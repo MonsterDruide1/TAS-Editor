@@ -12,6 +12,7 @@ public class InputLine {
     public InputLine (String full){
         this.full = full;
         splitIntoComponents();
+        System.out.println(buttonsEncoded);
     }
 
     private void splitIntoComponents () {

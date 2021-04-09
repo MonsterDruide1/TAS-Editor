@@ -6,6 +6,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
@@ -21,8 +23,15 @@ public class TAS {
 
     private static boolean stickWindowIsOpen;
 
-    public TAS (){
+    private static final LookAndFeel original = UIManager.getLookAndFeel();
 
+
+
+    public TAS (){
+        startProgram();
+    }
+
+    public static void startProgram (){
         startUpPanel = new JPanel();
 
         window = new Window();
@@ -35,12 +44,11 @@ public class TAS {
 
 
         createNewScriptButton.addActionListener(e -> {
-            //TODO create new script
+            onNewScriptButtonPress();
         });
 
         loadScriptButton.addActionListener(e -> {
             onLoadButtonPress();
-            startEditor();
         });
 
 
@@ -49,10 +57,29 @@ public class TAS {
         startUpPanel.add(createNewScriptButton);
         startUpPanel.add(loadScriptButton);
 
-
     }
 
     public static void onLoadButtonPress (){
+        openFileChooser();
+    }
+
+    public static void onNewScriptButtonPress (){
+        openFileChooser();
+    }
+
+    public static void openFileChooser (){
+
+        try {
+            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
 
         JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView());
 
@@ -60,6 +87,7 @@ public class TAS {
         fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
         FileNameExtensionFilter filter = new FileNameExtensionFilter(".txt files", "txt", "text");
         fileChooser.setFileFilter(filter);
+
         int option = fileChooser.showOpenDialog(null);
 
         if (option == JFileChooser.APPROVE_OPTION) {
@@ -72,13 +100,26 @@ public class TAS {
                 while ((sCurrentLine = br.readLine()) != null) {
                     stringBuilder.append(sCurrentLine).append("\n");
                 }
-            }
-            catch (IOException exception) {
+            } catch (IOException exception) {
                 exception.printStackTrace();
             }
 
             String string = stringBuilder.toString();
             script = new Script(string);
+
+            try {
+                UIManager.setLookAndFeel(original);
+            } catch (UnsupportedLookAndFeelException e) {
+                e.printStackTrace();
+            }
+
+            startEditor();
+        }
+
+        try {
+            UIManager.setLookAndFeel(original);
+        } catch (UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
         }
     }
 
@@ -118,24 +159,37 @@ public class TAS {
 
 
 
+
+
         JTable pianoRoll= new JTable(model) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
 
-            @Override
-            public boolean getColumnSelectionAllowed() {
-                return false;
-            }
-
-            @Override
-            public boolean getCellSelectionEnabled() {
-                return false;
-            }
-
 
         };
+
+        pianoRoll.setRowSelectionAllowed(false);
+
+        pianoRoll.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_SPACE){
+                    script.getInputLines().add(new InputLine((script.getInputLines().size() + 1) + " NONE 0;0 0;0"));
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+            }
+        });
 
         pianoRoll.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
