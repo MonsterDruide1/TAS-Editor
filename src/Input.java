@@ -59,7 +59,7 @@ public class Input {
         encode.put("DP-L","KEY_DLEFT");
         encode.put("DP-R","KEY_DRIGHT");
         encode.put("DP-U","KEY_DUP");
-        encode.put("DP-P","KEY_DDOWN");
+        encode.put("DP-D","KEY_DDOWN");
 
         //encode.put("", "NONE");
     }

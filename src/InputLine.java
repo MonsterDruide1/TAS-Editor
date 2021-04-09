@@ -24,13 +24,14 @@ public class InputLine {
 
         for (String s: buttonsPressed){
 
-            if (Input.getEncodeInputMap().containsKey(s)) {
+            if (Input.getEncodeInputMap().containsValue(s)) {
                 buttonsEncoded.add(Input.getDecodeInputMap().get(s));
             }
         }
 
         stickL = components[2];
         stickR = components[3];
+
     }
 
 
@@ -53,7 +54,7 @@ public class InputLine {
     private void updateFull (){
         StringBuilder tmpString = new StringBuilder();
 
-        tmpString.append(line + " " + getStickL() + " " + getStickR() + " ");
+        tmpString.append(line + " ");
 
         boolean first = true;
 
@@ -71,6 +72,8 @@ public class InputLine {
                 tmpString.append(Input.getEncodeInputMap().get(button));
             }
         }
+
+        tmpString.append(" " + getStickL() + " " + getStickR());
 
         full = tmpString.toString();
     }
