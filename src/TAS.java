@@ -63,17 +63,7 @@ public class TAS {
 
     public static void openLoadFileChooser (){
 
-        try {
-            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (UnsupportedLookAndFeelException e) {
-            e.printStackTrace();
-        }
+        setWindowsLookAndFeel();
 
         JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView());
 
@@ -118,20 +108,11 @@ public class TAS {
             e.printStackTrace();
         }
     }
-    
+
     public static void openNewFileCreator (){
-    	
-        try {
-            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (UnsupportedLookAndFeelException e) {
-            e.printStackTrace();
-        }
+
+
+        setWindowsLookAndFeel();
 
         JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView());
 
@@ -186,6 +167,20 @@ public class TAS {
             startEditor();
         }
         
+    }
+
+    public static void setWindowsLookAndFeel (){
+        try {
+            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void startEditor (){
