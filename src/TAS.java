@@ -54,15 +54,14 @@ public class TAS {
     }
 
     public static void onLoadButtonPress (){
-        openFileChooser();
-        //TODO create new file
+        openLoadFileChooser();
     }
 
     public static void onNewScriptButtonPress (){
-        openFileChooser();
+    	openNewFileCreator();
     }
 
-    public static void openFileChooser (){
+    public static void openLoadFileChooser (){
 
         try {
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
@@ -78,7 +77,7 @@ public class TAS {
 
         JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView());
 
-        fileChooser.setDialogTitle("choose existing TAS file");
+        fileChooser.setDialogTitle("Choose existing TAS file");
         fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
         FileNameExtensionFilter filter = new FileNameExtensionFilter(".txt files", "txt", "text");
         fileChooser.setFileFilter(filter);
@@ -118,6 +117,75 @@ public class TAS {
         } catch (UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         }
+    }
+    
+    public static void openNewFileCreator (){
+    	
+        try {
+            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
+
+        JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView());
+
+        fileChooser.setDialogTitle("Choose where you want your TAS file to go");
+        fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+        FileNameExtensionFilter filter = new FileNameExtensionFilter(".txt files", "txt", "text");
+        fileChooser.setFileFilter(filter);
+        fileChooser.setSelectedFile(new File("script1.txt"));
+
+        int option = fileChooser.showSaveDialog(null);
+        
+        if (option == JFileChooser.APPROVE_OPTION) {
+
+            File fileToOpen = fileChooser.getSelectedFile();
+            String fileName = fileChooser.getSelectedFile().getPath();
+            File file = new File(fileName);
+            try {
+				file.createNewFile();
+				FileWriter fileWriter = new FileWriter(fileName);
+				// optimize the below later
+				fileWriter.write("1 NONE 0;0 0;0\n");
+				fileWriter.write("2 NONE 0;0 0;0\n");
+				fileWriter.write("3 NONE 0;0 0;0\n");
+				fileWriter.write("4 NONE 0;0 0;0\n");
+				fileWriter.close();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+            
+            currentFile = fileToOpen;
+
+            StringBuilder stringBuilder = new StringBuilder();
+            try (BufferedReader br = new BufferedReader(new FileReader(fileToOpen))) {
+
+                String sCurrentLine;
+                while ((sCurrentLine = br.readLine()) != null) {
+                    stringBuilder.append(sCurrentLine).append("\n");
+                }
+            } catch (IOException exception) {
+                exception.printStackTrace();
+            }
+
+            String string = stringBuilder.toString();
+            script = new Script(string);
+
+            try {
+                UIManager.setLookAndFeel(original);
+            } catch (UnsupportedLookAndFeelException e) {
+                e.printStackTrace();
+            }
+
+            startEditor();
+        }
+        
     }
 
     public static void startEditor (){
