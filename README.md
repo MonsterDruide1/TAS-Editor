@@ -1,3 +1,5 @@
 # TAS-editor
 
-This is a WIP UI for an easier to use TAS file edior.
+A simple-to-use GUI for Nintendo Switch TAS editing.
+
+(WIP and very unstable as of now)
