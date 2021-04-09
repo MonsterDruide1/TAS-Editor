@@ -17,4 +17,5 @@ public class Script {
     public ArrayList<InputLine> getInputLines (){
         return inputLines;
     }
+
 }

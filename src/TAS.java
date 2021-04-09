@@ -1,16 +1,9 @@
-import com.sun.glass.ui.Clipboard;
-
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.image.BufferedImage;
+import java.awt.event.*;
 import java.io.*;
 
 public class TAS {
@@ -20,6 +13,7 @@ public class TAS {
     private static JPanel editor;
 
     private static Script script;
+    private static File currentFile;
 
     private static boolean stickWindowIsOpen;
 
@@ -61,6 +55,7 @@ public class TAS {
 
     public static void onLoadButtonPress (){
         openFileChooser();
+        //TODO create new file
     }
 
     public static void onNewScriptButtonPress (){
@@ -91,7 +86,9 @@ public class TAS {
         int option = fileChooser.showOpenDialog(null);
 
         if (option == JFileChooser.APPROVE_OPTION) {
+
             File fileToOpen = fileChooser.getSelectedFile();
+            currentFile = fileToOpen;
 
             StringBuilder stringBuilder = new StringBuilder();
             try (BufferedReader br = new BufferedReader(new FileReader(fileToOpen))) {
@@ -180,8 +177,15 @@ public class TAS {
 
             @Override
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_SPACE){
+                if (e.getKeyCode() == KeyEvent.VK_A){
+
                     script.getInputLines().add(new InputLine((script.getInputLines().size() + 1) + " NONE 0;0 0;0"));
+
+                    InputLine currentLine = script.getInputLines().get(script.getInputLines().size() - 1);
+
+                    Object[] tmp = new Object[columnNames.length - 3];
+                    tmp[0] = script.getInputLines().size() ;
+                    addRow(currentLine, tmp, columnNames, model);
                 }
             }
 
@@ -201,8 +205,13 @@ public class TAS {
 
                     if (pianoRoll.getModel().getValueAt(row,col).equals(" ")) {
                         pianoRoll.getModel().setValueAt(pianoRoll.getColumnName(col), row, col);
+
+                        script.getInputLines().get(row).buttonsEncoded.add(pianoRoll.getColumnName(col));
+
                     }else if (pianoRoll.getModel().getValueAt(row,col).equals(pianoRoll.getColumnName(col))){
+
                         pianoRoll.getModel().setValueAt(" ",row,col);
+                        script.getInputLines().get(row).buttonsEncoded.remove(pianoRoll.getColumnName(col));
                     }
 
                 }else if (col <= 2 && col > 0){
@@ -241,17 +250,7 @@ public class TAS {
 
             Object[] tmp = new Object[columnNames.length - 3];
             tmp[0] = i + 1;
-            tmp[1] = currentLine.getStickL();
-            tmp[2] = currentLine.getStickR();
-
-            for (int j = 3; j < tmp.length; j++){
-                if (currentLine.getButtonsEncoded().contains(columnNames[j])){
-                    tmp[j] = columnNames[j];
-                }else{
-                    tmp[j] = " ";
-                }
-            }
-            model.addRow(tmp);
+            addRow(currentLine, tmp, columnNames, model);
         }
 
 
@@ -280,9 +279,67 @@ public class TAS {
         }
 
         editor.add(scrollPane);
+
+        JButton saveFileButton = new JButton("Save file");
+
+        saveFileButton.addActionListener(e -> {
+            saveFile();
+        });
+
+        editor.add(saveFileButton);
     }
 
+    private static void saveFile (){
 
+
+        BufferedWriter writer = null;
+        try {
+
+            StringBuilder wholeScript = new StringBuilder();
+
+            for (InputLine currentLine: script.getInputLines()){
+                wholeScript.append(currentLine.getFull() + "\n");
+            }
+
+            FileWriter fw = null;
+
+            fw = new FileWriter(currentFile);
+
+
+            writer = new BufferedWriter(fw);
+
+
+            writer.write(wholeScript.toString());
+
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+
+        finally
+        {
+            try{
+                if (writer != null)
+                    writer.close();
+            }catch (Exception ex){
+                System.out.println("Error in closing the BufferedWriter" + ex);
+            }
+        }
+
+    }
+
+    private static void addRow(InputLine currentLine, Object[] tmp, String[] columnNames, DefaultTableModel model) {
+        tmp[1] = currentLine.getStickL();
+        tmp[2] = currentLine.getStickR();
+
+        for (int j = 3; j < tmp.length; j++){
+            if (currentLine.getButtonsEncoded().contains(columnNames[j])){
+                tmp[j] = columnNames[j];
+            }else{
+                tmp[j] = " ";
+            }
+        }
+        model.addRow(tmp);
+    }
 
 
     public static void main(String[] args) {

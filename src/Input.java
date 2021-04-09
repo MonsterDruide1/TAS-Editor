@@ -61,7 +61,7 @@ public class Input {
         encode.put("DP-U","KEY_DUP");
         encode.put("DP-P","KEY_DDOWN");
 
-        encode.put(" ", "NONE");
+        //encode.put("", "NONE");
     }
 
 

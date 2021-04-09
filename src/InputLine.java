@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class InputLine {
 
-    String full;
+    private String full;
 
     int line;
     String buttons;
@@ -12,7 +12,6 @@ public class InputLine {
     public InputLine (String full){
         this.full = full;
         splitIntoComponents();
-        System.out.println(buttonsEncoded);
     }
 
     private void splitIntoComponents () {
@@ -24,13 +23,15 @@ public class InputLine {
         String[] buttonsPressed = buttons.split(";");
 
         for (String s: buttonsPressed){
-            buttonsEncoded.add(Input.getDecodeInputMap().get(s));
+
+            if (Input.getEncodeInputMap().containsKey(s)) {
+                buttonsEncoded.add(Input.getDecodeInputMap().get(s));
+            }
         }
 
         stickL = components[2];
         stickR = components[3];
     }
-
 
 
     public int getLine() {
@@ -47,5 +48,35 @@ public class InputLine {
 
     public String getStickR() {
         return stickR;
+    }
+
+    private void updateFull (){
+        StringBuilder tmpString = new StringBuilder();
+
+        tmpString.append(line + " " + getStickL() + " " + getStickR() + " ");
+
+        boolean first = true;
+
+        if (buttonsEncoded.isEmpty()){
+            tmpString.append("NONE");
+        }else {
+            for (String button : buttonsEncoded) {
+
+                if (!first) {
+                    tmpString.append(";");
+                } else {
+                    first = false;
+                }
+
+                tmpString.append(Input.getEncodeInputMap().get(button));
+            }
+        }
+
+        full = tmpString.toString();
+    }
+
+    public String getFull (){
+        updateFull();
+        return full;
     }
 }
