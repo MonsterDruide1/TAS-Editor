@@ -1,3 +1,5 @@
+package io.github.jadefalke2;
+
 import java.awt.*;
 import java.awt.event.MouseEvent;
 
