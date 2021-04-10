@@ -1,5 +1,6 @@
+package io.github.jadefalke2;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Script {
 

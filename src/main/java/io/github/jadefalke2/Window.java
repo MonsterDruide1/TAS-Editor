@@ -1,3 +1,5 @@
+package io.github.jadefalke2;
+
 import javax.swing.*;
 
 public class Window extends JFrame {

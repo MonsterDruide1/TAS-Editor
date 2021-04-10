@@ -1,3 +1,5 @@
+package io.github.jadefalke2;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -27,7 +29,7 @@ public class StickImagePanel extends JPanel implements MouseListener, MouseMotio
 		this.stickPosition = stickPosition;
 
 		try {
-			stickImage = ImageIO.read(new File("Pictures/stick.png"));
+			stickImage = ImageIO.read(getClass().getResource("/stick.png"));
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
