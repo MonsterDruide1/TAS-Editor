@@ -13,125 +13,119 @@ import java.io.IOException;
 
 public class StickImagePanel extends JPanel {
 
-    private final JSpinner xSpinner;
-    private final JSpinner ySpinner;
-    private final JSpinner radiusSpinner;
-    private final JSpinner angleSpinner;
+	private final JSpinner xSpinner;
+	private final JSpinner ySpinner;
+	private final JSpinner radiusSpinner;
+	private final JSpinner angleSpinner;
 
-    private final Joystick joystick;
+	private final Joystick joystick;
 
-    private StickPosition stickPosition;
-    private StickType stickType;
-
-
-    private final int STICK_IMAGE_SIZE = 200;
+	private StickPosition stickPosition;
+	private StickType stickType;
 
 
-    enum StickType {
-        L_STICK,R_STICK
-    }
+	private final int STICK_IMAGE_SIZE = 200;
+
+
+	enum StickType {
+		L_STICK, R_STICK
+	}
 
 	public StickImagePanel(StickPosition stickPosition, StickType stickType) {
 
-        this.stickType = stickType;
+		this.stickType = stickType;
 		this.stickPosition = stickPosition;
-		joystick = new Joystick(32767,STICK_IMAGE_SIZE);
+		joystick = new Joystick(32767, STICK_IMAGE_SIZE);
 
 
-        JPanel joyStickPanel = new JPanel();
-        JPanel spinnerPanel = new JPanel();
+		JPanel joyStickPanel = new JPanel();
+		JPanel spinnerPanel = new JPanel();
 
 
-        GridLayout mainLayout = new GridLayout(2,1,0,20);
-        GridLayout spinnerLayout = new GridLayout(5,2,80,7);
+		GridLayout mainLayout = new GridLayout(2, 1, 0, 20);
+		GridLayout spinnerLayout = new GridLayout(5, 2, 80, 7);
 
 
-        spinnerPanel.setLayout(spinnerLayout);
-        spinnerPanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+		spinnerPanel.setLayout(spinnerLayout);
+		spinnerPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        setLayout(mainLayout);
-        add(spinnerPanel);
-        add(joyStickPanel);
+		setLayout(mainLayout);
+		add(spinnerPanel);
+		add(joyStickPanel);
 
-        joyStickPanel.add(joystick);
-
+		joyStickPanel.add(joystick);
 
 
 		SpinnerModel xModel = new SpinnerNumberModel(0, -32767, 32767, 100);
-        SpinnerModel yModel = new SpinnerNumberModel(0, -32767, 32767, 100);
-        SpinnerModel radiusModel = new SpinnerNumberModel(0, 0, 1, 0.1);
-        SpinnerModel angleModel = new SpinnerNumberModel(0, 0, 360, 1);
+		SpinnerModel yModel = new SpinnerNumberModel(0, -32767, 32767, 100);
+		SpinnerModel radiusModel = new SpinnerNumberModel(0, 0, 1, 0.1);
+		SpinnerModel angleModel = new SpinnerNumberModel(0, 0, 360, 1);
 
 
-        xSpinner = new JSpinner(xModel);
-        ySpinner = new JSpinner(yModel);
-        radiusSpinner = new JSpinner(radiusModel);
-        angleSpinner = new JSpinner(angleModel);
+		xSpinner = new JSpinner(xModel);
+		ySpinner = new JSpinner(yModel);
+		radiusSpinner = new JSpinner(radiusModel);
+		angleSpinner = new JSpinner(angleModel);
 
-        radiusSpinner.setPreferredSize(new Dimension(50,20));
-        radiusSpinner.setAlignmentX(10);
-
-
-        xSpinner.addChangeListener(e -> {
-            stickPosition.setX((int) xSpinner.getValue());
-            repaint();
-        });
-        ySpinner.addChangeListener(e -> {
-            stickPosition.setY((int) ySpinner.getValue());
-            repaint();
-        });
-        radiusSpinner.addChangeListener(e -> {
-            stickPosition.setRadius((double) radiusSpinner.getValue());
-            repaint();
-        });
-        angleSpinner.addChangeListener(e -> {
-            stickPosition.setTheta(Math.toRadians((int) angleModel.getValue()));
-            repaint();
-        });
+		radiusSpinner.setPreferredSize(new Dimension(50, 20));
+		radiusSpinner.setAlignmentX(10);
 
 
+		xSpinner.addChangeListener(e -> {
+			stickPosition.setX((int) xSpinner.getValue());
+			repaint();
+		});
+		ySpinner.addChangeListener(e -> {
+			stickPosition.setY((int) ySpinner.getValue());
+			repaint();
+		});
+		radiusSpinner.addChangeListener(e -> {
+			stickPosition.setRadius((double) radiusSpinner.getValue());
+			repaint();
+		});
+		angleSpinner.addChangeListener(e -> {
+			stickPosition.setTheta(Math.toRadians((int) angleModel.getValue()));
+			repaint();
+		});
 
 
-        JLabel cartesianLabel = new JLabel("Cartesian");
-        JLabel polarLabel = new JLabel("Polar");
+		JLabel cartesianLabel = new JLabel("Cartesian");
+		JLabel polarLabel = new JLabel("Polar");
 
-        JLabel xLabel = new JLabel("x:");
-        JLabel yLabel = new JLabel("y:");
+		JLabel xLabel = new JLabel("x:");
+		JLabel yLabel = new JLabel("y:");
 
-        JLabel radiusLabel = new JLabel("radius:");
-        JLabel thetaLabel = new JLabel("angle:");
+		JLabel radiusLabel = new JLabel("radius:");
+		JLabel thetaLabel = new JLabel("angle:");
 
-        spinnerPanel.add(cartesianLabel);
-        spinnerPanel.add(polarLabel);
+		spinnerPanel.add(cartesianLabel);
+		spinnerPanel.add(polarLabel);
 
-        spinnerPanel.add(xLabel);
-        spinnerPanel.add(thetaLabel);
-        spinnerPanel.add(xSpinner);
-        spinnerPanel.add(angleSpinner);
-
-
-        spinnerPanel.add(yLabel);
-        spinnerPanel.add(radiusLabel);
-        spinnerPanel.add(ySpinner);
-        spinnerPanel.add(radiusSpinner);
-
-    }
+		spinnerPanel.add(xLabel);
+		spinnerPanel.add(thetaLabel);
+		spinnerPanel.add(xSpinner);
+		spinnerPanel.add(angleSpinner);
 
 
+		spinnerPanel.add(yLabel);
+		spinnerPanel.add(radiusLabel);
+		spinnerPanel.add(ySpinner);
+		spinnerPanel.add(radiusSpinner);
 
+	}
 
 
 	private void updateStickPosition() {
 
-        int x = (int)joystick.getOutputPos().getX();
-        int y = (int)joystick.getOutputPos().getY();
+		int x = (int) joystick.getOutputPos().getX();
+		int y = (int) joystick.getOutputPos().getY();
 
-        joystick.getOutputPos();
+		joystick.getOutputPos();
 
-        xSpinner.setValue(x);
-        ySpinner.setValue(y);
-        radiusSpinner.setValue(stickPosition.getRadius());
-        angleSpinner.setValue((int) Math.toDegrees(stickPosition.getTheta()));
+		xSpinner.setValue(x);
+		ySpinner.setValue(y);
+		radiusSpinner.setValue(stickPosition.getRadius());
+		angleSpinner.setValue((int) Math.toDegrees(stickPosition.getTheta()));
 
 		repaint();
 	}
