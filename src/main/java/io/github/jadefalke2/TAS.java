@@ -7,142 +7,142 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.util.Stack;
 
 public class TAS {
 
-    private static Window window;
-    private static JPanel startUpPanel;
-    private static JPanel editor;
+	private Window window;
+	private JPanel startUpPanel;
+	private JPanel editor;
 
-    private static Script script;
-    private static File currentFile;
+	private Script script;
+	private File currentFile;
 
-    private static boolean stickWindowIsOpen;
-    private static boolean functionWindowIsOpen;
-
-
-    private static final LookAndFeel original = UIManager.getLookAndFeel();
+	private boolean stickWindowIsOpen;
+	private boolean functionWindowIsOpen;
 
 
+	private final LookAndFeel original = UIManager.getLookAndFeel();
 
-    public TAS (){
-        startProgram();
-    }
+	private Stack<Action> undoStack;
+	private Stack<Action> redoStack;
 
-    /**
-     * starts the program by opening a new window with the two options of either creating a new script or loading in a preexisting one. After this it will start the editor.
-     */
+	public TAS() {
+		startProgram();
+	}
 
-    public static void startProgram (){
-        startUpPanel = new JPanel();
+	/**
+	 * starts the program by opening a new window with the two options of either creating a new script or loading in a preexisting one. After this it will start the editor.
+	 */
 
-        window = new Window();
-        window.setBackground(new Color(52, 52, 52));
-        window.setSize(300,200);
-        window.add(startUpPanel);
+	public void startProgram() {
+		startUpPanel = new JPanel();
 
-        JButton createNewScriptButton = new JButton("create new script");
-        JButton loadScriptButton = new JButton("load script");
+		window = new Window();
+		window.setBackground(new Color(52, 52, 52));
+		window.setSize(300, 200);
+		window.add(startUpPanel);
 
-
-
-        createNewScriptButton.addActionListener(e -> {
-            onNewScriptButtonPress();
-        });
-
-        loadScriptButton.addActionListener(e -> {
-            onLoadButtonPress();
-        });
+		JButton createNewScriptButton = new JButton("create new script");
+		JButton loadScriptButton = new JButton("load script");
 
 
-        startUpPanel.setBorder(BorderFactory.createEmptyBorder(30,30,30,30));
+		createNewScriptButton.addActionListener(e -> {
+			onNewScriptButtonPress();
+		});
 
-        startUpPanel.add(createNewScriptButton);
-        startUpPanel.add(loadScriptButton);
-
-    }
-
-    public static void onLoadButtonPress (){
-        openLoadFileChooser();
-    }
-
-    public static void onNewScriptButtonPress (){
-    	openNewFileCreator();
-    }
-
-    public static void openLoadFileChooser (){
-
-        setWindowsLookAndFeel();
-
-        JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView());
-
-        fileChooser.setDialogTitle("Choose existing TAS file");
-        fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
-        FileNameExtensionFilter filter = new FileNameExtensionFilter(".txt files", "txt", "text");
-        fileChooser.setFileFilter(filter);
-
-        int option = fileChooser.showOpenDialog(null);
-
-        if (option == JFileChooser.APPROVE_OPTION) {
-
-            File fileToOpen = fileChooser.getSelectedFile();
-            prepareEditor(fileToOpen);
-        }
-
-        try {
-            UIManager.setLookAndFeel(original);
-        } catch (UnsupportedLookAndFeelException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static void prepareEditor(File fileToOpen) {
-        currentFile = fileToOpen;
-
-        StringBuilder stringBuilder = new StringBuilder();
-        try (BufferedReader br = new BufferedReader(new FileReader(fileToOpen))) {
-
-            String sCurrentLine;
-            while ((sCurrentLine = br.readLine()) != null) {
-                stringBuilder.append(sCurrentLine).append("\n");
-            }
-        } catch (IOException exception) {
-            exception.printStackTrace();
-        }
-
-        String string = stringBuilder.toString();
-        script = new Script(string);
-
-        try {
-            UIManager.setLookAndFeel(original);
-        } catch (UnsupportedLookAndFeelException e) {
-            e.printStackTrace();
-        }
-
-        startEditor();
-    }
-
-    public static void openNewFileCreator (){
+		loadScriptButton.addActionListener(e -> {
+			onLoadButtonPress();
+		});
 
 
-        setWindowsLookAndFeel();
+		startUpPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
 
-        JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView());
+		startUpPanel.add(createNewScriptButton);
+		startUpPanel.add(loadScriptButton);
 
-        fileChooser.setDialogTitle("Choose where you want your TAS file to go");
-        fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
-        FileNameExtensionFilter filter = new FileNameExtensionFilter(".txt files", "txt", "text");
-        fileChooser.setFileFilter(filter);
-        fileChooser.setSelectedFile(new File("script1.txt"));
+	}
 
-        int option = fileChooser.showSaveDialog(null);
-        
-        if (option == JFileChooser.APPROVE_OPTION) {
+	public void onLoadButtonPress() {
+		openLoadFileChooser();
+	}
 
-            File fileToOpen = fileChooser.getSelectedFile();
-            String fileName = fileChooser.getSelectedFile().getPath();
-            File file = new File(fileName);
-            try {
+	public void onNewScriptButtonPress() {
+		openNewFileCreator();
+	}
+
+	public void openLoadFileChooser() {
+
+		setWindowsLookAndFeel();
+
+		JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView());
+
+		fileChooser.setDialogTitle("Choose existing TAS file");
+		fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+		FileNameExtensionFilter filter = new FileNameExtensionFilter(".txt files", "txt", "text");
+		fileChooser.setFileFilter(filter);
+
+		int option = fileChooser.showOpenDialog(null);
+
+		if (option == JFileChooser.APPROVE_OPTION) {
+
+			File fileToOpen = fileChooser.getSelectedFile();
+			prepareEditor(fileToOpen);
+		}
+
+		try {
+			UIManager.setLookAndFeel(original);
+		} catch (UnsupportedLookAndFeelException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void prepareEditor(File fileToOpen) {
+		currentFile = fileToOpen;
+
+		StringBuilder stringBuilder = new StringBuilder();
+		try (BufferedReader br = new BufferedReader(new FileReader(fileToOpen))) {
+
+			String sCurrentLine;
+			while ((sCurrentLine = br.readLine()) != null) {
+				stringBuilder.append(sCurrentLine).append("\n");
+			}
+		} catch (IOException exception) {
+			exception.printStackTrace();
+		}
+
+		String string = stringBuilder.toString();
+		script = new Script(string);
+
+		try {
+			UIManager.setLookAndFeel(original);
+		} catch (UnsupportedLookAndFeelException e) {
+			e.printStackTrace();
+		}
+
+		startEditor();
+	}
+
+	public void openNewFileCreator() {
+
+		setWindowsLookAndFeel();
+
+		JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView());
+
+		fileChooser.setDialogTitle("Choose where you want your TAS file to go");
+		fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+		FileNameExtensionFilter filter = new FileNameExtensionFilter(".txt files", "txt", "text");
+		fileChooser.setFileFilter(filter);
+		fileChooser.setSelectedFile(new File("script1.txt"));
+
+		int option = fileChooser.showSaveDialog(null);
+
+		if (option == JFileChooser.APPROVE_OPTION) {
+
+			File fileToOpen = fileChooser.getSelectedFile();
+			String fileName = fileChooser.getSelectedFile().getPath();
+			File file = new File(fileName);
+			try {
 				file.createNewFile();
 				FileWriter fileWriter = new FileWriter(fileName);
 				// optimize the below later
@@ -155,295 +155,336 @@ public class TAS {
 				e1.printStackTrace();
 			}
 
-            prepareEditor(fileToOpen);
-        }
-        
-    }
+			prepareEditor(fileToOpen);
+		}
+
+	}
+
+	public void setWindowsLookAndFeel() {
+		try {
+			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (UnsupportedLookAndFeelException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void startEditor() {
+
+		window.remove(startUpPanel);
+
+		editor = new JPanel();
+		window.add(editor);
+
+		undoStack = new Stack<>();
+		redoStack = new Stack<>();
+
+		AbstractAction saveAction = new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				saveFile();
+			}
+		};
+		editor.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("control S"), "SAVE");
+		editor.getActionMap().put("SAVE", saveAction);
+
+		AbstractAction undoAction = new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				undo();
+			}
+		};
+		editor.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("control Z"), "UNDO");
+		editor.getActionMap().put("UNDO", undoAction);
+
+		AbstractAction redoAction = new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				redo();
+			}
+		};
+		editor.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("control shift Z"), "REDO");
+		editor.getActionMap().put("REDO", redoAction);
+
+		editor.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
+
+		String[] columnNames = {
+				"frame",
+				"L-stick",
+				"R-Stick",
+				"A",
+				"B",
+				"X",
+				"Y",
+				"ZR",
+				"ZL",
+				"R",
+				"L",
+				"DP-R",
+				"DP-L",
+				"DP-U",
+				"DP-D"
+		};
+
+		DefaultTableModel model = new DefaultTableModel();
+
+		for (String colName : columnNames) {
+			model.addColumn(colName);
+		}
+
+
+		JTable pianoRoll = new JTable(model) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+
+
+		};
+
+		pianoRoll.setRowSelectionAllowed(false);
+
+		pianoRoll.addKeyListener(new KeyListener() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+
+			}
 
-    public static void setWindowsLookAndFeel (){
-        try {
-            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (UnsupportedLookAndFeelException e) {
-            e.printStackTrace();
-        }
-    }
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_A) {
 
-    public static void startEditor (){
+					script.getInputLines().add(new InputLine((script.getInputLines().size() + 1) + " NONE 0;0 0;0"));
 
+					InputLine currentLine = script.getInputLines().get(script.getInputLines().size() - 1);
 
-        window.remove(startUpPanel);
+					Object[] tmp = new Object[columnNames.length];
+					tmp[0] = script.getInputLines().size();
+					addRow(currentLine, tmp, columnNames, model);
+				}
+			}
 
-        editor = new JPanel();
-        window.add(editor);
+			@Override
+			public void keyReleased(KeyEvent e) {
 
-        editor.setBorder(BorderFactory.createEmptyBorder(30,30,30,30));
+			}
+		});
 
-        String[] columnNames = {
-                "frame",
-                "L-stick",
-                "R-Stick",
-                "A",
-                "B",
-                "X",
-                "Y",
-                "ZR",
-                "ZL",
-                "R",
-                "L",
-                "DP-R",
-                "DP-L",
-                "DP-U",
-                "DP-D"
-        };
+		pianoRoll.addMouseListener(new java.awt.event.MouseAdapter() {
+			@Override
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
+				int row = pianoRoll.rowAtPoint(evt.getPoint());
+				int col = pianoRoll.columnAtPoint(evt.getPoint());
 
-        DefaultTableModel model = new DefaultTableModel();
+				if (row >= 0 && col >= 3) {
 
-        for (String colName: columnNames){
-            model.addColumn(colName);
-        }
+					executeAction(new CellAction(model, script, row, col));
 
+				} else if (col <= 2 && col > 0) {
+					JFrame stickWindow;
+					if (!stickWindowIsOpen) {
+						stickWindow = new JFrame();
 
+						stickWindowIsOpen = true;
+						stickWindow.setResizable(false);
+						stickWindow.setVisible(true);
+						stickWindow.setSize(300, 500);
+						stickWindow.setLocation(new Point(200, 200));
 
+						stickWindow.addWindowListener(new WindowAdapter() {
+							@Override
+							public void windowClosing(WindowEvent e) {
+								stickWindowIsOpen = false;
+								e.getWindow().dispose();
+							}
+						});
 
 
-        JTable pianoRoll= new JTable(model) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
+						StickImagePanel stickImagePanel;
 
+						if (row == 1) {
+							stickImagePanel = new StickImagePanel(script.inputLines.get(row).getStickL(), StickImagePanel.StickType.L_STICK);
+						} else {
+							stickImagePanel = new StickImagePanel(script.inputLines.get(row).getStickR(), StickImagePanel.StickType.R_STICK);
+						}
 
-        };
+						stickWindow.add(stickImagePanel);
 
-        pianoRoll.setRowSelectionAllowed(false);
+					}
 
-        pianoRoll.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
+				}
+			}
+		});
 
-            }
+		for (int i = 0; i < script.getInputLines().size(); i++) {
+			InputLine currentLine = script.getInputLines().get(i);
 
-            @Override
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_A){
+			Object[] tmp = new Object[columnNames.length];
+			tmp[0] = i + 1;
+			addRow(currentLine, tmp, columnNames, model);
+		}
 
-                    script.getInputLines().add(new InputLine((script.getInputLines().size() + 1) + " NONE 0;0 0;0"));
 
-                    InputLine currentLine = script.getInputLines().get(script.getInputLines().size() - 1);
+		JScrollPane scrollPane = new JScrollPane(pianoRoll);
 
-                    Object[] tmp = new Object[columnNames.length];
-                    tmp[0] = script.getInputLines().size() ;
-                    addRow(currentLine, tmp, columnNames, model);
-                }
-            }
+		pianoRoll.getTableHeader().setResizingAllowed(false);
+		pianoRoll.getTableHeader().setReorderingAllowed(false);
 
-            @Override
-            public void keyReleased(KeyEvent e) {
+		window.setSize(700, 1100);
+		editor.setSize(550, 550);
+		pianoRoll.setSize(500, 700);
 
-            }
-        });
+		pianoRoll.getColumnModel().getColumn(0).setPreferredWidth(300);
+		pianoRoll.getColumnModel().getColumn(1).setPreferredWidth(300);
+		pianoRoll.getColumnModel().getColumn(2).setPreferredWidth(300);
 
-        pianoRoll.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                int row = pianoRoll.rowAtPoint(evt.getPoint());
-                int col = pianoRoll.columnAtPoint(evt.getPoint());
 
-                if (row >= 0 && col >= 3) {
+		for (int i = 3; i < 11; i++) {
+			pianoRoll.getColumnModel().getColumn(i).setPreferredWidth(60);
+		}
 
-                    if (pianoRoll.getModel().getValueAt(row,col).equals(" ")) {
-                        pianoRoll.getModel().setValueAt(pianoRoll.getColumnName(col), row, col);
+		for (int i = 11; i < 15; i++) {
+			pianoRoll.getColumnModel().getColumn(i).setPreferredWidth(200);
+		}
 
-                        script.getInputLines().get(row).buttonsEncoded.add(pianoRoll.getColumnName(col));
+		editor.add(scrollPane);
 
-                    }else if (pianoRoll.getModel().getValueAt(row,col).equals(pianoRoll.getColumnName(col))){
+		JPanel buttonsPanel = new JPanel();
+		buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
 
-                        pianoRoll.getModel().setValueAt(" ",row,col);
-                        script.getInputLines().get(row).buttonsEncoded.remove(pianoRoll.getColumnName(col));
-                    }
+		JButton saveFileButton = new JButton("Save file");
+		saveFileButton.addActionListener(saveAction);
+		buttonsPanel.add(saveFileButton);
 
-                }else if (col <= 2 && col > 0){
-                    JFrame stickWindow;
-                    if (!stickWindowIsOpen) {
-                        stickWindow = new JFrame();
-                        
-                        stickWindowIsOpen = true;
-                        stickWindow.setResizable(false);
-                        stickWindow.setVisible(true);
-                        stickWindow.setSize(300,500);
-                        stickWindow.setLocation(new Point(200,200));
+		JButton undoButton = new JButton("Undo");
+		undoButton.addActionListener(undoAction);
+		buttonsPanel.add(undoButton);
 
-                        stickWindow.addWindowListener(new WindowAdapter() {
-                            @Override
-                            public void windowClosing(WindowEvent e) {
-                                stickWindowIsOpen = false;
-                                e.getWindow().dispose();
-                            }
-                        });
+		JButton redoButton = new JButton("Redo");
+		redoButton.addActionListener(redoAction);
+		buttonsPanel.add(redoButton);
 
+		JButton functionEditorButton = new JButton("Function editor");
+		functionEditorButton.addActionListener(e -> openFunctionEditor());
+		buttonsPanel.add(functionEditorButton);
 
-                        StickImagePanel stickImagePanel;
+		editor.add(buttonsPanel);
+	}
 
-                        if (row == 1){
-                            stickImagePanel = new StickImagePanel(script.inputLines.get(row).getStickL(),StickImagePanel.StickType.L_STICK);
-                        }else {
-                            stickImagePanel = new StickImagePanel(script.inputLines.get(row).getStickR(),StickImagePanel.StickType.R_STICK);
-                        }
+	private void openFunctionEditor() {
+		JFrame functionEditor;
 
-                        stickWindow.add(stickImagePanel);
-                        
-                    }
+		if (!functionWindowIsOpen) {
+			functionWindowIsOpen = true;
+			functionEditor = new JFrame();
+			functionEditor.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-                }
-            }
-        });
+			functionEditor.addWindowListener(new WindowAdapter() {
+				@Override
+				public void windowClosing(WindowEvent e) {
+					stickWindowIsOpen = false;
+					e.getWindow().dispose();
+				}
+			});
 
-        for (int i = 0; i < script.getInputLines().size(); i++){
-            InputLine currentLine = script.getInputLines().get(i);
+			JButton createNewFunctionButton = new JButton("Create new function");
+			createNewFunctionButton.addActionListener(e -> {
+				createNewFunction();
+			});
 
-            Object[] tmp = new Object[columnNames.length];
-            tmp[0] = i + 1;
-            addRow(currentLine, tmp, columnNames, model);
-        }
+			JButton editFunctionButton = new JButton("Edit existing function");
+			editFunctionButton.addActionListener(e -> {
+				editFunction();
+			});
+		}
 
+	}
 
+	private void createNewFunction() {
+		//creates a new function
+	}
 
-        JScrollPane scrollPane = new JScrollPane(pianoRoll);
+	private void editFunction() {
+		//edits a function
+	}
 
-        pianoRoll.getTableHeader().setResizingAllowed(false);
-        pianoRoll.getTableHeader().setReorderingAllowed(false);
+	private void saveFile() {
 
-        window.setSize(700,1100);
-        editor.setSize(550,550);
-        pianoRoll.setSize(500,700);
 
-        pianoRoll.getColumnModel().getColumn(0).setPreferredWidth(300);
-        pianoRoll.getColumnModel().getColumn(1).setPreferredWidth(300);
-        pianoRoll.getColumnModel().getColumn(2).setPreferredWidth(300);
+		BufferedWriter writer = null;
+		try {
 
+			StringBuilder wholeScript = new StringBuilder();
 
+			for (InputLine currentLine : script.getInputLines()) {
+				wholeScript.append(currentLine.getFull() + "\n");
+			}
 
-        for (int i = 3; i < 11; i++){
-           pianoRoll.getColumnModel().getColumn(i).setPreferredWidth(60);
-        }
+			FileWriter fw;
 
-        for (int i = 11; i < 15; i++){
-            pianoRoll.getColumnModel().getColumn(i).setPreferredWidth(200);
-        }
+			fw = new FileWriter(currentFile);
 
-        editor.add(scrollPane);
 
-        JButton saveFileButton = new JButton("Save file");
-        saveFileButton.addActionListener(e -> {
-            saveFile();
-        });
+			writer = new BufferedWriter(fw);
 
-        JButton functionEditorButton = new JButton("function editor");
-        functionEditorButton.addActionListener(e ->{
-            openFunctionEditor();
-        });
 
-        editor.add(saveFileButton);
-        editor.add(functionEditorButton);
-    }
+			writer.write(wholeScript.toString());
 
-    private static void openFunctionEditor (){
-        JFrame functionEditor;
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		} finally {
+			try {
+				if (writer != null)
+					writer.close();
+			} catch (Exception ex) {
+				System.out.println("Error in closing the BufferedWriter" + ex);
+			}
+		}
 
-        if (!functionWindowIsOpen) {
-            functionWindowIsOpen = true;
-            functionEditor = new JFrame();
-            functionEditor.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+	}
 
-            functionEditor.addWindowListener(new WindowAdapter() {
-                @Override
-                public void windowClosing(WindowEvent e) {
-                    stickWindowIsOpen = false;
-                    e.getWindow().dispose();
-                }
-            });
+	private void addRow(InputLine currentLine, Object[] tmp, String[] columnNames, DefaultTableModel model) {
+		tmp[1] = currentLine.getStickL();
+		tmp[2] = currentLine.getStickR();
 
-            JButton createNewFunctionButton = new JButton("create new function");
-            createNewFunctionButton.addActionListener(e -> {
-                createNewFunction();
-            });
+		for (int j = 3; j < tmp.length; j++) {
+			if (currentLine.getButtonsEncoded().contains(columnNames[j])) {
+				tmp[j] = columnNames[j];
+			} else {
+				tmp[j] = " ";
+			}
+		}
+		model.addRow(tmp);
+	}
 
-            JButton editFunctionButton = new JButton("edit existing function");
-            editFunctionButton.addActionListener(e -> {
-                editFunction();
-            });
-        }
+	private void executeAction(Action action) {
+		action.execute();
+		undoStack.push(action);
+		redoStack.clear();
+	}
 
-    }
+	private void undo() {
+		if (undoStack.isEmpty())
+			return;
+		Action action = undoStack.pop();
+		action.revert();
+		redoStack.push(action);
+	}
 
-    private static void createNewFunction (){
-        //creates a new function
-    }
+	private void redo() {
+		if (redoStack.isEmpty())
+			return;
+		Action action = redoStack.pop();
+		action.execute();
+		undoStack.push(action);
+	}
 
-    private static void editFunction (){
-        //edits a function
-    }
-
-    private static void saveFile (){
-
-
-        BufferedWriter writer = null;
-        try {
-
-            StringBuilder wholeScript = new StringBuilder();
-
-            for (InputLine currentLine: script.getInputLines()){
-                wholeScript.append(currentLine.getFull() + "\n");
-            }
-
-            FileWriter fw;
-
-            fw = new FileWriter(currentFile);
-
-
-            writer = new BufferedWriter(fw);
-
-
-            writer.write(wholeScript.toString());
-
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
-
-        finally
-        {
-            try{
-                if (writer != null)
-                    writer.close();
-            }catch (Exception ex){
-                System.out.println("Error in closing the BufferedWriter" + ex);
-            }
-        }
-
-    }
-
-    private static void addRow(InputLine currentLine, Object[] tmp, String[] columnNames, DefaultTableModel model) {
-        tmp[1] = currentLine.getStickL();
-        tmp[2] = currentLine.getStickR();
-
-        for (int j = 3; j < tmp.length; j++){
-            if (currentLine.getButtonsEncoded().contains(columnNames[j])){
-                tmp[j] = columnNames[j];
-            }else{
-                tmp[j] = " ";
-            }
-        }
-        model.addRow(tmp);
-    }
-
-
-    public static void main(String[] args) {
-        new TAS();
-    }
+	public static void main(String[] args) {
+		new TAS();
+	}
 }
