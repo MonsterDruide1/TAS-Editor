@@ -18,6 +18,8 @@ public class TAS {
     private static File currentFile;
 
     private static boolean stickWindowIsOpen;
+    private static boolean functionWindowIsOpen;
+
 
     private static final LookAndFeel original = UIManager.getLookAndFeel();
 
@@ -26,6 +28,10 @@ public class TAS {
     public TAS (){
         startProgram();
     }
+
+    /**
+     * starts the program by opening a new window with the two options of either creating a new script or loading in a preexisting one. After this it will start the editor.
+     */
 
     public static void startProgram (){
         startUpPanel = new JPanel();
@@ -80,29 +86,7 @@ public class TAS {
         if (option == JFileChooser.APPROVE_OPTION) {
 
             File fileToOpen = fileChooser.getSelectedFile();
-            currentFile = fileToOpen;
-
-            StringBuilder stringBuilder = new StringBuilder();
-            try (BufferedReader br = new BufferedReader(new FileReader(fileToOpen))) {
-
-                String sCurrentLine;
-                while ((sCurrentLine = br.readLine()) != null) {
-                    stringBuilder.append(sCurrentLine).append("\n");
-                }
-            } catch (IOException exception) {
-                exception.printStackTrace();
-            }
-
-            String string = stringBuilder.toString();
-            script = new Script(string);
-
-            try {
-                UIManager.setLookAndFeel(original);
-            } catch (UnsupportedLookAndFeelException e) {
-                e.printStackTrace();
-            }
-
-            startEditor();
+            prepareEditor(fileToOpen);
         }
 
         try {
@@ -110,6 +94,32 @@ public class TAS {
         } catch (UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         }
+    }
+
+    private static void prepareEditor(File fileToOpen) {
+        currentFile = fileToOpen;
+
+        StringBuilder stringBuilder = new StringBuilder();
+        try (BufferedReader br = new BufferedReader(new FileReader(fileToOpen))) {
+
+            String sCurrentLine;
+            while ((sCurrentLine = br.readLine()) != null) {
+                stringBuilder.append(sCurrentLine).append("\n");
+            }
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+
+        String string = stringBuilder.toString();
+        script = new Script(string);
+
+        try {
+            UIManager.setLookAndFeel(original);
+        } catch (UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
+
+        startEditor();
     }
 
     public static void openNewFileCreator (){
@@ -144,30 +154,8 @@ public class TAS {
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
-            
-            currentFile = fileToOpen;
 
-            StringBuilder stringBuilder = new StringBuilder();
-            try (BufferedReader br = new BufferedReader(new FileReader(fileToOpen))) {
-
-                String sCurrentLine;
-                while ((sCurrentLine = br.readLine()) != null) {
-                    stringBuilder.append(sCurrentLine).append("\n");
-                }
-            } catch (IOException exception) {
-                exception.printStackTrace();
-            }
-
-            String string = stringBuilder.toString();
-            script = new Script(string);
-
-            try {
-                UIManager.setLookAndFeel(original);
-            } catch (UnsupportedLookAndFeelException e) {
-                e.printStackTrace();
-            }
-
-            startEditor();
+            prepareEditor(fileToOpen);
         }
         
     }
@@ -267,8 +255,6 @@ public class TAS {
                 int row = pianoRoll.rowAtPoint(evt.getPoint());
                 int col = pianoRoll.columnAtPoint(evt.getPoint());
 
-                System.out.println(col);
-
                 if (row >= 0 && col >= 3) {
 
                     if (pianoRoll.getModel().getValueAt(row,col).equals(" ")) {
@@ -354,12 +340,54 @@ public class TAS {
         editor.add(scrollPane);
 
         JButton saveFileButton = new JButton("Save file");
-
         saveFileButton.addActionListener(e -> {
             saveFile();
         });
 
+        JButton functionEditorButton = new JButton("function editor");
+        functionEditorButton.addActionListener(e ->{
+            openFunctionEditor();
+        });
+
         editor.add(saveFileButton);
+        editor.add(functionEditorButton);
+    }
+
+    private static void openFunctionEditor (){
+        JFrame functionEditor;
+
+        if (!functionWindowIsOpen) {
+            functionWindowIsOpen = true;
+            functionEditor = new JFrame();
+            functionEditor.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+            functionEditor.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosing(WindowEvent e) {
+                    stickWindowIsOpen = false;
+                    e.getWindow().dispose();
+                }
+            });
+
+            JButton createNewFunctionButton = new JButton("create new function");
+            createNewFunctionButton.addActionListener(e -> {
+                createNewFunction();
+            });
+
+            JButton editFunctionButton = new JButton("edit existing function");
+            editFunctionButton.addActionListener(e -> {
+                editFunction();
+            });
+        }
+
+    }
+
+    private static void createNewFunction (){
+        //creates a new function
+    }
+
+    private static void editFunction (){
+        //edits a function
     }
 
     private static void saveFile (){
@@ -374,7 +402,7 @@ public class TAS {
                 wholeScript.append(currentLine.getFull() + "\n");
             }
 
-            FileWriter fw = null;
+            FileWriter fw;
 
             fw = new FileWriter(currentFile);
 
