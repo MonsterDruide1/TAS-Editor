@@ -52,6 +52,14 @@ public class InputLine {
 		return stickR;
 	}
 
+	public void setStickL(StickPosition stickL) {
+		this.stickL = stickL;
+	}
+
+	public void setStickR(StickPosition stickR) {
+		this.stickR = stickR;
+	}
+
 	private void updateFull() {
 		StringBuilder tmpString = new StringBuilder();
 

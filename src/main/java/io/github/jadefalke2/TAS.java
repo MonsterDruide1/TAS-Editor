@@ -307,10 +307,10 @@ public class TAS {
 
 						StickImagePanel stickImagePanel;
 
-						if (row == 1) {
-							stickImagePanel = new StickImagePanel(script.inputLines.get(row).getStickL(), StickImagePanel.StickType.L_STICK);
+						if (col == 1) {
+							stickImagePanel = new StickImagePanel(script.inputLines.get(row).getStickL(), StickImagePanel.StickType.L_STICK,script.getInputLines().get(row));
 						} else {
-							stickImagePanel = new StickImagePanel(script.inputLines.get(row).getStickR(), StickImagePanel.StickType.R_STICK);
+							stickImagePanel = new StickImagePanel(script.inputLines.get(row).getStickR(), StickImagePanel.StickType.R_STICK,script.getInputLines().get(row));
 						}
 
 						stickWindow.add(stickImagePanel);
