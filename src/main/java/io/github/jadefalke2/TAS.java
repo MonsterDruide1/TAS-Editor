@@ -275,11 +275,11 @@ public class TAS {
 			}
 		});
 
-		pianoRoll.addMouseListener(new java.awt.event.MouseAdapter() {
-			@Override
-			public void mouseClicked(java.awt.event.MouseEvent evt) {
-				int row = pianoRoll.rowAtPoint(evt.getPoint());
-				int col = pianoRoll.columnAtPoint(evt.getPoint());
+        pianoRoll.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                int row = pianoRoll.rowAtPoint(evt.getPoint());
+                int col = pianoRoll.columnAtPoint(evt.getPoint());
 
 				if (row >= 0 && col >= 3) {
 
