@@ -25,7 +25,6 @@ public class InputLine {
         String[] buttonsPressed = buttons.split(";");
 
         for (String s: buttonsPressed){
-
             if (Input.getEncodeInputMap().containsValue(s)) {
                 buttonsEncoded.add(Input.getDecodeInputMap().get(s));
             }

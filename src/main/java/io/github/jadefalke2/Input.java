@@ -7,23 +7,6 @@ import java.util.stream.Collectors;
 public class Input {
 
 
-
-
-
-    private final String ZR      = "KEY_ZR";
-    private final String ZL      = "KEY_ZL";
-
-    private final String R       = "KEY_R";
-    private final String L       = "KEY_L";
-
-    private final String PLUS    = "KEY_PLUS";
-    private final String MINUS   = "KEY_MINUS";
-
-    private final String D_LEFT  = "KEY_DLEFT";
-    private final String D_RIGHT = "KEY_DRIGHT";
-    private final String D_UP    = "KEY_DUP";
-    private final String D_DOWN  = "KEY_DDOWN";
-
     private static Map<String, String> encode = new HashMap<>();
     private static Map<String, String> decode = new HashMap<>();
 

@@ -249,7 +249,7 @@ public class TAS {
 
                     InputLine currentLine = script.getInputLines().get(script.getInputLines().size() - 1);
 
-                    Object[] tmp = new Object[columnNames.length - 3];
+                    Object[] tmp = new Object[columnNames.length];
                     tmp[0] = script.getInputLines().size() ;
                     addRow(currentLine, tmp, columnNames, model);
                 }
@@ -266,6 +266,8 @@ public class TAS {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 int row = pianoRoll.rowAtPoint(evt.getPoint());
                 int col = pianoRoll.columnAtPoint(evt.getPoint());
+
+                System.out.println(col);
 
                 if (row >= 0 && col >= 3) {
 
@@ -319,7 +321,7 @@ public class TAS {
         for (int i = 0; i < script.getInputLines().size(); i++){
             InputLine currentLine = script.getInputLines().get(i);
 
-            Object[] tmp = new Object[columnNames.length - 3];
+            Object[] tmp = new Object[columnNames.length];
             tmp[0] = i + 1;
             addRow(currentLine, tmp, columnNames, model);
         }
