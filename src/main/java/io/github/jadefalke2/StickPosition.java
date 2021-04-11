@@ -13,17 +13,17 @@ public class StickPosition {
 
 	private final static int MAX_SIZE = 32767;
 
-    public StickPosition(int x, int y) {
-        this.x = x;
-        this.y = y;
-        updatePolar();
-    }
+	public StickPosition(int x, int y) {
+		this.x = x;
+		this.y = y;
+		updatePolar();
+	}
 
 	public StickPosition() {
 		this(0, 0);
 	}
 
-    public StickPosition(StickPosition pos) {
+	public StickPosition(StickPosition pos) {
 		x = pos.x;
 		y = pos.y;
 		theta = pos.theta;
@@ -68,14 +68,14 @@ public class StickPosition {
 		y = (int) ((radius * MAX_SIZE) * Math.sin(theta));
 	}
 
-	public double getAngle (Point circleOrigin, MouseEvent e){
+	public double getAngle(Point circleOrigin, MouseEvent e) {
 		double side1 = e.getX() - circleOrigin.getX();
 		double side2 = e.getY() - circleOrigin.getY();
 
-		double hypot = Math.hypot(side1,side2);
+		double hypot = Math.hypot(side1, side2);
 
-		double alpha = Math.asin(side1/hypot);
-		double beta = Math.asin(side2/hypot);
+		double alpha = Math.asin(side1 / hypot);
+		double beta = Math.asin(side2 / hypot);
 
 		return alpha;
 	}
