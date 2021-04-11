@@ -9,7 +9,7 @@ public class InputLine {
     int line;
     String buttons;
     ArrayList<String> buttonsEncoded = new ArrayList<>();
-    String stickL,stickR;
+    StickPosition stickL,stickR;
 
     public InputLine (String full){
         this.full = full;
@@ -31,8 +31,8 @@ public class InputLine {
             }
         }
 
-        stickL = components[2];
-        stickR = components[3];
+        stickL = new StickPosition(Integer.parseInt(components[2].split(";")[0]),Integer.parseInt(components[2].split(";")[1]));
+        stickR = new StickPosition(Integer.parseInt(components[3].split(";")[0]),Integer.parseInt(components[3].split(";")[1]));
 
     }
 
@@ -45,11 +45,11 @@ public class InputLine {
         return buttonsEncoded;
     }
 
-    public String getStickL() {
+    public StickPosition getStickL() {
         return stickL;
     }
 
-    public String getStickR() {
+    public StickPosition getStickR() {
         return stickR;
     }
 
@@ -75,7 +75,7 @@ public class InputLine {
             }
         }
 
-        tmpString.append(" " + getStickL() + " " + getStickR());
+        tmpString.append(" " + getStickL().toString() + " " + getStickR().toString());
 
         full = tmpString.toString();
     }

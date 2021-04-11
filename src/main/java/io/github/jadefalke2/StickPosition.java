@@ -125,11 +125,6 @@ public class StickPosition {
 
 	@Override
 	public String toString() {
-		return "StickPosition{" +
-				"x=" + x +
-				", y=" + y +
-				", theta=" + theta +
-				", radius=" + radius +
-				'}';
+		return x + ";" + y;
 	}
 }

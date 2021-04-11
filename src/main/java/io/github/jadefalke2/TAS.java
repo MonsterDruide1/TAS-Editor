@@ -31,6 +31,7 @@ public class TAS {
         startUpPanel = new JPanel();
 
         window = new Window();
+        window.setBackground(new Color(52, 52, 52));
         window.setSize(300,200);
         window.add(startUpPanel);
 
@@ -287,21 +288,26 @@ public class TAS {
                         stickWindowIsOpen = true;
                         stickWindow.setResizable(false);
                         stickWindow.setVisible(true);
-                        stickWindow.setSize(300,400);
+                        stickWindow.setSize(300,500);
                         stickWindow.setLocation(new Point(200,200));
 
-                        stickWindow.addWindowListener(new WindowAdapter()
-                        {
+                        stickWindow.addWindowListener(new WindowAdapter() {
                             @Override
-                            public void windowClosing(WindowEvent e)
-                            {
+                            public void windowClosing(WindowEvent e) {
                                 stickWindowIsOpen = false;
                                 e.getWindow().dispose();
                             }
                         });
 
 
-                        StickImagePanel stickImagePanel = new StickImagePanel(new StickPosition(Integer.parseInt(script.inputLines.get(row).getStickL().split(";")[0]),Integer.parseInt(script.inputLines.get(row).getStickL().split(";")[1])));
+                        StickImagePanel stickImagePanel;
+
+                        if (row == 1){
+                            stickImagePanel = new StickImagePanel(script.inputLines.get(row).getStickL(),StickImagePanel.StickType.L_STICK);
+                        }else {
+                            stickImagePanel = new StickImagePanel(script.inputLines.get(row).getStickR(),StickImagePanel.StickType.R_STICK);
+                        }
+
                         stickWindow.add(stickImagePanel);
                         
                     }
