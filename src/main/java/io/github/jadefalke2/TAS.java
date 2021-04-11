@@ -7,6 +7,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.util.Stack;
 
 public class TAS {
 
@@ -21,13 +22,14 @@ public class TAS {
 
     private static final LookAndFeel original = UIManager.getLookAndFeel();
 
-
+    private Stack<Action> undoStack;
+    private Stack<Action> redoStack;
 
     public TAS (){
         startProgram();
     }
 
-    public static void startProgram (){
+    public void startProgram (){
         startUpPanel = new JPanel();
 
         window = new Window();
@@ -56,15 +58,15 @@ public class TAS {
 
     }
 
-    public static void onLoadButtonPress (){
+    public void onLoadButtonPress (){
         openLoadFileChooser();
     }
 
-    public static void onNewScriptButtonPress (){
+    public void onNewScriptButtonPress (){
     	openNewFileCreator();
     }
 
-    public static void openLoadFileChooser (){
+    public void openLoadFileChooser (){
 
         setWindowsLookAndFeel();
 
@@ -112,7 +114,7 @@ public class TAS {
         }
     }
 
-    public static void openNewFileCreator (){
+    public void openNewFileCreator (){
 
 
         setWindowsLookAndFeel();
@@ -144,7 +146,7 @@ public class TAS {
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
-            
+
             currentFile = fileToOpen;
 
             StringBuilder stringBuilder = new StringBuilder();
@@ -169,7 +171,7 @@ public class TAS {
 
             startEditor();
         }
-        
+
     }
 
     public static void setWindowsLookAndFeel (){
@@ -186,13 +188,42 @@ public class TAS {
         }
     }
 
-    public static void startEditor (){
-
+    public void startEditor (){
 
         window.remove(startUpPanel);
 
         editor = new JPanel();
         window.add(editor);
+
+        undoStack = new Stack<>();
+        redoStack = new Stack<>();
+
+        AbstractAction saveAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                saveFile();
+            }
+        };
+        editor.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("control S"), "SAVE");
+        editor.getActionMap().put("SAVE", saveAction);
+
+        AbstractAction undoAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                undo();
+            }
+        };
+        editor.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("control Z"), "UNDO");
+        editor.getActionMap().put("UNDO", undoAction);
+
+        AbstractAction redoAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                redo();
+            }
+        };
+        editor.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("control shift Z"), "REDO");
+        editor.getActionMap().put("REDO", redoAction);
 
         editor.setBorder(BorderFactory.createEmptyBorder(30,30,30,30));
 
@@ -271,22 +302,13 @@ public class TAS {
 
                 if (row >= 0 && col >= 3) {
 
-                    if (pianoRoll.getModel().getValueAt(row,col).equals(" ")) {
-                        pianoRoll.getModel().setValueAt(pianoRoll.getColumnName(col), row, col);
-
-                        script.getInputLines().get(row).buttonsEncoded.add(pianoRoll.getColumnName(col));
-
-                    }else if (pianoRoll.getModel().getValueAt(row,col).equals(pianoRoll.getColumnName(col))){
-
-                        pianoRoll.getModel().setValueAt(" ",row,col);
-                        script.getInputLines().get(row).buttonsEncoded.remove(pianoRoll.getColumnName(col));
-                    }
+                    executeAction(new CellAction(model, script, row, col));
 
                 }else if (col <= 2 && col > 0){
                     JFrame stickWindow;
                     if (!stickWindowIsOpen) {
                         stickWindow = new JFrame();
-                        
+
                         stickWindowIsOpen = true;
                         stickWindow.setResizable(false);
                         stickWindow.setVisible(true);
@@ -311,7 +333,7 @@ public class TAS {
                         }
 
                         stickWindow.add(stickImagePanel);
-                        
+
                     }
 
                 }
@@ -353,13 +375,22 @@ public class TAS {
 
         editor.add(scrollPane);
 
+        JPanel buttonsPanel = new JPanel();
+        buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
+
         JButton saveFileButton = new JButton("Save file");
+        saveFileButton.addActionListener(saveAction);
+        buttonsPanel.add(saveFileButton);
 
-        saveFileButton.addActionListener(e -> {
-            saveFile();
-        });
+        JButton undoButton = new JButton("Undo");
+        undoButton.addActionListener(undoAction);
+        buttonsPanel.add(undoButton);
 
-        editor.add(saveFileButton);
+        JButton redoButton = new JButton("Redo");
+        redoButton.addActionListener(redoAction);
+        buttonsPanel.add(redoButton);
+
+        editor.add(buttonsPanel);
     }
 
     private static void saveFile (){
@@ -414,6 +445,27 @@ public class TAS {
         model.addRow(tmp);
     }
 
+    private void executeAction(Action action) {
+        action.execute();
+        undoStack.push(action);
+        redoStack.clear();
+    }
+
+    private void undo() {
+        if (undoStack.isEmpty())
+            return;
+        Action action = undoStack.pop();
+        action.revert();
+        redoStack.push(action);
+    }
+
+    private void redo() {
+        if (redoStack.isEmpty())
+            return;
+        Action action = redoStack.pop();
+        action.execute();
+        undoStack.push(action);
+    }
 
     public static void main(String[] args) {
         new TAS();
