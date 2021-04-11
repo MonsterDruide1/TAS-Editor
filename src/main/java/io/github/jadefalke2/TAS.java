@@ -128,7 +128,7 @@ public class TAS {
         fileChooser.setSelectedFile(new File("script1.txt"));
 
         int option = fileChooser.showSaveDialog(null);
-        
+
         if (option == JFileChooser.APPROVE_OPTION) {
 
             File fileToOpen = fileChooser.getSelectedFile();
@@ -294,7 +294,7 @@ public class TAS {
 
         pianoRoll.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
                 int row = pianoRoll.rowAtPoint(evt.getPoint());
                 int col = pianoRoll.columnAtPoint(evt.getPoint());
 
