@@ -151,6 +151,7 @@ public class StickImagePanel extends JPanel {
         angleSpinner.setValue((int) Math.toDegrees(stickPosition.getTheta()));
 
         stickPosition.setPosition(x,y);
+        System.out.println(stickPosition.getRadius());
 
         if (stickType == StickType.L_STICK){
             inputLine.setStickL(stickPosition);
