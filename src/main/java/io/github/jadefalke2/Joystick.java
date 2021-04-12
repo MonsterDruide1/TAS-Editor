@@ -1,13 +1,11 @@
 package io.github.jadefalke2;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Point;
+import javax.swing.*;
+import javax.swing.event.SwingPropertyChangeSupport;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeListener;
-import javax.swing.*;
-import javax.swing.event.SwingPropertyChangeSupport;
 
 public class Joystick extends JPanel {
 

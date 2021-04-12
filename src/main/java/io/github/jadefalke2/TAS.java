@@ -214,21 +214,21 @@ public class TAS {
 		editor.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
 
 		String[] columnNames = {
-				"frame",
-				"L-stick",
-				"R-Stick",
-				"A",
-				"B",
-				"X",
-				"Y",
-				"ZR",
-				"ZL",
-				"R",
-				"L",
-				"DP-R",
-				"DP-L",
-				"DP-U",
-				"DP-D"
+			"frame",
+			"L-stick",
+			"R-Stick",
+			"A",
+			"B",
+			"X",
+			"Y",
+			"ZR",
+			"ZL",
+			"R",
+			"L",
+			"DP-R",
+			"DP-L",
+			"DP-U",
+			"DP-D"
 		};
 
 		DefaultTableModel model = new DefaultTableModel();
@@ -273,11 +273,11 @@ public class TAS {
 			}
 		});
 
-        pianoRoll.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                int row = pianoRoll.rowAtPoint(evt.getPoint());
-                int col = pianoRoll.columnAtPoint(evt.getPoint());
+		pianoRoll.addMouseListener(new java.awt.event.MouseAdapter() {
+			@Override
+			public void mousePressed(java.awt.event.MouseEvent evt) {
+				int row = pianoRoll.rowAtPoint(evt.getPoint());
+				int col = pianoRoll.columnAtPoint(evt.getPoint());
 
 				if (row >= 0 && col >= 3) {
 
