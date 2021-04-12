@@ -243,8 +243,6 @@ public class TAS {
 			public boolean isCellEditable(int row, int column) {
 				return false;
 			}
-
-
 		};
 
 		pianoRoll.setRowSelectionAllowed(false);
@@ -307,10 +305,10 @@ public class TAS {
 
 						StickImagePanel stickImagePanel;
 
-						if (row == 1) {
-							stickImagePanel = new StickImagePanel(script.inputLines.get(row).getStickL(), StickImagePanel.StickType.L_STICK);
+						if (col == 1) {
+							stickImagePanel = new StickImagePanel(script.inputLines.get(row).getStickL(), StickImagePanel.StickType.L_STICK,script.getInputLines().get(row));
 						} else {
-							stickImagePanel = new StickImagePanel(script.inputLines.get(row).getStickR(), StickImagePanel.StickType.R_STICK);
+							stickImagePanel = new StickImagePanel(script.inputLines.get(row).getStickR(), StickImagePanel.StickType.R_STICK,script.getInputLines().get(row));
 						}
 
 						stickWindow.add(stickImagePanel);
@@ -339,9 +337,9 @@ public class TAS {
 		editor.setSize(550, 550);
 		pianoRoll.setSize(500, 700);
 
-		pianoRoll.getColumnModel().getColumn(0).setPreferredWidth(300);
-		pianoRoll.getColumnModel().getColumn(1).setPreferredWidth(300);
-		pianoRoll.getColumnModel().getColumn(2).setPreferredWidth(300);
+		pianoRoll.getColumnModel().getColumn(0).setPreferredWidth(200);
+		pianoRoll.getColumnModel().getColumn(1).setPreferredWidth(500);
+		pianoRoll.getColumnModel().getColumn(2).setPreferredWidth(500);
 
 
 		for (int i = 3; i < 11; i++) {
