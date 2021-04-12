@@ -202,89 +202,9 @@ public class TAS {
 		PianoRoll pianoRoll = new PianoRoll(script);
 		JScrollPane scrollPane = new JScrollPane(pianoRoll);
 
-		//region MenuBar
-		// TODO: Handle the rest of the listeners and make things enabled or disabled correctly
-		MenuBar menuBar = new MenuBar();
-		Menu fileMenu = menuBar.add(new Menu("File"));
-		MenuItem newMenuItem = fileMenu.add(new MenuItem("New", new MenuShortcut(KeyEvent.VK_N)));
-		newMenuItem.addActionListener(e -> {});
-
-		MenuItem newWindowMenuItem = fileMenu.add(new MenuItem("New Window", new MenuShortcut(KeyEvent.VK_N, true)));
-		newWindowMenuItem.addActionListener(e -> {});
-
-		MenuItem openMenuItem = fileMenu.add(new MenuItem("Open...", new MenuShortcut(KeyEvent.VK_O)));
-		openMenuItem.addActionListener(e -> {});
-
-		MenuItem saveMenuItem = fileMenu.add(new MenuItem("Save", new MenuShortcut(KeyEvent.VK_S)));
-		saveMenuItem.addActionListener(e -> saveFile());
-
-		MenuItem saveAsMenuItem = fileMenu.add(new MenuItem("Save As...", new MenuShortcut(KeyEvent.VK_S, true)));
-		saveAsMenuItem.addActionListener(e -> saveFile());
-
-		fileMenu.addSeparator();
-
-		MenuItem exitMenuItem = fileMenu.add(new MenuItem("Exit"));
-		exitMenuItem.addActionListener(e -> System.exit(0));
-
-		Menu editMenu = menuBar.add(new Menu("Edit"));
-
-		MenuItem undoMenuItem = editMenu.add(new MenuItem("Undo", new MenuShortcut(KeyEvent.VK_Z)));
-		undoMenuItem.addActionListener(e -> undo());
-
-		MenuItem redoMenuItem = editMenu.add(new MenuItem("Redo", new MenuShortcut(KeyEvent.VK_Y)));
-		redoMenuItem.addActionListener(e -> redo());
-
-		editMenu.addSeparator();
-
-		MenuItem cutMenuItem = editMenu.add(new MenuItem("Cut", new MenuShortcut(KeyEvent.VK_X)));
-		cutMenuItem.addActionListener(e -> {});
-
-		MenuItem copyMenuItem = editMenu.add(new MenuItem("Copy", new MenuShortcut(KeyEvent.VK_C)));
-		copyMenuItem.addActionListener(e -> {});
-
-		MenuItem pasteMenuItem = editMenu.add(new MenuItem("Paste", new MenuShortcut(KeyEvent.VK_V)));
-		pasteMenuItem.addActionListener(e -> {});
-
-		MenuItem deleteMenuItem = editMenu.add(new MenuItem("Delete", new MenuShortcut(KeyEvent.VK_DELETE)));
-		deleteMenuItem.addActionListener(e -> {});
-
-		Menu viewMenu = menuBar.add(new Menu("View"));
-		CheckboxMenuItem darkThemeMenuItem = new CheckboxMenuItem("Toggle Dark Theme");
-
-		viewMenu.add(darkThemeMenuItem);
-
-		darkThemeMenuItem.addItemListener(e -> {
-			if (darkThemeMenuItem.getState()) {
-				setDarculaLookAndFeel();
-			} else {
-				setWindowsLookAndFeel();
-			}
-		});
-
-		Menu helpMenu = menuBar.add(new Menu("Help"));
-		MenuItem discordMenuItem = helpMenu.add(new MenuItem("Join the SMO TASing Discord"));
-
-		discordMenuItem.addActionListener(e -> {
-			try {
-				Desktop.getDesktop().browse(new URL("https://discord.gg/atKSg9fygq").toURI());
-			} catch (IOException | URISyntaxException ex) {
-				ex.printStackTrace();
-			}
-		});
-
-		helpMenu.addSeparator();
-		MenuItem aboutMenuItem = helpMenu.add(new MenuItem("About SMO TAS Editor"));
-		aboutMenuItem.addActionListener(e -> {
-			try {
-				Desktop.getDesktop().browse(new URL("https://github.com/Jadefalke2/TAS-editor").toURI());
-			} catch (IOException | URISyntaxException ex) {
-				ex.printStackTrace();
-			}
-		});
-
+		MainMenuBar menuBar = new MainMenuBar(this);
 		window.setMenuBar(menuBar);
 
-		//endregion
 
 		undoStack = new CircularStack<>(1024);
 		redoStack = new CircularStack<>(1024);
@@ -355,7 +275,7 @@ public class TAS {
 		//edits a function
 	}
 
-	private void saveFile() {
+	public void saveFile() {
 
 
 		BufferedWriter writer = null;
@@ -396,7 +316,7 @@ public class TAS {
 		redoStack.clear();
 	}
 
-	private void undo() {
+	public void undo() {
 		if (undoStack.isEmpty())
 			return;
 		Action action = undoStack.pop();
@@ -404,7 +324,7 @@ public class TAS {
 		redoStack.push(action);
 	}
 
-	private void redo() {
+	public void redo() {
 		if (redoStack.isEmpty())
 			return;
 		Action action = redoStack.pop();
