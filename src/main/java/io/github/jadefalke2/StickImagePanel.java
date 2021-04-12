@@ -141,8 +141,6 @@ public class StickImagePanel extends JPanel {
 
 	private void updateStickPosition() {
 
-    	StickPosition oldStickPosition = new StickPosition(stickPosition);
-
         int x = (int)joystick.getOutputPos().getX();
         int y = (int)joystick.getOutputPos().getY();
 
@@ -152,8 +150,13 @@ public class StickImagePanel extends JPanel {
         angleSpinner.setValue((int) Math.toDegrees(stickPosition.getTheta()));
 
         stickPosition.setPosition(x,y);
+        System.out.println(stickPosition.getRadius());
 
-        TAS.getInstance().executeAction(new StickAction(inputLine, stickType, oldStickPosition, stickPosition));
+        if (stickType == StickType.L_STICK){
+            inputLine.setStickL(stickPosition);
+        }else{
+            inputLine.setStickR(stickPosition);
+        }
 
 		repaint();
 	}
