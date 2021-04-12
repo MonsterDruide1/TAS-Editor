@@ -40,6 +40,7 @@ public class StickImagePanel extends JPanel {
 		joystick = new Joystick(32767,STICK_IMAGE_SIZE);
 
 
+		joystick.setThumbPos(new Point(stickPosition.getX(),stickPosition.getY()));
         JPanel joyStickPanel = new JPanel();
         JPanel spinnerPanel = new JPanel();
 
@@ -150,6 +151,7 @@ public class StickImagePanel extends JPanel {
         ySpinner.setValue(y);
         radiusSpinner.setValue(stickPosition.getRadius());
         angleSpinner.setValue((int) Math.toDegrees(stickPosition.getTheta()));
+
 
         stickPosition.setPosition(x,y);
 

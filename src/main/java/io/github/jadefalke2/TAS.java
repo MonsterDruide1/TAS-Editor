@@ -24,7 +24,6 @@ public class TAS {
 	private Script script;
 	private File currentFile;
 
-	private boolean stickWindowIsOpen;
 	private boolean functionWindowIsOpen;
 
 
@@ -189,6 +188,8 @@ public class TAS {
 		} catch (UnsupportedLookAndFeelException e) {
 			e.printStackTrace();
 		}
+
+
 	}
 
 	public void startEditor() {
@@ -198,40 +199,60 @@ public class TAS {
 		editor = new JPanel();
 		window.add(editor);
 
+		PianoRoll pianoRoll = new PianoRoll(script);
+		JScrollPane scrollPane = new JScrollPane(pianoRoll);
+
 		//region MenuBar
 		// TODO: Handle the rest of the listeners and make things enabled or disabled correctly
 		MenuBar menuBar = new MenuBar();
 		Menu fileMenu = menuBar.add(new Menu("File"));
 		MenuItem newMenuItem = fileMenu.add(new MenuItem("New", new MenuShortcut(KeyEvent.VK_N)));
 		newMenuItem.addActionListener(e -> {});
+
 		MenuItem newWindowMenuItem = fileMenu.add(new MenuItem("New Window", new MenuShortcut(KeyEvent.VK_N, true)));
 		newWindowMenuItem.addActionListener(e -> {});
+
 		MenuItem openMenuItem = fileMenu.add(new MenuItem("Open...", new MenuShortcut(KeyEvent.VK_O)));
 		openMenuItem.addActionListener(e -> {});
+
 		MenuItem saveMenuItem = fileMenu.add(new MenuItem("Save", new MenuShortcut(KeyEvent.VK_S)));
 		saveMenuItem.addActionListener(e -> saveFile());
+
 		MenuItem saveAsMenuItem = fileMenu.add(new MenuItem("Save As...", new MenuShortcut(KeyEvent.VK_S, true)));
 		saveAsMenuItem.addActionListener(e -> saveFile());
+
 		fileMenu.addSeparator();
+
 		MenuItem exitMenuItem = fileMenu.add(new MenuItem("Exit"));
 		exitMenuItem.addActionListener(e -> System.exit(0));
+
 		Menu editMenu = menuBar.add(new Menu("Edit"));
+
 		MenuItem undoMenuItem = editMenu.add(new MenuItem("Undo", new MenuShortcut(KeyEvent.VK_Z)));
 		undoMenuItem.addActionListener(e -> undo());
-		MenuItem redoMenuItem = editMenu.add(new MenuItem("Redo", new MenuShortcut(KeyEvent.VK_Z, true)));
+
+		MenuItem redoMenuItem = editMenu.add(new MenuItem("Redo", new MenuShortcut(KeyEvent.VK_Y)));
 		redoMenuItem.addActionListener(e -> redo());
+
 		editMenu.addSeparator();
+
 		MenuItem cutMenuItem = editMenu.add(new MenuItem("Cut", new MenuShortcut(KeyEvent.VK_X)));
 		cutMenuItem.addActionListener(e -> {});
+
 		MenuItem copyMenuItem = editMenu.add(new MenuItem("Copy", new MenuShortcut(KeyEvent.VK_C)));
 		copyMenuItem.addActionListener(e -> {});
+
 		MenuItem pasteMenuItem = editMenu.add(new MenuItem("Paste", new MenuShortcut(KeyEvent.VK_V)));
 		pasteMenuItem.addActionListener(e -> {});
+
 		MenuItem deleteMenuItem = editMenu.add(new MenuItem("Delete", new MenuShortcut(KeyEvent.VK_DELETE)));
 		deleteMenuItem.addActionListener(e -> {});
+
 		Menu viewMenu = menuBar.add(new Menu("View"));
 		CheckboxMenuItem darkThemeMenuItem = new CheckboxMenuItem("Toggle Dark Theme");
+
 		viewMenu.add(darkThemeMenuItem);
+
 		darkThemeMenuItem.addItemListener(e -> {
 			if (darkThemeMenuItem.getState()) {
 				setDarculaLookAndFeel();
@@ -239,8 +260,10 @@ public class TAS {
 				setWindowsLookAndFeel();
 			}
 		});
+
 		Menu helpMenu = menuBar.add(new Menu("Help"));
 		MenuItem discordMenuItem = helpMenu.add(new MenuItem("Join the SMO TASing Discord"));
+
 		discordMenuItem.addActionListener(e -> {
 			try {
 				Desktop.getDesktop().browse(new URL("https://discord.gg/atKSg9fygq").toURI());
@@ -248,10 +271,19 @@ public class TAS {
 				ex.printStackTrace();
 			}
 		});
+
 		helpMenu.addSeparator();
 		MenuItem aboutMenuItem = helpMenu.add(new MenuItem("About SMO TAS Editor"));
-		aboutMenuItem.addActionListener(e -> {});
+		aboutMenuItem.addActionListener(e -> {
+			try {
+				Desktop.getDesktop().browse(new URL("https://github.com/Jadefalke2/TAS-editor").toURI());
+			} catch (IOException | URISyntaxException ex) {
+				ex.printStackTrace();
+			}
+		});
+
 		window.setMenuBar(menuBar);
+
 		//endregion
 
 		undoStack = new CircularStack<>(1024);
@@ -259,142 +291,10 @@ public class TAS {
 
 		editor.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
 
-		String[] columnNames = {
-			"frame",
-			"L-stick",
-			"R-Stick",
-			"A",
-			"B",
-			"X",
-			"Y",
-			"ZR",
-			"ZL",
-			"R",
-			"L",
-			"DP-R",
-			"DP-L",
-			"DP-U",
-			"DP-D"
-		};
-
-		DefaultTableModel model = new DefaultTableModel();
-
-		for (String colName : columnNames) {
-			model.addColumn(colName);
-		}
-
-
-		JTable pianoRoll = new JTable(model) {
-			@Override
-			public boolean isCellEditable(int row, int column) {
-				return false;
-			}
-		};
-
-		pianoRoll.setRowSelectionAllowed(false);
-
-		pianoRoll.addKeyListener(new KeyListener() {
-			@Override
-			public void keyTyped(KeyEvent e) {
-
-			}
-
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_A) {
-
-					script.getInputLines().add(new InputLine((script.getInputLines().size() + 1) + " NONE 0;0 0;0"));
-
-					InputLine currentLine = script.getInputLines().get(script.getInputLines().size() - 1);
-
-					Object[] tmp = new Object[columnNames.length];
-					tmp[0] = script.getInputLines().size();
-					addRow(currentLine, tmp, columnNames, model);
-				}
-			}
-
-			@Override
-			public void keyReleased(KeyEvent e) {
-
-			}
-		});
-
-		pianoRoll.addMouseListener(new java.awt.event.MouseAdapter() {
-			@Override
-			public void mousePressed(java.awt.event.MouseEvent evt) {
-				int row = pianoRoll.rowAtPoint(evt.getPoint());
-				int col = pianoRoll.columnAtPoint(evt.getPoint());
-
-				if (row >= 0 && col >= 3) {
-
-					executeAction(new CellAction(model, script, row, col));
-
-				} else if (col <= 2 && col > 0) {
-					JFrame stickWindow;
-					if (!stickWindowIsOpen) {
-						stickWindow = new JFrame();
-
-						stickWindowIsOpen = true;
-						stickWindow.setResizable(false);
-						stickWindow.setVisible(true);
-						stickWindow.setSize(300, 500);
-						stickWindow.setLocation(new Point(200, 200));
-
-						stickWindow.addWindowListener(new WindowAdapter() {
-							@Override
-							public void windowClosing(WindowEvent e) {
-								stickWindowIsOpen = false;
-								e.getWindow().dispose();
-							}
-						});
-
-
-						StickImagePanel stickImagePanel;
-
-						if (col == 1) {
-							stickImagePanel = new StickImagePanel(script.inputLines.get(row).getStickL(), StickImagePanel.StickType.L_STICK,script.getInputLines().get(row));
-						} else {
-							stickImagePanel = new StickImagePanel(script.inputLines.get(row).getStickR(), StickImagePanel.StickType.R_STICK,script.getInputLines().get(row));
-						}
-
-						stickWindow.add(stickImagePanel);
-
-					}
-
-				}
-			}
-		});
-
-		for (int i = 0; i < script.getInputLines().size(); i++) {
-			InputLine currentLine = script.getInputLines().get(i);
-
-			Object[] tmp = new Object[columnNames.length];
-			tmp[0] = i + 1;
-			addRow(currentLine, tmp, columnNames, model);
-		}
-
-
-		JScrollPane scrollPane = new JScrollPane(pianoRoll);
-
-		pianoRoll.getTableHeader().setResizingAllowed(false);
-		pianoRoll.getTableHeader().setReorderingAllowed(false);
 
 		window.setSize(700, 1100);
 		editor.setSize(550, 550);
-		pianoRoll.setSize(500, 700);
 
-		pianoRoll.getColumnModel().getColumn(0).setPreferredWidth(200);
-		pianoRoll.getColumnModel().getColumn(1).setPreferredWidth(500);
-		pianoRoll.getColumnModel().getColumn(2).setPreferredWidth(500);
-
-
-		for (int i = 3; i < 11; i++) {
-			pianoRoll.getColumnModel().getColumn(i).setPreferredWidth(60);
-		}
-
-		for (int i = 11; i < 15; i++) {
-			pianoRoll.getColumnModel().getColumn(i).setPreferredWidth(200);
-		}
 
 		editor.add(scrollPane);
 
@@ -412,17 +312,24 @@ public class TAS {
 		JFrame functionEditor;
 
 		if (!functionWindowIsOpen) {
+
 			functionWindowIsOpen = true;
+
 			functionEditor = new JFrame();
+			functionEditor.setVisible(true);
+			functionEditor.setSize(500,400);
 			functionEditor.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 			functionEditor.addWindowListener(new WindowAdapter() {
 				@Override
 				public void windowClosing(WindowEvent e) {
-					stickWindowIsOpen = false;
+					functionWindowIsOpen = false;
 					e.getWindow().dispose();
 				}
 			});
+
+			JPanel functionWindowTypeChooser = new JPanel();
+			functionEditor.add(functionWindowTypeChooser);
 
 			JButton createNewFunctionButton = new JButton("Create new function");
 			createNewFunctionButton.addActionListener(e -> {
@@ -433,12 +340,15 @@ public class TAS {
 			editFunctionButton.addActionListener(e -> {
 				editFunction();
 			});
+
+			functionWindowTypeChooser.add(editFunctionButton);
+			functionWindowTypeChooser.add(createNewFunctionButton);
 		}
 
 	}
 
 	private void createNewFunction() {
-		//creates a new function
+		openLoadFileChooser();
 	}
 
 	private void editFunction() {
@@ -478,20 +388,6 @@ public class TAS {
 			}
 		}
 
-	}
-
-	private void addRow(InputLine currentLine, Object[] tmp, String[] columnNames, DefaultTableModel model) {
-		tmp[1] = currentLine.getStickL();
-		tmp[2] = currentLine.getStickR();
-
-		for (int j = 3; j < tmp.length; j++) {
-			if (currentLine.getButtonsEncoded().contains(columnNames[j])) {
-				tmp[j] = columnNames[j];
-			} else {
-				tmp[j] = " ";
-			}
-		}
-		model.addRow(tmp);
 	}
 
 	public void executeAction(Action action) {
