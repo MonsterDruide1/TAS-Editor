@@ -10,6 +10,8 @@ import java.io.*;
 
 public class TAS {
 
+	private static TAS instance;
+
 	private Window window;
 	private JPanel startUpPanel;
 	private JPanel editor;
@@ -26,8 +28,13 @@ public class TAS {
 	private Stack<Action> undoStack;
 	private Stack<Action> redoStack;
 
-	public TAS() {
+	private TAS() {
+		instance = this;
 		startProgram();
+	}
+
+	public static TAS getInstance() {
+		return instance;
 	}
 
 	/**
@@ -459,13 +466,14 @@ public class TAS {
 		model.addRow(tmp);
 	}
 
-	private void executeAction(Action action) {
+	public void executeAction(Action action) {
 		action.execute();
 		undoStack.push(action);
 		redoStack.clear();
 	}
 
 	private void undo() {
+		System.out.println("Undoing!");
 		if (undoStack.isEmpty())
 			return;
 		Action action = undoStack.pop();
