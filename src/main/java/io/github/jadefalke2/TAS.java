@@ -7,6 +7,8 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 public class TAS {
 
@@ -187,35 +189,64 @@ public class TAS {
 		editor = new JPanel();
 		window.add(editor);
 
+		//region MenuBar
+		// TODO: Handle the rest of the listeners and make things enabled or disabled correctly
+		MenuBar menuBar = new MenuBar();
+		Menu fileMenu = menuBar.add(new Menu("File"));
+		MenuItem newMenuItem = fileMenu.add(new MenuItem("New", new MenuShortcut(KeyEvent.VK_N)));
+		newMenuItem.addActionListener(e -> {});
+		MenuItem newWindowMenuItem = fileMenu.add(new MenuItem("New Window", new MenuShortcut(KeyEvent.VK_N, true)));
+		newWindowMenuItem.addActionListener(e -> {});
+		MenuItem openMenuItem = fileMenu.add(new MenuItem("Open...", new MenuShortcut(KeyEvent.VK_O)));
+		openMenuItem.addActionListener(e -> {});
+		MenuItem saveMenuItem = fileMenu.add(new MenuItem("Save", new MenuShortcut(KeyEvent.VK_S)));
+		saveMenuItem.addActionListener(e -> saveFile());
+		MenuItem saveAsMenuItem = fileMenu.add(new MenuItem("Save As...", new MenuShortcut(KeyEvent.VK_S, true)));
+		saveAsMenuItem.addActionListener(e -> saveFile());
+		fileMenu.addSeparator();
+		MenuItem exitMenuItem = fileMenu.add(new MenuItem("Exit"));
+		exitMenuItem.addActionListener(e -> System.exit(0));
+		Menu editMenu = menuBar.add(new Menu("Edit"));
+		MenuItem undoMenuItem = editMenu.add(new MenuItem("Undo", new MenuShortcut(KeyEvent.VK_Z)));
+		undoMenuItem.addActionListener(e -> undo());
+		MenuItem redoMenuItem = editMenu.add(new MenuItem("Redo", new MenuShortcut(KeyEvent.VK_Z, true)));
+		redoMenuItem.addActionListener(e -> redo());
+		editMenu.addSeparator();
+		MenuItem cutMenuItem = editMenu.add(new MenuItem("Cut", new MenuShortcut(KeyEvent.VK_X)));
+		cutMenuItem.addActionListener(e -> {});
+		MenuItem copyMenuItem = editMenu.add(new MenuItem("Copy", new MenuShortcut(KeyEvent.VK_C)));
+		copyMenuItem.addActionListener(e -> {});
+		MenuItem pasteMenuItem = editMenu.add(new MenuItem("Paste", new MenuShortcut(KeyEvent.VK_V)));
+		pasteMenuItem.addActionListener(e -> {});
+		MenuItem deleteMenuItem = editMenu.add(new MenuItem("Delete", new MenuShortcut(KeyEvent.VK_DELETE)));
+		deleteMenuItem.addActionListener(e -> {});
+		Menu viewMenu = menuBar.add(new Menu("View"));
+		CheckboxMenuItem darkThemeMenuItem = new CheckboxMenuItem("Toggle Dark Theme");
+		viewMenu.add(darkThemeMenuItem);
+		darkThemeMenuItem.addActionListener(e -> {
+			if (darkThemeMenuItem.getState()) {
+				// TODO: Dark theme
+			} else {
+				setWindowsLookAndFeel();
+			}
+		});
+		Menu helpMenu = menuBar.add(new Menu("Help"));
+		MenuItem discordMenuItem = helpMenu.add(new MenuItem("Join the SMO TASing Discord"));
+		discordMenuItem.addActionListener(e -> {
+			try {
+				Desktop.getDesktop().browse(new URL("https://discord.gg/atKSg9fygq").toURI());
+			} catch (IOException | URISyntaxException ex) {
+				ex.printStackTrace();
+			}
+		});
+		helpMenu.addSeparator();
+		MenuItem aboutMenuItem = helpMenu.add(new MenuItem("About SMO TAS Editor"));
+		aboutMenuItem.addActionListener(e -> {});
+		window.setMenuBar(menuBar);
+		//endregion
+
 		undoStack = new CircularStack<>(1024);
 		redoStack = new CircularStack<>(1024);
-
-		AbstractAction saveAction = new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				saveFile();
-			}
-		};
-		editor.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("control S"), "SAVE");
-		editor.getActionMap().put("SAVE", saveAction);
-
-		AbstractAction undoAction = new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				undo();
-			}
-		};
-		editor.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("control Z"), "UNDO");
-		editor.getActionMap().put("UNDO", undoAction);
-
-		AbstractAction redoAction = new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				redo();
-			}
-		};
-		editor.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("control shift Z"), "REDO");
-		editor.getActionMap().put("REDO", redoAction);
 
 		editor.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
 
@@ -361,18 +392,6 @@ public class TAS {
 		JPanel buttonsPanel = new JPanel();
 		buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
 
-		JButton saveFileButton = new JButton("Save file");
-		saveFileButton.addActionListener(saveAction);
-		buttonsPanel.add(saveFileButton);
-
-		JButton undoButton = new JButton("Undo");
-		undoButton.addActionListener(undoAction);
-		buttonsPanel.add(undoButton);
-
-		JButton redoButton = new JButton("Redo");
-		redoButton.addActionListener(redoAction);
-		buttonsPanel.add(redoButton);
-
 		JButton functionEditorButton = new JButton("Function editor");
 		functionEditorButton.addActionListener(e -> openFunctionEditor());
 		buttonsPanel.add(functionEditorButton);
@@ -473,7 +492,6 @@ public class TAS {
 	}
 
 	private void undo() {
-		System.out.println("Undoing!");
 		if (undoStack.isEmpty())
 			return;
 		Action action = undoStack.pop();
