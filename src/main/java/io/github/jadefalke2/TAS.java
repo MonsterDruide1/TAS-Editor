@@ -7,7 +7,6 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
-import java.util.Stack;
 
 public class TAS {
 
@@ -181,8 +180,8 @@ public class TAS {
 		editor = new JPanel();
 		window.add(editor);
 
-		undoStack = new Stack<>();
-		redoStack = new Stack<>();
+		undoStack = new CircularStack<>(1024);
+		redoStack = new CircularStack<>(1024);
 
 		AbstractAction saveAction = new AbstractAction() {
 			@Override
