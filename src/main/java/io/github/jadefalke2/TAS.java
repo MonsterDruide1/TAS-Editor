@@ -1,5 +1,8 @@
 package io.github.jadefalke2;
 
+import com.bulenkov.darcula.DarculaLaf;
+import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
+
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
@@ -169,14 +172,20 @@ public class TAS {
 	}
 
 	public void setWindowsLookAndFeel() {
+		System.out.println("Windows Look and Feel!");
 		try {
-			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-		} catch (ClassNotFoundException e) {
+			UIManager.setLookAndFeel(new WindowsLookAndFeel());
+			SwingUtilities.updateComponentTreeUI(window);
+		} catch (UnsupportedLookAndFeelException e) {
 			e.printStackTrace();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
+		}
+	}
+
+	public void setDarculaLookAndFeel() {
+		System.out.println("Darcula Look and Feel!");
+		try {
+			UIManager.setLookAndFeel(new DarculaLaf());
+			SwingUtilities.updateComponentTreeUI(window);
 		} catch (UnsupportedLookAndFeelException e) {
 			e.printStackTrace();
 		}
@@ -223,9 +232,9 @@ public class TAS {
 		Menu viewMenu = menuBar.add(new Menu("View"));
 		CheckboxMenuItem darkThemeMenuItem = new CheckboxMenuItem("Toggle Dark Theme");
 		viewMenu.add(darkThemeMenuItem);
-		darkThemeMenuItem.addActionListener(e -> {
+		darkThemeMenuItem.addItemListener(e -> {
 			if (darkThemeMenuItem.getState()) {
-				// TODO: Dark theme
+				setDarculaLookAndFeel();
 			} else {
 				setWindowsLookAndFeel();
 			}
