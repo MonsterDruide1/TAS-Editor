@@ -1,6 +1,5 @@
 package io.github.jadefalke2;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.IOException;

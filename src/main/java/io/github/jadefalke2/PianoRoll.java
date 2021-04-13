@@ -1,22 +1,15 @@
 package io.github.jadefalke2;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.util.Stack;
+import java.awt.event.*;
 
 public class PianoRoll extends JTable {
 
 	private boolean stickWindowIsOpen;
+	private JPopupMenu popupMenu = new JPopupMenu();
 
-	private Stack<Action> undoStack;
-	private Stack<Action> redoStack;
 
 	String[] columnNames = {
 		"frame",
@@ -39,8 +32,9 @@ public class PianoRoll extends JTable {
 	DefaultTableModel model = new DefaultTableModel();
 
 	public PianoRoll (Script script){
-
+		preparepopUpMenu();
 		setModel(model);
+		setDragEnabled(false);
 
 		setSize(500, 700);
 		getTableHeader().setResizingAllowed(false);
@@ -50,7 +44,7 @@ public class PianoRoll extends JTable {
 			model.addColumn(colName);
 		}
 
-		setRowSelectionAllowed(false);
+
 
 		addKeyListener(new KeyListener() {
 			@Override
@@ -84,43 +78,24 @@ public class PianoRoll extends JTable {
 				int row = rowAtPoint(evt.getPoint());
 				int col = columnAtPoint(evt.getPoint());
 
-				if (row >= 0 && col >= 3) {
+				switch (col){
 
-					TAS.getInstance().executeAction(new CellAction(model, script, row, col));
+					case 0:
 
-				} else if (col <= 2 && col > 0) {
-					JFrame stickWindow;
-					if (!stickWindowIsOpen) {
-						stickWindow = new JFrame();
-
-						stickWindowIsOpen = true;
-						stickWindow.setResizable(false);
-						stickWindow.setVisible(true);
-						stickWindow.setSize(300, 500);
-						stickWindow.setLocation(new Point(200, 200));
-
-						stickWindow.addWindowListener(new WindowAdapter() {
-							@Override
-							public void windowClosing(WindowEvent e) {
-								stickWindowIsOpen = false;
-								e.getWindow().dispose();
-							}
-						});
-
-
-						StickImagePanel stickImagePanel;
-
-						if (col == 1) {
-							stickImagePanel = new StickImagePanel(script.inputLines.get(row).getStickL(), StickImagePanel.StickType.L_STICK,script.getInputLines().get(row));
-						} else {
-							stickImagePanel = new StickImagePanel(script.inputLines.get(row).getStickR(), StickImagePanel.StickType.R_STICK,script.getInputLines().get(row));
+						if (evt.getButton() == MouseEvent.BUTTON3 && isRowSelected(row)) {
+							openPopUpMenu(row,evt.getPoint());
 						}
 
-						stickWindow.add(stickImagePanel);
+						break;
 
-					}
+					case 1: case 2:
+						openStickWindow(row,col,script);
+						break;
 
+					default:
+						TAS.getInstance().executeAction(new CellAction(model, script, row, col));
 				}
+
 			}
 		});
 
@@ -158,6 +133,73 @@ public class PianoRoll extends JTable {
 			}
 		}
 		model.addRow(tmp);
+	}
+
+	private void openStickWindow (int row,int col, Script script){
+		JFrame stickWindow;
+		if (!stickWindowIsOpen) {
+			stickWindow = new JFrame();
+
+			stickWindowIsOpen = true;
+			stickWindow.setResizable(false);
+			stickWindow.setVisible(true);
+			stickWindow.setSize(300, 500);
+			stickWindow.setLocation(new Point(200, 200));
+
+			stickWindow.addWindowListener(new WindowAdapter() {
+				@Override
+				public void windowClosing(WindowEvent e) {
+					stickWindowIsOpen = false;
+					e.getWindow().dispose();
+				}
+			});
+
+
+			StickImagePanel stickImagePanel;
+
+			if (col == 1) {
+				stickImagePanel = new StickImagePanel(script.inputLines.get(row).getStickL(), StickImagePanel.StickType.L_STICK,script.getInputLines().get(row));
+			} else {
+				stickImagePanel = new StickImagePanel(script.inputLines.get(row).getStickR(), StickImagePanel.StickType.R_STICK,script.getInputLines().get(row));
+			}
+
+			stickWindow.add(stickImagePanel);
+
+		}
+
+	}
+
+	private void openPopUpMenu(int row, Point point){
+		popupMenu.show(this,(int)point.getX(),(int)point.getY());
+	}
+
+	private void preparepopUpMenu (){
+
+		JMenuItem delete = new JMenuItem("delete");
+		delete.setActionCommand("delete");
+		delete.addActionListener(e -> {
+			System.out.println("delete");
+		});
+
+		JMenuItem insert = new JMenuItem("insert");
+		insert.setActionCommand("insert");
+		insert.addActionListener(e -> {
+			System.out.println("insert");
+		});
+
+		JMenuItem clone = new JMenuItem("clone");
+		clone.setActionCommand("clone");
+		clone.addActionListener(e -> {
+			System.out.println("clone");
+		});
+
+		popupMenu.add(delete);
+		popupMenu.add(insert);
+		popupMenu.add(clone);
+
+		popupMenu.setVisible(true);
+		popupMenu.setSize(100,100);
+		popupMenu.setVisible(false);
 	}
 
 

@@ -6,12 +6,9 @@ import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
-import java.net.URISyntaxException;
-import java.net.URL;
 
 public class TAS {
 
@@ -22,7 +19,9 @@ public class TAS {
 	private JPanel editor;
 
 	private Script script;
-	private File currentFile;
+	private Function currentFunction;
+
+	private File currentScriptFile;
 
 	private boolean functionWindowIsOpen;
 
@@ -73,6 +72,7 @@ public class TAS {
 
 	}
 
+
 	public void onLoadButtonPress() {
 		openLoadFileChooser();
 	}
@@ -80,6 +80,7 @@ public class TAS {
 	public void onNewScriptButtonPress() {
 		openNewFileCreator();
 	}
+
 
 	public void openLoadFileChooser() {
 
@@ -105,32 +106,6 @@ public class TAS {
 		} catch (UnsupportedLookAndFeelException e) {
 			e.printStackTrace();
 		}
-	}
-
-	private void prepareEditor(File fileToOpen) {
-		currentFile = fileToOpen;
-
-		StringBuilder stringBuilder = new StringBuilder();
-		try (BufferedReader br = new BufferedReader(new FileReader(fileToOpen))) {
-
-			String sCurrentLine;
-			while ((sCurrentLine = br.readLine()) != null) {
-				stringBuilder.append(sCurrentLine).append("\n");
-			}
-		} catch (IOException exception) {
-			exception.printStackTrace();
-		}
-
-		String string = stringBuilder.toString();
-		script = new Script(string);
-
-		try {
-			UIManager.setLookAndFeel(original);
-		} catch (UnsupportedLookAndFeelException e) {
-			e.printStackTrace();
-		}
-
-		startEditor();
 	}
 
 	public void openNewFileCreator() {
@@ -170,27 +145,34 @@ public class TAS {
 
 	}
 
-	public void setWindowsLookAndFeel() {
-		System.out.println("Windows Look and Feel!");
+
+	private void prepareEditor(File fileToOpen) {
+		currentScriptFile = fileToOpen;
+
+		StringBuilder stringBuilder = new StringBuilder();
+		try (BufferedReader br = new BufferedReader(new FileReader(fileToOpen))) {
+
+			String sCurrentLine;
+			while ((sCurrentLine = br.readLine()) != null) {
+				stringBuilder.append(sCurrentLine).append("\n");
+			}
+		} catch (IOException exception) {
+			exception.printStackTrace();
+		}
+
+		String string = stringBuilder.toString();
+		script = new Script(string);
+
 		try {
-			UIManager.setLookAndFeel(new WindowsLookAndFeel());
-			SwingUtilities.updateComponentTreeUI(window);
+			UIManager.setLookAndFeel(original);
 		} catch (UnsupportedLookAndFeelException e) {
 			e.printStackTrace();
 		}
+
+		startEditor();
 	}
 
-	public void setDarculaLookAndFeel() {
-		System.out.println("Darcula Look and Feel!");
-		try {
-			UIManager.setLookAndFeel(new DarculaLaf());
-			SwingUtilities.updateComponentTreeUI(window);
-		} catch (UnsupportedLookAndFeelException e) {
-			e.printStackTrace();
-		}
 
-
-	}
 
 	public void startEditor() {
 
@@ -289,7 +271,7 @@ public class TAS {
 
 			FileWriter fw;
 
-			fw = new FileWriter(currentFile);
+			fw = new FileWriter(currentScriptFile);
 
 
 			writer = new BufferedWriter(fw);
@@ -307,6 +289,28 @@ public class TAS {
 				System.out.println("Error in closing the BufferedWriter" + ex);
 			}
 		}
+
+	}
+
+	public void setWindowsLookAndFeel() {
+		System.out.println("Windows Look and Feel!");
+		try {
+			UIManager.setLookAndFeel(new WindowsLookAndFeel());
+			SwingUtilities.updateComponentTreeUI(window);
+		} catch (UnsupportedLookAndFeelException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void setDarculaLookAndFeel() {
+		System.out.println("Darcula Look and Feel!");
+		try {
+			UIManager.setLookAndFeel(new DarculaLaf());
+			SwingUtilities.updateComponentTreeUI(window);
+		} catch (UnsupportedLookAndFeelException e) {
+			e.printStackTrace();
+		}
+
 
 	}
 
@@ -330,6 +334,14 @@ public class TAS {
 		Action action = redoStack.pop();
 		action.execute();
 		undoStack.push(action);
+	}
+
+	public Script getScript (){
+		return script;
+	}
+
+	public File getCurrentScriptFile(){
+		return currentScriptFile;
 	}
 
 	public static void main(String[] args) {

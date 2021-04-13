@@ -8,15 +8,21 @@ public class Script {
 	ArrayList<InputLine> inputLines = new ArrayList<>();
 
 	public Script(String script) {
+		this.script = script;
+		prepareScript();
+	}
+
+	public ArrayList<InputLine> getInputLines() {
+		return inputLines;
+	}
+
+	private void prepareScript (){
+		inputLines.clear();
 		String[] lines = script.split("\n");
 
 		for (String line : lines) {
 			inputLines.add(new InputLine(line));
 		}
-	}
-
-	public ArrayList<InputLine> getInputLines() {
-		return inputLines;
 	}
 
 }
