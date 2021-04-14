@@ -92,8 +92,6 @@ public class TAS {
 
 	public void openLoadFileChooser() {
 
-		setWindowsLookAndFeel();
-
 		JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView());
 
 		fileChooser.setDialogTitle("Choose existing TAS file");
@@ -111,8 +109,6 @@ public class TAS {
 	}
 
 	public void openNewFileCreator() {
-
-		setWindowsLookAndFeel();
 
 		JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView());
 
