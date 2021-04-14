@@ -8,7 +8,12 @@ import java.awt.event.*;
 public class PianoRoll extends JTable {
 
 	private boolean stickWindowIsOpen;
+	private Script script;
+
 	private JPopupMenu popupMenu = new JPopupMenu();
+	JMenuItem delete = new JMenuItem("delete");
+	JMenuItem insert = new JMenuItem("insert");
+	JMenuItem clone = new JMenuItem("clone");
 
 
 	String[] columnNames = {
@@ -32,6 +37,7 @@ public class PianoRoll extends JTable {
 	DefaultTableModel model = new DefaultTableModel();
 
 	public PianoRoll (Script script){
+		this.script = script;
 		preparepopUpMenu();
 		setModel(model);
 		setDragEnabled(false);
@@ -132,6 +138,7 @@ public class PianoRoll extends JTable {
 				tmp[j] = " ";
 			}
 		}
+
 		model.addRow(tmp);
 	}
 
@@ -170,28 +177,38 @@ public class PianoRoll extends JTable {
 	}
 
 	private void openPopUpMenu(int row, Point point){
+
+		if (delete.getActionListeners().length != 0){
+			delete.removeActionListener(delete.getActionListeners()[0]);
+		}
+		delete.addActionListener(e -> {
+			TAS.getInstance().executeAction(new LineAction(this.model,script,row, LineAction.Type.DELETE));
+		});
+
+		if (insert.getActionListeners().length != 0){
+			insert.removeActionListener(insert.getActionListeners()[0]);
+		}
+		insert.addActionListener(e -> {
+			TAS.getInstance().executeAction(new LineAction(this.model,script,row, LineAction.Type.INSERT));
+			update();
+		});
+
+		if (clone.getActionListeners().length != 0){
+			clone.removeActionListener(clone.getActionListeners()[0]);
+		}
+		clone.addActionListener(e -> {
+			TAS.getInstance().executeAction(new LineAction(this.model,script,row, LineAction.Type.CLONE));
+		});
+
 		popupMenu.show(this,(int)point.getX(),(int)point.getY());
 	}
 
 	private void preparepopUpMenu (){
 
-		JMenuItem delete = new JMenuItem("delete");
 		delete.setActionCommand("delete");
-		delete.addActionListener(e -> {
-			System.out.println("delete");
-		});
-
-		JMenuItem insert = new JMenuItem("insert");
 		insert.setActionCommand("insert");
-		insert.addActionListener(e -> {
-			System.out.println("insert");
-		});
-
-		JMenuItem clone = new JMenuItem("clone");
 		clone.setActionCommand("clone");
-		clone.addActionListener(e -> {
-			System.out.println("clone");
-		});
+
 
 		popupMenu.add(delete);
 		popupMenu.add(insert);
@@ -200,6 +217,10 @@ public class PianoRoll extends JTable {
 		popupMenu.setVisible(true);
 		popupMenu.setSize(100,100);
 		popupMenu.setVisible(false);
+	}
+
+	private void update (){
+
 	}
 
 

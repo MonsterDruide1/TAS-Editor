@@ -60,6 +60,10 @@ public class InputLine {
 		this.stickR = stickR;
 	}
 
+	public void setLine(int line) {
+		this.line = line;
+	}
+
 	private void updateFull() {
 		StringBuilder tmpString = new StringBuilder();
 
@@ -87,8 +91,44 @@ public class InputLine {
 		full = tmpString.toString();
 	}
 
+	public Object[] getArray (){
+
+		String[] buttonNames = {
+			"",
+			"",
+			"",
+			"A",
+			"B",
+			"X",
+			"Y",
+			"ZR",
+			"ZL",
+			"R",
+			"L",
+			"DP-R",
+			"DP-L",
+			"DP-U",
+			"DP-D"
+		};
+
+		ArrayList<Object> tmp = new ArrayList<>();
+		tmp.add(line);
+		tmp.add(stickL.toString());
+		tmp.add(stickR.toString());
+
+		for (int i = 3; i < 15; i++){
+			tmp.add(buttonsEncoded.contains(buttonNames[i]) ? buttonNames[i] : " ");
+		}
+
+		return tmp.toArray();
+	}
+
 	public String getFull() {
 		updateFull();
 		return full;
+	}
+
+	public static InputLine getEmpty (int line){
+		return new InputLine(line + " NONE 0;0 0;0");
 	}
 }

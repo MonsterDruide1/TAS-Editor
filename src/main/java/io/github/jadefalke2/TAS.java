@@ -25,9 +25,6 @@ public class TAS {
 
 	private boolean functionWindowIsOpen;
 
-
-	private final LookAndFeel original = UIManager.getLookAndFeel();
-
 	private Stack<Action> undoStack;
 	private Stack<Action> redoStack;
 
@@ -45,12 +42,15 @@ public class TAS {
 	 */
 
 	public void startProgram() {
+
 		startUpPanel = new JPanel();
 
 		window = new Window();
 		window.setBackground(new Color(52, 52, 52));
 		window.setSize(300, 200);
 		window.add(startUpPanel);
+
+		setWindowsLookAndFeel();
 
 		JButton createNewScriptButton = new JButton("create new script");
 		JButton loadScriptButton = new JButton("load script");
@@ -99,12 +99,6 @@ public class TAS {
 
 			File fileToOpen = fileChooser.getSelectedFile();
 			prepareEditor(fileToOpen);
-		}
-
-		try {
-			UIManager.setLookAndFeel(original);
-		} catch (UnsupportedLookAndFeelException e) {
-			e.printStackTrace();
 		}
 	}
 
@@ -162,12 +156,6 @@ public class TAS {
 
 		String string = stringBuilder.toString();
 		script = new Script(string);
-
-		try {
-			UIManager.setLookAndFeel(original);
-		} catch (UnsupportedLookAndFeelException e) {
-			e.printStackTrace();
-		}
 
 		startEditor();
 	}

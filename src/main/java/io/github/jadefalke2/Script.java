@@ -16,6 +16,16 @@ public class Script {
 		return inputLines;
 	}
 
+	public void insertLine(int row, InputLine inputLine){
+
+		inputLines.add(row,inputLine);
+
+		for (int i = row + 1; i < inputLines.size(); i++){
+			inputLines.get(i).setLine(inputLines.get(i).getLine() + 1);
+		}
+
+	}
+
 	private void prepareScript (){
 		inputLines.clear();
 		String[] lines = script.split("\n");
