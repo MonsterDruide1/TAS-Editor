@@ -55,14 +55,7 @@ public class LineAction implements Action{
 
 	private void cloneRow(){
 		InputLine tmpLine = new InputLine(script.getInputLines().get(row).getFull());
-		script.insertLine(row,tmpLine);
-
-		table.addRow(tmpLine.getArray());
-		table.moveRow(table.getRowCount() - 1, table.getRowCount() - 1, row);
-
-		for (int i = row; i < table.getRowCount(); i++){
-			table.setValueAt(script.getInputLines().get(i).getLine(),i, 0);
-		}
+		insertRow(tmpLine);
 	}
 
 	private void deleteRow(){
@@ -86,6 +79,9 @@ public class LineAction implements Action{
 
 	private void insertRow (InputLine inputLine){
 		script.insertLine(row,inputLine);
+
+		table.addRow(inputLine.getArray());
+		table.moveRow(table.getRowCount() - 1, table.getRowCount() - 1, row);
 
 		for (int i = row; i < table.getRowCount(); i++){
 			table.setValueAt(script.getInputLines().get(i).getLine(),i, 0);
