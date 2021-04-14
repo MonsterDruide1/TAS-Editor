@@ -5,6 +5,7 @@ import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.prefs.Preferences;
 
 public class MainMenuBar extends MenuBar {
 
@@ -55,11 +56,15 @@ public class MainMenuBar extends MenuBar {
 		deleteMenuItem.addActionListener(e -> {});
 
 		Menu viewMenu = add(new Menu("View"));
-		CheckboxMenuItem darkThemeMenuItem = new CheckboxMenuItem("Toggle Dark Theme");
+
+		Preferences preferences = TAS.getInstance().getPreferences();
+
+		CheckboxMenuItem darkThemeMenuItem = new CheckboxMenuItem("Toggle Dark Theme", preferences.getBoolean("dark_theme", false));
 
 		viewMenu.add(darkThemeMenuItem);
 
 		darkThemeMenuItem.addItemListener(e -> {
+			preferences.putBoolean("dark_theme", darkThemeMenuItem.getState());
 			if (darkThemeMenuItem.getState()) {
 				main.setDarculaLookAndFeel();
 			} else {

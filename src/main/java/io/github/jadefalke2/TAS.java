@@ -9,6 +9,7 @@ import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.util.prefs.Preferences;
 
 public class TAS {
 
@@ -17,6 +18,8 @@ public class TAS {
 	private Window window;
 	private JPanel startUpPanel;
 	private JPanel editor;
+
+	private Preferences preferences;
 
 	private Script script;
 	private Function currentFunction;
@@ -43,6 +46,8 @@ public class TAS {
 
 	public void startProgram() {
 
+		preferences = Preferences.userRoot().node(getClass().getName());
+
 		startUpPanel = new JPanel();
 
 		window = new Window();
@@ -50,7 +55,11 @@ public class TAS {
 		window.setSize(300, 200);
 		window.add(startUpPanel);
 
-		setWindowsLookAndFeel();
+		if (preferences.getBoolean("dark_theme", false)) {
+			setDarculaLookAndFeel();
+		} else {
+			setWindowsLookAndFeel();
+		}
 
 		JButton createNewScriptButton = new JButton("create new script");
 		JButton loadScriptButton = new JButton("load script");
@@ -69,7 +78,6 @@ public class TAS {
 
 		startUpPanel.add(createNewScriptButton);
 		startUpPanel.add(loadScriptButton);
-
 	}
 
 
@@ -281,7 +289,6 @@ public class TAS {
 	}
 
 	public void setWindowsLookAndFeel() {
-		System.out.println("Windows Look and Feel!");
 		try {
 			UIManager.setLookAndFeel(new WindowsLookAndFeel());
 			SwingUtilities.updateComponentTreeUI(window);
@@ -291,7 +298,6 @@ public class TAS {
 	}
 
 	public void setDarculaLookAndFeel() {
-		System.out.println("Darcula Look and Feel!");
 		try {
 			UIManager.setLookAndFeel(new DarculaLaf());
 			SwingUtilities.updateComponentTreeUI(window);
@@ -330,6 +336,10 @@ public class TAS {
 
 	public File getCurrentScriptFile(){
 		return currentScriptFile;
+	}
+
+	public Preferences getPreferences() {
+		return preferences;
 	}
 
 	public static void main(String[] args) {
