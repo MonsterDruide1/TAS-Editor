@@ -180,8 +180,8 @@ public class TAS {
 		PianoRoll pianoRoll = new PianoRoll(script);
 		JScrollPane scrollPane = new JScrollPane(pianoRoll);
 
-		MainMenuBar menuBar = new MainMenuBar(this);
-		window.setMenuBar(menuBar);
+		MainJMenuBar jMenuBar = new MainJMenuBar(this);
+		window.setJMenuBar(jMenuBar);
 
 
 		undoStack = new CircularStack<>(1024);
