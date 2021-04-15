@@ -2,6 +2,9 @@ package io.github.jadefalke2;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
+import io.github.jadefalke2.actions.Action;
+import io.github.jadefalke2.util.CircularStack;
+import io.github.jadefalke2.util.Stack;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -27,8 +30,8 @@ public class TAS {
 
 	private boolean functionWindowIsOpen;
 
-	private Stack<Action> undoStack;
-	private Stack<Action> redoStack;
+	private Stack<io.github.jadefalke2.actions.Action> undoStack;
+	private Stack<io.github.jadefalke2.actions.Action> redoStack;
 
 	private TAS() {
 		instance = this;
@@ -321,7 +324,7 @@ public class TAS {
 
 	}
 
-	public void executeAction(Action action) {
+	public void executeAction(io.github.jadefalke2.actions.Action action) {
 		action.execute();
 		undoStack.push(action);
 		redoStack.clear();
@@ -330,7 +333,7 @@ public class TAS {
 	public void undo() {
 		if (undoStack.isEmpty())
 			return;
-		Action action = undoStack.pop();
+		io.github.jadefalke2.actions.Action action = undoStack.pop();
 		action.revert();
 		redoStack.push(action);
 	}

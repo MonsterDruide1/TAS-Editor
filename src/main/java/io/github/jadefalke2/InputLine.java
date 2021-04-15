@@ -8,7 +8,7 @@ public class InputLine {
 
 	int line;
 	String buttons;
-	ArrayList<String> buttonsEncoded = new ArrayList<>();
+	public ArrayList<String> buttonsEncoded = new ArrayList<>();
 	StickPosition stickL, stickR;
 
 	public InputLine(String full) {

@@ -1,5 +1,8 @@
 package io.github.jadefalke2;
 
+import io.github.jadefalke2.actions.CellAction;
+import io.github.jadefalke2.actions.LineAction;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
