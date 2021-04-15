@@ -5,7 +5,7 @@ import javax.swing.table.DefaultTableModel;
 public class LineAction implements Action{
 
 	enum Type {
-		DELETE,INSERT,CLONE;
+		DELETE,INSERT,CLONE
 	}
 
 	Type type;

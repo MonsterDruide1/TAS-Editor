@@ -19,7 +19,6 @@ public class TAS {
 	private JPanel editor;
 
 	private Script script;
-	private Function currentFunction;
 
 	private File currentScriptFile;
 
@@ -46,9 +45,17 @@ public class TAS {
 		startUpPanel = new JPanel();
 
 		window = new Window();
-		window.setBackground(new Color(52, 52, 52));
 		window.setSize(300, 200);
 		window.add(startUpPanel);
+		window.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				if (!(JOptionPane.showConfirmDialog(window, "Save Project changes?", "Save before exiting", JOptionPane.OK_OPTION, JOptionPane.CLOSED_OPTION, new ImageIcon("")) != 0) && window.mainEditor) {
+					saveFile();
+				}
+				System.exit(0);
+			}
+		});
 
 		setWindowsLookAndFeel();
 
@@ -56,13 +63,9 @@ public class TAS {
 		JButton loadScriptButton = new JButton("load script");
 
 
-		createNewScriptButton.addActionListener(e -> {
-			onNewScriptButtonPress();
-		});
+		createNewScriptButton.addActionListener(e -> onNewScriptButtonPress());
 
-		loadScriptButton.addActionListener(e -> {
-			onLoadButtonPress();
-		});
+		loadScriptButton.addActionListener(e -> onLoadButtonPress());
 
 
 		startUpPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
@@ -185,6 +188,8 @@ public class TAS {
 		window.setSize(700, 1100);
 		editor.setSize(550, 550);
 
+		window.mainEditor = true;
+
 
 		editor.add(scrollPane);
 
@@ -192,7 +197,9 @@ public class TAS {
 		buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
 
 		JButton functionEditorButton = new JButton("Function editor");
-		functionEditorButton.addActionListener(e -> openFunctionEditor());
+		functionEditorButton.addActionListener(e -> {
+		/*openFunctionEditor()*/
+		});
 		buttonsPanel.add(functionEditorButton);
 
 		editor.add(buttonsPanel);
@@ -222,14 +229,10 @@ public class TAS {
 			functionEditor.add(functionWindowTypeChooser);
 
 			JButton createNewFunctionButton = new JButton("Create new function");
-			createNewFunctionButton.addActionListener(e -> {
-				createNewFunction();
-			});
+			createNewFunctionButton.addActionListener(e -> createNewFunction());
 
 			JButton editFunctionButton = new JButton("Edit existing function");
-			editFunctionButton.addActionListener(e -> {
-				editFunction();
-			});
+			editFunctionButton.addActionListener(e -> editFunction());
 
 			functionWindowTypeChooser.add(editFunctionButton);
 			functionWindowTypeChooser.add(createNewFunctionButton);
@@ -280,6 +283,20 @@ public class TAS {
 
 	}
 
+	private void askForSave (){
+		JDialog save = new JDialog();
+		save.setVisible(true);
+
+		JLabel savingLabel = new JLabel("Save project changes?");
+
+		JButton yes = new JButton("Yes");
+		JButton no = new JButton("No");
+
+		save.add(savingLabel);
+		save.add(yes);
+		save.add(no);
+	}
+
 	public void setWindowsLookAndFeel() {
 		System.out.println("Windows Look and Feel!");
 		try {
@@ -324,13 +341,6 @@ public class TAS {
 		undoStack.push(action);
 	}
 
-	public Script getScript (){
-		return script;
-	}
-
-	public File getCurrentScriptFile(){
-		return currentScriptFile;
-	}
 
 	public static void main(String[] args) {
 		new TAS();

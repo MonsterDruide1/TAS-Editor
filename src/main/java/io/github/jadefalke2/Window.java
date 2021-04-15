@@ -4,6 +4,8 @@ import javax.swing.*;
 
 public class Window extends JFrame {
 
+	public boolean mainEditor = false;
+
 	public Window() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("SMO TAS editor");
