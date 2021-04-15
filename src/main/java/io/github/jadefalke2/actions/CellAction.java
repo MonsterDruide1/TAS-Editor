@@ -1,13 +1,15 @@
-package io.github.jadefalke2;
+package io.github.jadefalke2.actions;
+
+import io.github.jadefalke2.Script;
 
 import javax.swing.table.TableModel;
 
 public class CellAction implements Action {
 
-	TableModel table;
-	Script script;
-	int row;
-	int col;
+	private TableModel table;
+	private Script script;
+	private int row;
+	private int col;
 
 	public CellAction(TableModel table, Script script, int row, int col) {
 		this.table = table;
