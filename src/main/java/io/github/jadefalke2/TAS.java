@@ -1,6 +1,6 @@
 package io.github.jadefalke2;
 
-import com.bulenkov.darcula.DarculaLaf;
+import com.formdev.flatlaf.FlatDarkLaf;
 import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
 
 import javax.swing.*;
@@ -9,6 +9,7 @@ import javax.swing.filechooser.FileSystemView;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.util.prefs.Preferences;
 
 public class TAS {
 
@@ -17,6 +18,8 @@ public class TAS {
 	private Window window;
 	private JPanel startUpPanel;
 	private JPanel editor;
+
+	private Preferences preferences;
 
 	private Script script;
 
@@ -42,6 +45,8 @@ public class TAS {
 
 	public void startProgram() {
 
+		preferences = Preferences.userRoot().node(getClass().getName());
+
 		startUpPanel = new JPanel();
 
 		window = new Window();
@@ -57,7 +62,11 @@ public class TAS {
 			}
 		});
 
-		setWindowsLookAndFeel();
+		if (preferences.getBoolean("dark_theme", false)) {
+			setDarculaLookAndFeel();
+		} else {
+			setWindowsLookAndFeel();
+		}
 
 		JButton createNewScriptButton = new JButton("create new script");
 		JButton loadScriptButton = new JButton("load script");
@@ -72,7 +81,6 @@ public class TAS {
 
 		startUpPanel.add(createNewScriptButton);
 		startUpPanel.add(loadScriptButton);
-
 	}
 
 
@@ -86,8 +94,6 @@ public class TAS {
 
 
 	public void openLoadFileChooser() {
-
-		setWindowsLookAndFeel();
 
 		JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView());
 
@@ -106,8 +112,6 @@ public class TAS {
 	}
 
 	public void openNewFileCreator() {
-
-		setWindowsLookAndFeel();
 
 		JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView());
 
@@ -175,8 +179,8 @@ public class TAS {
 		PianoRoll pianoRoll = new PianoRoll(script);
 		JScrollPane scrollPane = new JScrollPane(pianoRoll);
 
-		MainMenuBar menuBar = new MainMenuBar(this);
-		window.setMenuBar(menuBar);
+		MainJMenuBar jMenuBar = new MainJMenuBar(this);
+		window.setJMenuBar(jMenuBar);
 
 
 		undoStack = new CircularStack<>(1024);
@@ -298,7 +302,6 @@ public class TAS {
 	}
 
 	public void setWindowsLookAndFeel() {
-		System.out.println("Windows Look and Feel!");
 		try {
 			UIManager.setLookAndFeel(new WindowsLookAndFeel());
 			SwingUtilities.updateComponentTreeUI(window);
@@ -308,9 +311,8 @@ public class TAS {
 	}
 
 	public void setDarculaLookAndFeel() {
-		System.out.println("Darcula Look and Feel!");
 		try {
-			UIManager.setLookAndFeel(new DarculaLaf());
+			UIManager.setLookAndFeel(new FlatDarkLaf());
 			SwingUtilities.updateComponentTreeUI(window);
 		} catch (UnsupportedLookAndFeelException e) {
 			e.printStackTrace();
@@ -341,6 +343,10 @@ public class TAS {
 		undoStack.push(action);
 	}
 
+
+	public Preferences getPreferences() {
+		return preferences;
+	}
 
 	public static void main(String[] args) {
 		new TAS();
