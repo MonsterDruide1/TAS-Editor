@@ -1,6 +1,6 @@
 package io.github.jadefalke2;
 
-import com.bulenkov.darcula.DarculaLaf;
+import com.formdev.flatlaf.FlatDarkLaf;
 import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
 
 import javax.swing.*;
@@ -295,7 +295,7 @@ public class TAS {
 
 	public void setDarculaLookAndFeel() {
 		try {
-			UIManager.setLookAndFeel(new DarculaLaf());
+			UIManager.setLookAndFeel(new FlatDarkLaf());
 			SwingUtilities.updateComponentTreeUI(window);
 		} catch (UnsupportedLookAndFeelException e) {
 			e.printStackTrace();
