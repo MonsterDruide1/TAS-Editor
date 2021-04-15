@@ -1,15 +1,13 @@
 package io.github.jadefalke2;
 
+import io.github.jadefalke2.actions.StickAction;
+
 import javax.swing.*;
 import java.awt.*;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 public class StickImagePanel extends JPanel {
 
@@ -28,7 +26,7 @@ public class StickImagePanel extends JPanel {
     private final int STICK_IMAGE_SIZE = 200;
 
 
-    enum StickType {
+    public enum StickType {
         L_STICK,R_STICK
     }
 

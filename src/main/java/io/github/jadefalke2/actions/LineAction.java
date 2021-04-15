@@ -1,18 +1,23 @@
-package io.github.jadefalke2;
+package io.github.jadefalke2.actions;
+
+import io.github.jadefalke2.InputLine;
+import io.github.jadefalke2.Script;
 
 import javax.swing.table.DefaultTableModel;
 
 public class LineAction implements Action{
 
-	enum Type {
-		DELETE,INSERT,CLONE
+	public enum Type {
+		DELETE,
+		INSERT,
+		CLONE
 	}
 
-	Type type;
-	DefaultTableModel table;
-	Script script;
-	int row;
-	InputLine previousLine;
+	private Type type;
+	private DefaultTableModel table;
+	private Script script;
+	private int row;
+	private InputLine previousLine;
 
 	public LineAction(DefaultTableModel table, Script script, int row, Type type) {
 		previousLine = new InputLine(script.getInputLines().get(row).getFull());

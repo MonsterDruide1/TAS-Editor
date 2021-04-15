@@ -2,11 +2,13 @@ package io.github.jadefalke2;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
+import io.github.jadefalke2.actions.Action;
+import io.github.jadefalke2.util.CircularStack;
+import io.github.jadefalke2.util.Stack;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
-import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.prefs.Preferences;
