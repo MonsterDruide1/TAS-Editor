@@ -18,14 +18,17 @@ public class MainJMenuBar extends JMenuBar {
 		JMenuItem newJMenuItem = fileJMenu.add(new JMenuItem("New"));
 		newJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_MASK));
 		newJMenuItem.addActionListener(e -> {});
+		newJMenuItem.setEnabled(false);
 
 		JMenuItem newWindowJMenuItem = fileJMenu.add(new JMenuItem("New Window"));
 		newWindowJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK));
 		newWindowJMenuItem.addActionListener(e -> {});
+		newWindowJMenuItem.setEnabled(false);
 
 		JMenuItem openJMenuItem = fileJMenu.add(new JMenuItem("Open..."));
 		openJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
 		openJMenuItem.addActionListener(e -> {});
+		openJMenuItem.setEnabled(false);
 
 		JMenuItem saveJMenuItem = fileJMenu.add(new JMenuItem("Save"));
 		saveJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
@@ -55,18 +58,22 @@ public class MainJMenuBar extends JMenuBar {
 		JMenuItem cutJMenuItem = editJMenu.add(new JMenuItem("Cut"));
 		cutJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_MASK));
 		cutJMenuItem.addActionListener(e -> {});
+		cutJMenuItem.setEnabled(false);
 
 		JMenuItem copyJMenuItem = editJMenu.add(new JMenuItem("Copy"));
 		copyJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_MASK));
 		copyJMenuItem.addActionListener(e -> {});
+		copyJMenuItem.setEnabled(false);
 
 		JMenuItem pasteJMenuItem = editJMenu.add(new JMenuItem("Paste"));
 		pasteJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, InputEvent.CTRL_MASK));
 		pasteJMenuItem.addActionListener(e -> {});
+		pasteJMenuItem.setEnabled(false);
 
 		JMenuItem deleteJMenuItem = editJMenu.add(new JMenuItem("Delete"));
 		deleteJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0));
 		deleteJMenuItem.addActionListener(e -> {});
+		deleteJMenuItem.setEnabled(false);
 
 		JMenu viewJMenu = add(new JMenu("View"));
 

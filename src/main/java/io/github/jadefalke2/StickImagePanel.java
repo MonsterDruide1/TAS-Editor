@@ -8,6 +8,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.TimerTask;
 
 public class StickImagePanel extends JPanel {
 
@@ -30,6 +31,8 @@ public class StickImagePanel extends JPanel {
         L_STICK,R_STICK
     }
 
+
+
 	public StickImagePanel(StickPosition stickPosition, StickType stickType,InputLine inputLine) {
 
         this.inputLine = inputLine;
@@ -39,6 +42,7 @@ public class StickImagePanel extends JPanel {
 
 
 		joystick.setThumbPos(new Point(stickPosition.getX(),stickPosition.getY()));
+
         JPanel joyStickPanel = new JPanel();
         JPanel spinnerPanel = new JPanel();
 
@@ -69,24 +73,35 @@ public class StickImagePanel extends JPanel {
         radiusSpinner = new JSpinner(radiusModel);
         angleSpinner = new JSpinner(angleModel);
 
+        xSpinner.setValue(stickPosition.getX());
+		ySpinner.setValue(stickPosition.getY());
+		radiusSpinner.setValue(stickPosition.getRadius());
+		angleSpinner.setValue(stickPosition.getTheta());
+
         radiusSpinner.setPreferredSize(new Dimension(50,20));
         radiusSpinner.setAlignmentX(10);
 
 
         xSpinner.addChangeListener(e -> {
             stickPosition.setX((int) xSpinner.getValue());
+            updateVisual();
             repaint();
         });
         ySpinner.addChangeListener(e -> {
             stickPosition.setY((int) ySpinner.getValue());
+            updateVisual();
             repaint();
         });
         radiusSpinner.addChangeListener(e -> {
             stickPosition.setRadius((double) radiusSpinner.getValue());
+            updateSpinners();
+            updateVisual();
             repaint();
         });
         angleSpinner.addChangeListener(e -> {
             stickPosition.setTheta(Math.toRadians((int) angleModel.getValue()));
+            updateSpinners();
+            updateVisual();
             repaint();
         });
 
@@ -156,5 +171,18 @@ public class StickImagePanel extends JPanel {
         TAS.getInstance().executeAction(new StickAction(inputLine, stickType, oldStickPosition, stickPosition));
 
 		repaint();
+	}
+
+	private void updateVisual (){
+		joystick.setThumbPos(new Point((int)xSpinner.getValue(),(int)ySpinner.getValue()));
+	}
+
+	private void updateSpinners (){
+    	xSpinner.setValue(stickPosition.getX());
+    	ySpinner.setValue(stickPosition.getY());
+	}
+
+	public StickPosition getStickPos (){
+    	return stickPosition;
 	}
 }

@@ -79,7 +79,7 @@ public class LineAction implements Action{
 	}
 
 	private void insertRow (){
-		insertRow(InputLine.getEmpty(row));
+		insertRow(InputLine.getEmpty(row + 1));
 	}
 
 	private void insertRow (InputLine inputLine){

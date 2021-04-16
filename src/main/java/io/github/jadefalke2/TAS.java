@@ -2,6 +2,7 @@ package io.github.jadefalke2;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
+import com.sun.xml.internal.ws.api.model.wsdl.WSDLOutput;
 import io.github.jadefalke2.actions.Action;
 import io.github.jadefalke2.util.CircularStack;
 import io.github.jadefalke2.util.Stack;
@@ -57,10 +58,14 @@ public class TAS {
 		window.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				if (!(JOptionPane.showConfirmDialog(window, "Save Project changes?", "Save before exiting", JOptionPane.OK_OPTION, JOptionPane.CLOSED_OPTION, new ImageIcon("")) != 0) && window.mainEditor) {
-					saveFile();
+				if (window.mainEditor) {
+					if (JOptionPane.showConfirmDialog(window, "Save Project changes?", "Save before exiting", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, new ImageIcon("")) == 0){
+						saveFile();
+						System.exit(0);
+					}
+				} else {
+					System.exit(0);
 				}
-				System.exit(0);
 			}
 		});
 
@@ -138,7 +143,9 @@ public class TAS {
 				fileWriter.write("2 NONE 0;0 0;0\n");
 				fileWriter.write("3 NONE 0;0 0;0\n");
 				fileWriter.write("4 NONE 0;0 0;0\n");
+
 				fileWriter.close();
+
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
@@ -204,9 +211,9 @@ public class TAS {
 
 		JButton functionEditorButton = new JButton("Function editor");
 		functionEditorButton.addActionListener(e -> {
-		/*openFunctionEditor()*/
+		openFunctionEditor();
 		});
-		buttonsPanel.add(functionEditorButton);
+		//buttonsPanel.add(functionEditorButton);
 
 		editor.add(buttonsPanel);
 	}
@@ -289,19 +296,6 @@ public class TAS {
 
 	}
 
-	private void askForSave (){
-		JDialog save = new JDialog();
-		save.setVisible(true);
-
-		JLabel savingLabel = new JLabel("Save project changes?");
-
-		JButton yes = new JButton("Yes");
-		JButton no = new JButton("No");
-
-		save.add(savingLabel);
-		save.add(yes);
-		save.add(no);
-	}
 
 	public void setWindowsLookAndFeel() {
 		try {

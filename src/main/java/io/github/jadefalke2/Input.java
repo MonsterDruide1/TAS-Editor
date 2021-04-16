@@ -38,15 +38,17 @@ public class Input {
 		encode.put("R", "KEY_R");
 		encode.put("L", "KEY_L");
 
-		encode.put("Plus", "KEY_PLUS");
-		encode.put("Minus", "KEY_MINUS");
+		encode.put("+", "KEY_PLUS");
+		encode.put("-", "KEY_MINUS");
 
 		encode.put("DP-L", "KEY_DLEFT");
 		encode.put("DP-R", "KEY_DRIGHT");
 		encode.put("DP-U", "KEY_DUP");
 		encode.put("DP-D", "KEY_DDOWN");
 
-		//encode.put("", "NONE");
+		encode.put("L-stick","KEY_LSTICK");
+		encode.put("R-stick", "KEY_RSTICK");
+
 	}
 
 

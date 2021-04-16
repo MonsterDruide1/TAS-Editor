@@ -31,21 +31,27 @@ public class PianoRoll extends JTable {
 		"ZL",
 		"R",
 		"L",
+		"+",
+		"-",
 		"DP-R",
 		"DP-L",
 		"DP-U",
-		"DP-D"
+		"DP-D",
+		"L-stick",
+		"R-Stick",
 	};
 
 	DefaultTableModel model = new DefaultTableModel();
 
 	public PianoRoll (Script script){
+
+		setAutoResizeMode(AUTO_RESIZE_OFF);
 		this.script = script;
+
 		preparepopUpMenu();
 		setModel(model);
-		setDragEnabled(false);
 
-		setSize(500, 700);
+		setDragEnabled(false);
 		getTableHeader().setResizingAllowed(false);
 		getTableHeader().setReorderingAllowed(false);
 
@@ -116,16 +122,20 @@ public class PianoRoll extends JTable {
 			addRow(currentLine, tmp, columnNames, model);
 		}
 
-		getColumnModel().getColumn(0).setPreferredWidth(200);
-		getColumnModel().getColumn(1).setPreferredWidth(500);
-		getColumnModel().getColumn(2).setPreferredWidth(500);
+		getColumnModel().getColumn(0).setPreferredWidth(45);
+		getColumnModel().getColumn(1).setPreferredWidth(90);
+		getColumnModel().getColumn(2).setPreferredWidth(90);
 
-		for (int i = 3; i < 11; i++) {
-			getColumnModel().getColumn(i).setPreferredWidth(60);
+		for (int i = 3; i < 13; i++) {
+			getColumnModel().getColumn(i).setPreferredWidth(30);
 		}
 
-		for (int i = 11; i < 15; i++) {
-			getColumnModel().getColumn(i).setPreferredWidth(200);
+		for (int i = 13; i < columnNames.length - 2; i++) {
+			getColumnModel().getColumn(i).setPreferredWidth(40);
+		}
+
+		for (int i = columnNames.length - 2; i < columnNames.length; i++){
+			getColumnModel().getColumn(i).setPreferredWidth(60);
 		}
 
 	}
@@ -150,6 +160,14 @@ public class PianoRoll extends JTable {
 		if (!stickWindowIsOpen) {
 			stickWindow = new JFrame();
 
+			StickImagePanel stickImagePanel;
+
+			if (col == 1) {
+				stickImagePanel = new StickImagePanel(script.inputLines.get(row).getStickL(), StickImagePanel.StickType.L_STICK,script.getInputLines().get(row));
+			} else {
+				stickImagePanel = new StickImagePanel(script.inputLines.get(row).getStickR(), StickImagePanel.StickType.R_STICK,script.getInputLines().get(row));
+			}
+
 			stickWindowIsOpen = true;
 			stickWindow.setResizable(false);
 			stickWindow.setVisible(true);
@@ -160,18 +178,11 @@ public class PianoRoll extends JTable {
 				@Override
 				public void windowClosing(WindowEvent e) {
 					stickWindowIsOpen = false;
+					setValueAt(stickImagePanel.getStickPos().toString(),row,col);
 					e.getWindow().dispose();
 				}
 			});
 
-
-			StickImagePanel stickImagePanel;
-
-			if (col == 1) {
-				stickImagePanel = new StickImagePanel(script.inputLines.get(row).getStickL(), StickImagePanel.StickType.L_STICK,script.getInputLines().get(row));
-			} else {
-				stickImagePanel = new StickImagePanel(script.inputLines.get(row).getStickR(), StickImagePanel.StickType.R_STICK,script.getInputLines().get(row));
-			}
 
 			stickWindow.add(stickImagePanel);
 

@@ -35,31 +35,18 @@ public class StickPosition {
 
 		if (radius > 1) {
 			radius = 1;
-			updateCart();
 		}
 
-		if (x >= 0) {
-			theta = Math.atan((double) y / (double) x);
+		if (x >= 0 && y >= 0){
+			theta = Math.atan((double)y/(double)x);
 		}
 
-		if (x < 0 && y >= 0) {
-			theta = Math.atan((double) y / (double) x) + Math.PI;
+		if (x < 0){
+			theta = (Math.PI) - Math.atan((double)y/(double)x);
 		}
 
-		if (x < 0 && y < 0) {
-			theta = Math.atan((double) y / (double) x) - Math.PI;
-		}
-
-		if (x == 0 && y > 0) {
-			theta = Math.PI / 2;
-		}
-
-		if (x == 0 && y < 0) {
-			theta = -Math.PI / 2;
-		}
-
-		if (x == 0 && y == 0) {
-			theta = Double.NaN;
+		if (x >= 0 && y < 0){
+			theta = (Math.PI*2) + Math.atan((double)y/(double)x);
 		}
 	}
 
@@ -67,19 +54,6 @@ public class StickPosition {
 		x = (int) ((radius * MAX_SIZE) * Math.cos(theta));
 		y = (int) ((radius * MAX_SIZE) * Math.sin(theta));
 	}
-
-	public double getAngle(Point circleOrigin, MouseEvent e) {
-		double side1 = e.getX() - circleOrigin.getX();
-		double side2 = e.getY() - circleOrigin.getY();
-
-		double hypot = Math.hypot(side1, side2);
-
-		double alpha = Math.asin(side1 / hypot);
-		double beta = Math.asin(side2 / hypot);
-
-		return alpha;
-	}
-
 
 	public int getX() {
 		return x;
@@ -126,5 +100,9 @@ public class StickPosition {
 	@Override
 	public String toString() {
 		return x + ";" + y;
+	}
+
+	public String toPolarString (){
+		return Math.floor(Math.toDegrees(theta)) + "°, " + radius;
 	}
 }

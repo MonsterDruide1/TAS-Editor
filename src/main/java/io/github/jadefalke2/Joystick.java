@@ -118,8 +118,8 @@ public class Joystick extends JPanel {
 	}
 
 	public void setThumbPos (Point scaled){
-		thumbPos.x = (scaled.x/outputMax) * (panelWidth / 2 - thumbDiameter / 2) + (panelWidth / 2);
-		thumbPos.y = (scaled.y/-outputMax) * (panelWidth / 2 - thumbDiameter / 2) + (panelWidth / 2);
+		thumbPos.x = (int)((scaled.x/(double)outputMax) * (panelWidth / 2.0 - thumbDiameter / 2.0) + (panelWidth / 2.0));
+		thumbPos.y = (int)((scaled.y/(double)-outputMax) * (panelWidth / 2.0 - thumbDiameter / 2.0) + (panelWidth / 2.0));
 	}
 
 	@Override
