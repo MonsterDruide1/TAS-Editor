@@ -2,7 +2,6 @@ package io.github.jadefalke2;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
-import com.sun.xml.internal.ws.api.model.wsdl.WSDLOutput;
 import io.github.jadefalke2.actions.Action;
 import io.github.jadefalke2.util.CircularStack;
 import io.github.jadefalke2.util.Stack;
@@ -53,6 +52,7 @@ public class TAS {
 		startUpPanel = new JPanel();
 
 		window = new Window();
+		window.setResizable(false);
 		window.setSize(300, 200);
 		window.add(startUpPanel);
 		window.addWindowListener(new WindowAdapter() {

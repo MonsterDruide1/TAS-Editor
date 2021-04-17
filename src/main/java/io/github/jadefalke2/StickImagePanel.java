@@ -3,6 +3,7 @@ package io.github.jadefalke2;
 import io.github.jadefalke2.actions.StickAction;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
 import java.awt.event.MouseAdapter;
@@ -23,6 +24,9 @@ public class StickImagePanel extends JPanel {
     private StickType stickType;
     private InputLine inputLine;
 
+    private DefaultTableModel table;
+    private int row;
+
 
     private final int STICK_IMAGE_SIZE = 200;
 
@@ -33,8 +37,9 @@ public class StickImagePanel extends JPanel {
 
 
 
-	public StickImagePanel(StickPosition stickPosition, StickType stickType,InputLine inputLine) {
-
+	public StickImagePanel(StickPosition stickPosition, StickType stickType, InputLine inputLine, DefaultTableModel table, int row) {
+		this.row = row;
+    	this.table = table;
         this.inputLine = inputLine;
         this.stickType = stickType;
 		this.stickPosition = stickPosition;
@@ -45,6 +50,7 @@ public class StickImagePanel extends JPanel {
 
         JPanel joyStickPanel = new JPanel();
         JPanel spinnerPanel = new JPanel();
+        JPanel centerButtonPanel = new JPanel();
 
 
         GridLayout mainLayout = new GridLayout(2,1,0,20);
@@ -57,6 +63,7 @@ public class StickImagePanel extends JPanel {
         setLayout(mainLayout);
         add(spinnerPanel);
         add(joyStickPanel);
+        //add(centerButtonPanel);
 
         joyStickPanel.add(joystick);
 
@@ -147,6 +154,12 @@ public class StickImagePanel extends JPanel {
         spinnerPanel.add(ySpinner);
         spinnerPanel.add(radiusSpinner);
 
+		JButton centerButton = new JButton("center");
+		centerButton.addActionListener(e -> {
+			joystick.centerThumbPad();
+		});
+		//centerButtonPanel.add(centerButton);
+
     }
 
 
@@ -168,7 +181,7 @@ public class StickImagePanel extends JPanel {
 
         stickPosition.setPosition(x,y);
 
-        TAS.getInstance().executeAction(new StickAction(inputLine, stickType, oldStickPosition, stickPosition));
+        TAS.getInstance().executeAction(new StickAction(inputLine, stickType, oldStickPosition, stickPosition, table, row));
 
 		repaint();
 	}

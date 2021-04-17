@@ -76,7 +76,7 @@ public class Joystick extends JPanel {
 		centerThumbPad();
 	}
 
-	private void centerThumbPad() {
+	public void centerThumbPad() {
 		thumbPos.x = panelWidth / 2;
 		thumbPos.y = panelWidth / 2;
 	}
