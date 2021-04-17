@@ -4,6 +4,7 @@ import io.github.jadefalke2.InputLine;
 import io.github.jadefalke2.Script;
 
 import javax.swing.table.DefaultTableModel;
+import java.util.Arrays;
 
 public class LineAction implements Action{
 
@@ -35,7 +36,7 @@ public class LineAction implements Action{
 	public void execute() {
 		switch (type){
 			case CLONE:
-				cloneRow();
+				cloneRows();
 				break;
 
 			case DELETE:
@@ -62,20 +63,8 @@ public class LineAction implements Action{
 		}
 	}
 
-	private void cloneRow(){
-
-		InputLine[] inputLines = new InputLine[rows.length];
-
-		for (int i = 0; i < rows.length; i++){
-				inputLines[i] = new InputLine(script.getInputLines().get(rows[i]).getFull());
-		}
-
-		for (int i = 0; i < rows.length; i++) {
-			script.getInputLines().add(rows[0] + i + rows.length, inputLines[i]);
-			table.addRow(script.getInputLines().get(rows[0] + i + rows.length).getArray());
-		}
-
-		adjustLines();
+	private void cloneRows(){
+		insertRows(Arrays.stream(rows).mapToObj(row -> new InputLine(script.getInputLines().get(row).getFull())).toArray(InputLine[]::new));
 	}
 
 	private void adjustLines() {
@@ -113,6 +102,15 @@ public class LineAction implements Action{
 
 		for (int i = 0; i < rows.length; i++) {
 			script.getInputLines().add(rows[0] + i + rows.length, InputLine.getEmpty(rows[0] + i + 1));
+			table.addRow(script.getInputLines().get(rows[0] + i + rows.length).getArray());
+		}
+
+		adjustLines();
+	}
+
+	private void insertRows (InputLine[] inputLines){
+		for (int i = 0; i < rows.length; i++) {
+			script.getInputLines().add(rows[0] + i + rows.length, inputLines[i]);
 			table.addRow(script.getInputLines().get(rows[0] + i + rows.length).getArray());
 		}
 

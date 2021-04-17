@@ -71,13 +71,7 @@ public class PianoRoll extends JTable {
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_A) {
 
-					script.getInputLines().add(new InputLine((script.getInputLines().size() + 1) + " NONE 0;0 0;0"));
-
-					InputLine currentLine = script.getInputLines().get(script.getInputLines().size() - 1);
-
-					Object[] tmp = new Object[columnNames.length];
-					tmp[0] = script.getInputLines().size();
-					addRow(currentLine, tmp, columnNames, model);
+					addEmptyRow(script);
 				}
 			}
 
@@ -138,6 +132,16 @@ public class PianoRoll extends JTable {
 			getColumnModel().getColumn(i).setPreferredWidth(60);
 		}
 
+	}
+
+	public void addEmptyRow(Script script) {
+		script.getInputLines().add(new InputLine((script.getInputLines().size() + 1) + " NONE 0;0 0;0"));
+
+		InputLine currentLine = script.getInputLines().get(script.getInputLines().size() - 1);
+
+		Object[] tmp = new Object[columnNames.length];
+		tmp[0] = script.getInputLines().size();
+		addRow(currentLine, tmp, columnNames, model);
 	}
 
 	private void addRow(InputLine currentLine, Object[] tmp, String[] columnNames, DefaultTableModel model) {

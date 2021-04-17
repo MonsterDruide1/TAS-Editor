@@ -188,7 +188,7 @@ public class TAS {
 		PianoRoll pianoRoll = new PianoRoll(script);
 		JScrollPane scrollPane = new JScrollPane(pianoRoll);
 
-		MainJMenuBar jMenuBar = new MainJMenuBar(this);
+		MainJMenuBar jMenuBar = new MainJMenuBar(this,pianoRoll);
 		window.setJMenuBar(jMenuBar);
 
 
@@ -198,7 +198,7 @@ public class TAS {
 		editor.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
 
 
-		window.setSize(700, 1100);
+		window.setSize(600, 700);
 		editor.setSize(550, 550);
 
 		window.mainEditor = true;
@@ -342,6 +342,10 @@ public class TAS {
 
 	public Preferences getPreferences() {
 		return preferences;
+	}
+
+	public Script getScript(){
+		return script;
 	}
 
 	public static void main(String[] args) {

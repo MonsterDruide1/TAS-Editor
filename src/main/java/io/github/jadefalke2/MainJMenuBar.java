@@ -11,7 +11,7 @@ import java.util.prefs.Preferences;
 
 public class MainJMenuBar extends JMenuBar {
 
-	public MainJMenuBar(TAS main){
+	public MainJMenuBar(TAS main, PianoRoll pianoRoll){
 		// TODO: Handle the rest of the listeners and make things enabled or disabled correctly
 
 		JMenu fileJMenu = add(new JMenu("File"));
@@ -74,6 +74,10 @@ public class MainJMenuBar extends JMenuBar {
 		deleteJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0));
 		deleteJMenuItem.addActionListener(e -> {});
 		deleteJMenuItem.setEnabled(false);
+
+		JMenuItem addNewLineItem = editJMenu.add(new JMenuItem("Add line"));
+		addNewLineItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_MASK));
+		addNewLineItem.addActionListener(e -> pianoRoll.addEmptyRow(main.getScript()));
 
 		JMenu viewJMenu = add(new JMenu("View"));
 
