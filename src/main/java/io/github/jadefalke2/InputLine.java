@@ -16,6 +16,7 @@ public class InputLine {
 		splitIntoComponents();
 	}
 
+
 	private void splitIntoComponents() {
 
 		String[] components = full.split(" ");

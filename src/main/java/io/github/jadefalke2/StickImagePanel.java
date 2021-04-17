@@ -9,7 +9,6 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.TimerTask;
 
 public class StickImagePanel extends JPanel {
 
@@ -155,9 +154,7 @@ public class StickImagePanel extends JPanel {
         spinnerPanel.add(radiusSpinner);
 
 		JButton centerButton = new JButton("center");
-		centerButton.addActionListener(e -> {
-			joystick.centerThumbPad();
-		});
+		centerButton.addActionListener(e -> joystick.centerThumbPad());
 		//centerButtonPanel.add(centerButton);
 
     }

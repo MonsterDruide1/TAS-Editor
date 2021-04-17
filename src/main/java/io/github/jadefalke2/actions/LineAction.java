@@ -16,14 +16,18 @@ public class LineAction implements Action{
 	private Type type;
 	private DefaultTableModel table;
 	private Script script;
-	private int row;
-	private InputLine previousLine;
+	private int[] rows;
+	private InputLine[] previousLines;
 
-	public LineAction(DefaultTableModel table, Script script, int row, Type type) {
-		previousLine = new InputLine(script.getInputLines().get(row).getFull());
+	public LineAction(DefaultTableModel table, Script script, int[] rows, Type type) {
+
+		for (int i = 0; i < rows.length; i++){
+			//previousLines[i] = new InputLine(script.getInputLines().get(i).getFull());
+		}
+
 		this.table = table;
 		this.script = script;
-		this.row = row;
+		this.rows = rows;
 		this.type = type;
 	}
 
@@ -35,11 +39,11 @@ public class LineAction implements Action{
 				break;
 
 			case DELETE:
-				deleteRow();
+				deleteRows();
 				break;
 
 			case INSERT:
-				insertRow();
+				insertRows();
 				break;
 		}
 	}
@@ -49,48 +53,72 @@ public class LineAction implements Action{
 		switch (type){
 			case CLONE:
 			case INSERT:
-				deleteRow();
+				deleteRows();
 				break;
 
 			case DELETE:
-				insertRow(previousLine);
+
 				break;
 		}
 	}
 
 	private void cloneRow(){
-		InputLine tmpLine = new InputLine(script.getInputLines().get(row).getFull());
-		insertRow(tmpLine);
-	}
 
-	private void deleteRow(){
-		script.getInputLines().remove(row);
-		table.removeRow(row);
+		InputLine[] inputLines = new InputLine[rows.length];
 
-		for (int i = row; i < table.getRowCount(); i++){
-			InputLine curLine = script.getInputLines().get(i);
-			curLine.setLine(curLine.getLine() - 1);
-
+		for (int i = 0; i < rows.length; i++){
+				inputLines[i] = new InputLine(script.getInputLines().get(rows[i]).getFull());
 		}
 
-		for (int i = row; i < table.getRowCount(); i++){
+		for (int i = 0; i < rows.length; i++) {
+			script.getInputLines().add(rows[0] + i + rows.length, inputLines[i]);
+			table.addRow(script.getInputLines().get(rows[0] + i + rows.length).getArray());
+		}
+
+		adjustLines();
+	}
+
+	private void adjustLines() {
+		table.moveRow(table.getRowCount() - rows.length, table.getRowCount() - 1, rows[0] + rows.length);
+
+		for (int i = rows[0] + rows.length; i < table.getRowCount(); i++){
+			InputLine cLine = script.getInputLines().get(i);
+
+			cLine.setLine(cLine.getLine() + rows.length);
+			table.setValueAt(cLine.getLine(),i,0);
+		}
+	}
+
+	private void deleteRows(){
+
+		for (int i = rows.length - 1; i >= 0; i--){
+
+			int cRow = rows[i];
+
+			script.getInputLines().remove(cRow);
+			table.removeRow(cRow);
+		}
+
+		for (int i = rows[0]; i < table.getRowCount(); i++){
+
+			InputLine curLine = script.getInputLines().get(i);
+			curLine.setLine(curLine.getLine() - rows.length);
+
 			table.setValueAt(script.getInputLines().get(i).getLine(),i,0);
 		}
+
 	}
 
-	private void insertRow (){
-		insertRow(InputLine.getEmpty(row + 1));
-	}
+	private void insertRows(){
 
-	private void insertRow (InputLine inputLine){
-		script.insertLine(row,inputLine);
-
-		table.addRow(inputLine.getArray());
-		table.moveRow(table.getRowCount() - 1, table.getRowCount() - 1, row);
-
-		for (int i = row; i < table.getRowCount(); i++){
-			table.setValueAt(script.getInputLines().get(i).getLine(),i, 0);
+		for (int i = 0; i < rows.length; i++) {
+			script.getInputLines().add(rows[0] + i + rows.length, InputLine.getEmpty(rows[0] + i + 1));
+			table.addRow(script.getInputLines().get(rows[0] + i + rows.length).getArray());
 		}
+
+		adjustLines();
 	}
+
+
 
 }

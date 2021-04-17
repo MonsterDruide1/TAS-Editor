@@ -98,7 +98,7 @@ public class PianoRoll extends JTable {
 					case 0:
 
 						if (evt.getButton() == MouseEvent.BUTTON3 && isRowSelected(row)) {
-							openPopUpMenu(row,evt.getPoint());
+							openPopUpMenu(getSelectedRows(),evt.getPoint());
 						}
 
 						break;
@@ -190,20 +190,20 @@ public class PianoRoll extends JTable {
 
 	}
 
-	private void openPopUpMenu(int row, Point point){
+	private void openPopUpMenu(int[] rows, Point point){
 
 		if (delete.getActionListeners().length != 0){
 			delete.removeActionListener(delete.getActionListeners()[0]);
 		}
 		delete.addActionListener(e -> {
-			TAS.getInstance().executeAction(new LineAction(this.model,script,row, LineAction.Type.DELETE));
+			TAS.getInstance().executeAction(new LineAction(this.model,script,rows, LineAction.Type.DELETE));
 		});
 
 		if (insert.getActionListeners().length != 0){
 			insert.removeActionListener(insert.getActionListeners()[0]);
 		}
 		insert.addActionListener(e -> {
-			TAS.getInstance().executeAction(new LineAction(this.model,script,row, LineAction.Type.INSERT));
+			TAS.getInstance().executeAction(new LineAction(this.model,script,rows, LineAction.Type.INSERT));
 			update();
 		});
 
@@ -211,7 +211,7 @@ public class PianoRoll extends JTable {
 			clone.removeActionListener(clone.getActionListeners()[0]);
 		}
 		clone.addActionListener(e -> {
-			TAS.getInstance().executeAction(new LineAction(this.model,script,row, LineAction.Type.CLONE));
+			TAS.getInstance().executeAction(new LineAction(this.model,script,rows, LineAction.Type.CLONE));
 		});
 
 		popupMenu.show(this,(int)point.getX(),(int)point.getY());
