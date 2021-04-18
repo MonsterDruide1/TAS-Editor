@@ -299,9 +299,9 @@ public class TAS {
 
 	public void setWindowsLookAndFeel() {
 		try {
-			UIManager.setLookAndFeel(new WindowsLookAndFeel());
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			SwingUtilities.updateComponentTreeUI(window);
-		} catch (UnsupportedLookAndFeelException e) {
+		} catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
 	}

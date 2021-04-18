@@ -1,5 +1,6 @@
 package io.github.jadefalke2;
 
+import java.nio.file.FileSystemException;
 import java.util.ArrayList;
 
 public class Script {
@@ -30,8 +31,33 @@ public class Script {
 		inputLines.clear();
 		String[] lines = script.split("\n");
 
+		int prevLine = 0;
+
 		for (String line : lines) {
-			inputLines.add(new InputLine(line));
+			InputLine currentInputLine = new InputLine(line);
+
+
+			if (currentInputLine.getLine() <= prevLine){
+
+				try {
+					throw new Exception();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+			}else {
+
+				if (prevLine + 1 != currentInputLine.getLine()) {
+					for (int i = 0; i < currentInputLine.getLine() - prevLine - 1; i++){
+						inputLines.add(InputLine.getEmpty(prevLine + 1 + i));
+					}
+				}
+
+				inputLines.add(currentInputLine);
+
+			}
+
+			prevLine = currentInputLine.getLine();
 		}
 	}
 
