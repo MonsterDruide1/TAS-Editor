@@ -21,6 +21,7 @@ public class StickImagePanel extends JPanel {
 
     private StickPosition stickPosition;
     private StickType stickType;
+    private Script script;
     private InputLine inputLine;
 
     private DefaultTableModel table;
@@ -36,10 +37,11 @@ public class StickImagePanel extends JPanel {
 
 
 
-	public StickImagePanel(StickPosition stickPosition, StickType stickType, InputLine inputLine, DefaultTableModel table, int row) {
+	public StickImagePanel(StickPosition stickPosition, StickType stickType,Script script, DefaultTableModel table, int row) {
+    	this.script = script;
 		this.row = row;
     	this.table = table;
-        this.inputLine = inputLine;
+        this.inputLine = script.getInputLines().get(row);
         this.stickType = stickType;
 		this.stickPosition = stickPosition;
 		joystick = new Joystick(32767,STICK_IMAGE_SIZE);
@@ -49,11 +51,9 @@ public class StickImagePanel extends JPanel {
 
         JPanel joyStickPanel = new JPanel();
         JPanel spinnerPanel = new JPanel();
-        JPanel centerButtonPanel = new JPanel();
-
 
         GridLayout mainLayout = new GridLayout(2,1,0,20);
-        GridLayout spinnerLayout = new GridLayout(5,2,80,7);
+        GridLayout spinnerLayout = new GridLayout(6,2,30,7);
 
 
         spinnerPanel.setLayout(spinnerLayout);
@@ -62,7 +62,6 @@ public class StickImagePanel extends JPanel {
         setLayout(mainLayout);
         add(spinnerPanel);
         add(joyStickPanel);
-        //add(centerButtonPanel);
 
         joyStickPanel.add(joystick);
 
@@ -157,9 +156,42 @@ public class StickImagePanel extends JPanel {
         spinnerPanel.add(ySpinner);
         spinnerPanel.add(radiusSpinner);
 
+
 		JButton centerButton = new JButton("center");
-		centerButton.addActionListener(e -> joystick.centerThumbPad());
-		//centerButtonPanel.add(centerButton);
+		centerButton.addActionListener(e -> {
+			joystick.centerThumbPad();
+			stickPosition.setPosition((int)joystick.getOutputPos().getX(),(int)joystick.getOutputPos().getY());
+			updateCartSpinners();
+			updatePolarSpinners();
+		});
+
+		spinnerPanel.add(centerButton);
+
+
+		JButton keepStickPosButton = new JButton("keep stick position for # of frames");
+		keepStickPosButton.addActionListener(e -> {
+			int frameNumber = FrameNumberOptionDialog.getFrameNumber();
+			for (int i = row - 1; i < row + frameNumber; i++){
+
+				if (i >= script.getInputLines().size()){
+					script.getInputLines().add(InputLine.getEmpty(i + 1));
+					table.addRow(script.getInputLines().get(i).getArray());
+				}
+
+				if (stickType == StickType.L_STICK) {
+					script.getInputLines().get(i).setStickL(new StickPosition(script.getInputLines().get(row).getStickL()));
+					table.setValueAt(script.getInputLines().get(i - 1).getStickL().toString(), i,1);
+
+				}else{
+					script.getInputLines().get(i).setStickR(new StickPosition(script.getInputLines().get(row).getStickR()));
+					table.setValueAt(script.getInputLines().get(i - 1).getStickR().toString(), i,2);
+				}
+
+			}
+		});
+
+		spinnerPanel.add(keepStickPosButton);
+
 
     }
 

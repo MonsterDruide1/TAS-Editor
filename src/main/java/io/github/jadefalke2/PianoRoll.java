@@ -46,6 +46,7 @@ public class PianoRoll extends JTable {
 	public PianoRoll (Script script){
 
 		setAutoResizeMode(AUTO_RESIZE_OFF);
+
 		this.script = script;
 
 		preparepopUpMenu();
@@ -58,28 +59,6 @@ public class PianoRoll extends JTable {
 		for (String colName : columnNames) {
 			model.addColumn(colName);
 		}
-
-
-
-		addKeyListener(new KeyListener() {
-			@Override
-			public void keyTyped(KeyEvent e) {
-
-			}
-
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_A) {
-
-					addEmptyRow(script);
-				}
-			}
-
-			@Override
-			public void keyReleased(KeyEvent e) {
-
-			}
-		});
 
 		addMouseListener(new java.awt.event.MouseAdapter() {
 			@Override
@@ -167,9 +146,9 @@ public class PianoRoll extends JTable {
 			StickImagePanel stickImagePanel;
 
 			if (col == 1) {
-				stickImagePanel = new StickImagePanel(script.inputLines.get(row).getStickL(), StickImagePanel.StickType.L_STICK,script.getInputLines().get(row),model, row);
+				stickImagePanel = new StickImagePanel(script.inputLines.get(row).getStickL(), StickImagePanel.StickType.L_STICK,script,model, row);
 			} else {
-				stickImagePanel = new StickImagePanel(script.inputLines.get(row).getStickR(), StickImagePanel.StickType.R_STICK,script.getInputLines().get(row),model, row);
+				stickImagePanel = new StickImagePanel(script.inputLines.get(row).getStickR(), StickImagePanel.StickType.R_STICK,script,model, row);
 			}
 
 			stickWindowIsOpen = true;

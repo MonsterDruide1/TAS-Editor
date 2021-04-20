@@ -33,21 +33,7 @@ public class StickPosition {
 			radius = 1;
 		}
 
-		/*if (x >= 0 && y >= 0){
-			theta = Math.atan((double)y/(double)x);
-		}
-
-		if (x < 0){
-			theta = Math.PI - Math.atan((double)y/(double)x);
-		}
-
-		if (x >= 0 && y < 0){
-			theta = (Math.PI*2) + Math.atan((double)y/(double)x);
-		}
-
-		 */
-
-		theta = Math.atan2((double) y, (double) x);
+		theta = Math.atan2(y,x);
 	}
 
 	private void updateCart() {
