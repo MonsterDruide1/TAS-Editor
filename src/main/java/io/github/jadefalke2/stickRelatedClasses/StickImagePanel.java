@@ -1,5 +1,8 @@
-package io.github.jadefalke2;
+package io.github.jadefalke2.stickRelatedClasses;
 
+import io.github.jadefalke2.InputLine;
+import io.github.jadefalke2.Script;
+import io.github.jadefalke2.TAS;
 import io.github.jadefalke2.actions.StickAction;
 
 import javax.swing.*;

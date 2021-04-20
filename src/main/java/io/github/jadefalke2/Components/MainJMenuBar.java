@@ -1,4 +1,6 @@
-package io.github.jadefalke2;
+package io.github.jadefalke2.Components;
+
+import io.github.jadefalke2.TAS;
 
 import javax.swing.*;
 import java.awt.*;

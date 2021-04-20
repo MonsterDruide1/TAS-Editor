@@ -1,8 +1,8 @@
 package io.github.jadefalke2.actions;
 
 import io.github.jadefalke2.InputLine;
-import io.github.jadefalke2.StickImagePanel;
-import io.github.jadefalke2.StickPosition;
+import io.github.jadefalke2.stickRelatedClasses.StickImagePanel;
+import io.github.jadefalke2.stickRelatedClasses.StickPosition;
 
 import javax.swing.table.DefaultTableModel;
 

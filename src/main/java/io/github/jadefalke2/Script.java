@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class Script {
 
 	private String script;
-	ArrayList<InputLine> inputLines = new ArrayList<>();
+	private ArrayList<InputLine> inputLines = new ArrayList<>();
 
 	public Script(String script) {
 		this.script = script;

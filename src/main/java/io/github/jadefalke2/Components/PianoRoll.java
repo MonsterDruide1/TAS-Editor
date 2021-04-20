@@ -1,13 +1,16 @@
-package io.github.jadefalke2;
+package io.github.jadefalke2.Components;
 
-import io.github.jadefalke2.actions.CellAction;
+import io.github.jadefalke2.InputLine;
+import io.github.jadefalke2.Script;
+import io.github.jadefalke2.TAS;
 import io.github.jadefalke2.actions.LineAction;
+import io.github.jadefalke2.stickRelatedClasses.StickImagePanel;
+import io.github.jadefalke2.util.InputDrawMouseListener;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
 
 public class PianoRoll extends JTable {
 
@@ -126,9 +129,9 @@ public class PianoRoll extends JTable {
 			StickImagePanel stickImagePanel;
 
 			if (col == 1) {
-				stickImagePanel = new StickImagePanel(script.inputLines.get(row).getStickL(), StickImagePanel.StickType.L_STICK,script,model, row);
+				stickImagePanel = new StickImagePanel(script.getInputLines().get(row).getStickL(), StickImagePanel.StickType.L_STICK,script,model, row);
 			} else {
-				stickImagePanel = new StickImagePanel(script.inputLines.get(row).getStickR(), StickImagePanel.StickType.R_STICK,script,model, row);
+				stickImagePanel = new StickImagePanel(script.getInputLines().get(row).getStickR(), StickImagePanel.StickType.R_STICK,script,model, row);
 			}
 
 			stickWindowIsOpen = true;
@@ -152,7 +155,7 @@ public class PianoRoll extends JTable {
 
 	}
 
-	void openPopUpMenu(int[] rows, Point point){
+	public void openPopUpMenu(int[] rows, Point point){
 
 		if (delete.getActionListeners().length != 0){
 			delete.removeActionListener(delete.getActionListeners()[0]);

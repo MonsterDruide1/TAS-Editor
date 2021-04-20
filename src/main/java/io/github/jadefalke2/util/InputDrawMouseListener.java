@@ -1,5 +1,7 @@
-package io.github.jadefalke2;
+package io.github.jadefalke2.util;
 
+import io.github.jadefalke2.Components.PianoRoll;
+import io.github.jadefalke2.TAS;
 import io.github.jadefalke2.actions.CellAction;
 
 import java.awt.*;

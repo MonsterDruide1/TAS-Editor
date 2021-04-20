@@ -1,4 +1,4 @@
-package io.github.jadefalke2;
+package io.github.jadefalke2.stickRelatedClasses;
 
 import javax.swing.*;
 import javax.swing.event.SwingPropertyChangeSupport;

@@ -1,6 +1,9 @@
 package io.github.jadefalke2;
 
 import com.formdev.flatlaf.FlatDarkLaf;
+import io.github.jadefalke2.Components.MainJMenuBar;
+import io.github.jadefalke2.Components.PianoRoll;
+import io.github.jadefalke2.Components.Window;
 import io.github.jadefalke2.actions.Action;
 import io.github.jadefalke2.util.CircularStack;
 import io.github.jadefalke2.util.Stack;

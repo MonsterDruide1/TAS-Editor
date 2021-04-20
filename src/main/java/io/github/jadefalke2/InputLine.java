@@ -1,5 +1,8 @@
 package io.github.jadefalke2;
 
+import io.github.jadefalke2.stickRelatedClasses.StickPosition;
+import io.github.jadefalke2.util.Input;
+
 import java.util.ArrayList;
 
 public class InputLine {

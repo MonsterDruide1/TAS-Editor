@@ -1,7 +1,4 @@
-package io.github.jadefalke2;
-
-import java.awt.*;
-import java.awt.event.MouseEvent;
+package io.github.jadefalke2.stickRelatedClasses;
 
 public class StickPosition {
 

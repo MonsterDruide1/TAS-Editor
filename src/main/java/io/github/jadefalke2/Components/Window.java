@@ -1,4 +1,4 @@
-package io.github.jadefalke2;
+package io.github.jadefalke2.Components;
 
 import javax.swing.*;
 
