@@ -124,6 +124,10 @@ public class InputLine {
 		return tmp.toArray();
 	}
 
+	public boolean isEmpty (){
+		return buttonsEncoded.isEmpty() && stickR.isZeroZero() && stickL.isZeroZero();
+	}
+
 	public String getFull() {
 		updateFull();
 		return full;

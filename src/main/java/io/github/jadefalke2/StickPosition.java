@@ -19,10 +19,6 @@ public class StickPosition {
 		updatePolar();
 	}
 
-	public StickPosition() {
-		this(0, 0);
-	}
-
 	public StickPosition(StickPosition pos) {
 		x = pos.x;
 		y = pos.y;
@@ -42,17 +38,19 @@ public class StickPosition {
 		}
 
 		if (x < 0){
-			theta = (Math.PI) - Math.atan((double)y/(double)x);
+			theta = Math.PI - Math.atan((double)y/(double)x);
 		}
 
 		if (x >= 0 && y < 0){
 			theta = (Math.PI*2) + Math.atan((double)y/(double)x);
 		}
+
 	}
 
 	private void updateCart() {
 		x = (int) ((radius * MAX_SIZE) * Math.cos(theta));
 		y = (int) ((radius * MAX_SIZE) * Math.sin(theta));
+		updatePolar();
 	}
 
 	public int getX() {
@@ -87,14 +85,18 @@ public class StickPosition {
 		updatePolar();
 	}
 
-	public void setTheta(double theta) {
-		this.theta = theta;
+	public void setTheta(int theta) {
+		this.theta = Math.toRadians(theta);
 		updateCart();
 	}
 
 	public void setRadius(double radius) {
 		this.radius = radius;
 		updateCart();
+	}
+
+	public boolean isZeroZero (){
+		return x == 0 && y == 0;
 	}
 
 	@Override

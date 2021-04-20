@@ -270,7 +270,9 @@ public class TAS {
 			StringBuilder wholeScript = new StringBuilder();
 
 			for (InputLine currentLine : script.getInputLines()) {
-				wholeScript.append(currentLine.getFull() + "\n");
+				if (!currentLine.isEmpty()) {
+					wholeScript.append(currentLine.getFull() + "\n");
+				}
 			}
 
 			FileWriter fw;

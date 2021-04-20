@@ -82,7 +82,7 @@ public class StickImagePanel extends JPanel {
         xSpinner.setValue(stickPosition.getX());
 		ySpinner.setValue(stickPosition.getY());
 		radiusSpinner.setValue(stickPosition.getRadius());
-		angleSpinner.setValue(stickPosition.getTheta());
+		angleSpinner.setValue((int)Math.toDegrees(stickPosition.getTheta()));
 
         radiusSpinner.setPreferredSize(new Dimension(50,20));
         radiusSpinner.setAlignmentX(10);
@@ -90,26 +90,30 @@ public class StickImagePanel extends JPanel {
 
         xSpinner.addChangeListener(e -> {
             stickPosition.setX((int) xSpinner.getValue());
+           	//updatePolarSpinners();
             updateVisual();
             repaint();
         });
         ySpinner.addChangeListener(e -> {
             stickPosition.setY((int) ySpinner.getValue());
+            //updatePolarSpinners();
             updateVisual();
             repaint();
         });
         radiusSpinner.addChangeListener(e -> {
             stickPosition.setRadius((double) radiusSpinner.getValue());
-            updateSpinners();
+            updateCartSpinners();
             updateVisual();
             repaint();
         });
         angleSpinner.addChangeListener(e -> {
-            stickPosition.setTheta(Math.toRadians((int) angleModel.getValue()));
-            updateSpinners();
+            stickPosition.setTheta((int)angleSpinner.getValue());
+            updateCartSpinners();
             updateVisual();
             repaint();
         });
+
+
 
         MouseListener mouseListener = new MouseAdapter() {
 
@@ -185,11 +189,17 @@ public class StickImagePanel extends JPanel {
 
 	private void updateVisual (){
 		joystick.setThumbPos(new Point((int)xSpinner.getValue(),(int)ySpinner.getValue()));
+		repaint();
 	}
 
-	private void updateSpinners (){
+	private void updateCartSpinners(){
     	xSpinner.setValue(stickPosition.getX());
     	ySpinner.setValue(stickPosition.getY());
+	}
+
+	private void updatePolarSpinners(){
+		angleSpinner.setValue((int)Math.toDegrees(stickPosition.getTheta()));
+		radiusSpinner.setValue(stickPosition.getRadius());
 	}
 
 	public StickPosition getStickPos (){
