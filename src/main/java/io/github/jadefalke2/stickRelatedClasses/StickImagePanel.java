@@ -46,10 +46,11 @@ public class StickImagePanel extends JPanel {
         this.stickType = stickType;
 		this.stickPosition = stickPosition;
 
-		StickPosition[] stickPositions = new StickPosition[2];
+		StickPosition[] stickPositions = new StickPosition[Math.min(row,3)];
 
 		for (int i = 0; i < stickPositions.length; i++){
-			InputLine currentLine = row - 1 >= 0 ? script.getInputLines().get(row - i - 1) : script.getInputLines().get(0);
+			//InputLine currentLine =  script.getInputLines().get(row - i) : script.getInputLines().get(0);
+			InputLine currentLine = script.getInputLines().get(row - i);
 
 			stickPositions[i] = stickType == StickType.L_STICK ? currentLine.getStickL() : currentLine.getStickR();
 		}

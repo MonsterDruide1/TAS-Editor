@@ -151,11 +151,13 @@ public class Joystick extends JPanel {
 			Point tmp = new Point(stickPositions[i].getX(),stickPositions[i].getY());
 			Point downscaled = new Point(scaledToVisual(tmp));
 
-			g.setColor(new Color(0,0,0,150));
+			final double percentage = i/(double)stickPositions.length;
+
+			g.setColor(new Color(0,0,0,(int)(150*percentage)));
 			g.fillOval((int)downscaled.getX() - thumbRadius - BORDER_THICKNESS, (int) downscaled.getY() - thumbRadius - BORDER_THICKNESS, thumbRadius * 2 + BORDER_THICKNESS * 2, thumbRadius * 2 + BORDER_THICKNESS * 2);
 
 			//thumb pad color
-			g.setColor(new Color(255,0,0,150));
+			g.setColor(new Color(255,0,0,(int)(150*percentage)));
 			g.fillOval((int)downscaled.getX() - thumbRadius, (int) downscaled.getY() - thumbRadius, thumbRadius * 2, thumbRadius * 2);
 		}
 
