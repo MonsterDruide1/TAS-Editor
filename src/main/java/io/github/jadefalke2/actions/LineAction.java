@@ -22,8 +22,9 @@ public class LineAction implements Action{
 
 	public LineAction(DefaultTableModel table, Script script, int[] rows, Type type) {
 
+		previousLines = new InputLine[rows.length];
 		for (int i = 0; i < rows.length; i++){
-			//previousLines[i] = new InputLine(script.getInputLines().get(i).getFull());
+			previousLines[i] = new InputLine(script.getInputLines().get(i).getFull());
 		}
 
 		this.table = table;

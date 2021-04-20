@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Vector;
 
 public class Joystick extends JPanel {
 
@@ -14,6 +15,8 @@ public class Joystick extends JPanel {
 	private final int thumbRadius;
 	private final int panelWidth;
 	private final int BORDER_THICKNESS = 2;
+
+	private StickPosition[] stickPositions;
 
 	private final Point thumbPos = new Point();
 	protected SwingPropertyChangeSupport propertySupporter = new SwingPropertyChangeSupport(this);
@@ -27,11 +30,12 @@ public class Joystick extends JPanel {
 	 *                    visual components are proportional to this value
 	 */
 
-	public Joystick(int output_max, int panel_width) {
+	public Joystick(int output_max, int panel_width, StickPosition[] stickPositions) {
 
 		assert output_max > 0;
 		assert panel_width > 0;
 
+		this.stickPositions = stickPositions;
 		outputMax = output_max;
 		panelWidth = panel_width;
 		thumbDiameter = panel_width / 15;
@@ -122,6 +126,10 @@ public class Joystick extends JPanel {
 		thumbPos.y = (int)((scaled.y/(double)-outputMax) * (panelWidth / 2.0 - thumbDiameter / 2.0) + (panelWidth / 2.0));
 	}
 
+	public Point scaledToVisual (Point scaled){
+		return new Point((int)((scaled.x/(double)outputMax) * (panelWidth / 2.0 - thumbDiameter / 2.0) + (panelWidth / 2.0)),(int)((scaled.y/(double)-outputMax) * (panelWidth / 2.0 - thumbDiameter / 2.0) + (panelWidth / 2.0)));
+	}
+
 	@Override
 	protected void paintComponent(final Graphics g) {
 		super.paintComponent(g);
@@ -138,6 +146,18 @@ public class Joystick extends JPanel {
 		g.setColor(Color.black);
 		g.drawLine(panelWidth / 2, thumbRadius + BORDER_THICKNESS, panelWidth / 2, panelWidth - thumbRadius - BORDER_THICKNESS);
 		g.drawLine(thumbRadius + BORDER_THICKNESS, panelWidth / 2, panelWidth - thumbRadius - BORDER_THICKNESS, panelWidth / 2);
+
+		for (int i = 0; i < stickPositions.length; i++){
+			Point tmp = new Point(stickPositions[i].getX(),stickPositions[i].getY());
+			Point downscaled = new Point(scaledToVisual(tmp));
+
+			g.setColor(new Color(0,0,0,150));
+			g.fillOval((int)downscaled.getX() - thumbRadius - BORDER_THICKNESS, (int) downscaled.getY() - thumbRadius - BORDER_THICKNESS, thumbRadius * 2 + BORDER_THICKNESS * 2, thumbRadius * 2 + BORDER_THICKNESS * 2);
+
+			//thumb pad color
+			g.setColor(new Color(255,0,0,150));
+			g.fillOval((int)downscaled.getX() - thumbRadius, (int) downscaled.getY() - thumbRadius, thumbRadius * 2, thumbRadius * 2);
+		}
 
 		//thumb pad border
 		g.setColor(Color.BLACK);

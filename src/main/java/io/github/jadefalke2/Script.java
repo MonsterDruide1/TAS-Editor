@@ -1,6 +1,5 @@
 package io.github.jadefalke2;
 
-import java.nio.file.FileSystemException;
 import java.util.ArrayList;
 
 public class Script {

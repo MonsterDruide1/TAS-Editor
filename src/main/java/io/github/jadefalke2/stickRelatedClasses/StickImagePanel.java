@@ -45,7 +45,16 @@ public class StickImagePanel extends JPanel {
         this.inputLine = script.getInputLines().get(row);
         this.stickType = stickType;
 		this.stickPosition = stickPosition;
-		joystick = new Joystick(32767,STICK_IMAGE_SIZE);
+
+		StickPosition[] stickPositions = new StickPosition[2];
+
+		for (int i = 0; i < stickPositions.length; i++){
+			InputLine currentLine = row - 1 >= 0 ? script.getInputLines().get(row - i - 1) : script.getInputLines().get(0);
+
+			stickPositions[i] = stickType == StickType.L_STICK ? currentLine.getStickL() : currentLine.getStickR();
+		}
+
+		joystick = new Joystick(32767,STICK_IMAGE_SIZE,stickPositions );
 
 
 		joystick.setThumbPos(new Point(stickPosition.getX(),stickPosition.getY()));
