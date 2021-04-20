@@ -7,6 +7,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 
 public class PianoRoll extends JTable {
 
@@ -60,32 +61,10 @@ public class PianoRoll extends JTable {
 			model.addColumn(colName);
 		}
 
-		addMouseListener(new java.awt.event.MouseAdapter() {
-			@Override
-			public void mousePressed(java.awt.event.MouseEvent evt) {
-				int row = rowAtPoint(evt.getPoint());
-				int col = columnAtPoint(evt.getPoint());
+		InputDrawMouseListener mouseListener = new InputDrawMouseListener(this);
 
-				switch (col){
-
-					case 0:
-
-						if (evt.getButton() == MouseEvent.BUTTON3 && isRowSelected(row)) {
-							openPopUpMenu(getSelectedRows(),evt.getPoint());
-						}
-
-						break;
-
-					case 1: case 2:
-						openStickWindow(row,col,script);
-						break;
-
-					default:
-						TAS.getInstance().executeAction(new CellAction(model, script, row, col));
-				}
-
-			}
-		});
+		addMouseListener(mouseListener);
+		addMouseMotionListener(mouseListener);
 
 		for (int i = 0; i < script.getInputLines().size(); i++) {
 			InputLine currentLine = script.getInputLines().get(i);
@@ -113,6 +92,7 @@ public class PianoRoll extends JTable {
 
 	}
 
+
 	public void addEmptyRow(Script script) {
 		script.getInputLines().add(new InputLine((script.getInputLines().size() + 1) + " NONE 0;0 0;0"));
 
@@ -138,7 +118,7 @@ public class PianoRoll extends JTable {
 		model.addRow(tmp);
 	}
 
-	private void openStickWindow (int row,int col, Script script){
+	public void openStickWindow (int row,int col, Script script){
 		JFrame stickWindow;
 		if (!stickWindowIsOpen) {
 			stickWindow = new JFrame();
@@ -166,14 +146,13 @@ public class PianoRoll extends JTable {
 				}
 			});
 
-
 			stickWindow.add(stickImagePanel);
 
 		}
 
 	}
 
-	private void openPopUpMenu(int[] rows, Point point){
+	void openPopUpMenu(int[] rows, Point point){
 
 		if (delete.getActionListeners().length != 0){
 			delete.removeActionListener(delete.getActionListeners()[0]);
@@ -187,7 +166,6 @@ public class PianoRoll extends JTable {
 		}
 		insert.addActionListener(e -> {
 			TAS.getInstance().executeAction(new LineAction(this.model,script,rows, LineAction.Type.INSERT));
-			update();
 		});
 
 		if (clone.getActionListeners().length != 0){
@@ -216,8 +194,12 @@ public class PianoRoll extends JTable {
 		popupMenu.setVisible(false);
 	}
 
-	private void update (){
+	public Script getScript (){
+		return script;
+	}
 
+	public DefaultTableModel getModel (){
+		return model;
 	}
 
 

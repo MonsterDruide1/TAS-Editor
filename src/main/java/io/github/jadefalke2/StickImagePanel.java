@@ -6,9 +6,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 
 public class StickImagePanel extends JPanel {
 
@@ -128,7 +126,40 @@ public class StickImagePanel extends JPanel {
 
         };
 
-        joystick.addMouseListener(mouseListener);
+		KeyListener keyListener = new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+
+				//
+				//NOT WORKING AS OF NOW
+				//
+
+				switch (e.getKeyCode()){
+
+					case KeyEvent.VK_0:
+						joystick.setThumbPos(new Point(32767,0));
+						break;
+
+					case KeyEvent.VK_KP_LEFT:
+						joystick.setThumbPos(new Point(-32767,0));
+						break;
+
+					case KeyEvent.VK_KP_UP:
+						joystick.setThumbPos(new Point(0,32767));
+						break;
+
+					case KeyEvent.VK_KP_DOWN:
+						joystick.setThumbPos(new Point(0,-32767));
+						break;
+
+				}
+
+				repaint();
+			}
+		};
+
+		joystick.addMouseListener(mouseListener);
+        joystick.addKeyListener(keyListener);
 
 
 
