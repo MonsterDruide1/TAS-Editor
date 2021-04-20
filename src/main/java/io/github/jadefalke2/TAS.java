@@ -1,7 +1,6 @@
 package io.github.jadefalke2;
 
 import com.formdev.flatlaf.FlatDarkLaf;
-import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
 import io.github.jadefalke2.actions.Action;
 import io.github.jadefalke2.util.CircularStack;
 import io.github.jadefalke2.util.Stack;
@@ -210,9 +209,7 @@ public class TAS {
 		buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
 
 		JButton functionEditorButton = new JButton("Function editor");
-		functionEditorButton.addActionListener(e -> {
-		openFunctionEditor();
-		});
+		functionEditorButton.addActionListener(e -> openFunctionEditor());
 		//buttonsPanel.add(functionEditorButton);
 
 		editor.add(buttonsPanel);
