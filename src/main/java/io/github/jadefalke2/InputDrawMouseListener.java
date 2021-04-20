@@ -2,7 +2,6 @@ package io.github.jadefalke2;
 
 import io.github.jadefalke2.actions.CellAction;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -11,8 +10,13 @@ import java.util.ArrayList;
 public class InputDrawMouseListener extends MouseAdapter {
 
 
+	enum Mode {
+		ADDING,REMOVING,IDLE
+	}
+
 	ArrayList<Integer> rows = new ArrayList<>();
 	PianoRoll table;
+	Mode mode = Mode.IDLE;
 
 
 	public InputDrawMouseListener (PianoRoll table){
@@ -34,6 +38,7 @@ public class InputDrawMouseListener extends MouseAdapter {
 
 	public void mouseReleased(MouseEvent e){
 		rows.clear();
+		mode = Mode.IDLE;
 	}
 
 
@@ -58,12 +63,14 @@ public class InputDrawMouseListener extends MouseAdapter {
 				break;
 
 			default:
+
+				mode = table.getValueAt(row, col) != " " ? Mode.ADDING : Mode.REMOVING;
 				setCell(new Point(col,row));
 		}
 	}
 
 	private Point getCell (MouseEvent e){
-		int row = table.rowAtPoint(e.getPoint());
+		int row = table.rowAtPoint(e.getPoint()) < 0 ? 0 : Math.min(table.rowAtPoint(e.getPoint()), table.getRowCount());
 		int col = table.columnAtPoint(e.getPoint());
 
 		return new Point(col,row);
