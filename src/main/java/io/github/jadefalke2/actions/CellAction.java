@@ -6,10 +6,10 @@ import javax.swing.table.TableModel;
 
 public class CellAction implements Action {
 
-	private TableModel table;
-	private Script script;
-	private int row;
-	private int col;
+	private final TableModel table;
+	private final Script script;
+	private final int row;
+	private final int col;
 
 	public CellAction(TableModel table, Script script, int row, int col) {
 		this.table = table;

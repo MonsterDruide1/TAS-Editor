@@ -3,9 +3,11 @@ package io.github.jadefalke2;
 import com.formdev.flatlaf.FlatDarkLaf;
 import io.github.jadefalke2.Components.MainJMenuBar;
 import io.github.jadefalke2.Components.PianoRoll;
+import io.github.jadefalke2.Components.TxtFileChooser;
 import io.github.jadefalke2.Components.Window;
 import io.github.jadefalke2.actions.Action;
 import io.github.jadefalke2.util.CircularStack;
+import io.github.jadefalke2.util.Input;
 import io.github.jadefalke2.util.Stack;
 
 import javax.swing.*;
@@ -20,8 +22,8 @@ public class TAS {
 	private static TAS instance;
 
 	private Window window;
+	private JFrame functionEditor;
 	private JPanel startUpPanel;
-	private JPanel editor;
 
 	private Preferences preferences;
 
@@ -103,21 +105,8 @@ public class TAS {
 
 
 	public void openLoadFileChooser() {
-
-		JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView());
-
-		fileChooser.setDialogTitle("Choose existing TAS file");
-		fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
-		FileNameExtensionFilter filter = new FileNameExtensionFilter(".txt files", "txt", "text");
-		fileChooser.setFileFilter(filter);
-
-		int option = fileChooser.showOpenDialog(null);
-
-		if (option == JFileChooser.APPROVE_OPTION) {
-
-			File fileToOpen = fileChooser.getSelectedFile();
-			prepareEditor(fileToOpen);
-		}
+		TxtFileChooser fileChooser = new TxtFileChooser();
+		prepareEditor(fileChooser.getFile());
 	}
 
 	public void openNewFileCreator() {
@@ -141,10 +130,10 @@ public class TAS {
 				file.createNewFile();
 				FileWriter fileWriter = new FileWriter(fileName);
 				// optimize the below later
-				fileWriter.write("1 NONE 0;0 0;0\n");
-				fileWriter.write("2 NONE 0;0 0;0\n");
-				fileWriter.write("3 NONE 0;0 0;0\n");
-				fileWriter.write("4 NONE 0;0 0;0\n");
+				fileWriter.write(Input.EMPTY_LINE);
+				fileWriter.write(Input.EMPTY_LINE);
+				fileWriter.write(Input.EMPTY_LINE);
+				fileWriter.write(Input.EMPTY_LINE);
 
 				fileWriter.close();
 
@@ -159,22 +148,7 @@ public class TAS {
 
 
 	private void prepareEditor(File fileToOpen) {
-		currentScriptFile = fileToOpen;
-
-		StringBuilder stringBuilder = new StringBuilder();
-		try (BufferedReader br = new BufferedReader(new FileReader(fileToOpen))) {
-
-			String sCurrentLine;
-			while ((sCurrentLine = br.readLine()) != null) {
-				stringBuilder.append(sCurrentLine).append("\n");
-			}
-		} catch (IOException exception) {
-			exception.printStackTrace();
-		}
-
-		String string = stringBuilder.toString();
-		script = new Script(string);
-
+		script = new Script(preparePianoRoll(fileToOpen));
 		startEditor();
 	}
 
@@ -184,7 +158,7 @@ public class TAS {
 
 		window.remove(startUpPanel);
 
-		editor = new JPanel();
+		JPanel editor = new JPanel();
 		window.add(editor);
 
 		PianoRoll pianoRoll = new PianoRoll(script);
@@ -212,14 +186,17 @@ public class TAS {
 		buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
 
 		JButton functionEditorButton = new JButton("Function editor");
-		functionEditorButton.addActionListener(e -> openFunctionEditor());
-		//buttonsPanel.add(functionEditorButton);
+		functionEditorButton.addActionListener(e -> {
+			openFunctionEditorPreparingWindow();
+		});
+
+
+		buttonsPanel.add(functionEditorButton);
 
 		editor.add(buttonsPanel);
 	}
 
-	private void openFunctionEditor() {
-		JFrame functionEditor;
+	private void openFunctionEditorPreparingWindow() {
 
 		if (!functionWindowIsOpen) {
 
@@ -258,7 +235,39 @@ public class TAS {
 	}
 
 	private void editFunction() {
-		//edits a function
+		TxtFileChooser fileChooser = new TxtFileChooser();
+		openFunctionEditor(fileChooser.getFile());
+	}
+
+	private void openFunctionEditor(File file){
+		functionEditor.setVisible(true);
+		functionEditor.setSize(200,400);
+
+		Function function = new Function(preparePianoRoll(file));
+
+		PianoRoll functionWindowPianoRoll = new PianoRoll(function);
+		functionWindowPianoRoll.setVisible(true);
+		JScrollPane scrollPane = new JScrollPane(functionWindowPianoRoll);
+
+
+		functionEditor.add(scrollPane);
+	}
+
+	private String preparePianoRoll(File file) {
+		currentScriptFile = file;
+
+		StringBuilder stringBuilder = new StringBuilder();
+		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+
+			String sCurrentLine;
+			while ((sCurrentLine = br.readLine()) != null) {
+				stringBuilder.append(sCurrentLine).append("\n");
+			}
+		} catch (IOException exception) {
+			exception.printStackTrace();
+		}
+
+		return stringBuilder.toString();
 	}
 
 	public void saveFile() {

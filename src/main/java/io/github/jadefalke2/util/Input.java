@@ -7,8 +7,9 @@ import java.util.stream.Collectors;
 public class Input {
 
 
-	private static Map<String, String> encode = new HashMap<>();
+	private static final Map<String, String> encode = new HashMap<>();
 	private static Map<String, String> decode = new HashMap<>();
+	public static final String EMPTY_LINE = "1 NONE 0;0 0;0\n";
 
 	public Input() {
 

@@ -10,9 +10,8 @@ public class InputLine {
 	private String full;
 
 	int line;
-	String buttons;
 	public ArrayList<String> buttonsEncoded = new ArrayList<>();
-	StickPosition stickL, stickR;
+	private StickPosition stickL, stickR;
 
 	public InputLine(String full) {
 		this.full = full;
@@ -25,7 +24,7 @@ public class InputLine {
 		String[] components = full.split(" ");
 
 		line = Integer.parseInt(components[0]);
-		buttons = components[1];
+		String buttons = components[1];
 		String[] buttonsPressed = buttons.split(";");
 
 		for (String s : buttonsPressed) {
@@ -67,6 +66,7 @@ public class InputLine {
 	public void setLine(int line) {
 		this.line = line;
 	}
+
 
 	private void updateFull() {
 		StringBuilder tmpString = new StringBuilder();

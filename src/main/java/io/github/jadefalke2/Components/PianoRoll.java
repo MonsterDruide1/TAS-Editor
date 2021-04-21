@@ -15,37 +15,20 @@ import java.awt.event.*;
 public class PianoRoll extends JTable {
 
 	private boolean stickWindowIsOpen;
-	private Script script;
+	private final Script script;
 
-	private JPopupMenu popupMenu = new JPopupMenu();
-	JMenuItem delete = new JMenuItem("delete");
-	JMenuItem insert = new JMenuItem("insert");
-	JMenuItem clone = new JMenuItem("clone");
+	private final JPopupMenu popupMenu = new JPopupMenu();
+
+	private final JMenuItem deleteOption = new JMenuItem("delete");
+	private final JMenuItem insertOption = new JMenuItem("insert");
+	private final JMenuItem cloneOption = new JMenuItem("clone");
+
+	private final DefaultTableModel model = new DefaultTableModel();
 
 
-	String[] columnNames = {
-		"frame",
-		"L-stick",
-		"R-Stick",
-		"A",
-		"B",
-		"X",
-		"Y",
-		"ZR",
-		"ZL",
-		"R",
-		"L",
-		"+",
-		"-",
-		"DP-R",
-		"DP-L",
-		"DP-U",
-		"DP-D",
-		"L-stick",
-		"R-Stick",
+	private final String[] columnNames = {
+		"frame", "L-stick", "R-Stick", "A", "B", "X", "Y", "ZR", "ZL", "R", "L", "+", "-", "DP-R", "DP-L", "DP-U", "DP-D", "L-stick", "R-Stick",
 	};
-
-	DefaultTableModel model = new DefaultTableModel();
 
 	public PianoRoll (Script script){
 
@@ -157,24 +140,24 @@ public class PianoRoll extends JTable {
 
 	public void openPopUpMenu(int[] rows, Point point){
 
-		if (delete.getActionListeners().length != 0){
-			delete.removeActionListener(delete.getActionListeners()[0]);
+		if (deleteOption.getActionListeners().length != 0){
+			deleteOption.removeActionListener(deleteOption.getActionListeners()[0]);
 		}
-		delete.addActionListener(e -> {
+		deleteOption.addActionListener(e -> {
 			TAS.getInstance().executeAction(new LineAction(this.model,script,rows, LineAction.Type.DELETE));
 		});
 
-		if (insert.getActionListeners().length != 0){
-			insert.removeActionListener(insert.getActionListeners()[0]);
+		if (insertOption.getActionListeners().length != 0){
+			insertOption.removeActionListener(insertOption.getActionListeners()[0]);
 		}
-		insert.addActionListener(e -> {
+		insertOption.addActionListener(e -> {
 			TAS.getInstance().executeAction(new LineAction(this.model,script,rows, LineAction.Type.INSERT));
 		});
 
-		if (clone.getActionListeners().length != 0){
-			clone.removeActionListener(clone.getActionListeners()[0]);
+		if (cloneOption.getActionListeners().length != 0){
+			cloneOption.removeActionListener(cloneOption.getActionListeners()[0]);
 		}
-		clone.addActionListener(e -> {
+		cloneOption.addActionListener(e -> {
 			TAS.getInstance().executeAction(new LineAction(this.model,script,rows, LineAction.Type.CLONE));
 		});
 
@@ -183,14 +166,14 @@ public class PianoRoll extends JTable {
 
 	private void preparepopUpMenu (){
 
-		delete.setActionCommand("delete");
-		insert.setActionCommand("insert");
-		clone.setActionCommand("clone");
+		deleteOption.setActionCommand("delete");
+		insertOption.setActionCommand("insert");
+		cloneOption.setActionCommand("clone");
 
 
-		popupMenu.add(delete);
-		popupMenu.add(insert);
-		popupMenu.add(clone);
+		popupMenu.add(deleteOption);
+		popupMenu.add(insertOption);
+		popupMenu.add(cloneOption);
 
 		popupMenu.setVisible(true);
 		popupMenu.setSize(100,100);

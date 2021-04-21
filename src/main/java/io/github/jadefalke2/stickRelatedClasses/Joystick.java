@@ -16,7 +16,7 @@ public class Joystick extends JPanel {
 	private final int panelWidth;
 	private final int BORDER_THICKNESS = 2;
 
-	private StickPosition[] stickPositions;
+	private final StickPosition[] stickPositions;
 
 	private final Point thumbPos = new Point();
 	protected SwingPropertyChangeSupport propertySupporter = new SwingPropertyChangeSupport(this);

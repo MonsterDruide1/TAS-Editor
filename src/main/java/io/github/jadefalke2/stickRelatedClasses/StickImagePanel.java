@@ -20,26 +20,21 @@ public class StickImagePanel extends JPanel {
 
     private final Joystick joystick;
 
-    private StickPosition stickPosition;
-    private StickType stickType;
-    private Script script;
-    private InputLine inputLine;
+    private final StickPosition stickPosition;
+    private final StickType stickType;
+	private final InputLine inputLine;
 
-    private DefaultTableModel table;
-    private int row;
-
-
-    private final int STICK_IMAGE_SIZE = 200;
+    private final DefaultTableModel table;
+    private final int row;
 
 
-    public enum StickType {
+	public enum StickType {
         L_STICK,R_STICK
     }
 
 
 
 	public StickImagePanel(StickPosition stickPosition, StickType stickType,Script script, DefaultTableModel table, int row) {
-    	this.script = script;
 		this.row = row;
     	this.table = table;
         this.inputLine = script.getInputLines().get(row);
@@ -49,13 +44,13 @@ public class StickImagePanel extends JPanel {
 		StickPosition[] stickPositions = new StickPosition[Math.min(row,3)];
 
 		for (int i = 0; i < stickPositions.length; i++){
-			//InputLine currentLine =  script.getInputLines().get(row - i) : script.getInputLines().get(0);
 			InputLine currentLine = script.getInputLines().get(row - i);
 
 			stickPositions[i] = stickType == StickType.L_STICK ? currentLine.getStickL() : currentLine.getStickR();
 		}
 
-		joystick = new Joystick(32767,STICK_IMAGE_SIZE,stickPositions );
+		int STICK_IMAGE_SIZE = 200;
+		joystick = new Joystick(32767, STICK_IMAGE_SIZE,stickPositions );
 
 
 		joystick.setThumbPos(new Point(stickPosition.getX(),stickPosition.getY()));

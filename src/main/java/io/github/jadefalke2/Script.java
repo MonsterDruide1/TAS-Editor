@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 public class Script {
 
-	private String script;
-	private ArrayList<InputLine> inputLines = new ArrayList<>();
+	private final String script;
+	private final ArrayList<InputLine> inputLines = new ArrayList<>();
 
 	public Script(String script) {
 		this.script = script;

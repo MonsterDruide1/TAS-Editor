@@ -8,12 +8,12 @@ import javax.swing.table.DefaultTableModel;
 
 public class StickAction implements Action {
 
-	private InputLine inputLine;
-	private StickImagePanel.StickType stickType;
-	private StickPosition oldPosition;
-	private StickPosition newPosition;
-	private DefaultTableModel table;
-	private int row;
+	private final InputLine inputLine;
+	private final StickImagePanel.StickType stickType;
+	private final StickPosition oldPosition;
+	private final StickPosition newPosition;
+	private final DefaultTableModel table;
+	private final int row;
 
 	public StickAction(InputLine inputLine, StickImagePanel.StickType stickType, StickPosition oldPosition, StickPosition newPosition, DefaultTableModel table, int row) {
 		this.row = row;
@@ -35,12 +35,14 @@ public class StickAction implements Action {
 	}
 
 	private void setPosition(StickPosition position) {
+
 		if (stickType == StickImagePanel.StickType.L_STICK) {
 			inputLine.setStickL(position);
-			table.setValueAt(inputLine.getStickL().toString(),row, stickType == StickImagePanel.StickType.L_STICK ? 1:2);
+			table.setValueAt(inputLine.getStickL().toString(),row, 1);
 		} else {
 			inputLine.setStickR(position);
-			table.setValueAt(inputLine.getStickR().toString(),row, stickType == StickImagePanel.StickType.L_STICK ? 1:2);
+			table.setValueAt(inputLine.getStickR().toString(),row,2);
 		}
+
 	}
 }

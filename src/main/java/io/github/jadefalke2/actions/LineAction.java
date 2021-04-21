@@ -14,15 +14,16 @@ public class LineAction implements Action{
 		CLONE
 	}
 
-	private Type type;
-	private DefaultTableModel table;
-	private Script script;
-	private int[] rows;
-	private InputLine[] previousLines;
+	private final Type type;
+	private final DefaultTableModel table;
+	private final Script script;
+	private final int[] rows;
+	private final InputLine[] previousLines;
 
 	public LineAction(DefaultTableModel table, Script script, int[] rows, Type type) {
 
 		previousLines = new InputLine[rows.length];
+
 		for (int i = 0; i < rows.length; i++){
 			previousLines[i] = new InputLine(script.getInputLines().get(i).getFull());
 		}

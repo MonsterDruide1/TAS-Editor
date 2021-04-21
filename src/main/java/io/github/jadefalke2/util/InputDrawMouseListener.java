@@ -12,13 +12,13 @@ import java.util.ArrayList;
 public class InputDrawMouseListener extends MouseAdapter {
 
 
-	enum Mode {
+	private enum Mode {
 		ADDING,REMOVING,IDLE
 	}
 
-	ArrayList<Integer> rows = new ArrayList<>();
-	PianoRoll table;
-	Mode mode = Mode.IDLE;
+	private final ArrayList<Integer> rows = new ArrayList<>();
+	private final PianoRoll table;
+	private Mode mode = Mode.IDLE;
 
 
 	public InputDrawMouseListener (PianoRoll table){
