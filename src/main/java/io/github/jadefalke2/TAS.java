@@ -7,7 +7,6 @@ import io.github.jadefalke2.Components.TxtFileChooser;
 import io.github.jadefalke2.Components.Window;
 import io.github.jadefalke2.actions.Action;
 import io.github.jadefalke2.util.CircularStack;
-import io.github.jadefalke2.util.Input;
 import io.github.jadefalke2.util.Stack;
 
 import javax.swing.*;
@@ -22,8 +21,9 @@ public class TAS {
 	private static TAS instance;
 
 	private Window window;
-	private JFrame functionEditor;
+	JFrame functionEditor;
 	private JPanel startUpPanel;
+	private JPanel editor;
 
 	private Preferences preferences;
 
@@ -130,10 +130,10 @@ public class TAS {
 				file.createNewFile();
 				FileWriter fileWriter = new FileWriter(fileName);
 				// optimize the below later
-				fileWriter.write(Input.EMPTY_LINE);
-				fileWriter.write(Input.EMPTY_LINE);
-				fileWriter.write(Input.EMPTY_LINE);
-				fileWriter.write(Input.EMPTY_LINE);
+				fileWriter.write("1 NONE 0;0 0;0\n");
+				fileWriter.write("2 NONE 0;0 0;0\n");
+				fileWriter.write("3 NONE 0;0 0;0\n");
+				fileWriter.write("4 NONE 0;0 0;0\n");
 
 				fileWriter.close();
 
@@ -158,7 +158,7 @@ public class TAS {
 
 		window.remove(startUpPanel);
 
-		JPanel editor = new JPanel();
+		editor = new JPanel();
 		window.add(editor);
 
 		PianoRoll pianoRoll = new PianoRoll(script);
@@ -244,11 +244,10 @@ public class TAS {
 		functionEditor.setSize(200,400);
 
 		Function function = new Function(preparePianoRoll(file));
-
 		PianoRoll functionWindowPianoRoll = new PianoRoll(function);
-		functionWindowPianoRoll.setVisible(true);
-		JScrollPane scrollPane = new JScrollPane(functionWindowPianoRoll);
 
+		functionEditor.removeAll();
+		JScrollPane scrollPane = new JScrollPane(functionWindowPianoRoll);
 
 		functionEditor.add(scrollPane);
 	}
