@@ -60,4 +60,24 @@ public class Script {
 		}
 	}
 
+	public String getFull (){
+		StringBuilder sb = new StringBuilder();
+
+		for (InputLine inputLine: inputLines){
+			sb.append(inputLine.getFull()).append("\n");
+		}
+
+		return sb.toString();
+	}
+
+	public static Script getEmptyScript (int amount){
+		Script tmp = new Script(InputLine.getEmpty(1).getFull());
+
+		for (int i = 2; i < amount; i++){
+			tmp.insertLine(i - 1,InputLine.getEmpty(i));
+		}
+
+		return tmp;
+	}
+
 }

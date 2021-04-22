@@ -13,14 +13,11 @@ import java.io.IOException;
 
 public class StartUpWindow extends JFrame {
 
-	//temporary -> will get removed
-	public boolean mainEditor = false;
-
 	private MainEditorWindow mainEditorWindow;
 	private JPanel startUpPanel;
 
 
-	public StartUpWindow(@NotNull MainEditorWindow mainEditorWindow) {
+	public StartUpWindow(MainEditorWindow mainEditorWindow) {
 
 		this.mainEditorWindow = mainEditorWindow;
 
@@ -63,6 +60,7 @@ public class StartUpWindow extends JFrame {
 	public void openLoadFileChooser() {
 		TxtFileChooser fileChooser = new TxtFileChooser();
 		mainEditorWindow.prepareEditor(fileChooser.getFile());
+		dispose();
 	}
 
 	public void openNewFileCreator() {

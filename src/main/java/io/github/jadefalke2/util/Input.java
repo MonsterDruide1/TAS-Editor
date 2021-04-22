@@ -42,10 +42,10 @@ public class Input {
 		encode.put("+", "KEY_PLUS");
 		encode.put("-", "KEY_MINUS");
 
-		encode.put("DP-L", "KEY_DLEFT");
-		encode.put("DP-R", "KEY_DRIGHT");
-		encode.put("DP-U", "KEY_DUP");
-		encode.put("DP-D", "KEY_DDOWN");
+		encode.put("DL", "KEY_DLEFT");
+		encode.put("DR", "KEY_DRIGHT");
+		encode.put("DU", "KEY_DUP");
+		encode.put("DD", "KEY_DDOWN");
 
 		encode.put("L-stick","KEY_LSTICK");
 		encode.put("R-stick", "KEY_RSTICK");

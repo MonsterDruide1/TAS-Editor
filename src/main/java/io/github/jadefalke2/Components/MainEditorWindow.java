@@ -2,8 +2,6 @@ package io.github.jadefalke2.Components;
 
 import io.github.jadefalke2.InputLine;
 import io.github.jadefalke2.Script;
-import io.github.jadefalke2.TAS;
-import io.github.jadefalke2.util.CircularStack;
 
 import javax.swing.*;
 import java.awt.event.WindowAdapter;
@@ -11,6 +9,8 @@ import java.awt.event.WindowEvent;
 import java.io.*;
 
 public class MainEditorWindow extends JFrame {
+
+	private final FunctionEditorWindow functionEditorWindow;
 
 	private JPanel editor;
 
@@ -20,12 +20,17 @@ public class MainEditorWindow extends JFrame {
 	private Script script;
 	private File currentScriptFile;
 
-	public MainEditorWindow (){
+	public MainEditorWindow (FunctionEditorWindow functionEditorWindow){
+
+		this.functionEditorWindow = functionEditorWindow;
+
 		setVisible(false);
 
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
+
+				//TODO ONLY IF IN EDITOR + CHANGES DONE
 
 				if (JOptionPane.showConfirmDialog(editor, "Save Project changes?", "Save before exiting", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, new ImageIcon("")) == 0){
 					saveFile();
@@ -41,6 +46,14 @@ public class MainEditorWindow extends JFrame {
 		script = new Script(preparePianoRoll(fileToOpen));
 		startEditor();
 	}
+
+	public void prepareEditor(Script script) {
+		setVisible(true);
+		this.script = new Script(script.getFull());
+		startEditor();
+	}
+
+
 
 	private String preparePianoRoll(File file) {
 		currentScriptFile = file;
@@ -86,8 +99,12 @@ public class MainEditorWindow extends JFrame {
 
 		JButton functionEditorButton = new JButton("Function editor");
 		functionEditorButton.addActionListener(e -> {
-			//openFunctionEditorPreparingWindow();
+			functionEditorWindow.startUp();
 		});
+
+		editor.add(functionEditorButton);
+
+		pack();
 	}
 
 	public void saveFile() {

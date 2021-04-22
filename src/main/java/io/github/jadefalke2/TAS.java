@@ -26,7 +26,7 @@ public class TAS {
 		new TAS();
 	}
 
-	private TAS() {
+	public TAS() {
 		instance = this;
 		startProgram();
 	}
@@ -41,18 +41,21 @@ public class TAS {
 
 	public void startProgram() {
 
+
+		//initialising preferences
+		preferences = Preferences.userRoot().node(getClass().getName());
+
 		//initialising stacks
 		undoStack = new CircularStack<>(1024);
 		redoStack = new CircularStack<>(1024);
 
 		//initialising windows -> set to be invisible by default
 		//will be set visible once they are supposed to
-		mainEditorWindow = new MainEditorWindow();
-		functionEditorWindow = new FunctionEditorWindow();
-		startUpWindow = new StartUpWindow(mainEditorWindow);
 
-		//initialising preferences
-		preferences = Preferences.userRoot().node(getClass().getName());
+		functionEditorWindow = new FunctionEditorWindow();
+		mainEditorWindow = new MainEditorWindow(functionEditorWindow);
+		//startUpWindow = new StartUpWindow(mainEditorWindow);
+		mainEditorWindow.prepareEditor(Script.getEmptyScript(10));
 
 		//set correct UI theme
 		if (preferences.getBoolean("dark_theme", false)) {
@@ -68,7 +71,7 @@ public class TAS {
 		//sets the look and feel to the OS' default
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-			SwingUtilities.updateComponentTreeUI(startUpWindow);
+			SwingUtilities.updateComponentTreeUI(mainEditorWindow);
 		} catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
@@ -78,12 +81,11 @@ public class TAS {
 		//sets the look and feel to dark mode
 		try {
 			UIManager.setLookAndFeel(new FlatDarkLaf());
-			SwingUtilities.updateComponentTreeUI(startUpWindow);
+			SwingUtilities.updateComponentTreeUI(mainEditorWindow);
+
 		} catch (UnsupportedLookAndFeelException e) {
 			e.printStackTrace();
 		}
-
-
 	}
 
 

@@ -27,12 +27,16 @@ public class PianoRoll extends JTable {
 
 
 	private final String[] columnNames = {
-		"frame", "L-stick", "R-Stick", "A", "B", "X", "Y", "ZR", "ZL", "R", "L", "+", "-", "DP-R", "DP-L", "DP-U", "DP-D", "L-stick", "R-Stick",
+		"frame", "L-stick", "R-Stick", "A", "B", "X", "Y", "ZR", "ZL", "R", "L", "+", "-", "DR", "DL", "DU", "DD", "L-stick", "R-Stick",
 	};
 
 	public PianoRoll (Script script){
 
 		setAutoResizeMode(AUTO_RESIZE_OFF);
+
+		setPreferredSize(new Dimension(700,800));
+		setPreferredScrollableViewportSize(getPreferredSize());
+		setFillsViewportHeight(false);
 
 		this.script = script;
 
@@ -60,20 +64,14 @@ public class PianoRoll extends JTable {
 			addRow(currentLine, tmp, columnNames, model);
 		}
 
-		getColumnModel().getColumn(0).setPreferredWidth(45);
-		getColumnModel().getColumn(1).setPreferredWidth(90);
-		getColumnModel().getColumn(2).setPreferredWidth(90);
+		int[] columnsWidth = {
+			45, //frame number
+			85,85, // sticks
+			18,18,18,18,25,25,18,18,18,18,30,30,30,30,50,50 //buttons
+		};
 
-		for (int i = 3; i < 13; i++) {
-			getColumnModel().getColumn(i).setPreferredWidth(30);
-		}
-
-		for (int i = 13; i < columnNames.length - 2; i++) {
-			getColumnModel().getColumn(i).setPreferredWidth(40);
-		}
-
-		for (int i = columnNames.length - 2; i < columnNames.length; i++){
-			getColumnModel().getColumn(i).setPreferredWidth(60);
+		for (int i = 0; i < columnsWidth.length && i < getColumnCount(); i++) {
+			getColumnModel().getColumn(i).setPreferredWidth(columnsWidth[i]);
 		}
 
 	}
