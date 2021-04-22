@@ -11,6 +11,10 @@ public class TxtFileChooser extends JFileChooser {
 		super(FileSystemView.getFileSystemView());
 	}
 
+	/**
+	 * returns the chosen file
+	 * @return the chosen file
+	 */
 	public File getFile (){
 
 		setDialogTitle("Choose existing TAS file");
@@ -25,5 +29,6 @@ public class TxtFileChooser extends JFileChooser {
 		}
 
 		return null;
+
 	}
 }
