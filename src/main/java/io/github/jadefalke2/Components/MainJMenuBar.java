@@ -13,7 +13,7 @@ import java.util.prefs.Preferences;
 
 public class MainJMenuBar extends JMenuBar {
 
-	public MainJMenuBar(TAS main, PianoRoll pianoRoll){
+	public MainJMenuBar(MainEditorWindow mainEditorWindow){
 		// TODO: Handle the rest of the listeners and make things enabled or disabled correctly
 
 		JMenu fileJMenu = add(new JMenu("File"));
@@ -34,11 +34,11 @@ public class MainJMenuBar extends JMenuBar {
 
 		JMenuItem saveJMenuItem = fileJMenu.add(new JMenuItem("Save"));
 		saveJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
-		saveJMenuItem.addActionListener(e -> main.saveFile());
+		saveJMenuItem.addActionListener(e -> mainEditorWindow.saveFile());
 
 		JMenuItem saveAsJMenuItem = fileJMenu.add(new JMenuItem("Save As..."));
 		saveAsJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK));
-		saveAsJMenuItem.addActionListener(e -> main.saveFile());
+		saveAsJMenuItem.addActionListener(e -> mainEditorWindow.saveFile());
 
 		fileJMenu.addSeparator();
 
@@ -49,11 +49,11 @@ public class MainJMenuBar extends JMenuBar {
 
 		JMenuItem undoJMenuItem = editJMenu.add(new JMenuItem("Undo"));
 		undoJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_MASK));
-		undoJMenuItem.addActionListener(e -> main.undo());
+		undoJMenuItem.addActionListener(e -> TAS.getInstance().undo());
 
 		JMenuItem redoJMenuItem = editJMenu.add(new JMenuItem("Redo"));
 		redoJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK));
-		redoJMenuItem.addActionListener(e -> main.redo());
+		redoJMenuItem.addActionListener(e -> TAS.getInstance().redo());
 
 		editJMenu.addSeparator();
 
@@ -79,7 +79,7 @@ public class MainJMenuBar extends JMenuBar {
 
 		JMenuItem addNewLineItem = editJMenu.add(new JMenuItem("Add line"));
 		addNewLineItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_MASK));
-		addNewLineItem.addActionListener(e -> pianoRoll.addEmptyRow(main.getScript()));
+		addNewLineItem.addActionListener(e -> mainEditorWindow.getPianoRoll().addEmptyRow(mainEditorWindow.getScript()));
 
 		JMenu viewJMenu = add(new JMenu("View"));
 
@@ -92,9 +92,9 @@ public class MainJMenuBar extends JMenuBar {
 		darkThemeJMenuItem.addItemListener(e -> {
 			preferences.putBoolean("dark_theme", darkThemeJMenuItem.getState());
 			if (darkThemeJMenuItem.getState()) {
-				main.setDarculaLookAndFeel();
+				TAS.getInstance().setDarculaLookAndFeel();
 			} else {
-				main.setWindowsLookAndFeel();
+				TAS.getInstance().setDefaultLookAndFeel();
 			}
 		});
 
