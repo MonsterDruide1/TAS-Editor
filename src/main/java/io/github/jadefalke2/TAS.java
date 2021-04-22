@@ -31,10 +31,6 @@ public class TAS {
 		startProgram();
 	}
 
-	public static TAS getInstance() {
-		return instance;
-	}
-
 	/**
 	 * starts the program by opening a new window with the two options of either creating a new script or loading in a preexisting one. After this it will start the editor.
 	 */
@@ -93,12 +89,14 @@ public class TAS {
 
 
 	public void executeAction(Action action) {
+		//adds a mew action to the stack to make it possible to undo
 		action.execute();
 		undoStack.push(action);
 		redoStack.clear();
 	}
 
 	public void undo() {
+		//undoes the last action
 		if (undoStack.isEmpty())
 			return;
 		Action action = undoStack.pop();
@@ -107,6 +105,7 @@ public class TAS {
 	}
 
 	public void redo() {
+		//redoes the last action
 		if (redoStack.isEmpty())
 			return;
 		Action action = redoStack.pop();
@@ -116,6 +115,10 @@ public class TAS {
 
 
 	// getter
+
+	public static TAS getInstance() {
+		return instance;
+	}
 
 	public Preferences getPreferences() {
 		return preferences;

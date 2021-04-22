@@ -71,7 +71,7 @@ public class InputLine {
 	private void updateFull() {
 		StringBuilder tmpString = new StringBuilder();
 
-		tmpString.append(line + " ");
+		tmpString.append(line).append(" ");
 
 		boolean first = true;
 
@@ -90,7 +90,9 @@ public class InputLine {
 			}
 		}
 
-		tmpString.append(" " + getStickL().toString() + " " + getStickR().toString());
+		tmpString
+			.append(" ").append(getStickL().toString())
+			.append(" ").append(getStickR().toString());
 
 		full = tmpString.toString();
 	}
