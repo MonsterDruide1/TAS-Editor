@@ -23,6 +23,10 @@ public class MainEditorWindow extends JFrame {
 	private File currentScriptFile;
 
 
+	/**
+	 * Constructor
+	 * @param functionEditorWindow the function editor window that can be opened from within this window
+	 */
 	public MainEditorWindow (FunctionEditorWindow functionEditorWindow){
 
 		this.functionEditorWindow = functionEditorWindow;
@@ -45,25 +49,31 @@ public class MainEditorWindow extends JFrame {
 		});
 	}
 
+	/**
+	 * Prepares the editor to make it ready to be started
+	 * @param fileToOpen the file the editor will be opened with
+	 */
 	public void prepareEditor(File fileToOpen) {
 		setVisible(true);
 		script = new Script(preparePianoRoll(fileToOpen));
 		startEditor();
 	}
 
+	/**
+	 * Prepares the editor to make it ready to be started
+	 * @param script the script that the editor will be opened with
+	 */
 	public void prepareEditor(Script script) {
 		setVisible(true);
 		this.script = new Script(script.getFull());
 		startEditor();
 	}
 
-
 	/**
 	 * Returns the string that is being read from the given file.
 	 * @param file the file to open
 	 * @return the corresponding String
 	 */
-
 	private String preparePianoRoll(File file) {
 
 		//sets the current script file to be the one that the method is called with
@@ -87,8 +97,9 @@ public class MainEditorWindow extends JFrame {
 		return stringBuilder.toString();
 	}
 
-
-
+	/**
+	 * starts the editor
+	 */
 	public void startEditor() {
 
 		setSize(600, 700);
@@ -123,7 +134,6 @@ public class MainEditorWindow extends JFrame {
 	/**
 	 * writes the current script into the current file
 	 */
-
 	public void saveFile() {
 
 		BufferedWriter writer = null;

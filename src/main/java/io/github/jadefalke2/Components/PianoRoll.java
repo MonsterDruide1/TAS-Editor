@@ -125,7 +125,7 @@ public class PianoRoll extends JTable {
 	 * Opens the Window to control the stick input
 	 * @param row the row the window corresponds to
 	 * @param col the column the window corresponds to (1 -> LSTICK; 2 -> RSTICK)
-	 * @param script
+	 * @param script the script
 	 */
 	public void openStickWindow (int row,int col, Script script){
 
