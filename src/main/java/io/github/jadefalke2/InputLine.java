@@ -91,8 +91,8 @@ public class InputLine {
 		}
 
 		tmpString
-			.append(" ").append(getStickL().toString())
-			.append(" ").append(getStickR().toString());
+			.append(" ").append(getStickL().toCartString())
+			.append(" ").append(getStickR().toCartString());
 
 		full = tmpString.toString();
 	}
@@ -119,8 +119,8 @@ public class InputLine {
 
 		ArrayList<Object> tmp = new ArrayList<>();
 		tmp.add(line);
-		tmp.add(stickL.toString());
-		tmp.add(stickR.toString());
+		tmp.add(stickL.toCartString());
+		tmp.add(stickR.toCartString());
 
 		for (int i = 3; i < 15; i++){
 			tmp.add(buttonsEncoded.contains(buttonNames[i]) ? buttonNames[i] : " ");

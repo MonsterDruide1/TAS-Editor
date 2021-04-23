@@ -151,7 +151,7 @@ public class PianoRoll extends JTable {
 				@Override
 				public void windowClosing(WindowEvent e) {
 					stickWindowIsOpen = false;
-					setValueAt(stickImagePanel.getStickPos().toString(),row,col);
+					setValueAt(stickImagePanel.getStickPos().toCartString(),row,col);
 					e.getWindow().dispose();
 				}
 			});

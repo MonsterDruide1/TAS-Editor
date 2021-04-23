@@ -38,10 +38,10 @@ public class StickAction implements Action {
 
 		if (stickType == StickImagePanel.StickType.L_STICK) {
 			inputLine.setStickL(position);
-			table.setValueAt(inputLine.getStickL().toString(),row, 1);
+			table.setValueAt(inputLine.getStickL().toCartString(),row, 1);
 		} else {
 			inputLine.setStickR(position);
-			table.setValueAt(inputLine.getStickR().toString(),row,2);
+			table.setValueAt(inputLine.getStickR().toCartString(),row,2);
 		}
 
 	}

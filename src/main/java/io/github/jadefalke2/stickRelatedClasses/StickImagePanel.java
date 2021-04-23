@@ -13,13 +13,16 @@ import java.awt.event.*;
 
 public class StickImagePanel extends JPanel {
 
+	// Spinners
     private final JSpinner xSpinner;
     private final JSpinner ySpinner;
     private final JSpinner radiusSpinner;
     private final JSpinner angleSpinner;
 
+    // Joystick
     private final Joystick joystick;
 
+    // Other stuff
     private final StickPosition stickPosition;
     private final StickType stickType;
 	private final InputLine inputLine;
@@ -28,13 +31,24 @@ public class StickImagePanel extends JPanel {
     private final int row;
 
 
+    // Used to have a good way to differentiate sticks
+
 	public enum StickType {
         L_STICK,R_STICK
     }
 
 
-
+	/**
+	 * Constructor
+	 * @param stickPosition the stick position
+	 * @param stickType the type of stick
+	 * @param script the script
+	 * @param table the main table
+	 * @param row the current row
+	 */
 	public StickImagePanel(StickPosition stickPosition, StickType stickType,Script script, DefaultTableModel table, int row) {
+
+		// setting global vars
 		this.row = row;
     	this.table = table;
         this.inputLine = script.getInputLines().get(row);
@@ -43,13 +57,14 @@ public class StickImagePanel extends JPanel {
 
 		StickPosition[] stickPositions = new StickPosition[Math.min(row,3)];
 
+		// sets the contents of the stickpositions array to be the previous stick positions of the same stick
 		for (int i = 0; i < stickPositions.length; i++){
 			InputLine currentLine = script.getInputLines().get(row - i);
 
 			stickPositions[i] = stickType == StickType.L_STICK ? currentLine.getStickL() : currentLine.getStickR();
 		}
 
-		int STICK_IMAGE_SIZE = 200;
+		final int STICK_IMAGE_SIZE = 200;
 		joystick = new Joystick(32767, STICK_IMAGE_SIZE,stickPositions );
 
 
@@ -96,12 +111,14 @@ public class StickImagePanel extends JPanel {
         xSpinner.addChangeListener(e -> {
             stickPosition.setX((int) xSpinner.getValue());
            	//updatePolarSpinners();
+			//uncommenting above leads to recursive method calls and a stackOverFlow error! -> fix
             updateVisual();
             repaint();
         });
         ySpinner.addChangeListener(e -> {
             stickPosition.setY((int) ySpinner.getValue());
             //updatePolarSpinners();
+			//uncommenting above leads to recursive method calls and a stackOverFlow error! -> fix
             updateVisual();
             repaint();
         });
@@ -219,11 +236,11 @@ public class StickImagePanel extends JPanel {
 
 				if (stickType == StickType.L_STICK) {
 					script.getInputLines().get(i).setStickL(new StickPosition(script.getInputLines().get(row).getStickL()));
-					table.setValueAt(script.getInputLines().get(i - 1).getStickL().toString(), i,1);
+					table.setValueAt(script.getInputLines().get(i - 1).getStickL().toCartString(), i,1);
 
 				}else{
 					script.getInputLines().get(i).setStickR(new StickPosition(script.getInputLines().get(row).getStickR()));
-					table.setValueAt(script.getInputLines().get(i - 1).getStickR().toString(), i,2);
+					table.setValueAt(script.getInputLines().get(i - 1).getStickR().toCartString(), i,2);
 				}
 
 			}
@@ -235,9 +252,9 @@ public class StickImagePanel extends JPanel {
     }
 
 
-
-
-
+	/**
+	 * Updates the stick position based on the sliders
+	 */
 	private void updateStickPosition() {
 
     	StickPosition oldStickPosition = new StickPosition(stickPosition);
@@ -258,20 +275,31 @@ public class StickImagePanel extends JPanel {
 		repaint();
 	}
 
+	/**
+	 * Updates the visual stickPosition -> is called on changes
+	 */
 	private void updateVisual (){
 		joystick.setThumbPos(new Point((int)xSpinner.getValue(),(int)ySpinner.getValue()));
 		repaint();
 	}
 
+	/**
+	 * Updates the cartesian spinners
+	 */
 	private void updateCartSpinners(){
     	xSpinner.setValue(stickPosition.getX());
     	ySpinner.setValue(stickPosition.getY());
 	}
 
+	/**
+	 * Updates the polar spinners
+	 */
 	private void updatePolarSpinners(){
 		angleSpinner.setValue((int)Math.toDegrees(stickPosition.getTheta()));
 		radiusSpinner.setValue(stickPosition.getRadius());
 	}
+
+	// getter
 
 	public StickPosition getStickPos (){
     	return stickPosition;

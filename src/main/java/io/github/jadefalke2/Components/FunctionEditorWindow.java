@@ -19,11 +19,12 @@ public class FunctionEditorWindow extends JFrame {
 		setSize(200,100);
 		setLocation(200,200);
 
-		add(mainPanel);
 
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
 
 		JScrollPane scrollPane = new JScrollPane(pianoRoll);
 		mainPanel.add(scrollPane);
+
+		add(mainPanel);
 	}
 }

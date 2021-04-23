@@ -7,6 +7,9 @@ import java.io.File;
 
 public class TxtFileChooser extends JFileChooser {
 
+	/**
+	 * Constructor
+	 */
 	public TxtFileChooser (){
 		super(FileSystemView.getFileSystemView());
 	}

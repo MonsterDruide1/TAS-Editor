@@ -10,12 +10,14 @@ import java.util.Vector;
 
 public class Joystick extends JPanel {
 
+	// Coordinates + Data
 	private final int outputMax;
 	private final int thumbDiameter;
 	private final int thumbRadius;
 	private final int panelWidth;
 	private final int BORDER_THICKNESS = 2;
 
+	// stick positions
 	private final StickPosition[] stickPositions;
 
 	private final Point thumbPos = new Point();
@@ -67,6 +69,7 @@ public class Joystick extends JPanel {
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				if (SwingUtilities.isLeftMouseButton(e)) {
+					updateThumbPos(e.getX(), e.getY());
 					repaintAndTriggerListeners();
 				}
 			}
@@ -113,7 +116,6 @@ public class Joystick extends JPanel {
 	/**
 	 * @return the scaled position of the joystick thumb pad
 	 */
-
 	public Point getOutputPos() {
 		Point result = new Point();
 		result.x = outputMax * (thumbPos.x - panelWidth / 2) / (panelWidth / 2 - thumbDiameter / 2);
@@ -121,14 +123,19 @@ public class Joystick extends JPanel {
 		return result;
 	}
 
+	public Point scaledToVisual (Point scaled){
+		return new Point((int)((scaled.x/(double)outputMax) * (panelWidth / 2.0 - thumbDiameter / 2.0) + (panelWidth / 2.0)),(int)((scaled.y/(double)-outputMax) * (panelWidth / 2.0 - thumbDiameter / 2.0) + (panelWidth / 2.0)));
+	}
+
 	public void setThumbPos (Point scaled){
 		thumbPos.x = (int)((scaled.x/(double)outputMax) * (panelWidth / 2.0 - thumbDiameter / 2.0) + (panelWidth / 2.0));
 		thumbPos.y = (int)((scaled.y/(double)-outputMax) * (panelWidth / 2.0 - thumbDiameter / 2.0) + (panelWidth / 2.0));
 	}
 
-	public Point scaledToVisual (Point scaled){
-		return new Point((int)((scaled.x/(double)outputMax) * (panelWidth / 2.0 - thumbDiameter / 2.0) + (panelWidth / 2.0)),(int)((scaled.y/(double)-outputMax) * (panelWidth / 2.0 - thumbDiameter / 2.0) + (panelWidth / 2.0)));
-	}
+
+
+	// Overwrites
+
 
 	@Override
 	protected void paintComponent(final Graphics g) {
