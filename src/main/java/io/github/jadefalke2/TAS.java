@@ -7,6 +7,7 @@ import io.github.jadefalke2.util.CircularStack;
 import io.github.jadefalke2.util.Stack;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.prefs.Preferences;
 
 public class TAS {
@@ -63,11 +64,15 @@ public class TAS {
 	}
 
 
+	// set look and feels
+
 	public void setDefaultLookAndFeel() {
 		//sets the look and feel to the OS' default
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-			SwingUtilities.updateComponentTreeUI(mainEditorWindow);
+			for(Window window : JFrame.getWindows()) {
+				SwingUtilities.updateComponentTreeUI(window);
+			}
 		} catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
@@ -77,8 +82,9 @@ public class TAS {
 		//sets the look and feel to dark mode
 		try {
 			UIManager.setLookAndFeel(new FlatDarkLaf());
-			SwingUtilities.updateComponentTreeUI(mainEditorWindow);
-
+			for(Window window : JFrame.getWindows()) {
+				SwingUtilities.updateComponentTreeUI(window);
+			}
 		} catch (UnsupportedLookAndFeelException e) {
 			e.printStackTrace();
 		}

@@ -7,14 +7,18 @@ import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.*;
+import java.util.stream.Collectors;
 
 public class MainEditorWindow extends JFrame {
 
 	// frame that can be opened from this one
 	private final FunctionEditorWindow functionEditorWindow;
 
-	//Components
+	//JPanel
 	private JPanel editor;
+
+	//Components
+	private JScrollPane scrollPane;
 	private PianoRoll pianoRoll;
 	private MainJMenuBar mainJMenuBar;
 
@@ -31,19 +35,21 @@ public class MainEditorWindow extends JFrame {
 
 		this.functionEditorWindow = functionEditorWindow;
 		setVisible(false);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				//TODO ONLY IF IN EDITOR + CHANGES DONE
 				askForFileSave();
+				dispose();
+				System.exit(0);
 			}
 
 			private void askForFileSave() {
 				if (JOptionPane.showConfirmDialog(editor, "Save Project changes?", "Save before exiting", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, new ImageIcon("")) == 0){
 					//opens a new dialog that asks about saving, the exits
 					saveFile();
-					System.exit(0);
 				}
 			}
 		});
@@ -80,21 +86,14 @@ public class MainEditorWindow extends JFrame {
 		currentScriptFile = file;
 
 		//reads the file into a string that is returned
-		StringBuilder stringBuilder = new StringBuilder();
-
 		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-
-			String sCurrentLine;
-
-			while ((sCurrentLine = br.readLine()) != null) {
-				stringBuilder.append(sCurrentLine).append("\n");
-			}
-
-		} catch (IOException exception) {
-			exception.printStackTrace();
+			return br.lines().map(sCurrentLine -> sCurrentLine + "\n").collect(Collectors.joining());
+		} catch (IOException ex) {
+			ex.printStackTrace();
 		}
 
-		return stringBuilder.toString();
+		// in case file is not being found -> also throws an exception
+		return "";
 	}
 
 	/**
@@ -107,7 +106,7 @@ public class MainEditorWindow extends JFrame {
 		editor = new JPanel();
 
 		pianoRoll = new PianoRoll(script);
-		JScrollPane scrollPane = new JScrollPane(pianoRoll);
+		scrollPane = new JScrollPane(pianoRoll);
 
 		mainJMenuBar = new MainJMenuBar(this);
 		setJMenuBar(mainJMenuBar);
@@ -144,7 +143,7 @@ public class MainEditorWindow extends JFrame {
 
 			for (InputLine currentLine : script.getInputLines()) {
 				if (!currentLine.isEmpty()) {
-					wholeScript.append(currentLine.getFull() + "\n");
+					wholeScript.append(currentLine.getFull()).append("\n");
 				}
 			}
 
