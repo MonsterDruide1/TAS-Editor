@@ -20,16 +20,19 @@ public class CellAction implements Action {
 
 	@Override
 	public void execute() {
-		if (table.getValueAt(row, col).equals(" ")) {
-			table.setValueAt(table.getColumnName(col), row, col);
 
+		if (table.getValueAt(row, col).equals(" ")) {
+
+			table.setValueAt(table.getColumnName(col), row, col);
 			script.getInputLines().get(row).buttonsEncoded.add(table.getColumnName(col));
 
 		} else if (table.getValueAt(row, col).equals(table.getColumnName(col))) {
 
 			table.setValueAt(" ", row, col);
 			script.getInputLines().get(row).buttonsEncoded.remove(table.getColumnName(col));
+
 		}
+
 	}
 
 	@Override

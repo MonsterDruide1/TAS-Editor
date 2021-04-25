@@ -105,6 +105,7 @@ public class MainEditorWindow extends JFrame {
 		setSize(600, 700);
 
 		editor = new JPanel();
+
 		pianoRoll = new PianoRoll(script);
 		JScrollPane scrollPane = new JScrollPane(pianoRoll);
 
@@ -126,7 +127,6 @@ public class MainEditorWindow extends JFrame {
 		editor.add(functionEditorButton);
 
 		add(editor);
-
 
 		pack();
 	}

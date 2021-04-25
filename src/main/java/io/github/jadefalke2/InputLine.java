@@ -94,15 +94,13 @@ public class InputLine {
 			.append(" ").append(getStickL().toCartString())
 			.append(" ").append(getStickR().toCartString());
 
+
 		full = tmpString.toString();
 	}
 
 	public Object[] getArray (){
 
 		String[] buttonNames = {
-			"",
-			"",
-			"",
 			"A",
 			"B",
 			"X",
@@ -122,8 +120,8 @@ public class InputLine {
 		tmp.add(stickL.toCartString());
 		tmp.add(stickR.toCartString());
 
-		for (int i = 3; i < 15; i++){
-			tmp.add(buttonsEncoded.contains(buttonNames[i]) ? buttonNames[i] : " ");
+		for (int i = 3; i < buttonNames.length + 3; i++){
+			tmp.add(buttonsEncoded.contains(buttonNames[i - 3]) ? buttonNames[i - 3] : " ");
 		}
 
 		return tmp.toArray();

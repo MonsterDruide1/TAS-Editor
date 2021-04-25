@@ -165,6 +165,7 @@ public class StickPosition {
 
 	@Override
 	public String toString (){
-		return "Cartesian: " + toCartString() + "\n Polar: " + toPolarString();
+		//return "Cartesian: " + toCartString() + "\n Polar: " + toPolarString();
+		return toCartString();
 	}
 }

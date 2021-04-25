@@ -47,10 +47,10 @@ public class TAS {
 
 		//initialising windows -> set to be invisible by default
 		//will be set visible once they are supposed to
-
 		functionEditorWindow = new FunctionEditorWindow();
 		mainEditorWindow = new MainEditorWindow(functionEditorWindow);
 		//startUpWindow = new StartUpWindow(mainEditorWindow);
+
 		mainEditorWindow.prepareEditor(Script.getEmptyScript(10));
 
 		//set correct UI theme

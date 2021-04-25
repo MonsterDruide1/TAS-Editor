@@ -44,9 +44,6 @@ public class PianoRoll extends JTable {
 		this.script = script;
 
 		setAutoResizeMode(AUTO_RESIZE_OFF);
-		setPreferredSize(new Dimension(700,800));
-		setPreferredScrollableViewportSize(getPreferredSize());
-		setFillsViewportHeight(false);
 		setModel(model);
 		setDragEnabled(false);
 
@@ -61,10 +58,11 @@ public class PianoRoll extends JTable {
 		// adjust the size of all columns
 
 		int[] columnsWidth = {
-			45,											   		// frame number
-			85,85,										  		// sticks
-			18,18,18,18,25,25,18,18,18,18,30,30,30,30,50,50	    // buttons
+			45,											   		                // frame number
+			85, 85,										  	                	// sticks
+			18, 18, 18, 18, 25, 25, 18, 18, 18, 18, 30, 30, 30, 30, 50, 50	    // buttons
 		};
+
 
 		for (int i = 0; i < columnsWidth.length && i < getColumnCount(); i++) {
 			getColumnModel().getColumn(i).setPreferredWidth(columnsWidth[i]);
