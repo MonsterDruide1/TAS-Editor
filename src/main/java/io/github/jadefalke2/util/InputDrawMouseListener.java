@@ -64,7 +64,8 @@ public class InputDrawMouseListener extends MouseAdapter {
 				break;
 
 			default:
-				mode = table.getValueAt(row, col) != " " ? Mode.ADDING : Mode.REMOVING;
+				mode = table.getValueAt(row, col) != " " ? Mode.REMOVING : Mode.ADDING;
+				System.out.println(mode);
 				setCell(row,col);
 		}
 	}
@@ -90,7 +91,10 @@ public class InputDrawMouseListener extends MouseAdapter {
 
 		if (row == -1 || col == -1) return;
 
-		TAS.getInstance().executeAction(new CellAction(table.getModel(), table.getScript(),row,col));
+		if ((table.getValueAt(row, col).equals(" ") && (mode == Mode.ADDING)) || (!table.getValueAt(row, col).equals(" ") && (mode == Mode.REMOVING))){
+			TAS.getInstance().executeAction(new CellAction(table.getModel(), table.getScript(),row,col));
+		}
+
 	}
 
 
