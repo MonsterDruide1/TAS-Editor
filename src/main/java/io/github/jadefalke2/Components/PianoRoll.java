@@ -18,11 +18,14 @@ import static io.github.jadefalke2.stickRelatedClasses.StickImagePanel.StickType
 
 public class PianoRoll extends JTable {
 
+
+	private final double multiplicator = 1.5;
+
 	//used to test if a new window can be opened
 	private boolean stickWindowIsOpen;
 
 	//script
-	private final Script script;
+	private Script script;
 
 	//Components
 	private final JPopupMenu popupMenu = new JPopupMenu();
@@ -224,6 +227,24 @@ public class PianoRoll extends JTable {
 	 */
 	public DefaultTableModel getModel (){
 		return model;
+	}
+
+	/**
+	 * sets the script to a new script
+	 * @param script the new script
+	 */
+	public void setNewScript (Script script){
+		this.script = script;
+
+		int origRowCount = getRowCount();
+
+		for (int i = 0; i < origRowCount; i++) {
+			model.removeRow(0);
+		}
+
+		for (int i = 0; i < script.getInputLines().size(); i++){
+			model.addRow(script.getInputLines().get(i).getArray());
+		}
 	}
 
 	/**

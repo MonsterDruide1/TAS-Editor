@@ -8,6 +8,8 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Vector;
 
 public class InputDrawMouseListener extends MouseAdapter {
 
@@ -21,6 +23,9 @@ public class InputDrawMouseListener extends MouseAdapter {
 
 	// keeps track of already visited rows
 	private final ArrayList<Integer> rows = new ArrayList<>();
+
+	// detect the row
+	private int drawingCol;
 
 	// the table
 	private final PianoRoll table;
@@ -44,7 +49,7 @@ public class InputDrawMouseListener extends MouseAdapter {
 		int row = table.rowAtPoint(e.getPoint());
 		int col = table.columnAtPoint(e.getPoint());
 
-		rows.add((int)getCell(e).getY());
+		rows.add(getCell(e)[0]);
 
 		switch (col){
 
@@ -60,7 +65,7 @@ public class InputDrawMouseListener extends MouseAdapter {
 
 			default:
 				mode = table.getValueAt(row, col) != " " ? Mode.ADDING : Mode.REMOVING;
-				setCell(new Point(col,row));
+				setCell(row,col);
 		}
 	}
 
@@ -69,19 +74,23 @@ public class InputDrawMouseListener extends MouseAdapter {
 	 * @param e the mouse event
 	 * @return a point with the cell data (col:row)
 	 */
-	private Point getCell (MouseEvent e){
-		int row = table.rowAtPoint(e.getPoint()) < 0 ? 0 : Math.min(table.rowAtPoint(e.getPoint()), table.getRowCount());
+	private int[] getCell (MouseEvent e){
+		int row = table.rowAtPoint(e.getPoint());
 		int col = table.columnAtPoint(e.getPoint());
 
-		return new Point(col,row);
+		return new int[]{row,col};
 	}
 
 	/**
 	 * edits the cell at the given point
-	 * @param point the corresponding point (cell)
+	 * @param col the column
+	 * @param row the row
 	 */
-	private void setCell (Point point){
-		TAS.getInstance().executeAction(new CellAction(table.getModel(), table.getScript(),(int)point.getY(),(int)point.getX()));
+	private void setCell (int row, int col){
+
+		if (row == -1 || col == -1) return;
+
+		TAS.getInstance().executeAction(new CellAction(table.getModel(), table.getScript(),row,col));
 	}
 
 
@@ -89,14 +98,15 @@ public class InputDrawMouseListener extends MouseAdapter {
 
 	@Override
 	public void mouseDragged(java.awt.event.MouseEvent e) {
-		if (!rows.contains((int)getCell(e).getY())){
-			rows.add((int)getCell(e).getY());
-			setCell(getCell(e));
+		if (!rows.contains(getCell(e)[0])){
+			rows.add(getCell(e)[0]);
+			setCell(getCell(e)[0],drawingCol);
 		}
 	}
 
 	@Override
 	public void mousePressed(java.awt.event.MouseEvent e) {
+		drawingCol = getCell(e)[1];
 		reactToMouseClick(e);
 	}
 

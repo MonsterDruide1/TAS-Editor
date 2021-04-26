@@ -1,5 +1,6 @@
 package io.github.jadefalke2.Components;
 
+import io.github.jadefalke2.Script;
 import io.github.jadefalke2.TAS;
 
 import javax.swing.*;
@@ -29,8 +30,12 @@ public class MainJMenuBar extends JMenuBar {
 
 		JMenuItem openJMenuItem = fileJMenu.add(new JMenuItem("Open..."));
 		openJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
-		openJMenuItem.addActionListener(e -> {});
-		openJMenuItem.setEnabled(false);
+
+		openJMenuItem.addActionListener(e -> {
+			mainEditorWindow.getPianoRoll().setNewScript(new Script(mainEditorWindow.preparePianoRoll(new TxtFileChooser().getFile())));
+		});
+
+		openJMenuItem.setEnabled(true);
 
 		JMenuItem saveJMenuItem = fileJMenu.add(new JMenuItem("Save"));
 		saveJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));

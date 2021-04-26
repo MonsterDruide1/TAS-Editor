@@ -4,6 +4,9 @@ import io.github.jadefalke2.InputLine;
 import io.github.jadefalke2.Script;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.*;
@@ -16,6 +19,9 @@ public class MainEditorWindow extends JFrame {
 
 	//JPanel
 	private JPanel editor;
+
+	// Layout manager
+	private GroupLayout groupLayout;
 
 	//Components
 	private JScrollPane scrollPane;
@@ -35,6 +41,7 @@ public class MainEditorWindow extends JFrame {
 
 		this.functionEditorWindow = functionEditorWindow;
 		setVisible(false);
+		setResizable(true);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
 		addWindowListener(new WindowAdapter() {
@@ -53,6 +60,21 @@ public class MainEditorWindow extends JFrame {
 				}
 			}
 		});
+
+
+		addComponentListener(new ComponentAdapter() {
+			public void componentResized(ComponentEvent componentEvent) {
+
+				if (pianoRoll == null) {
+					return;
+				}
+
+				pianoRoll.setPreferredSize(new Dimension((int)(getSize().getWidth() - 40), Math.min((int)(getSize().getHeight() - 40), 1000)));
+				pianoRoll.setPreferredScrollableViewportSize(pianoRoll.getPreferredSize());
+				pianoRoll.setFillsViewportHeight(true);
+			}
+		});
+
 	}
 
 	/**
@@ -61,6 +83,7 @@ public class MainEditorWindow extends JFrame {
 	 */
 	public void prepareEditor(File fileToOpen) {
 		setVisible(true);
+		setSize(800, 1000);
 		script = new Script(preparePianoRoll(fileToOpen));
 		startEditor();
 	}
@@ -71,6 +94,7 @@ public class MainEditorWindow extends JFrame {
 	 */
 	public void prepareEditor(Script script) {
 		setVisible(true);
+		setSize(800, 1000);
 		this.script = new Script(script.getFull());
 		startEditor();
 	}
@@ -80,10 +104,11 @@ public class MainEditorWindow extends JFrame {
 	 * @param file the file to open
 	 * @return the corresponding String
 	 */
-	private String preparePianoRoll(File file) {
+	public String preparePianoRoll(File file) {
 
 		//sets the current script file to be the one that the method is called with
 		currentScriptFile = file;
+		System.out.println(currentScriptFile);
 
 		//reads the file into a string that is returned
 		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
@@ -101,31 +126,33 @@ public class MainEditorWindow extends JFrame {
 	 */
 	public void startEditor() {
 
-		setSize(600, 700);
-
 		editor = new JPanel();
+
+		editor.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
+		editor.setSize(550, 550);
+
+		groupLayout = new GroupLayout(this);
 
 		pianoRoll = new PianoRoll(script);
 		scrollPane = new JScrollPane(pianoRoll);
-
 		mainJMenuBar = new MainJMenuBar(this);
-		setJMenuBar(mainJMenuBar);
+
 
 		JPanel buttonsPanel = new JPanel();
 		buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
 
-		editor.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
-		editor.setSize(550, 550);
 
 		JButton functionEditorButton = new JButton("Function editor");
 		functionEditorButton.addActionListener(e -> {
 			functionEditorWindow.startUp();
 		});
 
+		buttonsPanel.add(functionEditorButton);
 		editor.add(scrollPane);
-		editor.add(functionEditorButton);
+		editor.add(buttonsPanel);
 
 		add(editor);
+		setJMenuBar(mainJMenuBar);
 
 		pack();
 	}
