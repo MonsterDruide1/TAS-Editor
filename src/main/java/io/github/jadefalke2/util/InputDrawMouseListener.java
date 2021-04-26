@@ -65,7 +65,6 @@ public class InputDrawMouseListener extends MouseAdapter {
 
 			default:
 				mode = table.getValueAt(row, col) != " " ? Mode.REMOVING : Mode.ADDING;
-				System.out.println(mode);
 				setCell(row,col);
 		}
 	}
