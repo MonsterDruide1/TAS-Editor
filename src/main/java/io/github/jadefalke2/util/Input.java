@@ -7,26 +7,25 @@ import java.util.stream.Collectors;
 public class Input {
 
 
-	private static final Map<String, String> encode = new HashMap<>();
-	private static Map<String, String> decode = new HashMap<>();
+	private static final HashMap<String, String> encode;
+	private static final HashMap<String, String> decode;
 	public static final String EMPTY_LINE = "1 NONE 0;0 0;0\n";
 
-	public Input() {
-
+	static {
+		encode = new HashMap<>();
+		putData(encode);
+		decode = invert(encode);
 	}
 
 	public static Map<String, String> getDecodeInputMap() {
-		putData();
-		decode = invert(encode);
 		return decode;
 	}
 
 	public static Map<String, String> getEncodeInputMap() {
-		putData();
 		return encode;
 	}
 
-	private static void putData() {
+	private static void putData(HashMap<String, String> encode) {
 		encode.put("A", "KEY_A");
 		encode.put("B", "KEY_B");
 
@@ -49,12 +48,11 @@ public class Input {
 
 		encode.put("L-stick","KEY_LSTICK");
 		encode.put("R-stick", "KEY_RSTICK");
-
 	}
 
 
-	public static <V, K> Map<V, K> invert(Map<K, V> map) {
-		return map.entrySet().stream().collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey));
+	public static <V, K> HashMap<V, K> invert(HashMap<K, V> map) {
+		return new HashMap<>(map.entrySet().stream().collect(Collectors.toMap(HashMap.Entry::getValue, Map.Entry::getKey)));
 	}
 
 
