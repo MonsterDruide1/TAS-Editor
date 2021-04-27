@@ -1,6 +1,8 @@
 package io.github.jadefalke2.actions;
 
 import io.github.jadefalke2.Script;
+import io.github.jadefalke2.util.Button;
+import javafx.scene.control.IndexRange;
 
 import javax.swing.table.TableModel;
 
@@ -21,15 +23,15 @@ public class CellAction implements Action {
 	@Override
 	public void execute() {
 
-		if (table.getValueAt(row, col).equals(" ")) {
+		if (table.getValueAt(row, col).equals("")) {
 
 			table.setValueAt(table.getColumnName(col), row, col);
-			script.getInputLines().get(row).buttonsEncoded.add(table.getColumnName(col));
+			script.getInputLines().get(row).buttons.add(Button.valueOf("KEY_"+table.getColumnName(col)));
 
 		} else if (table.getValueAt(row, col).equals(table.getColumnName(col))) {
 
-			table.setValueAt(" ", row, col);
-			script.getInputLines().get(row).buttonsEncoded.remove(table.getColumnName(col));
+			table.setValueAt("", row, col);
+			script.getInputLines().get(row).buttons.remove(Button.valueOf("KEY_"+table.getColumnName(col)));
 
 		}
 

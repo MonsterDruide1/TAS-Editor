@@ -24,7 +24,7 @@ public class Function extends Script{
 
 						case 1:
 							mainScript.getInputLines().get(i).setStickL(getInputLines().get(i - row).getStickL());
-							table.setValueAt(" ",i,j);
+							table.setValueAt("",i,j);
 							break;
 
 						case 2:

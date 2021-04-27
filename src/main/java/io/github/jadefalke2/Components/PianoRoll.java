@@ -6,12 +6,15 @@ import io.github.jadefalke2.TAS;
 import io.github.jadefalke2.actions.LineAction;
 import io.github.jadefalke2.stickRelatedClasses.StickImagePanel;
 import io.github.jadefalke2.stickRelatedClasses.StickImagePanel.StickType;
+import io.github.jadefalke2.util.Button;
 import io.github.jadefalke2.util.InputDrawMouseListener;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import static io.github.jadefalke2.stickRelatedClasses.StickImagePanel.StickType.L_STICK;
 import static io.github.jadefalke2.stickRelatedClasses.StickImagePanel.StickType.R_STICK;
@@ -37,11 +40,6 @@ public class PianoRoll extends JTable {
 	// table model
 	private final DefaultTableModel model = new DefaultTableModel();
 
-	// the names of the columns of the table -> order CAN be changed
-	private final String[] columnNames = {
-		"frame", "L-stick", "R-Stick", "A", "B", "X", "Y", "ZR", "ZL", "R", "L", "+", "-", "DR", "DL", "DU", "DD", "L-stick", "R-Stick",
-	};
-
 	public PianoRoll (Script script){
 
 		this.script = script;
@@ -54,8 +52,11 @@ public class PianoRoll extends JTable {
 		getTableHeader().setReorderingAllowed(false);
 
 		// add all the column's corresponding with their names
-		for (String colName : columnNames) {
-			model.addColumn(colName);
+		model.addColumn("Frame");
+		model.addColumn("L-Stick");
+		model.addColumn("R-Stick");
+		for (Button button : Button.values()) {
+			model.addColumn(button.toString());
 		}
 
 		// adjust the size of all columns
@@ -104,21 +105,7 @@ public class PianoRoll extends JTable {
 	 * @param model the table model
 	 */
 	private void addRow(InputLine line, int lineIndex, DefaultTableModel model) {
-		Object[] tmp = new Object[columnNames.length];
-
-		tmp[0] = lineIndex;
-		tmp[1] = line.getStickL();
-		tmp[2] = line.getStickR();
-
-		for (int j = 3; j < tmp.length; j++) {
-			if (line.getButtonsEncoded().contains(columnNames[j])) {
-				tmp[j] = columnNames[j];
-			} else {
-				tmp[j] = " ";
-			}
-		}
-
-		model.addRow(tmp);
+		model.addRow(line.getArray());
 	}
 
 	/**
