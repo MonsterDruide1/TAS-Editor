@@ -42,22 +42,27 @@ public class MainEditorWindow extends JFrame {
 		this.functionEditorWindow = functionEditorWindow;
 		setVisible(false);
 		setResizable(true);
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE); //let the WindowListener handle everything
 
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				//TODO ONLY IF IN EDITOR + CHANGES DONE
-				askForFileSave();
-				dispose();
-				System.exit(0);
+				if(askForFileSave())
+					dispose();
 			}
 
-			private void askForFileSave() {
-				if (JOptionPane.showConfirmDialog(editor, "Save Project changes?", "Save before exiting", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, new ImageIcon("")) == 0){
-					//opens a new dialog that asks about saving, the exits
+			/**
+			 * Ask and save the file before exiting the program
+			 * @return whether it should actually close
+			 */
+			private boolean askForFileSave() {
+				int result = JOptionPane.showConfirmDialog(editor, "Save Project changes?", "Save before exiting", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+				if (result == 0){
+					//opens a new dialog that asks about saving, then exit
 					saveFile();
 				}
+				return result != 2; //cancel option
 			}
 		});
 
