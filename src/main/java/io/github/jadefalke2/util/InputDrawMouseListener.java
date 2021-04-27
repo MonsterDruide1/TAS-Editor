@@ -52,14 +52,14 @@ public class InputDrawMouseListener extends MouseAdapter {
 		rows.add(getCell(e)[0]);
 
 		switch (col){
-
 			case 0:
 				if (e.getButton() == MouseEvent.BUTTON3 && table.isRowSelected(row)) {
 					table.openPopUpMenu(table.getSelectedRows(),e.getPoint());
 				}
 				break;
 
-			case 1: case 2:
+			case 1:
+			case 2:
 				table.openStickWindow(row,col,table.getScript());
 				break;
 

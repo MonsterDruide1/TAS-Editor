@@ -64,7 +64,6 @@ public class MainEditorWindow extends JFrame {
 
 		addComponentListener(new ComponentAdapter() {
 			public void componentResized(ComponentEvent componentEvent) {
-
 				if (pianoRoll == null) {
 					return;
 				}
