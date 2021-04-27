@@ -78,10 +78,10 @@ public class Script {
 	 * @return the created script
 	 */
 	public static Script getEmptyScript (int amount){
-		Script tmp = new Script(InputLine.getEmpty(1).getFull());
+		Script tmp = new Script();
 
-		for (int i = 2; i < amount; i++){
-			tmp.insertLine(i - 1,InputLine.getEmpty(i));
+		for (int i = 0; i < amount; i++){
+			tmp.insertLine(i,InputLine.getEmpty(i+1));
 		}
 
 		return tmp;
