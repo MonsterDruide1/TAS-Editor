@@ -247,6 +247,14 @@ public class PianoRoll extends JTable {
 		}
 	}
 
+	//always fill the available parent container space
+	//idea stolen from https://stackoverflow.com/questions/6104916/how-to-make-jtable-both-autoresize-and-horizontall-scrollable/6104955
+	//but always making it true as if it were bigger than the preferred size
+	@Override
+	public boolean getScrollableTracksViewportWidth(){
+		return true;
+	}
+
 	/**
 	 * Overwriting the table to make all cells uneditable -> might change in the future due to functions
 	 * @param row the row

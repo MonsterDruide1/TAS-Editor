@@ -1,16 +1,12 @@
 package io.github.jadefalke2.Components;
 
-import io.github.jadefalke2.InputLine;
 import io.github.jadefalke2.Script;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.*;
-import java.util.stream.Collectors;
 
 public class MainEditorWindow extends JFrame {
 
@@ -19,9 +15,6 @@ public class MainEditorWindow extends JFrame {
 
 	//JPanel
 	private JPanel editor;
-
-	// Layout manager
-	private GroupLayout groupLayout;
 
 	//Components
 	private JScrollPane scrollPane;
@@ -65,20 +58,6 @@ public class MainEditorWindow extends JFrame {
 				return result != 2; //cancel option
 			}
 		});
-
-
-		addComponentListener(new ComponentAdapter() {
-			public void componentResized(ComponentEvent componentEvent) {
-				if (pianoRoll == null) {
-					return;
-				}
-
-				pianoRoll.setPreferredSize(new Dimension((int)(getSize().getWidth() - 40), 500));
-				pianoRoll.setPreferredScrollableViewportSize(new Dimension((int)(getSize().getWidth() - 40), 500));
-				pianoRoll.setFillsViewportHeight(true);
-			}
-		});
-
 	}
 
 	/**
@@ -124,31 +103,28 @@ public class MainEditorWindow extends JFrame {
 	 * starts the editor
 	 */
 	public void startEditor() {
-
-		editor = new JPanel();
-
-		editor.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
-		editor.setSize(550, 550);
-
-		groupLayout = new GroupLayout(this);
+		editor = new JPanel(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
 
 		pianoRoll = new PianoRoll(script);
+		pianoRoll.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		scrollPane = new JScrollPane(pianoRoll);
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		mainJMenuBar = new MainJMenuBar(this);
-
-
-		JPanel buttonsPanel = new JPanel();
-		buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
-
 
 		JButton functionEditorButton = new JButton("Function editor");
 		functionEditorButton.addActionListener(e -> {
 			functionEditorWindow.startUp();
 		});
 
-		buttonsPanel.add(functionEditorButton);
-		editor.add(scrollPane);
-		editor.add(buttonsPanel);
+		c.fill = GridBagConstraints.BOTH;
+		c.weighty = 1;
+		c.weightx = 1;
+		editor.add(scrollPane, c);
+
+		c.gridy = 1;
+		c.weighty = 0;
+		editor.add(functionEditorButton, c);
 
 		add(editor);
 		setJMenuBar(mainJMenuBar);
