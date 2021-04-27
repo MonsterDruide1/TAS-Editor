@@ -3,11 +3,19 @@ package io.github.jadefalke2.Components;
 import io.github.jadefalke2.Script;
 import io.github.jadefalke2.util.CorruptedScriptException;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JButton;
+import javax.swing.JTable;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.JOptionPane;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
 
 public class MainEditorWindow extends JFrame {
 

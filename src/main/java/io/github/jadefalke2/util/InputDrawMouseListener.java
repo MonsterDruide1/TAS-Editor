@@ -4,12 +4,9 @@ import io.github.jadefalke2.Components.PianoRoll;
 import io.github.jadefalke2.TAS;
 import io.github.jadefalke2.actions.CellAction;
 
-import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.Vector;
 
 public class InputDrawMouseListener extends MouseAdapter {
 
@@ -24,7 +21,7 @@ public class InputDrawMouseListener extends MouseAdapter {
 	// keeps track of already visited rows
 	private final ArrayList<Integer> rows = new ArrayList<>();
 
-	// detect the row
+	// detect the column
 	private int drawingCol;
 
 	// the table
@@ -64,7 +61,7 @@ public class InputDrawMouseListener extends MouseAdapter {
 				break;
 
 			default:
-				mode = table.getValueAt(row, col) != " " ? Mode.REMOVING : Mode.ADDING;
+				mode = table.getValueAt(row, col) != "" ? Mode.REMOVING : Mode.ADDING;
 				setCell(row,col);
 		}
 	}
@@ -90,14 +87,14 @@ public class InputDrawMouseListener extends MouseAdapter {
 
 		if (row == -1 || col == -1) return;
 
-		if ((table.getValueAt(row, col).equals(" ") && (mode == Mode.ADDING)) || (!table.getValueAt(row, col).equals(" ") && (mode == Mode.REMOVING))){
+		if ((table.getValueAt(row, col).equals("") && (mode == Mode.ADDING)) || (!table.getValueAt(row, col).equals("") && (mode == Mode.REMOVING))){
 			TAS.getInstance().executeAction(new CellAction(table.getModel(), table.getScript(),row,col));
 		}
 
 	}
 
 
-	// Overwriting Methods
+	// Overriding Methods
 
 	@Override
 	public void mouseDragged(java.awt.event.MouseEvent e) {
