@@ -2,11 +2,13 @@ package io.github.jadefalke2.Components;
 
 import io.github.jadefalke2.Script;
 import io.github.jadefalke2.TAS;
+import io.github.jadefalke2.util.CorruptedScriptException;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -32,7 +34,11 @@ public class MainJMenuBar extends JMenuBar {
 		openJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
 
 		openJMenuItem.addActionListener(e -> {
-			mainEditorWindow.getPianoRoll().setNewScript(new Script(mainEditorWindow.preparePianoRoll(new TxtFileChooser().getFile())));
+			try {
+				mainEditorWindow.getPianoRoll().setNewScript(new Script(mainEditorWindow.preparePianoRoll(new TxtFileChooser().getFile())));
+			} catch (CorruptedScriptException | FileNotFoundException corruptedScriptException) {
+				corruptedScriptException.printStackTrace();
+			}
 		});
 
 		openJMenuItem.setEnabled(true);
@@ -83,7 +89,7 @@ public class MainJMenuBar extends JMenuBar {
 		deleteJMenuItem.setEnabled(false);
 
 		JMenuItem addNewLineItem = editJMenu.add(new JMenuItem("Add line"));
-		addNewLineItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_MASK));
+		addNewLineItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK));
 		addNewLineItem.addActionListener(e -> mainEditorWindow.getPianoRoll().addEmptyRow(mainEditorWindow.getScript()));
 
 		JMenu viewJMenu = add(new JMenu("View"));

@@ -1,16 +1,21 @@
 package io.github.jadefalke2.Components;
 
-import io.github.jadefalke2.InputLine;
 import io.github.jadefalke2.Script;
+import io.github.jadefalke2.util.CorruptedScriptException;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JButton;
+import javax.swing.JTable;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.JOptionPane;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.*;
-import java.util.stream.Collectors;
+import java.io.File;
+import java.io.FileNotFoundException;
 
 public class MainEditorWindow extends JFrame {
 
@@ -19,9 +24,6 @@ public class MainEditorWindow extends JFrame {
 
 	//JPanel
 	private JPanel editor;
-
-	// Layout manager
-	private GroupLayout groupLayout;
 
 	//Components
 	private JScrollPane scrollPane;
@@ -42,41 +44,32 @@ public class MainEditorWindow extends JFrame {
 		this.functionEditorWindow = functionEditorWindow;
 		setVisible(false);
 		setResizable(true);
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE); //let the WindowListener handle everything
 
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				//TODO ONLY IF IN EDITOR + CHANGES DONE
-				askForFileSave();
-				dispose();
-				System.exit(0);
+				if(askForFileSave())
+					dispose();
 			}
 
-			private void askForFileSave() {
-				if (JOptionPane.showConfirmDialog(editor, "Save Project changes?", "Save before exiting", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, new ImageIcon("")) == 0){
-					//opens a new dialog that asks about saving, the exits
+			/**
+			 * Ask and save the file before exiting the program
+			 * @return whether it should actually close
+			 */
+			private boolean askForFileSave() {
+				int result = JOptionPane.showConfirmDialog(editor, "Save Project changes?", "Save before exiting", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+				if (result == 0){
+					//opens a new dialog that asks about saving, then exit
 					saveFile();
 				}
+				return result != 2; //cancel option
 			}
 		});
-
-
-		addComponentListener(new ComponentAdapter() {
-			public void componentResized(ComponentEvent componentEvent) {
-
-				if (pianoRoll == null) {
-					return;
-				}
-
-				pianoRoll.setPreferredSize(new Dimension((int)(getSize().getWidth() - 40), 500));
-				pianoRoll.setPreferredScrollableViewportSize(new Dimension((int)(getSize().getWidth() - 40), 500));
-				pianoRoll.setFillsViewportHeight(true);
-			}
-		});
-
 	}
 
+	//TODO same method twice? Replace one of them...
 	/**
 	 * Prepares the editor to make it ready to be started
 	 * @param fileToOpen the file the editor will be opened with
@@ -84,7 +77,11 @@ public class MainEditorWindow extends JFrame {
 	public void prepareEditor(File fileToOpen) {
 		setVisible(true);
 		setSize(800, 1000);
-		script = new Script(preparePianoRoll(fileToOpen));
+		try {
+			script = new Script(preparePianoRoll(fileToOpen));
+		} catch (CorruptedScriptException | FileNotFoundException e) {
+			e.printStackTrace();
+		}
 		startEditor();
 	}
 
@@ -95,7 +92,11 @@ public class MainEditorWindow extends JFrame {
 	public void prepareEditor(Script script) {
 		setVisible(true);
 		setSize(800, 1000);
-		this.script = new Script(script.getFull());
+		try {
+			this.script = new Script(script.getFull());
+		} catch (CorruptedScriptException e) {
+			e.printStackTrace();
+		}
 		startEditor();
 	}
 
@@ -104,7 +105,7 @@ public class MainEditorWindow extends JFrame {
 	 * @param file the file to open
 	 * @return the corresponding String
 	 */
-	public String preparePianoRoll(File file) {
+	public String preparePianoRoll(File file) throws FileNotFoundException {
 
 		// sets the current script file to be the one that the method is called with
 
@@ -120,31 +121,28 @@ public class MainEditorWindow extends JFrame {
 	 * starts the editor
 	 */
 	public void startEditor() {
-
-		editor = new JPanel();
-
-		editor.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
-		editor.setSize(550, 550);
-
-		groupLayout = new GroupLayout(this);
+		editor = new JPanel(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
 
 		pianoRoll = new PianoRoll(script);
+		pianoRoll.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		scrollPane = new JScrollPane(pianoRoll);
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		mainJMenuBar = new MainJMenuBar(this);
-
-
-		JPanel buttonsPanel = new JPanel();
-		buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.Y_AXIS));
-
 
 		JButton functionEditorButton = new JButton("Function editor");
 		functionEditorButton.addActionListener(e -> {
 			functionEditorWindow.startUp();
 		});
 
-		buttonsPanel.add(functionEditorButton);
-		editor.add(scrollPane);
-		editor.add(buttonsPanel);
+		c.fill = GridBagConstraints.BOTH;
+		c.weighty = 1;
+		c.weightx = 1;
+		editor.add(scrollPane, c);
+
+		c.gridy = 1;
+		c.weighty = 0;
+		editor.add(functionEditorButton, c);
 
 		add(editor);
 		setJMenuBar(mainJMenuBar);

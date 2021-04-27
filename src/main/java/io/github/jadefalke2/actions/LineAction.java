@@ -2,6 +2,7 @@ package io.github.jadefalke2.actions;
 
 import io.github.jadefalke2.InputLine;
 import io.github.jadefalke2.Script;
+import io.github.jadefalke2.util.CorruptedScriptException;
 
 import javax.swing.table.DefaultTableModel;
 import java.util.Arrays;
@@ -25,7 +26,7 @@ public class LineAction implements Action{
 		previousLines = new InputLine[rows.length];
 
 		for (int i = 0; i < rows.length; i++){
-			previousLines[i] = new InputLine(script.getInputLines().get(i).getFull());
+			previousLines[i] = script.getInputLines().get(i).clone();
 		}
 
 		this.table = table;
@@ -68,7 +69,7 @@ public class LineAction implements Action{
 	}
 
 	private void cloneRows(){
-		insertRows(Arrays.stream(rows).mapToObj(row -> new InputLine(script.getInputLines().get(row).getFull())).toArray(InputLine[]::new));
+		insertRows(Arrays.stream(rows).mapToObj(row -> script.getInputLines().get(row).clone()).toArray(InputLine[]::new));
 	}
 
 	private void adjustLines() {
@@ -77,8 +78,8 @@ public class LineAction implements Action{
 		for (int i = rows[0] + rows.length; i < table.getRowCount(); i++){
 			InputLine cLine = script.getInputLines().get(i);
 
-			cLine.setLine(cLine.getLine() + rows.length);
-			table.setValueAt(cLine.getLine(),i,0);
+			cLine.setFrame(cLine.getFrame() + rows.length);
+			table.setValueAt(cLine.getFrame(),i,0);
 		}
 	}
 
@@ -95,9 +96,9 @@ public class LineAction implements Action{
 		for (int i = rows[0]; i < table.getRowCount(); i++){
 
 			InputLine curLine = script.getInputLines().get(i);
-			curLine.setLine(curLine.getLine() - rows.length);
+			curLine.setFrame(curLine.getFrame() - rows.length);
 
-			table.setValueAt(script.getInputLines().get(i).getLine(),i,0);
+			table.setValueAt(script.getInputLines().get(i).getFrame(),i,0);
 		}
 
 	}

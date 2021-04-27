@@ -1,31 +1,37 @@
 package io.github.jadefalke2;
 
 import io.github.jadefalke2.stickRelatedClasses.StickPosition;
+import io.github.jadefalke2.util.Button;
 import io.github.jadefalke2.util.CorruptedScriptException;
-import io.github.jadefalke2.util.Input;
 
-import java.util.ArrayList;
+import java.util.EnumSet;
 
 public class InputLine {
 
-	private String full;
-
-	int line;
-	public ArrayList<String> buttonsEncoded = new ArrayList<>();
+	private int frame;
+	public EnumSet<Button> buttons = EnumSet.noneOf(Button.class);
 	private StickPosition stickL, stickR;
 
-	public InputLine(String full) {
-		this.full = full;
+	public InputLine(int frame) {
+		this.frame = frame;
+		stickL = new StickPosition(0,0);
+		stickR = new StickPosition(0,0);
+	}
+	public InputLine(String full) throws CorruptedScriptException {
+		splitIntoComponents(full);
+	}
 
-		try {
-			splitIntoComponents();
-		} catch (CorruptedScriptException e) {
-			e.printStackTrace();
-		}
+	@Override
+	public InputLine clone(){
+		InputLine newLine = new InputLine(frame);
+		newLine.buttons = buttons.clone();
+		newLine.stickL = stickL.clone();
+		newLine.stickR = stickR.clone();
+		return newLine;
 	}
 
 
-	private void splitIntoComponents() throws CorruptedScriptException {
+	private void splitIntoComponents(String full) throws CorruptedScriptException {
 
 		if (full.equals("")){
 			throw new CorruptedScriptException("empty script");
@@ -33,28 +39,28 @@ public class InputLine {
 
 		String[] components = full.split(" ");
 
-		line = Integer.parseInt(components[0]);
+		frame = Integer.parseInt(components[0]);
 		String buttons = components[1];
 		String[] buttonsPressed = buttons.split(";");
 
 		for (String s : buttonsPressed) {
-			if (Input.getEncodeInputMap().containsValue(s)) {
-				buttonsEncoded.add(Input.getDecodeInputMap().get(s));
+			//TODO better way to handle this?
+			try {
+				this.buttons.add(Button.valueOf(s));
+			} catch(IllegalArgumentException e){
+				if(!s.equals("NONE")){
+					throw new CorruptedScriptException("Unknown button encountered: "+s);
+				}
 			}
 		}
 
-		stickL = new StickPosition(Integer.parseInt(components[2].split(";")[0]), Integer.parseInt(components[2].split(";")[1]));
-		stickR = new StickPosition(Integer.parseInt(components[3].split(";")[0]), Integer.parseInt(components[3].split(";")[1]));
-
+		stickL = new StickPosition(components[2]);
+		stickR = new StickPosition(components[3]);
 	}
 
 
-	public int getLine() {
-		return line;
-	}
-
-	public ArrayList<String> getButtonsEncoded() {
-		return buttonsEncoded;
+	public int getFrame() {
+		return frame;
 	}
 
 	public StickPosition getStickL() {
@@ -73,22 +79,21 @@ public class InputLine {
 		this.stickR = stickR;
 	}
 
-	public void setLine(int line) {
-		this.line = line;
+	public void setFrame(int frame) {
+		this.frame = frame;
 	}
 
-
-	private void updateFull() {
+	public String getFull() {
 		StringBuilder tmpString = new StringBuilder();
 
-		tmpString.append(line).append(" ");
+		tmpString.append(frame).append(" ");
 
-		boolean first = true;
-
-		if (buttonsEncoded.isEmpty()) {
+		if (buttons.isEmpty()) {
 			tmpString.append("NONE");
 		} else {
-			for (String button : buttonsEncoded) {
+			boolean first = true;
+
+			for (Button button : buttons) {
 
 				if (!first) {
 					tmpString.append(";");
@@ -96,7 +101,7 @@ public class InputLine {
 					first = false;
 				}
 
-				tmpString.append(Input.getEncodeInputMap().get(button));
+				tmpString.append(button.name());
 			}
 		}
 
@@ -105,48 +110,26 @@ public class InputLine {
 			.append(" ").append(getStickR().toCartString());
 
 
-		full = tmpString.toString();
+		return tmpString.toString();
 	}
 
 	public Object[] getArray (){
+		Object[] tmp = new Object[3+Button.values().length];
+		tmp[0] = frame;
+		tmp[1] = stickL.toCartString();
+		tmp[2] = stickR.toCartString();
 
-		String[] buttonNames = {
-			"A",
-			"B",
-			"X",
-			"Y",
-			"ZR",
-			"ZL",
-			"R",
-			"L",
-			"DP-R",
-			"DP-L",
-			"DP-U",
-			"DP-D"
-		};
-
-		ArrayList<Object> tmp = new ArrayList<>();
-		tmp.add(line);
-		tmp.add(stickL.toCartString());
-		tmp.add(stickR.toCartString());
-
-		for (int i = 3; i < buttonNames.length + 3; i++){
-			tmp.add(buttonsEncoded.contains(buttonNames[i - 3]) ? buttonNames[i - 3] : " ");
+		for (int i=0;i<Button.values().length;i++) {
+			tmp[i + 3] = buttons.contains(Button.values()[i]) ? Button.values()[i].toString() : "";
 		}
-
-		return tmp.toArray();
+		return tmp;
 	}
 
 	public boolean isEmpty (){
-		return buttonsEncoded.isEmpty() && stickR.isZeroZero() && stickL.isZeroZero();
+		return buttons.isEmpty() && stickR.isZeroZero() && stickL.isZeroZero();
 	}
 
-	public String getFull() {
-		updateFull();
-		return full;
-	}
-
-	public static InputLine getEmpty (int line){
-		return new InputLine(line + " NONE 0;0 0;0");
+	public static InputLine getEmpty (int frame){
+		return new InputLine(frame);
 	}
 }

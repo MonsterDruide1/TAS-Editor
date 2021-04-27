@@ -2,6 +2,8 @@ package io.github.jadefalke2.stickRelatedClasses;
 
 public class StickPosition {
 
+	//TODO is this double-storage necessary?
+
 	// the cartesian coordinates
 	// Range of x: -32767;32767
 	// Range of y: -32767;32767
@@ -37,6 +39,16 @@ public class StickPosition {
 		y = pos.y;
 		theta = pos.theta;
 		radius = pos.radius;
+	}
+
+	public StickPosition(String component) {
+		this(Integer.parseInt(component.split(";")[0]), Integer.parseInt(component.split(";")[1]));
+		updatePolar();
+	}
+
+	@Override
+	public StickPosition clone(){
+		return new StickPosition(x, y);
 	}
 
 	/**
