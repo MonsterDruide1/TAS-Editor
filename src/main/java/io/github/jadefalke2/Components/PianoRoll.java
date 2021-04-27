@@ -104,7 +104,6 @@ public class PianoRoll extends JTable {
 	 * @param model the table model
 	 */
 	private void addRow(InputLine line, int lineIndex, DefaultTableModel model) {
-
 		Object[] tmp = new Object[columnNames.length];
 
 		tmp[0] = lineIndex;

@@ -77,8 +77,8 @@ public class LineAction implements Action{
 		for (int i = rows[0] + rows.length; i < table.getRowCount(); i++){
 			InputLine cLine = script.getInputLines().get(i);
 
-			cLine.setLine(cLine.getLine() + rows.length);
-			table.setValueAt(cLine.getLine(),i,0);
+			cLine.setFrame(cLine.getFrame() + rows.length);
+			table.setValueAt(cLine.getFrame(),i,0);
 		}
 	}
 
@@ -95,9 +95,9 @@ public class LineAction implements Action{
 		for (int i = rows[0]; i < table.getRowCount(); i++){
 
 			InputLine curLine = script.getInputLines().get(i);
-			curLine.setLine(curLine.getLine() - rows.length);
+			curLine.setFrame(curLine.getFrame() - rows.length);
 
-			table.setValueAt(script.getInputLines().get(i).getLine(),i,0);
+			table.setValueAt(script.getInputLines().get(i).getFrame(),i,0);
 		}
 
 	}

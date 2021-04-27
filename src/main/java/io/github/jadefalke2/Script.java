@@ -29,7 +29,7 @@ public class Script {
 		inputLines.add(row,inputLine);
 
 		for (int i = row + 1; i < inputLines.size(); i++){
-			inputLines.get(i).setLine(inputLines.get(i).getLine() + 1);
+			inputLines.get(i).setFrame(inputLines.get(i).getFrame() + 1);
 		}
 
 	}
@@ -48,19 +48,19 @@ public class Script {
 
 			InputLine currentInputLine = new InputLine(line);
 
-			if (currentInputLine.getLine() <= prevLine){
+			if (currentInputLine.getFrame() <= prevLine){
 				throw new CorruptedScriptException("Line numbers misordered");
 			}
 
-			if (prevLine + 1 != currentInputLine.getLine()) {
-				for (int i = 0; i < currentInputLine.getLine() - prevLine - 1; i++){
+			if (prevLine + 1 != currentInputLine.getFrame()) {
+				for (int i = 0; i < currentInputLine.getFrame() - prevLine - 1; i++){
 					inputLines.add(InputLine.getEmpty(prevLine + 1 + i));
 				}
 			}
 
 			inputLines.add(currentInputLine);
 
-			prevLine = currentInputLine.getLine();
+			prevLine = currentInputLine.getFrame();
 		}
 	}
 

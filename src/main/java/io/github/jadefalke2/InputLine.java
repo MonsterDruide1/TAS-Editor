@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class InputLine {
 
-	int line;
+	private int frame;
 	public ArrayList<String> buttonsEncoded = new ArrayList<>();
 	private StickPosition stickL, stickR;
 
@@ -29,7 +29,7 @@ public class InputLine {
 
 		String[] components = full.split(" ");
 
-		line = Integer.parseInt(components[0]);
+		frame = Integer.parseInt(components[0]);
 		String buttons = components[1];
 		String[] buttonsPressed = buttons.split(";");
 
@@ -37,16 +37,18 @@ public class InputLine {
 			if (Input.getEncodeInputMap().containsValue(s)) {
 				buttonsEncoded.add(Input.getDecodeInputMap().get(s));
 			}
+			else if(!s.equals("NONE")){
+				throw new CorruptedScriptException("Unknown button encountered: "+s);
+			}
 		}
 
-		stickL = new StickPosition(Integer.parseInt(components[2].split(";")[0]), Integer.parseInt(components[2].split(";")[1]));
-		stickR = new StickPosition(Integer.parseInt(components[3].split(";")[0]), Integer.parseInt(components[3].split(";")[1]));
-
+		stickL = new StickPosition(components[2]);
+		stickR = new StickPosition(components[3]);
 	}
 
 
-	public int getLine() {
-		return line;
+	public int getFrame() {
+		return frame;
 	}
 
 	public ArrayList<String> getButtonsEncoded() {
@@ -69,14 +71,14 @@ public class InputLine {
 		this.stickR = stickR;
 	}
 
-	public void setLine(int line) {
-		this.line = line;
+	public void setFrame(int frame) {
+		this.frame = frame;
 	}
 
 	public String getFull() {
 		StringBuilder tmpString = new StringBuilder();
 
-		tmpString.append(line).append(" ");
+		tmpString.append(frame).append(" ");
 
 		boolean first = true;
 
@@ -121,7 +123,7 @@ public class InputLine {
 		};
 
 		ArrayList<Object> tmp = new ArrayList<>();
-		tmp.add(line);
+		tmp.add(frame);
 		tmp.add(stickL.toCartString());
 		tmp.add(stickR.toCartString());
 
