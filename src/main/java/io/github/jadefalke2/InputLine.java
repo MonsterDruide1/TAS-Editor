@@ -12,12 +12,22 @@ public class InputLine {
 	public EnumSet<Button> buttons = EnumSet.noneOf(Button.class);
 	private StickPosition stickL, stickR;
 
-	public InputLine(String full) {
-		try {
-			splitIntoComponents(full);
-		} catch (CorruptedScriptException e) {
-			e.printStackTrace();
-		}
+	public InputLine(int frame) {
+		this.frame = frame;
+		stickL = new StickPosition(0,0);
+		stickR = new StickPosition(0,0);
+	}
+	public InputLine(String full) throws CorruptedScriptException {
+		splitIntoComponents(full);
+	}
+
+	@Override
+	public InputLine clone(){
+		InputLine newLine = new InputLine(frame);
+		newLine.buttons = buttons.clone();
+		newLine.stickL = stickL.clone();
+		newLine.stickR = stickR.clone();
+		return newLine;
 	}
 
 
@@ -78,11 +88,11 @@ public class InputLine {
 
 		tmpString.append(frame).append(" ");
 
-		boolean first = true;
-
 		if (buttons.isEmpty()) {
 			tmpString.append("NONE");
 		} else {
+			boolean first = true;
+
 			for (Button button : buttons) {
 
 				if (!first) {
@@ -119,7 +129,7 @@ public class InputLine {
 		return buttons.isEmpty() && stickR.isZeroZero() && stickL.isZeroZero();
 	}
 
-	public static InputLine getEmpty (int line){
-		return new InputLine(line + " NONE 0;0 0;0");
+	public static InputLine getEmpty (int frame){
+		return new InputLine(frame);
 	}
 }

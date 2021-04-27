@@ -46,6 +46,11 @@ public class StickPosition {
 		updatePolar();
 	}
 
+	@Override
+	public StickPosition clone(){
+		return new StickPosition(x, y);
+	}
+
 	/**
 	 * Updates the polar coordinates based on the cartesian coordinates
 	 */

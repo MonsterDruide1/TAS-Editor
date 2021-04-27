@@ -93,7 +93,7 @@ public class PianoRoll extends JTable {
 	 * @param script the script which the line is being added to
 	 */
 	public void addEmptyRow(Script script) {
-		script.getInputLines().add(new InputLine((script.getInputLines().size() + 1) + " NONE 0;0 0;0"));
+		script.getInputLines().add(InputLine.getEmpty(script.getInputLines().size() + 1));
 		InputLine currentLine = script.getInputLines().get(script.getInputLines().size() - 1);
 		addRow(currentLine, script.getInputLines().size(), model);
 	}

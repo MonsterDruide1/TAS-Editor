@@ -2,6 +2,7 @@ package io.github.jadefalke2.actions;
 
 import io.github.jadefalke2.InputLine;
 import io.github.jadefalke2.Script;
+import io.github.jadefalke2.util.CorruptedScriptException;
 
 import javax.swing.table.DefaultTableModel;
 import java.util.Arrays;
@@ -25,7 +26,7 @@ public class LineAction implements Action{
 		previousLines = new InputLine[rows.length];
 
 		for (int i = 0; i < rows.length; i++){
-			previousLines[i] = new InputLine(script.getInputLines().get(i).getFull());
+			previousLines[i] = script.getInputLines().get(i).clone();
 		}
 
 		this.table = table;
@@ -68,7 +69,7 @@ public class LineAction implements Action{
 	}
 
 	private void cloneRows(){
-		insertRows(Arrays.stream(rows).mapToObj(row -> new InputLine(script.getInputLines().get(row).getFull())).toArray(InputLine[]::new));
+		insertRows(Arrays.stream(rows).mapToObj(row -> script.getInputLines().get(row).clone()).toArray(InputLine[]::new));
 	}
 
 	private void adjustLines() {
