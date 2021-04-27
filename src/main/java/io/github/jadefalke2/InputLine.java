@@ -8,24 +8,20 @@ import java.util.ArrayList;
 
 public class InputLine {
 
-	private String full;
-
 	int line;
 	public ArrayList<String> buttonsEncoded = new ArrayList<>();
 	private StickPosition stickL, stickR;
 
 	public InputLine(String full) {
-		this.full = full;
-
 		try {
-			splitIntoComponents();
+			splitIntoComponents(full);
 		} catch (CorruptedScriptException e) {
 			e.printStackTrace();
 		}
 	}
 
 
-	private void splitIntoComponents() throws CorruptedScriptException {
+	private void splitIntoComponents(String full) throws CorruptedScriptException {
 
 		if (full.equals("")){
 			throw new CorruptedScriptException("empty script");
@@ -77,8 +73,7 @@ public class InputLine {
 		this.line = line;
 	}
 
-
-	private void updateFull() {
+	public String getFull() {
 		StringBuilder tmpString = new StringBuilder();
 
 		tmpString.append(line).append(" ");
@@ -105,7 +100,7 @@ public class InputLine {
 			.append(" ").append(getStickR().toCartString());
 
 
-		full = tmpString.toString();
+		return tmpString.toString();
 	}
 
 	public Object[] getArray (){
@@ -139,11 +134,6 @@ public class InputLine {
 
 	public boolean isEmpty (){
 		return buttonsEncoded.isEmpty() && stickR.isZeroZero() && stickL.isZeroZero();
-	}
-
-	public String getFull() {
-		updateFull();
-		return full;
 	}
 
 	public static InputLine getEmpty (int line){
