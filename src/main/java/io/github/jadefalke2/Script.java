@@ -2,31 +2,21 @@ package io.github.jadefalke2;
 
 import io.github.jadefalke2.util.CorruptedScriptException;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 public class Script {
 
-	private final String script;
 	private final ArrayList<InputLine> inputLines = new ArrayList<>();
 
-	public Script(String script) {
+	public Script(){}
 
-		this.script = script;
-
-		try {
-			prepareScript();
-		} catch (CorruptedScriptException e) {
-			e.printStackTrace();
-		}
-
+	public Script(String script) throws CorruptedScriptException {
+		prepareScript(script);
 	}
 
-	public Script (File file){
+	public Script (File file) throws CorruptedScriptException, FileNotFoundException {
 		this(fileToString(file));
 	}
 
@@ -48,7 +38,7 @@ public class Script {
 	 * prepares the script
 	 * @throws CorruptedScriptException
 	 */
-	private void prepareScript () throws CorruptedScriptException {
+	private void prepareScript (String script) throws CorruptedScriptException {
 		inputLines.clear();
 		String[] lines = script.split("\n");
 
@@ -102,16 +92,9 @@ public class Script {
 	 * @param file the original file
 	 * @return the string
 	 */
-	public static String fileToString (File file){
-
-		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-			return br.lines().map(sCurrentLine -> sCurrentLine + "\n").collect(Collectors.joining());
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		}
-
-		// in case file is not being found -> throws an exception as well
-		return "";
+	public static String fileToString (File file) throws FileNotFoundException {
+		BufferedReader br = new BufferedReader(new FileReader(file));
+		return br.lines().map(sCurrentLine -> sCurrentLine + "\n").collect(Collectors.joining());
 	}
 
 

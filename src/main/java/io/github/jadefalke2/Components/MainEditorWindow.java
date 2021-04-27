@@ -1,6 +1,7 @@
 package io.github.jadefalke2.Components;
 
 import io.github.jadefalke2.Script;
+import io.github.jadefalke2.util.CorruptedScriptException;
 
 import javax.swing.*;
 import java.awt.*;
@@ -60,6 +61,7 @@ public class MainEditorWindow extends JFrame {
 		});
 	}
 
+	//TODO same method twice? Replace one of them...
 	/**
 	 * Prepares the editor to make it ready to be started
 	 * @param fileToOpen the file the editor will be opened with
@@ -67,7 +69,11 @@ public class MainEditorWindow extends JFrame {
 	public void prepareEditor(File fileToOpen) {
 		setVisible(true);
 		setSize(800, 1000);
-		script = new Script(preparePianoRoll(fileToOpen));
+		try {
+			script = new Script(preparePianoRoll(fileToOpen));
+		} catch (CorruptedScriptException | FileNotFoundException e) {
+			e.printStackTrace();
+		}
 		startEditor();
 	}
 
@@ -78,7 +84,11 @@ public class MainEditorWindow extends JFrame {
 	public void prepareEditor(Script script) {
 		setVisible(true);
 		setSize(800, 1000);
-		this.script = new Script(script.getFull());
+		try {
+			this.script = new Script(script.getFull());
+		} catch (CorruptedScriptException e) {
+			e.printStackTrace();
+		}
 		startEditor();
 	}
 
@@ -87,7 +97,7 @@ public class MainEditorWindow extends JFrame {
 	 * @param file the file to open
 	 * @return the corresponding String
 	 */
-	public String preparePianoRoll(File file) {
+	public String preparePianoRoll(File file) throws FileNotFoundException {
 
 		// sets the current script file to be the one that the method is called with
 
