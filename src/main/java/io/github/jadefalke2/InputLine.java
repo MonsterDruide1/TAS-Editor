@@ -4,7 +4,6 @@ import io.github.jadefalke2.stickRelatedClasses.StickPosition;
 import io.github.jadefalke2.util.Button;
 import io.github.jadefalke2.util.CorruptedScriptException;
 
-import java.util.ArrayList;
 import java.util.EnumSet;
 
 public class InputLine {

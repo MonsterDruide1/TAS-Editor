@@ -42,25 +42,23 @@ public class Script {
 		inputLines.clear();
 		String[] lines = script.split("\n");
 
-		int prevLine = 0;
+		int currentFrame = 0;
 
 		for (String line : lines) {
 
 			InputLine currentInputLine = new InputLine(line);
 
-			if (currentInputLine.getFrame() <= prevLine){
+			if (currentInputLine.getFrame() < currentFrame){
 				throw new CorruptedScriptException("Line numbers misordered");
 			}
 
-			if (prevLine + 1 != currentInputLine.getFrame()) {
-				for (int i = 0; i < currentInputLine.getFrame() - prevLine - 1; i++){
-					inputLines.add(InputLine.getEmpty(prevLine + 1 + i));
-				}
+			while(currentFrame < currentInputLine.getFrame()){
+				inputLines.add(InputLine.getEmpty(currentFrame++));
 			}
 
 			inputLines.add(currentInputLine);
 
-			prevLine = currentInputLine.getFrame();
+			currentFrame++;
 		}
 	}
 
