@@ -1,9 +1,15 @@
 package io.github.jadefalke2.Components;
 
+import io.github.jadefalke2.InputLine;
+import io.github.jadefalke2.Script;
+
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class TxtFileChooser extends JFileChooser {
 
@@ -34,4 +40,70 @@ public class TxtFileChooser extends JFileChooser {
 		return null;
 
 	}
+
+	public void saveFileAs (Script scriptToSave){
+
+		scriptToSave.getInputLines().forEach(inputLine -> System.out.println(inputLine.getFull()));
+
+		setDialogTitle("Choose place to save");
+		setCurrentDirectory(new File(System.getProperty("user.home")));
+		FileNameExtensionFilter filter = new FileNameExtensionFilter(".txt files", "txt", "text");
+		setFileFilter(filter);
+
+		int option = showSaveDialog(null);
+
+		if (option == JFileChooser.APPROVE_OPTION) {
+
+			String fileName = getSelectedFile().getPath();
+			File file = new File(fileName);
+
+			try {
+
+				file.createNewFile();
+				writeToFile(scriptToSave, file);
+
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+
+
+		}
+
+
+	}
+
+	public static void writeToFile(Script scriptToSave, File file) {
+
+		BufferedWriter writer = null;
+
+		try {
+
+			StringBuilder wholeScript = new StringBuilder();
+
+			for (InputLine currentLine : scriptToSave.getInputLines()) {
+				if (!currentLine.isEmpty()) {
+					wholeScript.append(currentLine.getFull()).append("\n");
+				}
+			}
+
+			System.out.println(wholeScript);
+
+			FileWriter fw = new FileWriter(file);
+			writer = new BufferedWriter(fw);
+
+
+			writer.write(wholeScript.toString());
+
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		} finally {
+			try {
+				if (writer != null)
+					writer.close();
+			} catch (Exception ex) {
+				System.out.println("Error in closing the BufferedWriter" + ex);
+			}
+		}
+	}
+
 }

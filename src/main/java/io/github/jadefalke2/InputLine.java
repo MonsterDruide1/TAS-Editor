@@ -1,6 +1,7 @@
 package io.github.jadefalke2;
 
 import io.github.jadefalke2.stickRelatedClasses.StickPosition;
+import io.github.jadefalke2.util.CorruptedScriptException;
 import io.github.jadefalke2.util.Input;
 
 import java.util.ArrayList;
@@ -15,11 +16,20 @@ public class InputLine {
 
 	public InputLine(String full) {
 		this.full = full;
-		splitIntoComponents();
+
+		try {
+			splitIntoComponents();
+		} catch (CorruptedScriptException e) {
+			e.printStackTrace();
+		}
 	}
 
 
-	private void splitIntoComponents() {
+	private void splitIntoComponents() throws CorruptedScriptException {
+
+		if (full.equals("")){
+			throw new CorruptedScriptException("empty script");
+		}
 
 		String[] components = full.split(" ");
 

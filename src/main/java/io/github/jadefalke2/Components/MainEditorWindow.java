@@ -69,8 +69,8 @@ public class MainEditorWindow extends JFrame {
 					return;
 				}
 
-				pianoRoll.setPreferredSize(new Dimension((int)(getSize().getWidth() - 40), Math.min((int)(getSize().getHeight() - 40), 1000)));
-				pianoRoll.setPreferredScrollableViewportSize(pianoRoll.getPreferredSize());
+				pianoRoll.setPreferredSize(new Dimension((int)(getSize().getWidth() - 40), 500));
+				pianoRoll.setPreferredScrollableViewportSize(new Dimension((int)(getSize().getWidth() - 40), 500));
 				pianoRoll.setFillsViewportHeight(true);
 			}
 		});
@@ -106,19 +106,14 @@ public class MainEditorWindow extends JFrame {
 	 */
 	public String preparePianoRoll(File file) {
 
-		//sets the current script file to be the one that the method is called with
+		// sets the current script file to be the one that the method is called with
+
 		currentScriptFile = file;
-		System.out.println(currentScriptFile);
+		//script = new Script();
 
-		//reads the file into a string that is returned
-		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-			return br.lines().map(sCurrentLine -> sCurrentLine + "\n").collect(Collectors.joining());
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		}
 
-		// in case file is not being found -> also throws an exception
-		return "";
+		// reads the file into a string that is returned
+		return Script.fileToString(file);
 	}
 
 	/**
@@ -161,40 +156,7 @@ public class MainEditorWindow extends JFrame {
 	 * writes the current script into the current file
 	 */
 	public void saveFile() {
-
-		BufferedWriter writer = null;
-
-		try {
-
-			StringBuilder wholeScript = new StringBuilder();
-
-			for (InputLine currentLine : script.getInputLines()) {
-				if (!currentLine.isEmpty()) {
-					wholeScript.append(currentLine.getFull()).append("\n");
-				}
-			}
-
-			FileWriter fw;
-
-			fw = new FileWriter(currentScriptFile);
-
-
-			writer = new BufferedWriter(fw);
-
-
-			writer.write(wholeScript.toString());
-
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-		} finally {
-			try {
-				if (writer != null)
-					writer.close();
-			} catch (Exception ex) {
-				System.out.println("Error in closing the BufferedWriter" + ex);
-			}
-		}
-
+		TxtFileChooser.writeToFile(script, currentScriptFile);
 	}
 
 

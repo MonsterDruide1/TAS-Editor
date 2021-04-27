@@ -2,6 +2,10 @@ package io.github.jadefalke2;
 
 import io.github.jadefalke2.util.CorruptedScriptException;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -14,10 +18,16 @@ public class Script {
 
 		this.script = script;
 
-		try { prepareScript();} catch (CorruptedScriptException e) {
+		try {
+			prepareScript();
+		} catch (CorruptedScriptException e) {
 			e.printStackTrace();
 		}
 
+	}
+
+	public Script (File file){
+		this(fileToString(file));
 	}
 
 	public ArrayList<InputLine> getInputLines() {
@@ -36,7 +46,8 @@ public class Script {
 
 	/**
 	 * prepares the script
- 	 */
+	 * @throws CorruptedScriptException
+	 */
 	private void prepareScript () throws CorruptedScriptException {
 		inputLines.clear();
 		String[] lines = script.split("\n");
@@ -84,6 +95,23 @@ public class Script {
 		}
 
 		return tmp;
+	}
+
+	/**
+	 * Takes in a file and converts it to a readble string
+	 * @param file the original file
+	 * @return the string
+	 */
+	public static String fileToString (File file){
+
+		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+			return br.lines().map(sCurrentLine -> sCurrentLine + "\n").collect(Collectors.joining());
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+
+		// in case file is not being found -> throws an exception as well
+		return "";
 	}
 
 
