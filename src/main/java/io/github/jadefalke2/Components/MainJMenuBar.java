@@ -35,8 +35,8 @@ public class MainJMenuBar extends JMenuBar {
 
 		openJMenuItem.addActionListener(e -> {
 			try {
-				mainEditorWindow.getPianoRoll().setNewScript(new Script(mainEditorWindow.preparePianoRoll(new TxtFileChooser().getFile())));
-			} catch (CorruptedScriptException | FileNotFoundException corruptedScriptException) {
+				mainEditorWindow.setScript(new TxtFileChooser().getFile());
+			} catch (FileNotFoundException corruptedScriptException) {
 				corruptedScriptException.printStackTrace();
 			}
 		});

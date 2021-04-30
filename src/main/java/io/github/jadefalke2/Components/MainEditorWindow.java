@@ -3,13 +3,7 @@ package io.github.jadefalke2.Components;
 import io.github.jadefalke2.Script;
 import io.github.jadefalke2.util.CorruptedScriptException;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JButton;
-import javax.swing.JTable;
-import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.WindowAdapter;
@@ -78,7 +72,7 @@ public class MainEditorWindow extends JFrame {
 		setVisible(true);
 		setSize(800, 1000);
 		try {
-			script = new Script(preparePianoRoll(fileToOpen));
+			script = new Script(setScript(fileToOpen));
 		} catch (CorruptedScriptException | FileNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -105,13 +99,19 @@ public class MainEditorWindow extends JFrame {
 	 * @param file the file to open
 	 * @return the corresponding String
 	 */
-	public String preparePianoRoll(File file) throws FileNotFoundException {
+	public String setScript(File file) throws FileNotFoundException {
 
 		// sets the current script file to be the one that the method is called with
 
 		currentScriptFile = file;
-		//script = new Script();
 
+		try {
+			script = new Script(Script.fileToString(file));
+		} catch (CorruptedScriptException e) {
+			e.printStackTrace();
+		}
+
+		pianoRoll.setNewScript(script);
 
 		// reads the file into a string that is returned
 		return Script.fileToString(file);
@@ -126,8 +126,11 @@ public class MainEditorWindow extends JFrame {
 
 		pianoRoll = new PianoRoll(script);
 		pianoRoll.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+
 		scrollPane = new JScrollPane(pianoRoll);
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+
 		mainJMenuBar = new MainJMenuBar(this);
 
 		JButton functionEditorButton = new JButton("Function editor");
