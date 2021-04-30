@@ -29,6 +29,7 @@ public class StickImagePanel extends JPanel {
 
     private final DefaultTableModel table;
     private final int row;
+    private final TAS parent; //TODO avoid this
 
 
     // Used to have a good way to differentiate sticks
@@ -46,7 +47,7 @@ public class StickImagePanel extends JPanel {
 	 * @param table the main table
 	 * @param row the current row
 	 */
-	public StickImagePanel(StickPosition stickPosition, StickType stickType,Script script, DefaultTableModel table, int row) {
+	public StickImagePanel(StickPosition stickPosition, StickType stickType,Script script, DefaultTableModel table, int row, TAS parent) {
 
 		// setting global vars
 		this.row = row;
@@ -54,6 +55,7 @@ public class StickImagePanel extends JPanel {
         this.inputLine = script.getInputLines().get(row);
         this.stickType = stickType;
 		this.stickPosition = stickPosition;
+		this.parent = parent;
 
 		StickPosition[] stickPositions = new StickPosition[Math.min(row,3)];
 
@@ -270,7 +272,7 @@ public class StickImagePanel extends JPanel {
 
         stickPosition.setPosition(x,y);
 
-        TAS.getInstance().executeAction(new StickAction(inputLine, stickType, oldStickPosition, stickPosition, table, row));
+        parent.executeAction(new StickAction(inputLine, stickType, oldStickPosition, stickPosition, table, row));
 
 		repaint();
 	}

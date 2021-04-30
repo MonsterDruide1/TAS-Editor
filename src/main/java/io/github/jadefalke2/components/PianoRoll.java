@@ -38,10 +38,12 @@ public class PianoRoll extends JTable {
 
 	// table model
 	private final DefaultTableModel model = new DefaultTableModel();
+	private final TAS parent;
 
-	public PianoRoll (Script script){
+	public PianoRoll (Script script, TAS parent){
 
 		this.script = script;
+		this.parent = parent;
 
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment( SwingConstants.CENTER );
@@ -86,7 +88,7 @@ public class PianoRoll extends JTable {
 		}
 
 		// Mouse listener
-		InputDrawMouseListener mouseListener = new InputDrawMouseListener(this);
+		InputDrawMouseListener mouseListener = new InputDrawMouseListener(this, parent);
 		addMouseListener(mouseListener);
 		addMouseMotionListener(mouseListener);
 
@@ -144,7 +146,8 @@ public class PianoRoll extends JTable {
 
 			// Creates StickImagePanel
 			InputLine tmpCurrentInputLine = script.getInputLines().get(row);
-			StickImagePanel stickImagePanel = new StickImagePanel(stickType == L_STICK ? tmpCurrentInputLine.getStickL() : tmpCurrentInputLine.getStickR(), stickType, script, model, row);
+			//TODO way too many parameters. rework this.
+			StickImagePanel stickImagePanel = new StickImagePanel(stickType == L_STICK ? tmpCurrentInputLine.getStickL() : tmpCurrentInputLine.getStickR(), stickType, script, model, row, parent);
 
 
 			stickWindow.addWindowListener(new WindowAdapter() {
@@ -173,17 +176,25 @@ public class PianoRoll extends JTable {
 			deleteOption.removeActionListener(deleteOption.getActionListeners()[0]);
 		}
 
-		deleteOption.addActionListener(e -> TAS.getInstance().executeAction(new LineAction(this.model,script,rows, LineAction.Type.DELETE)));
+		deleteOption.addActionListener(e -> {
+			parent.executeAction(new LineAction(this.model,script,rows, LineAction.Type.DELETE));
+		});
 
 		if (insertOption.getActionListeners().length != 0){
 			insertOption.removeActionListener(insertOption.getActionListeners()[0]);
 		}
-		insertOption.addActionListener(e -> TAS.getInstance().executeAction(new LineAction(this.model,script,rows, LineAction.Type.INSERT)));
+
+		insertOption.addActionListener(e -> {
+			parent.executeAction(new LineAction(this.model,script,rows, LineAction.Type.INSERT));
+		});
 
 		if (cloneOption.getActionListeners().length != 0){
 			cloneOption.removeActionListener(cloneOption.getActionListeners()[0]);
 		}
-		cloneOption.addActionListener(e -> TAS.getInstance().executeAction(new LineAction(this.model,script,rows, LineAction.Type.CLONE)));
+
+		cloneOption.addActionListener(e -> {
+			parent.executeAction(new LineAction(this.model,script,rows, LineAction.Type.CLONE));
+		});
 
 		popupMenu.show(this,(int)point.getX(),(int)point.getY());
 	}

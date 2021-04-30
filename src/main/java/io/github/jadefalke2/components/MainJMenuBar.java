@@ -14,7 +14,7 @@ import java.util.prefs.Preferences;
 
 public class MainJMenuBar extends JMenuBar {
 
-	public MainJMenuBar(MainEditorWindow mainEditorWindow){
+	public MainJMenuBar(MainEditorWindow mainEditorWindow, TAS parent){
 		// TODO: Handle the rest of the listeners and make things enabled or disabled correctly
 
 		JMenu fileJMenu = add(new JMenu("File"));
@@ -58,11 +58,11 @@ public class MainJMenuBar extends JMenuBar {
 
 		JMenuItem undoJMenuItem = editJMenu.add(new JMenuItem("Undo"));
 		undoJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_MASK));
-		undoJMenuItem.addActionListener(e -> TAS.getInstance().undo());
+		undoJMenuItem.addActionListener(e -> parent.undo());
 
 		JMenuItem redoJMenuItem = editJMenu.add(new JMenuItem("Redo"));
 		redoJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK));
-		redoJMenuItem.addActionListener(e -> TAS.getInstance().redo());
+		redoJMenuItem.addActionListener(e -> parent.redo());
 
 		editJMenu.addSeparator();
 
@@ -92,7 +92,7 @@ public class MainJMenuBar extends JMenuBar {
 
 		JMenu viewJMenu = add(new JMenu("View"));
 
-		Preferences preferences = TAS.getInstance().getPreferences();
+		Preferences preferences = parent.getPreferences();
 
 		JCheckBoxMenuItem darkThemeJMenuItem = new JCheckBoxMenuItem("Toggle Dark Theme", preferences.getBoolean("dark_theme", false));
 
@@ -101,9 +101,9 @@ public class MainJMenuBar extends JMenuBar {
 		darkThemeJMenuItem.addItemListener(e -> {
 			preferences.putBoolean("dark_theme", darkThemeJMenuItem.getState());
 			if (darkThemeJMenuItem.getState()) {
-				TAS.getInstance().setDarculaLookAndFeel();
+				parent.setDarculaLookAndFeel();
 			} else {
-				TAS.getInstance().setDefaultLookAndFeel();
+				parent.setDefaultLookAndFeel();
 			}
 		});
 

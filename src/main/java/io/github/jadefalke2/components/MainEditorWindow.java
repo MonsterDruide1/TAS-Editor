@@ -1,6 +1,7 @@
 package io.github.jadefalke2.components;
 
 import io.github.jadefalke2.Script;
+import io.github.jadefalke2.TAS;
 import io.github.jadefalke2.Util;
 import io.github.jadefalke2.util.CorruptedScriptException;
 
@@ -26,15 +27,17 @@ public class MainEditorWindow extends JFrame {
 	private Script script;
 	private File currentScriptFile;
 
+	private TAS parent;
+
 
 	/**
 	 * Constructor
 	 * @param functionEditorWindow the function editor window that can be opened from within this window
 	 */
-	public MainEditorWindow (FunctionEditorWindow functionEditorWindow){
+	public MainEditorWindow (FunctionEditorWindow functionEditorWindow, TAS parent){
 
 		this.functionEditorWindow = functionEditorWindow;
-		setPreferredSize(new Dimension(1500,700));
+		this.parent = parent;
 		setVisible(false);
 		setResizable(true);
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE); //let the WindowListener handle everything
@@ -87,7 +90,7 @@ public class MainEditorWindow extends JFrame {
 		currentScriptFile = file;
 
 		try {
-			script = new Script(Script.fileToString(file));
+			script = new Script(Util.fileToString(file));
 		} catch (CorruptedScriptException e) {
 			e.printStackTrace();
 		}
@@ -105,7 +108,7 @@ public class MainEditorWindow extends JFrame {
 		editor = new JPanel(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 
-		pianoRoll = new PianoRoll(script);
+		pianoRoll = new PianoRoll(script, parent);
 		pianoRoll.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
 		//Components
