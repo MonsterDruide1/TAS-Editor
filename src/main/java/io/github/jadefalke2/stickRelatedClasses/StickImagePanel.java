@@ -140,12 +140,13 @@ public class StickImagePanel extends JPanel {
 
 
 
-        MouseListener mouseListener = new MouseAdapter() {
+        MouseAdapter mouseListener = new MouseAdapter() {
 
-            @Override
-            public void mouseMoved(MouseEvent e){
-                updateStickPosition();
-            }
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				//TODO dont update the mainPanel here, as UndoList will get too clustered
+				updateStickPosition();
+			}
 
             @Override
             public void mouseReleased(MouseEvent e){
@@ -187,7 +188,6 @@ public class StickImagePanel extends JPanel {
 		};
 
 		joystick.addMouseListener(mouseListener);
-        joystick.addKeyListener(keyListener);
 
 
 
