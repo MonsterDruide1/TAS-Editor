@@ -65,32 +65,23 @@ public class TAS {
 
 	public void setDefaultLookAndFeel() {
 		//sets the look and feel to light mode
-		try {
-			UIManager.setLookAndFeel(new FlatLightLaf());
-
-			for(Window window : JFrame.getWindows()) {
-				SwingUtilities.updateComponentTreeUI(window);
-			}
-
-			setDefaultsAfterThemeChange();
-
-		} catch (UnsupportedLookAndFeelException e) {
-			e.printStackTrace();
-		}
+		setLookAndFeel("com.formdev.flatlaf.FlatLightLaf");
 	}
 
 	public void setDarculaLookAndFeel() {
 		//sets the look and feel to dark mode
-		try {
-			UIManager.setLookAndFeel(new FlatDarkLaf());
+		setLookAndFeel("com.formdev.flatlaf.FlatDarkLaf");
+	}
 
+	public void setLookAndFeel(String lookAndFeel){
+		try {
+			UIManager.setLookAndFeel(lookAndFeel);
 			for(Window window : JFrame.getWindows()) {
 				SwingUtilities.updateComponentTreeUI(window);
 			}
 
 			setDefaultsAfterThemeChange();
-
-		} catch (UnsupportedLookAndFeelException e) {
+		} catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
 	}
