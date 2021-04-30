@@ -41,9 +41,7 @@ public class TxtFileChooser extends JFileChooser {
 
 	}
 
-	public void saveFileAs (Script scriptToSave){
-
-		scriptToSave.getInputLines().forEach(inputLine -> System.out.println(inputLine.getFull()));
+	public File saveFileAs (Script scriptToSave){
 
 		setDialogTitle("Choose place to save");
 		setCurrentDirectory(new File(System.getProperty("user.home")));
@@ -52,10 +50,10 @@ public class TxtFileChooser extends JFileChooser {
 
 		int option = showSaveDialog(null);
 
-		if (option == JFileChooser.APPROVE_OPTION) {
+		String fileName = getSelectedFile().getPath();
+		File file = new File(fileName);
 
-			String fileName = getSelectedFile().getPath();
-			File file = new File(fileName);
+		if (option == JFileChooser.APPROVE_OPTION) {
 
 			try {
 
@@ -68,13 +66,18 @@ public class TxtFileChooser extends JFileChooser {
 
 
 		}
-
-
+		return file;
 	}
 
 	public static void writeToFile(Script scriptToSave, File file) {
 
+		if (file == null){
+			file = new TxtFileChooser().saveFileAs(scriptToSave);
+		}
+
 		BufferedWriter writer = null;
+
+
 
 		try {
 
@@ -85,8 +88,6 @@ public class TxtFileChooser extends JFileChooser {
 					wholeScript.append(currentLine.getFull()).append("\n");
 				}
 			}
-
-			System.out.println(wholeScript);
 
 			FileWriter fw = new FileWriter(file);
 			writer = new BufferedWriter(fw);
