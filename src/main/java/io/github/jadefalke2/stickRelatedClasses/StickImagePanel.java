@@ -160,7 +160,7 @@ public class StickImagePanel extends JPanel {
 			public void keyPressed(KeyEvent e) {
 
 				//
-				//NOT WORKING AS OF NOW
+				//NOT WORKING AS OF NOW, as focus always is on one of the spinners...
 				//
 
 				switch (e.getKeyCode()){
@@ -188,6 +188,8 @@ public class StickImagePanel extends JPanel {
 		};
 
 		joystick.addMouseListener(mouseListener);
+		joystick.addMouseMotionListener(mouseListener);
+        joystick.addKeyListener(keyListener);
 
 
 
