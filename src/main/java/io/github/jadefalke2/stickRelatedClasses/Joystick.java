@@ -10,12 +10,13 @@ import java.util.Vector;
 
 public class Joystick extends JPanel {
 
+	private final static int BORDER_THICKNESS = 2;
+
 	// Coordinates + Data
 	private final int outputMax;
 	private final int thumbDiameter;
 	private final int thumbRadius;
 	private final int panelWidth;
-	private final int BORDER_THICKNESS = 2;
 
 	// stick positions
 	private final StickPosition[] stickPositions;

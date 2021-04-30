@@ -9,6 +9,7 @@ import io.github.jadefalke2.stickRelatedClasses.StickImagePanel.StickType;
 import io.github.jadefalke2.util.Button;
 import io.github.jadefalke2.util.InputDrawMouseListener;
 
+import javax.sound.sampled.Line;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -179,31 +180,21 @@ public class PianoRoll extends JTable implements ComponentListener {
 	 */
 	public void openPopUpMenu(int[] rows, Point point){
 
-		if (deleteOption.getActionListeners().length != 0){
-			deleteOption.removeActionListener(deleteOption.getActionListeners()[0]);
-		}
-
-		deleteOption.addActionListener(e -> {
-			parent.executeAction(new LineAction(this.model,script,rows, LineAction.Type.DELETE));
-		});
-
-		if (insertOption.getActionListeners().length != 0){
-			insertOption.removeActionListener(insertOption.getActionListeners()[0]);
-		}
-
-		insertOption.addActionListener(e -> {
-			parent.executeAction(new LineAction(this.model,script,rows, LineAction.Type.INSERT));
-		});
-
-		if (cloneOption.getActionListeners().length != 0){
-			cloneOption.removeActionListener(cloneOption.getActionListeners()[0]);
-		}
-
-		cloneOption.addActionListener(e -> {
-			parent.executeAction(new LineAction(this.model,script,rows, LineAction.Type.CLONE));
-		});
+		setListener(deleteOption, rows, LineAction.Type.DELETE);
+		setListener(insertOption, rows, LineAction.Type.INSERT);
+		setListener(cloneOption, rows, LineAction.Type.CLONE);
 
 		popupMenu.show(this,(int)point.getX(),(int)point.getY());
+	}
+
+	public void setListener(JMenuItem item, int[] rows, LineAction.Type type){
+		while (item.getActionListeners().length > 0){
+			item.removeActionListener(item.getActionListeners()[0]);
+		}
+
+		item.addActionListener(e -> {
+			parent.executeAction(new LineAction(this.model, script, rows, type));
+		});
 	}
 
 	/**
@@ -220,11 +211,8 @@ public class PianoRoll extends JTable implements ComponentListener {
 		popupMenu.add(insertOption);
 		popupMenu.add(cloneOption);
 
-		popupMenu.setVisible(true);
-		popupMenu.setSize(100,100);
-		popupMenu.setVisible(false);
-
 		add(popupMenu);
+		popupMenu.pack();
 	}
 
 	/**

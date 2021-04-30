@@ -13,6 +13,8 @@ import java.awt.event.*;
 
 public class StickImagePanel extends JPanel {
 
+	private final static int STICK_IMAGE_SIZE = 200;
+
 	// Spinners
     private final JSpinner xSpinner;
     private final JSpinner ySpinner;
@@ -66,8 +68,7 @@ public class StickImagePanel extends JPanel {
 			stickPositions[i] = stickType == StickType.L_STICK ? currentLine.getStickL() : currentLine.getStickR();
 		}
 
-		final int STICK_IMAGE_SIZE = 200;
-		joystick = new Joystick(32767, STICK_IMAGE_SIZE,stickPositions );
+		joystick = new Joystick(32767, STICK_IMAGE_SIZE,stickPositions);
 
 
 		joystick.setThumbPos(new Point(stickPosition.getX(),stickPosition.getY()));

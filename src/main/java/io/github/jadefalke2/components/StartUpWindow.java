@@ -21,9 +21,7 @@ public class StartUpWindow extends JFrame {
 		setTitle("SMO TAS editor");
 		setLocation(500, 500);
 		pack();
-		setVisible(true);
 		setResizable(false);
-		setSize(300, 200);
 
 
 		startUpPanel = new JPanel();
@@ -43,6 +41,7 @@ public class StartUpWindow extends JFrame {
 		startUpPanel.add(loadScriptButton);
 
 		add(startUpPanel);
+		setVisible(true);
 	}
 
 	public void onLoadButtonPress() {
