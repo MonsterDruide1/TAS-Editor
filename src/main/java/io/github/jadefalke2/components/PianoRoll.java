@@ -14,14 +14,15 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import java.awt.*;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import static io.github.jadefalke2.stickRelatedClasses.StickImagePanel.StickType.L_STICK;
 import static io.github.jadefalke2.stickRelatedClasses.StickImagePanel.StickType.R_STICK;
 
-public class PianoRoll extends JTable {
-
+public class PianoRoll extends JTable implements ComponentListener {
 
 	//used to test if a new window can be opened
 	private boolean stickWindowIsOpen;
@@ -69,18 +70,8 @@ public class PianoRoll extends JTable {
 			model.addColumn(button.toString());
 		}
 
-		// adjust the size of all columns
-
-		int[] columnsWidth = {
-			45,											   		                // frame number
-			85, 85,										  	                	// sticks
-			18, 18, 18, 18, 25, 25, 18, 18, 18, 18, 30, 30, 30, 30, 50, 50	    // buttons
-		};
-
-
-		for (int i = 0; i < columnsWidth.length && i < getColumnCount(); i++) {
-			getColumnModel().getColumn(i).setPreferredWidth(columnsWidth[i]);
-		}
+		adjustColumnWidth();
+		addComponentListener(this);
 
 		//Center all columns
 		for (int i = 0; i < getColumnCount(); i++){
@@ -101,6 +92,22 @@ public class PianoRoll extends JTable {
 		add(popupMenu);
 		preparepopUpMenu();
 
+	}
+
+	public void adjustColumnWidth(){
+		// adjust the size of all columns
+
+		int[] columnsWidth = {
+			45,											   		                // frame number
+			85, 85,										  	                	// sticks
+			18, 18, 18, 18, 25, 25, 18, 18, 18, 18, 30, 30, 30, 30, 50, 50	    // buttons
+		};
+		float sum = 629;
+
+
+		for (int i = 0; i < columnsWidth.length && i < getColumnCount(); i++) {
+			getColumnModel().getColumn(i).setPreferredWidth((int)(getWidth()*(columnsWidth[i]/sum)));
+		}
 	}
 
 
@@ -272,4 +279,17 @@ public class PianoRoll extends JTable {
 	public boolean isCellEditable(int row, int column) {
 		return false;
 	}
+
+	@Override
+	public void componentResized(ComponentEvent e) {
+		adjustColumnWidth();
+	}
+
+	//unused methods from ComponentListener
+	@Override
+	public void componentMoved(ComponentEvent e) {}
+	@Override
+	public void componentShown(ComponentEvent e) {}
+	@Override
+	public void componentHidden(ComponentEvent e) {}
 }
