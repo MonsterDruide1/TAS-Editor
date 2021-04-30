@@ -1,6 +1,7 @@
-package io.github.jadefalke2.Components;
+package io.github.jadefalke2.components;
 
 import io.github.jadefalke2.Script;
+import io.github.jadefalke2.Util;
 import io.github.jadefalke2.util.CorruptedScriptException;
 
 import javax.swing.*;
@@ -9,6 +10,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class MainEditorWindow extends JFrame {
 
@@ -60,14 +62,11 @@ public class MainEditorWindow extends JFrame {
 		});
 	}
 
-
 	/**
 	 * Prepares the editor to make it ready to be started
 	 * @param script the script that the editor will be opened with
 	 */
 	public void prepareEditor(Script script) {
-		setVisible(true);
-		setSize(2000,700);
 		try {
 			this.script = new Script(script.getFull());
 		} catch (CorruptedScriptException e) {
@@ -96,7 +95,7 @@ public class MainEditorWindow extends JFrame {
 		pianoRoll.setNewScript(script);
 
 		// reads the file into a string that is returned
-		return Script.fileToString(file);
+		return Util.fileToString(file);
 	}
 
 	/**
@@ -132,14 +131,18 @@ public class MainEditorWindow extends JFrame {
 		setJMenuBar(mainJMenuBar);
 
 		pack();
+		setVisible(true);
 	}
 
 	/**
 	 * writes the current script into the current file
 	 */
 	public void saveFile() {
-
-		TxtFileChooser.writeToFile(script, currentScriptFile);
+		try {
+			TxtFileChooser.writeToFile(script, currentScriptFile);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 

@@ -1,7 +1,6 @@
-package io.github.jadefalke2.Components;
+package io.github.jadefalke2.components;
 
 import io.github.jadefalke2.Script;
-import sun.awt.image.GifImageDecoder;
 
 import javax.swing.*;
 import java.awt.*;

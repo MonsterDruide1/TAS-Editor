@@ -1,7 +1,8 @@
-package io.github.jadefalke2.Components;
+package io.github.jadefalke2.components;
 
 import io.github.jadefalke2.InputLine;
 import io.github.jadefalke2.Script;
+import io.github.jadefalke2.Util;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -70,42 +71,8 @@ public class TxtFileChooser extends JFileChooser {
 		return file;
 	}
 
-	public static void writeToFile(Script scriptToSave, File file) {
-
-		if (file == null){
-			file = new TxtFileChooser().saveFileAs(scriptToSave);
-		}
-
-		BufferedWriter writer = null;
-
-
-
-		try {
-
-			StringBuilder wholeScript = new StringBuilder();
-
-			for (InputLine currentLine : scriptToSave.getInputLines()) {
-				if (!currentLine.isEmpty()) {
-					wholeScript.append(currentLine.getFull()).append("\n");
-				}
-			}
-
-			FileWriter fw = new FileWriter(file);
-			writer = new BufferedWriter(fw);
-
-
-			writer.write(wholeScript.toString());
-
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-		} finally {
-			try {
-				if (writer != null)
-					writer.close();
-			} catch (Exception ex) {
-				System.out.println("Error in closing the BufferedWriter" + ex);
-			}
-		}
+	public static void writeToFile(Script scriptToSave, File file) throws IOException {
+		Util.writeFile(scriptToSave.getFull(), file);
 	}
 
 }
