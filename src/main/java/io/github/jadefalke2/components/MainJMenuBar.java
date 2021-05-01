@@ -88,7 +88,7 @@ public class MainJMenuBar extends JMenuBar {
 
 		JMenuItem addNewLineItem = editJMenu.add(new JMenuItem("Add line"));
 		addNewLineItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK));
-		addNewLineItem.addActionListener(e -> mainEditorWindow.getPianoRoll().addEmptyRow(mainEditorWindow.getScript()));
+		addNewLineItem.addActionListener(e -> mainEditorWindow.getPianoRoll().addEmptyRow());
 
 		JMenu viewJMenu = add(new JMenu("View"));
 
@@ -100,11 +100,7 @@ public class MainJMenuBar extends JMenuBar {
 
 		darkThemeJMenuItem.addItemListener(e -> {
 			preferences.putBoolean("dark_theme", darkThemeJMenuItem.getState());
-			if (darkThemeJMenuItem.getState()) {
-				parent.setDarculaLookAndFeel();
-			} else {
-				parent.setDefaultLookAndFeel();
-			}
+			parent.updateLookAndFeel();
 		});
 
 		JMenu helpJMenu = add(new JMenu("Help"));

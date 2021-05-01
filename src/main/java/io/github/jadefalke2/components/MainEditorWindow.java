@@ -95,7 +95,7 @@ public class MainEditorWindow extends JFrame {
 			e.printStackTrace();
 		}
 
-		pianoRoll.setNewScript(script);
+		pianoRoll.setScript(script);
 
 		// reads the file into a string that is returned
 		return Util.fileToString(file);

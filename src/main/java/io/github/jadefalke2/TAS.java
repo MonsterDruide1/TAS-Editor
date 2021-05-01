@@ -57,11 +57,21 @@ public class TAS {
 
 		mainEditorWindow.prepareEditor(Script.getEmptyScript(10));
 
+		//set correct UI theme
+		updateLookAndFeel();
 
 	}
 
 
 	// set look and feels
+
+	public void updateLookAndFeel(){
+		if (preferences.getBoolean("dark_theme", false)) {
+			setDarculaLookAndFeel();
+		} else {
+			setDefaultLookAndFeel();
+		}
+	}
 
 	public void setDefaultLookAndFeel() {
 		//sets the look and feel to light mode
