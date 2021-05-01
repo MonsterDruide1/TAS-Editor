@@ -95,6 +95,7 @@ public class LineAction implements Action{
 	}
 
 	private void insertRows(){
+		InputLine[] newRows = new InputLine[rows.length];
 
 		InputLine[] tmpLines = new InputLine[rows.length];
 
