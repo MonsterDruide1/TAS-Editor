@@ -33,7 +33,7 @@ public class MainJMenuBar extends JMenuBar {
 
 		openJMenuItem.addActionListener(e -> {
 			try {
-				mainEditorWindow.setScript(new TxtFileChooser().getFile());
+				mainEditorWindow.setScript(new TxtFileChooser().getFile(true));
 			} catch (FileNotFoundException corruptedScriptException) {
 				corruptedScriptException.printStackTrace();
 			}

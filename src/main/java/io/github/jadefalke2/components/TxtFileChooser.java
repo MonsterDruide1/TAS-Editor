@@ -22,14 +22,14 @@ public class TxtFileChooser extends JFileChooser {
 	 * returns the chosen file
 	 * @return the chosen file
 	 */
-	public File getFile (){
+	public File getFile (boolean existingFile){
 
-		setDialogTitle("Choose existing TAS file");
+		setDialogTitle(existingFile ? "Choose existing TAS file" : "Choose where you want your TAS file to go");
 		setCurrentDirectory(new File(System.getProperty("user.home")));
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(".txt files", "txt", "text");
 		setFileFilter(filter);
 
-		int option = showOpenDialog(null);
+		int option = existingFile ? showOpenDialog(null) : showSaveDialog(null);
 
 		if (option == JFileChooser.APPROVE_OPTION) {
 			return getSelectedFile();

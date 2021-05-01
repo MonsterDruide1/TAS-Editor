@@ -1,5 +1,8 @@
 package io.github.jadefalke2.components;
 
+import io.github.jadefalke2.Script;
+import io.github.jadefalke2.Util;
+
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
@@ -17,10 +20,9 @@ public class StartUpWindow extends JFrame {
 
 		this.mainEditorWindow = mainEditorWindow;
 
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setTitle("SMO TAS editor");
 		setLocation(500, 500);
-		pack();
 		setResizable(false);
 
 
@@ -41,6 +43,7 @@ public class StartUpWindow extends JFrame {
 		startUpPanel.add(loadScriptButton);
 
 		add(startUpPanel);
+		pack();
 		setVisible(true);
 	}
 
@@ -54,43 +57,26 @@ public class StartUpWindow extends JFrame {
 
 	public void openLoadFileChooser() {
 		TxtFileChooser fileChooser = new TxtFileChooser();
-		mainEditorWindow.prepareEditor(fileChooser.getFile());
+		mainEditorWindow.prepareEditor(fileChooser.getFile(true));
 		dispose();
 	}
 
 	public void openNewFileCreator() {
 
-		JFileChooser fileChooser = new JFileChooser(FileSystemView.getFileSystemView());
+		File file = new TxtFileChooser().getFile(false);
 
-		fileChooser.setDialogTitle("Choose where you want your TAS file to go");
-		fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
-		FileNameExtensionFilter filter = new FileNameExtensionFilter(".txt files", "txt", "text");
-		fileChooser.setFileFilter(filter);
-		fileChooser.setSelectedFile(new File("script1.txt"));
-
-		int option = fileChooser.showSaveDialog(null);
-
-		if (option == JFileChooser.APPROVE_OPTION) {
-
-			File fileToOpen = fileChooser.getSelectedFile();
-			String fileName = fileChooser.getSelectedFile().getPath();
-			File file = new File(fileName);
+		if (file != null) {
 			try {
 				file.createNewFile();
-				FileWriter fileWriter = new FileWriter(fileName);
-				// optimize the below later
-				fileWriter.write("1 NONE 0;0 0;0\n");
-				fileWriter.write("2 NONE 0;0 0;0\n");
-				fileWriter.write("3 NONE 0;0 0;0\n");
-				fileWriter.write("4 NONE 0;0 0;0\n");
 
-				fileWriter.close();
+				String emptyScript = Script.getEmptyScript(5).getFull();
+				Util.writeFile(emptyScript, file);
 
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
 
-			mainEditorWindow.prepareEditor(fileToOpen);
+			mainEditorWindow.prepareEditor(file);
 		}
 
 	}
