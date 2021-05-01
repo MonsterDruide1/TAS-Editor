@@ -52,6 +52,8 @@ public class PianoRoll extends JTable {
 		setModel(model);
 		setDragEnabled(false);
 		setRowHeight(20);
+		setMinimumSize(new Dimension(1000,200));
+		setShowGrid(true);
 		setFont(new Font("Arial", Font.PLAIN, 15));
 
 		getTableHeader().setResizingAllowed(false);
@@ -106,7 +108,7 @@ public class PianoRoll extends JTable {
 	 * @param script the script which the line is being added to
 	 */
 	public void addEmptyRow(Script script) {
-		script.getInputLines().add(InputLine.getEmpty(script.getInputLines().size() + 1));
+		script.getInputLines().add(InputLine.getEmpty(script.getInputLines().size()));
 		InputLine currentLine = script.getInputLines().get(script.getInputLines().size() - 1);
 		addRow(currentLine, model);
 	}
