@@ -33,6 +33,8 @@ public class StickImagePanel extends JPanel {
     private final int row;
     private final TAS parent; //TODO avoid this
 
+	private boolean shouldTriggerUpdate = true;
+
 
     // Used to have a good way to differentiate sticks
 
@@ -111,31 +113,46 @@ public class StickImagePanel extends JPanel {
         radiusSpinner.setAlignmentX(10);
 
 
+        //TODO simplify these repeating listeners
         xSpinner.addChangeListener(e -> {
             stickPosition.setX((int) xSpinner.getValue());
-           	//updatePolarSpinners();
-			//uncommenting above leads to recursive method calls and a stackOverFlow error! -> fix
-            updateVisual();
-            repaint();
+           	if(shouldTriggerUpdate){
+				shouldTriggerUpdate = false;
+           		updatePolarSpinners();
+				updateVisual();
+				repaint();
+				shouldTriggerUpdate = true;
+			}
         });
         ySpinner.addChangeListener(e -> {
             stickPosition.setY((int) ySpinner.getValue());
-            //updatePolarSpinners();
-			//uncommenting above leads to recursive method calls and a stackOverFlow error! -> fix
-            updateVisual();
-            repaint();
+            if(shouldTriggerUpdate){
+				shouldTriggerUpdate = false;
+				updatePolarSpinners();
+				updateVisual();
+				repaint();
+				shouldTriggerUpdate = true;
+			}
         });
         radiusSpinner.addChangeListener(e -> {
             stickPosition.setRadius((double) radiusSpinner.getValue());
-            updateCartSpinners();
-            updateVisual();
-            repaint();
+            if(shouldTriggerUpdate){
+				shouldTriggerUpdate = false;
+				updateCartSpinners();
+				updateVisual();
+				repaint();
+				shouldTriggerUpdate = true;
+			}
         });
         angleSpinner.addChangeListener(e -> {
             stickPosition.setTheta((int)angleSpinner.getValue());
-            updateCartSpinners();
-            updateVisual();
-            repaint();
+            if(shouldTriggerUpdate){
+				shouldTriggerUpdate = false;
+				updateCartSpinners();
+				updateVisual();
+				repaint();
+				shouldTriggerUpdate = true;
+			}
         });
 
 
