@@ -5,7 +5,9 @@ import io.github.jadefalke2.Script;
 import io.github.jadefalke2.util.CorruptedScriptException;
 
 import javax.swing.table.DefaultTableModel;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.stream.IntStream;
 
 public class LineAction implements Action{
 
@@ -76,9 +78,10 @@ public class LineAction implements Action{
 		table.moveRow(table.getRowCount() - rows.length, table.getRowCount() - 1, rows[0] + rows.length);
 
 		for (int i = rows[0] + rows.length; i < table.getRowCount(); i++){
-			InputLine cLine = script.getInputLines().get(i);
 
-			cLine.setFrame(cLine.getFrame() + rows.length);
+			InputLine cLine = script.getInputLines().get(i);
+			cLine.setFrame(cLine.getFrame() + rows.length - 1);
+
 			table.setValueAt(cLine.getFrame(),i,0);
 		}
 	}
@@ -104,18 +107,14 @@ public class LineAction implements Action{
 	}
 
 	private void insertRows(){
-
-		for (int i = 0; i < rows.length; i++) {
-			script.getInputLines().add(rows[0] + i + rows.length, InputLine.getEmpty(rows[0] + i + 1));
-			table.addRow(script.getInputLines().get(rows[0] + i + rows.length).getArray());
-		}
-
-		adjustLines();
+		//intelliJ suggested this, don't ask me how it works.
+		InputLine[] inputLines = IntStream.range(0, rows.length).mapToObj(i -> InputLine.getEmpty(rows[0] + i + 1)).toArray(InputLine[]::new);
+		insertRows(inputLines);
 	}
 
 	private void insertRows (InputLine[] inputLines){
 		for (int i = 0; i < rows.length; i++) {
-			script.getInputLines().add(rows[0] + i + rows.length, inputLines[i]);
+			script.getInputLines().add(rows[0] + i + rows.length - 1, inputLines[i]);
 			table.addRow(script.getInputLines().get(rows[0] + i + rows.length).getArray());
 		}
 

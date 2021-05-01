@@ -173,6 +173,7 @@ public class PianoRoll extends JTable {
 		if (deleteOption.getActionListeners().length != 0){
 			deleteOption.removeActionListener(deleteOption.getActionListeners()[0]);
 		}
+
 		deleteOption.addActionListener(e -> {
 			TAS.getInstance().executeAction(new LineAction(this.model,script,rows, LineAction.Type.DELETE));
 		});
