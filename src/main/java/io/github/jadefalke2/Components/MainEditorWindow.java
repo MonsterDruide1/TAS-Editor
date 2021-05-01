@@ -4,8 +4,7 @@ import io.github.jadefalke2.Script;
 import io.github.jadefalke2.util.CorruptedScriptException;
 
 import javax.swing.*;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -36,6 +35,7 @@ public class MainEditorWindow extends JFrame {
 	public MainEditorWindow (FunctionEditorWindow functionEditorWindow){
 
 		this.functionEditorWindow = functionEditorWindow;
+		setPreferredSize(new Dimension(1500,700));
 		setVisible(false);
 		setResizable(true);
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE); //let the WindowListener handle everything
@@ -70,7 +70,7 @@ public class MainEditorWindow extends JFrame {
 	 */
 	public void prepareEditor(File fileToOpen) {
 		setVisible(true);
-		setSize(800, 1000);
+		setSize(2000,700);
 		try {
 			script = new Script(setScript(fileToOpen));
 		} catch (CorruptedScriptException | FileNotFoundException e) {
@@ -85,7 +85,7 @@ public class MainEditorWindow extends JFrame {
 	 */
 	public void prepareEditor(Script script) {
 		setVisible(true);
-		setSize(800, 1000);
+		setSize(2000,700);
 		try {
 			this.script = new Script(script.getFull());
 		} catch (CorruptedScriptException e) {

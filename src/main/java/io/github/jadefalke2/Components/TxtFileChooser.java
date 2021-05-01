@@ -63,9 +63,12 @@ public class TxtFileChooser extends JFileChooser {
 			} catch (IOException ex) {
 				ex.printStackTrace();
 			}
-
-
 		}
+
+		if (option == JFileChooser.CANCEL_OPTION){
+			return null;
+		}
+
 		return file;
 	}
 

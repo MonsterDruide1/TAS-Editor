@@ -10,6 +10,7 @@ import io.github.jadefalke2.util.Button;
 import io.github.jadefalke2.util.InputDrawMouseListener;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import java.awt.*;
@@ -44,6 +45,9 @@ public class PianoRoll extends JTable {
 
 		this.script = script;
 
+		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		centerRenderer.setHorizontalAlignment( SwingConstants.CENTER );
+
 		setAutoResizeMode(AUTO_RESIZE_OFF);
 		setModel(model);
 		setDragEnabled(false);
@@ -70,6 +74,12 @@ public class PianoRoll extends JTable {
 
 		for (int i = 0; i < columnsWidth.length && i < getColumnCount(); i++) {
 			getColumnModel().getColumn(i).setPreferredWidth(columnsWidth[i]);
+		}
+
+		//Center all columns
+		for (int i = 0; i < getColumnCount(); i++){
+			getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+			getTableHeader().setDefaultRenderer(centerRenderer);
 		}
 
 		// Mouse listener
