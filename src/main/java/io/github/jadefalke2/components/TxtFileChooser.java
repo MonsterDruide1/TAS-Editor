@@ -22,14 +22,14 @@ public class TxtFileChooser extends JFileChooser {
 	 * returns the chosen file
 	 * @return the chosen file
 	 */
-	public File getFile (boolean existingFile){
+	public File getFile (boolean openFile){
 
-		setDialogTitle(existingFile ? "Choose existing TAS file" : "Choose where you want your TAS file to go");
+		setDialogTitle(openFile ? "Choose existing TAS file" : "Choose place to save");
 		setCurrentDirectory(new File(System.getProperty("user.home")));
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(".txt files", "txt", "text");
 		setFileFilter(filter);
 
-		int option = existingFile ? showOpenDialog(null) : showSaveDialog(null);
+		int option = openFile ? showOpenDialog(null) : showSaveDialog(null);
 
 		if (option == JFileChooser.APPROVE_OPTION) {
 			return getSelectedFile();
@@ -41,23 +41,11 @@ public class TxtFileChooser extends JFileChooser {
 
 	public File saveFileAs (Script scriptToSave) throws IOException {
 
-		setDialogTitle("Choose place to save");
-		setCurrentDirectory(new File(System.getProperty("user.home")));
-		FileNameExtensionFilter filter = new FileNameExtensionFilter(".txt files", "txt", "text");
-		setFileFilter(filter);
+		File file = getFile(false);
 
-		int option = showSaveDialog(null);
-
-		String fileName = getSelectedFile().getPath();
-		File file = new File(fileName);
-
-		if (option == JFileChooser.APPROVE_OPTION) {
-			try {
-				file.createNewFile();
-				writeToFile(scriptToSave, file);
-			} catch (IOException ex) {
-				ex.printStackTrace();
-			}
+		if (file != null) {
+			file.createNewFile();
+			writeToFile(scriptToSave, file);
 		}
 
 		if (option == JFileChooser.CANCEL_OPTION){
