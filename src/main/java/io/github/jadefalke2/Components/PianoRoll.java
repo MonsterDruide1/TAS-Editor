@@ -51,14 +51,18 @@ public class PianoRoll extends JTable {
 		setAutoResizeMode(AUTO_RESIZE_OFF);
 		setModel(model);
 		setDragEnabled(false);
+		setRowHeight(20);
+		setFont(new Font("Arial", Font.PLAIN, 15));
 
 		getTableHeader().setResizingAllowed(false);
 		getTableHeader().setReorderingAllowed(false);
+		getTableHeader().setDefaultRenderer(centerRenderer);
 
 		// add all the column's corresponding with their names
 		model.addColumn("Frame");
 		model.addColumn("L-Stick");
 		model.addColumn("R-Stick");
+
 		for (Button button : Button.values()) {
 			model.addColumn(button.toString());
 		}
@@ -79,7 +83,6 @@ public class PianoRoll extends JTable {
 		//Center all columns
 		for (int i = 0; i < getColumnCount(); i++){
 			getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
-			getTableHeader().setDefaultRenderer(centerRenderer);
 		}
 
 		// Mouse listener
@@ -90,7 +93,7 @@ public class PianoRoll extends JTable {
 		// insert all existing rows
 		for (int i = 0; i < script.getInputLines().size(); i++) {
 			InputLine currentLine = script.getInputLines().get(i);
-			addRow(currentLine, i + 1, model);
+			addRow(currentLine, model);
 		}
 
 		preparepopUpMenu();
@@ -105,16 +108,15 @@ public class PianoRoll extends JTable {
 	public void addEmptyRow(Script script) {
 		script.getInputLines().add(InputLine.getEmpty(script.getInputLines().size() + 1));
 		InputLine currentLine = script.getInputLines().get(script.getInputLines().size() - 1);
-		addRow(currentLine, script.getInputLines().size(), model);
+		addRow(currentLine, model);
 	}
 
 	/**
 	 * adds a line at a specified place with specified contents
 	 * @param line the InputLine that is being inserted
-	 * @param lineIndex the place at which the line is being inserted
 	 * @param model the table model
 	 */
-	private void addRow(InputLine line, int lineIndex, DefaultTableModel model) {
+	private void addRow(InputLine line, DefaultTableModel model) {
 		model.addRow(line.getArray());
 	}
 
@@ -207,6 +209,8 @@ public class PianoRoll extends JTable {
 		popupMenu.setVisible(true);
 		popupMenu.setSize(100,100);
 		popupMenu.setVisible(false);
+
+		add(popupMenu);
 	}
 
 	/**
