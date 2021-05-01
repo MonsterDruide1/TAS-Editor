@@ -36,7 +36,7 @@ public class Script {
 
 	/**
 	 * prepares the script
-	 * @throws CorruptedScriptException
+	 * @throws CorruptedScriptException if lines are in the wrong order
 	 */
 	private void prepareScript (String script) throws CorruptedScriptException {
 		inputLines.clear();

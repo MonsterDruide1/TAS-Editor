@@ -30,7 +30,7 @@ public class InputDrawMouseListener extends MouseAdapter {
 	// mode
 	private Mode mode = Mode.IDLE;
 
-	private TAS parent;
+	private final TAS parent;
 
 	/**
 	 * Constructor

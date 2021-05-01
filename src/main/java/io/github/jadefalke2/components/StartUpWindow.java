@@ -9,8 +9,8 @@ import java.io.IOException;
 
 public class StartUpWindow extends JFrame {
 
-	private MainEditorWindow mainEditorWindow;
-	private JPanel startUpPanel;
+	private final MainEditorWindow mainEditorWindow;
+	private final JPanel startUpPanel;
 
 
 	public StartUpWindow(MainEditorWindow mainEditorWindow) {

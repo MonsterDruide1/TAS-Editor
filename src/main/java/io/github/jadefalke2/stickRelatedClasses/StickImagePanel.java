@@ -163,24 +163,11 @@ public class StickImagePanel extends JPanel {
 				//NOT WORKING AS OF NOW, as focus always is on one of the spinners...
 				//
 
-				switch (e.getKeyCode()){
-
-					case KeyEvent.VK_0:
-						joystick.setThumbPos(new Point(32767,0));
-						break;
-
-					case KeyEvent.VK_KP_LEFT:
-						joystick.setThumbPos(new Point(-32767,0));
-						break;
-
-					case KeyEvent.VK_KP_UP:
-						joystick.setThumbPos(new Point(0,32767));
-						break;
-
-					case KeyEvent.VK_KP_DOWN:
-						joystick.setThumbPos(new Point(0,-32767));
-						break;
-
+				switch (e.getKeyCode()) {
+					case KeyEvent.VK_0 -> joystick.setThumbPos(new Point(32767, 0));
+					case KeyEvent.VK_KP_LEFT -> joystick.setThumbPos(new Point(-32767, 0));
+					case KeyEvent.VK_KP_UP -> joystick.setThumbPos(new Point(0, 32767));
+					case KeyEvent.VK_KP_DOWN -> joystick.setThumbPos(new Point(0, -32767));
 				}
 
 				repaint();

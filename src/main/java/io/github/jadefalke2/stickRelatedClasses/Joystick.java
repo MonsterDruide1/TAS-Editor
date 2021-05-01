@@ -6,7 +6,6 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeListener;
-import java.util.Vector;
 
 public class Joystick extends JPanel {
 
@@ -22,7 +21,7 @@ public class Joystick extends JPanel {
 	private final StickPosition[] stickPositions;
 
 	private final Point thumbPos = new Point();
-	protected SwingPropertyChangeSupport propertySupporter = new SwingPropertyChangeSupport(this);
+	protected final SwingPropertyChangeSupport propertySupporter = new SwingPropertyChangeSupport(this);
 
 
 	/**
@@ -94,7 +93,6 @@ public class Joystick extends JPanel {
 	 *
 	 * @param mouseX the x position of cursor that has clicked in the joystick panel
 	 * @param mouseY the y position of cursor that has clicked in the joystick panel
-	 * @return
 	 */
 
 	private void updateThumbPos(int mouseX, int mouseY) {

@@ -8,8 +8,8 @@ import java.awt.*;
 
 public class FunctionEditorWindow extends JFrame {
 
-	private PianoRoll pianoRoll;
-	private JPanel mainPanel;
+	private final PianoRoll pianoRoll;
+	private final JPanel mainPanel;
 
 	public FunctionEditorWindow (TAS parent){
 		mainPanel = new JPanel(new GridBagLayout());

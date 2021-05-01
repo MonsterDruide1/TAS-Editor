@@ -35,7 +35,7 @@ public class PianoRoll extends JTable implements ComponentListener {
 	private final DefaultTableModel model = new DefaultTableModel();
 	private final TAS parent;
 
-	private JFrame stickWindow;
+	private final JFrame stickWindow;
 
 
 	public PianoRoll (Script script, TAS parent){
@@ -161,9 +161,7 @@ public class PianoRoll extends JTable implements ComponentListener {
 			item.removeActionListener(item.getActionListeners()[0]);
 		}
 
-		item.addActionListener(e -> {
-			parent.executeAction(new LineAction(this.model, script, rows, type));
-		});
+		item.addActionListener(e -> parent.executeAction(new LineAction(this.model, script, rows, type)));
 	}
 
 	/**

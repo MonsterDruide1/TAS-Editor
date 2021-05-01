@@ -27,7 +27,7 @@ public class MainEditorWindow extends JFrame {
 	private Script script;
 	private File currentScriptFile;
 
-	private TAS parent;
+	private final TAS parent;
 
 
 	/**
