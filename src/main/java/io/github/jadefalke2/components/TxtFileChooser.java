@@ -42,7 +42,7 @@ public class TxtFileChooser extends JFileChooser {
 
 	}
 
-	public File saveFileAs (Script scriptToSave){
+	public File saveFileAs (Script scriptToSave) throws IOException {
 
 		setDialogTitle("Choose place to save");
 		setCurrentDirectory(new File(System.getProperty("user.home")));
@@ -55,7 +55,6 @@ public class TxtFileChooser extends JFileChooser {
 		File file = new File(fileName);
 
 		if (option == JFileChooser.APPROVE_OPTION) {
-
 			try {
 				file.createNewFile();
 				writeToFile(scriptToSave, file);

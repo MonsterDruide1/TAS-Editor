@@ -19,17 +19,17 @@ public class MainJMenuBar extends JMenuBar {
 
 		JMenu fileJMenu = add(new JMenu("File"));
 		JMenuItem newJMenuItem = fileJMenu.add(new JMenuItem("New"));
-		newJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_MASK));
+		newJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK));
 		newJMenuItem.addActionListener(e -> {});
 		newJMenuItem.setEnabled(false);
 
 		JMenuItem newWindowJMenuItem = fileJMenu.add(new JMenuItem("New Window"));
-		newWindowJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK));
+		newWindowJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
 		newWindowJMenuItem.addActionListener(e -> new TAS());
 		newWindowJMenuItem.setEnabled(true);
 
 		JMenuItem openJMenuItem = fileJMenu.add(new JMenuItem("Open..."));
-		openJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
+		openJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
 
 		openJMenuItem.addActionListener(e -> {
 			try {
@@ -42,12 +42,18 @@ public class MainJMenuBar extends JMenuBar {
 		openJMenuItem.setEnabled(true);
 
 		JMenuItem saveJMenuItem = fileJMenu.add(new JMenuItem("Save"));
-		saveJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
+		saveJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
 		saveJMenuItem.addActionListener(e -> mainEditorWindow.saveFile());
 
 		JMenuItem saveAsJMenuItem = fileJMenu.add(new JMenuItem("Save As..."));
-		saveAsJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK));
-		saveAsJMenuItem.addActionListener(e -> new TxtFileChooser().saveFileAs(mainEditorWindow.getScript()));
+		saveAsJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
+		saveAsJMenuItem.addActionListener(e -> {
+			try {
+				new TxtFileChooser().saveFileAs(mainEditorWindow.getScript());
+			} catch(IOException err){
+				err.printStackTrace();
+			}
+		});
 
 		fileJMenu.addSeparator();
 
@@ -57,27 +63,27 @@ public class MainJMenuBar extends JMenuBar {
 		JMenu editJMenu = add(new JMenu("Edit"));
 
 		JMenuItem undoJMenuItem = editJMenu.add(new JMenuItem("Undo"));
-		undoJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_MASK));
+		undoJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK));
 		undoJMenuItem.addActionListener(e -> parent.undo());
 
 		JMenuItem redoJMenuItem = editJMenu.add(new JMenuItem("Redo"));
-		redoJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK));
+		redoJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
 		redoJMenuItem.addActionListener(e -> parent.redo());
 
 		editJMenu.addSeparator();
 
 		JMenuItem cutJMenuItem = editJMenu.add(new JMenuItem("Cut"));
-		cutJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_MASK));
+		cutJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_DOWN_MASK));
 		cutJMenuItem.addActionListener(e -> {});
 		cutJMenuItem.setEnabled(false);
 
 		JMenuItem copyJMenuItem = editJMenu.add(new JMenuItem("Copy"));
-		copyJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_MASK));
+		copyJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK));
 		copyJMenuItem.addActionListener(e -> {});
 		copyJMenuItem.setEnabled(false);
 
 		JMenuItem pasteJMenuItem = editJMenu.add(new JMenuItem("Paste"));
-		pasteJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, InputEvent.CTRL_MASK));
+		pasteJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, InputEvent.CTRL_DOWN_MASK));
 		pasteJMenuItem.addActionListener(e -> {});
 		pasteJMenuItem.setEnabled(false);
 
@@ -87,7 +93,7 @@ public class MainJMenuBar extends JMenuBar {
 		deleteJMenuItem.setEnabled(false);
 
 		JMenuItem addNewLineItem = editJMenu.add(new JMenuItem("Add line"));
-		addNewLineItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK));
+		addNewLineItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
 		addNewLineItem.addActionListener(e -> mainEditorWindow.getPianoRoll().addEmptyRow());
 
 		JMenu viewJMenu = add(new JMenu("View"));

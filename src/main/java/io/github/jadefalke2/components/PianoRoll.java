@@ -8,9 +8,6 @@ import io.github.jadefalke2.stickRelatedClasses.StickImagePanel;
 import io.github.jadefalke2.stickRelatedClasses.StickImagePanel.StickType;
 import io.github.jadefalke2.util.Button;
 import io.github.jadefalke2.util.InputDrawMouseListener;
-import jdk.internal.util.xml.impl.Input;
-
-import javax.sound.sampled.Line;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -18,8 +15,6 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 import static io.github.jadefalke2.stickRelatedClasses.StickImagePanel.StickType.L_STICK;
 import static io.github.jadefalke2.stickRelatedClasses.StickImagePanel.StickType.R_STICK;
