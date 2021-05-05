@@ -2,14 +2,9 @@ package io.github.jadefalke2.actions;
 
 import io.github.jadefalke2.InputLine;
 import io.github.jadefalke2.Script;
-import io.github.jadefalke2.util.CorruptedScriptException;
 
 import javax.swing.table.DefaultTableModel;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.IntStream;
+
 
 public class LineAction implements Action{
 

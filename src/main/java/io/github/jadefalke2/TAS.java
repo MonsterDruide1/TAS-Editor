@@ -14,7 +14,6 @@ public class TAS {
 
 	private static TAS instance;
 
-	private StartUpWindow startUpWindow;
 	private MainEditorWindow mainEditorWindow;
 
 	private Preferences preferences;
@@ -48,7 +47,6 @@ public class TAS {
 		//initialising windows -> set to be invisible by default
 		//will be set visible once they are supposed to
 		mainEditorWindow = new MainEditorWindow(new FunctionEditorWindow());
-		//startUpWindow = new StartUpWindow(mainEditorWindow);
 
 		mainEditorWindow.prepareEditor(Script.getEmptyScript(10));
 
