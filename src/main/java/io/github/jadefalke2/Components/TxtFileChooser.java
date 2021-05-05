@@ -56,10 +56,8 @@ public class TxtFileChooser extends JFileChooser {
 		if (option == JFileChooser.APPROVE_OPTION) {
 
 			try {
-
 				file.createNewFile();
 				writeToFile(scriptToSave, file);
-
 			} catch (IOException ex) {
 				ex.printStackTrace();
 			}

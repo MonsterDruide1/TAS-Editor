@@ -1,8 +1,6 @@
 package io.github.jadefalke2.Components;
 
-import io.github.jadefalke2.Script;
 import io.github.jadefalke2.TAS;
-import io.github.jadefalke2.util.CorruptedScriptException;
 
 import javax.swing.*;
 import java.awt.*;

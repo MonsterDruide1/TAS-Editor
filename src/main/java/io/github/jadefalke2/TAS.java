@@ -1,6 +1,7 @@
 package io.github.jadefalke2;
 
 import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatLightLaf;
 import io.github.jadefalke2.Components.*;
 import io.github.jadefalke2.actions.Action;
 import io.github.jadefalke2.util.CircularStack;
@@ -14,12 +15,12 @@ public class TAS {
 
 	private static TAS instance;
 
-	private MainEditorWindow mainEditorWindow;
-
 	private Preferences preferences;
 
 	private Stack<Action> undoStack;
 	private Stack<Action> redoStack;
+
+	private MainEditorWindow mainEditorWindow;
 
 	public static void main(String[] args) {
 		new TAS();
@@ -36,9 +37,15 @@ public class TAS {
 
 	public void startProgram() {
 
-
 		//initialising preferences
 		preferences = Preferences.userRoot().node(getClass().getName());
+
+		//set correct UI theme
+		if (preferences.getBoolean("dark_theme", false)) {
+			setDarculaLookAndFeel();
+		} else {
+			setDefaultLookAndFeel();
+		}
 
 		//initialising stacks
 		undoStack = new CircularStack<>(1024);
@@ -50,12 +57,6 @@ public class TAS {
 
 		mainEditorWindow.prepareEditor(Script.getEmptyScript(10));
 
-		//set correct UI theme
-		if (preferences.getBoolean("dark_theme", false)) {
-			setDarculaLookAndFeel();
-		} else {
-			setDefaultLookAndFeel();
-		}
 
 	}
 
@@ -63,13 +64,14 @@ public class TAS {
 	// set look and feels
 
 	public void setDefaultLookAndFeel() {
-		//sets the look and feel to the OS' default
+		//sets the look and feel to light mode
 		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			UIManager.setLookAndFeel(new FlatLightLaf());
+			setDefaultsAfterThemeChange();
 			for(Window window : JFrame.getWindows()) {
 				SwingUtilities.updateComponentTreeUI(window);
 			}
-		} catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+		} catch (UnsupportedLookAndFeelException e) {
 			e.printStackTrace();
 		}
 	}
@@ -78,11 +80,21 @@ public class TAS {
 		//sets the look and feel to dark mode
 		try {
 			UIManager.setLookAndFeel(new FlatDarkLaf());
+			setDefaultsAfterThemeChange();
+
 			for(Window window : JFrame.getWindows()) {
 				SwingUtilities.updateComponentTreeUI(window);
 			}
+			System.out.println(mainEditorWindow.getPianoRoll().getGridColor());
 		} catch (UnsupportedLookAndFeelException e) {
 			e.printStackTrace();
+		}
+	}
+
+	private void setDefaultsAfterThemeChange () {
+		if (mainEditorWindow != null) {
+			mainEditorWindow.getPianoRoll().setShowGrid(true);
+			mainEditorWindow.getPianoRoll().setGridColor(Color.RED);
 		}
 	}
 

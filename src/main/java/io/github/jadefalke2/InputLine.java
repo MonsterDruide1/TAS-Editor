@@ -33,7 +33,7 @@ public class InputLine {
 	/**
 	 * Splits the full string of a line into its components. Namely: Frame number, L-stick, R-stick, buttons
 	 * @param full the full string of the line
-	 * @throws CorruptedScriptException
+	 * @throws CorruptedScriptException if an unknown button is entered
 	 */
 	private void splitIntoComponents(String full) throws CorruptedScriptException {
 
