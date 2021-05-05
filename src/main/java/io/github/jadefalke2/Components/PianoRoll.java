@@ -23,8 +23,6 @@ import static io.github.jadefalke2.stickRelatedClasses.StickImagePanel.StickType
 public class PianoRoll extends JTable {
 
 
-	private final double multiplicator = 1.5;
-
 	//used to test if a new window can be opened
 	private boolean stickWindowIsOpen;
 
@@ -174,23 +172,17 @@ public class PianoRoll extends JTable {
 			deleteOption.removeActionListener(deleteOption.getActionListeners()[0]);
 		}
 
-		deleteOption.addActionListener(e -> {
-			TAS.getInstance().executeAction(new LineAction(this.model,script,rows, LineAction.Type.DELETE));
-		});
+		deleteOption.addActionListener(e -> TAS.getInstance().executeAction(new LineAction(this.model,script,rows, LineAction.Type.DELETE)));
 
 		if (insertOption.getActionListeners().length != 0){
 			insertOption.removeActionListener(insertOption.getActionListeners()[0]);
 		}
-		insertOption.addActionListener(e -> {
-			TAS.getInstance().executeAction(new LineAction(this.model,script,rows, LineAction.Type.INSERT));
-		});
+		insertOption.addActionListener(e -> TAS.getInstance().executeAction(new LineAction(this.model,script,rows, LineAction.Type.INSERT)));
 
 		if (cloneOption.getActionListeners().length != 0){
 			cloneOption.removeActionListener(cloneOption.getActionListeners()[0]);
 		}
-		cloneOption.addActionListener(e -> {
-			TAS.getInstance().executeAction(new LineAction(this.model,script,rows, LineAction.Type.CLONE));
-		});
+		cloneOption.addActionListener(e -> TAS.getInstance().executeAction(new LineAction(this.model,script,rows, LineAction.Type.CLONE)));
 
 		popupMenu.show(this,(int)point.getX(),(int)point.getY());
 	}

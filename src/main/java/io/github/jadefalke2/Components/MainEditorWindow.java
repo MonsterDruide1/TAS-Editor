@@ -18,10 +18,7 @@ public class MainEditorWindow extends JFrame {
 	//JPanel
 	private JPanel editor;
 
-	//Components
-	private JScrollPane scrollPane;
 	private PianoRoll pianoRoll;
-	private MainJMenuBar mainJMenuBar;
 
 	//script
 	private Script script;
@@ -63,21 +60,6 @@ public class MainEditorWindow extends JFrame {
 		});
 	}
 
-	//TODO same method twice? Replace one of them...
-	/**
-	 * Prepares the editor to make it ready to be started
-	 * @param fileToOpen the file the editor will be opened with
-	 */
-	public void prepareEditor(File fileToOpen) {
-		setVisible(true);
-		setSize(2000,700);
-		try {
-			script = new Script(setScript(fileToOpen));
-		} catch (CorruptedScriptException | FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		startEditor();
-	}
 
 	/**
 	 * Prepares the editor to make it ready to be started
@@ -127,16 +109,15 @@ public class MainEditorWindow extends JFrame {
 		pianoRoll = new PianoRoll(script);
 		pianoRoll.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
-		scrollPane = new JScrollPane(pianoRoll);
+		//Components
+		JScrollPane scrollPane = new JScrollPane(pianoRoll);
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 
-		mainJMenuBar = new MainJMenuBar(this);
+		MainJMenuBar mainJMenuBar = new MainJMenuBar(this);
 
 		JButton functionEditorButton = new JButton("Function editor");
-		functionEditorButton.addActionListener(e -> {
-			functionEditorWindow.startUp();
-		});
+		functionEditorButton.addActionListener(e -> functionEditorWindow.startUp());
 
 		c.fill = GridBagConstraints.BOTH;
 		c.weighty = 1;
