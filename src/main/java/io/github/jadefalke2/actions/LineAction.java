@@ -73,7 +73,7 @@ public class LineAction implements Action{
 
 			InputLine currentLine = script.getInputLines().get(i);
 
-			currentLine.setFrame(currentLine.getFrame() + amount);
+			currentLine.increaseFrameBy(amount);
 			table.setValueAt(currentLine.getFrame(),i,0);
 		}
 	}

@@ -72,7 +72,7 @@ public class InputLine {
 	}
 
 
-	// getter (special)
+	// getter + setter (special)
 
 	/**
 	 * creates and returns a new string that contains all information about this input line
@@ -130,6 +130,14 @@ public class InputLine {
 	 */
 	public boolean isEmpty (){
 		return buttons.isEmpty() && stickR.isZeroZero() && stickL.isZeroZero();
+	}
+
+	/**
+	 * Increases the frame number by a specified amount
+	 * @param amount the amount to increase by
+	 */
+	public void increaseFrameBy (int amount){
+		frame += amount;
 	}
 
 
