@@ -2,6 +2,7 @@ package io.github.jadefalke2.util;
 
 //TODO still not happy with this, as it handles both frontend and backend...
 //toString used for displaying, name for script files
+
 public enum Button {
 	KEY_A,
 	KEY_B,

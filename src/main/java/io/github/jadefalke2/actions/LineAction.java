@@ -23,16 +23,9 @@ public class LineAction implements Action{
 	private final DefaultTableModel table;
 	private final Script script;
 	private final int[] rows;
-	private final InputLine[] previousLines;
+	private InputLine[] previousLines;
 
 	public LineAction(DefaultTableModel table, Script script, int[] rows, Type type) {
-
-		previousLines = new InputLine[rows.length];
-
-		for (int i = 0; i < rows.length; i++){
-			previousLines[i] = script.getInputLines().get(i).clone();
-		}
-
 		this.table = table;
 		this.script = script;
 		this.rows = rows;
@@ -64,11 +57,11 @@ public class LineAction implements Action{
 		switch (type){
 			case CLONE:
 			case INSERT:
-				//deleteRows();
+				deleteRows();
 				break;
 
 			case DELETE:
-				//
+				//insertRows(previousLines);
 				break;
 		}
 	}
@@ -90,17 +83,20 @@ public class LineAction implements Action{
 		InputLine[] tmpLines = new InputLine[rows.length];
 
 		for (int i = 0; i < rows.length; i++){
-			try {
-				tmpLines[i] = new InputLine(script.getInputLines().get(rows[0] + i).getFull());
-			} catch (CorruptedScriptException e) {
-				e.printStackTrace();
-			}
+			tmpLines[i] = script.getInputLines().get(rows[0] + i).clone();
 		}
 
 		insertRows(tmpLines);
 	}
 
 	private void deleteRows(){
+
+		previousLines = new InputLine[rows.length];
+
+		for (int i = 0; i < rows.length; i++){
+			previousLines[i] = script.getInputLines().get(i).clone();
+		}
+
 		for (int i = rows.length - 1; i >= 0; i--){
 			int actualIndex = rows[0] + i;
 
@@ -125,19 +121,16 @@ public class LineAction implements Action{
 	private void insertRows (InputLine[] inputLines){
 
 		// script
+
 		for (int i = 0; i < inputLines.length; i++){
-
 			int actualIndex = rows[0] + i;
-
 			script.getInputLines().add(actualIndex, inputLines[i]);
 		}
 
 		// table
 
 		for (int i = 0; i < inputLines.length; i++){
-
 			int actualIndex = rows[0] + i;
-
 			table.insertRow(actualIndex, script.getInputLines().get(actualIndex).getArray());
 		}
 
