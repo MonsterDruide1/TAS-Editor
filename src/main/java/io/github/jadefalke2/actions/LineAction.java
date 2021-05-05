@@ -73,49 +73,77 @@ public class LineAction implements Action{
 		}
 	}
 
-	private void cloneRows(){
-		insertRows(Arrays.stream(rows).mapToObj(row -> script.getInputLines().get(row).clone()).toArray(InputLine[]::new));
+
+
+	private void adjustLines(int start, int amount) {
+		for (int i = start; i < table.getRowCount(); i++){
+
+			InputLine currentLine = script.getInputLines().get(i);
+
+			currentLine.setFrame(currentLine.getFrame() + amount);
+			table.setValueAt(currentLine.getFrame(),i,0);
+		}
 	}
 
-	private void adjustLines(int offset, int amount) {
 
-		for (int i = rows[0] + offset; i < table.getRowCount(); i++){
+	private void cloneRows(){
+		InputLine[] tmpLines = new InputLine[rows.length];
 
-			InputLine cLine = script.getInputLines().get(i);
-
-			cLine.setFrame(cLine.getFrame() + amount);
-			table.setValueAt(cLine.getFrame(),i,0);
+		for (int i = 0; i < rows.length; i++){
+			try {
+				tmpLines[i] = new InputLine(script.getInputLines().get(rows[0] + i).getFull());
+			} catch (CorruptedScriptException e) {
+				e.printStackTrace();
+			}
 		}
+
+		insertRows(tmpLines);
 	}
 
 	private void deleteRows(){
+		for (int i = rows.length - 1; i >= 0; i--){
+			int actualIndex = rows[0] + i;
 
-		int start = rows[0];
-		int end = rows[rows.length - 1];
-
-
-		for (int i = start; i <= end; i++){
-			table.removeRow(rows[0]);
-			script.getInputLines().remove(rows[0]);
+			script.getInputLines().remove(actualIndex);
+			table.removeRow(actualIndex);
 		}
-		
-		adjustLines(0, -rows.length);
+
+		adjustLines(rows[0], -rows.length);
 	}
 
 	private void insertRows(){
-		//intelliJ suggested this, don't ask me how it works.
-		InputLine[] inputLines = IntStream.range(0, rows.length).mapToObj(i -> InputLine.getEmpty(rows[0] + i)).toArray(InputLine[]::new);
-		insertRows(inputLines);
+
+		InputLine[] tmpLines = new InputLine[rows.length];
+
+		for (int i = 0; i < rows.length; i++){
+			tmpLines[i] = InputLine.getEmpty(rows[0] + i);
+		}
+
+		insertRows(tmpLines);
 	}
 
 	private void insertRows (InputLine[] inputLines){
 
-		for (int i = 0; i < rows.length; i++) {
-			script.getInputLines().add(rows[0] + i + rows.length, inputLines[i]);
-			table.addRow(script.getInputLines().get(rows[0] + i + rows.length).getArray());
+		// script
+		for (int i = 0; i < inputLines.length; i++){
+
+			int actualIndex = rows[0] + i;
+
+			script.getInputLines().add(actualIndex, inputLines[i]);
 		}
 
-		adjustLines(rows.length, rows.length);
+		// table
+
+		for (int i = 0; i < inputLines.length; i++){
+
+			int actualIndex = rows[0] + i;
+
+			table.insertRow(actualIndex, script.getInputLines().get(actualIndex).getArray());
+		}
+
+		adjustLines(rows[0] + rows.length, rows.length);
+
 	}
+
 
 }
