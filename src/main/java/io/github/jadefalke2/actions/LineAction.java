@@ -7,6 +7,8 @@ import io.github.jadefalke2.util.CorruptedScriptException;
 import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.IntStream;
 
 public class LineAction implements Action{
@@ -54,6 +56,7 @@ public class LineAction implements Action{
 				insertRows();
 				break;
 		}
+
 	}
 
 	@Override
@@ -61,11 +64,11 @@ public class LineAction implements Action{
 		switch (type){
 			case CLONE:
 			case INSERT:
-				deleteRows();
+				//deleteRows();
 				break;
 
 			case DELETE:
-
+				//
 				break;
 		}
 	}
@@ -74,53 +77,45 @@ public class LineAction implements Action{
 		insertRows(Arrays.stream(rows).mapToObj(row -> script.getInputLines().get(row).clone()).toArray(InputLine[]::new));
 	}
 
-	private void adjustLines() {
-		table.moveRow(table.getRowCount() - rows.length, table.getRowCount() - 1, rows[0] + rows.length);
+	private void adjustLines(int offset, int amount) {
 
-		for (int i = rows[0] + rows.length; i < table.getRowCount(); i++){
+		for (int i = rows[0] + offset; i < table.getRowCount(); i++){
 
 			InputLine cLine = script.getInputLines().get(i);
-			cLine.setFrame(cLine.getFrame() + rows.length - 1);
 
+			cLine.setFrame(cLine.getFrame() + amount);
 			table.setValueAt(cLine.getFrame(),i,0);
 		}
 	}
 
 	private void deleteRows(){
 
-		for (int i = rows.length - 1; i >= 0; i--){
+		int start = rows[0];
+		int end = rows[rows.length - 1];
 
-			int cRow = rows[i];
 
-			script.getInputLines().remove(cRow);
-			table.removeRow(cRow);
+		for (int i = start; i <= end; i++){
+			table.removeRow(rows[0]);
+			script.getInputLines().remove(rows[0]);
 		}
-
-		for (int i = rows[0]; i < table.getRowCount(); i++){
-
-			InputLine curLine = script.getInputLines().get(i);
-			curLine.setFrame(curLine.getFrame() - rows.length);
-
-			table.setValueAt(script.getInputLines().get(i).getFrame(),i,0);
-		}
-
+		
+		adjustLines(0, -rows.length);
 	}
 
 	private void insertRows(){
 		//intelliJ suggested this, don't ask me how it works.
-		InputLine[] inputLines = IntStream.range(0, rows.length).mapToObj(i -> InputLine.getEmpty(rows[0] + i + 1)).toArray(InputLine[]::new);
+		InputLine[] inputLines = IntStream.range(0, rows.length).mapToObj(i -> InputLine.getEmpty(rows[0] + i)).toArray(InputLine[]::new);
 		insertRows(inputLines);
 	}
 
 	private void insertRows (InputLine[] inputLines){
+
 		for (int i = 0; i < rows.length; i++) {
-			script.getInputLines().add(rows[0] + i + rows.length - 1, inputLines[i]);
+			script.getInputLines().add(rows[0] + i + rows.length, inputLines[i]);
 			table.addRow(script.getInputLines().get(rows[0] + i + rows.length).getArray());
 		}
 
-		adjustLines();
+		adjustLines(rows.length, rows.length);
 	}
-
-
 
 }

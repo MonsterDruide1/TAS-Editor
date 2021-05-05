@@ -132,4 +132,5 @@ public class InputLine {
 	public static InputLine getEmpty (int frame){
 		return new InputLine(frame);
 	}
+
 }
