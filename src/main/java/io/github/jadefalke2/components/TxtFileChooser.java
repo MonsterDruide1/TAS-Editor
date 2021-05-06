@@ -20,6 +20,7 @@ public class TxtFileChooser extends JFileChooser {
 
 	/**
 	 * returns the chosen file
+	 * @param openFile whether it should display the opening or saving dialog
 	 * @return the chosen file
 	 */
 	public File getFile (boolean openFile){

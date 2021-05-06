@@ -309,9 +309,4 @@ public class StickImagePanel extends JPanel {
 		radiusSpinner.setValue(stickPosition.getRadius());
 	}
 
-	// getter
-
-	public StickPosition getStickPos (){
-    	return stickPosition;
-	}
 }
