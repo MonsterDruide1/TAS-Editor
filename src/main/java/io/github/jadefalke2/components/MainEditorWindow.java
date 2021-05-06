@@ -116,7 +116,7 @@ public class MainEditorWindow extends JFrame {
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 
-		MainJMenuBar mainJMenuBar = new MainJMenuBar(this);
+		MainJMenuBar mainJMenuBar = new MainJMenuBar(this, parent);
 
 		JButton functionEditorButton = new JButton("Function editor");
 		functionEditorButton.addActionListener(e -> functionEditorWindow.startUp());

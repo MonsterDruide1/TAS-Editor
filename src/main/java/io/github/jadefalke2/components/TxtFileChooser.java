@@ -49,10 +49,6 @@ public class TxtFileChooser extends JFileChooser {
 			writeToFile(scriptToSave, file);
 		}
 
-		if (option == JFileChooser.CANCEL_OPTION){
-			return null;
-		}
-
 		return file;
 	}
 

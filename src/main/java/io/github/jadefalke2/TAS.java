@@ -20,8 +20,6 @@ public class TAS {
 	private Stack<Action> undoStack;
 	private Stack<Action> redoStack;
 
-	private MainEditorWindow mainEditorWindow;
-
 	public static void main(String[] args) {
 		new TAS();
 	}
