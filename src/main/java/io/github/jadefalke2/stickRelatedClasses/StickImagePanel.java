@@ -90,6 +90,7 @@ public class StickImagePanel extends JPanel {
         add(joyStickPanel);
 
         joyStickPanel.add(joystick);
+        joyStickPanel.setLayout(new GridLayout(0, 1));
 
 
 
@@ -225,7 +226,7 @@ public class StickImagePanel extends JPanel {
 		JButton centerButton = new JButton("center");
 		centerButton.addActionListener(e -> {
 			joystick.centerThumbPad();
-			stickPosition.setPosition((int)joystick.getOutputPos().getX(),(int)joystick.getOutputPos().getY());
+			stickPosition.setPosition((int)joystick.getThumbPos().getX(),(int)joystick.getThumbPos().getY());
 			updateCartSpinners();
 			updatePolarSpinners();
 		});
@@ -268,8 +269,8 @@ public class StickImagePanel extends JPanel {
 
     	StickPosition oldStickPosition = new StickPosition(stickPosition);
 
-        int x = (int)joystick.getOutputPos().getX();
-        int y = (int)joystick.getOutputPos().getY();
+        int x = (int)joystick.getThumbPos().getX();
+        int y = (int)joystick.getThumbPos().getY();
 
         xSpinner.setValue(x);
         ySpinner.setValue(y);
