@@ -98,7 +98,6 @@ public class TAS {
 	private void setDefaultsAfterThemeChange () {
 		if (mainEditorWindow != null) {
 			mainEditorWindow.getPianoRoll().setShowGrid(true);
-			System.out.println(mainEditorWindow.getPianoRoll().getShowHorizontalLines());
 		}
 	}
 

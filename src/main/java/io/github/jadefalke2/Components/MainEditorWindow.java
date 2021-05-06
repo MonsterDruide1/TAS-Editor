@@ -55,7 +55,7 @@ public class MainEditorWindow extends JFrame {
 					//opens a new dialog that asks about saving, then exit
 					saveFile();
 				}
-				return result != 2; //cancel option
+				return result != JOptionPane.CANCEL_OPTION && result != JOptionPane.CLOSED_OPTION; //cancel option
 			}
 		});
 	}
