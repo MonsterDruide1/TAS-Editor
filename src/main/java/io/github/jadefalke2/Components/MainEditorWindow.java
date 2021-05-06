@@ -55,7 +55,7 @@ public class MainEditorWindow extends JFrame {
 					//opens a new dialog that asks about saving, then exit
 					saveFile();
 				}
-				return result != JOptionPane.CANCEL_OPTION && result != JOptionPane.CLOSED_OPTION; //cancel option
+				return result != JOptionPane.CANCEL_OPTION && result != JOptionPane.CLOSED_OPTION; //cancel option and dispose option
 			}
 		});
 	}
@@ -138,6 +138,7 @@ public class MainEditorWindow extends JFrame {
 	 * writes the current script into the current file
 	 */
 	public void saveFile() {
+
 		TxtFileChooser.writeToFile(script, currentScriptFile);
 	}
 

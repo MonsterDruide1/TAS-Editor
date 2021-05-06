@@ -96,6 +96,7 @@ public class PianoRoll extends JTable {
 			addRow(currentLine, model);
 		}
 
+		add(popupMenu);
 		preparepopUpMenu();
 
 	}
