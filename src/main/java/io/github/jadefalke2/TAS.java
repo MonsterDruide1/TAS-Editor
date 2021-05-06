@@ -67,10 +67,13 @@ public class TAS {
 		//sets the look and feel to light mode
 		try {
 			UIManager.setLookAndFeel(new FlatLightLaf());
-			setDefaultsAfterThemeChange();
+
 			for(Window window : JFrame.getWindows()) {
 				SwingUtilities.updateComponentTreeUI(window);
 			}
+
+			setDefaultsAfterThemeChange();
+
 		} catch (UnsupportedLookAndFeelException e) {
 			e.printStackTrace();
 		}
@@ -80,12 +83,13 @@ public class TAS {
 		//sets the look and feel to dark mode
 		try {
 			UIManager.setLookAndFeel(new FlatDarkLaf());
-			setDefaultsAfterThemeChange();
 
 			for(Window window : JFrame.getWindows()) {
 				SwingUtilities.updateComponentTreeUI(window);
 			}
-			System.out.println(mainEditorWindow.getPianoRoll().getGridColor());
+
+			setDefaultsAfterThemeChange();
+
 		} catch (UnsupportedLookAndFeelException e) {
 			e.printStackTrace();
 		}
@@ -94,7 +98,7 @@ public class TAS {
 	private void setDefaultsAfterThemeChange () {
 		if (mainEditorWindow != null) {
 			mainEditorWindow.getPianoRoll().setShowGrid(true);
-			mainEditorWindow.getPianoRoll().setGridColor(Color.RED);
+			System.out.println(mainEditorWindow.getPianoRoll().getShowHorizontalLines());
 		}
 	}
 

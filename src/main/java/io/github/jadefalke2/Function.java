@@ -18,7 +18,7 @@ public class Function extends Script{
 			if (i > table.getRowCount()){
 				mainScript.getInputLines().add(currentLineToInsert);
 				table.addRow(currentLineToInsert.getArray());
-			} else{
+			} else {
 				for (int j = 0; j < table.getColumnCount(); j++){
 					switch (j){
 
