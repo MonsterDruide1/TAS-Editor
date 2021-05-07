@@ -1,6 +1,6 @@
 package io.github.jadefalke2.util;
 
-import io.github.jadefalke2.Components.PianoRoll;
+import io.github.jadefalke2.components.PianoRoll;
 import io.github.jadefalke2.TAS;
 import io.github.jadefalke2.actions.CellAction;
 
@@ -30,12 +30,15 @@ public class InputDrawMouseListener extends MouseAdapter {
 	// mode
 	private Mode mode = Mode.IDLE;
 
+	private final TAS parent;
+
 	/**
 	 * Constructor
 	 * @param table the table the data is being read into
 	 */
-	public InputDrawMouseListener (PianoRoll table){
+	public InputDrawMouseListener (PianoRoll table, TAS parent){
 		this.table = table;
+		this.parent = parent;
 	}
 
 	/**
@@ -88,7 +91,7 @@ public class InputDrawMouseListener extends MouseAdapter {
 		if (row == -1 || col == -1) return;
 
 		if ((table.getValueAt(row, col).equals("") && (mode == Mode.ADDING)) || (!table.getValueAt(row, col).equals("") && (mode == Mode.REMOVING))){
-			TAS.getInstance().executeAction(new CellAction(table.getModel(), table.getScript(),row,col));
+			parent.executeAction(new CellAction(table.getModel(), table.getScript(),row,col));
 		}
 
 	}

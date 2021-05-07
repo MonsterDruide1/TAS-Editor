@@ -6,22 +6,23 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeListener;
-import java.util.Vector;
 
 public class Joystick extends JPanel {
 
+	private final static int BORDER_THICKNESS = 2;
+
 	// Coordinates + Data
 	private final int outputMax;
-	private final int thumbDiameter;
-	private final int thumbRadius;
-	private final int panelWidth;
-	private final int BORDER_THICKNESS = 2;
+	private int thumbDiameter;
+	private int thumbRadius;
+	private int panelWidth;
 
 	// stick positions
 	private final StickPosition[] stickPositions;
 
-	private final Point thumbPos = new Point();
-	protected SwingPropertyChangeSupport propertySupporter = new SwingPropertyChangeSupport(this);
+	private Point currentPos;
+	private Point visualOffset;
+	protected final SwingPropertyChangeSupport propertySupporter = new SwingPropertyChangeSupport(this);
 
 
 	/**
@@ -47,7 +48,7 @@ public class Joystick extends JPanel {
 
 			private void repaintAndTriggerListeners() {
 				SwingUtilities.getRoot(Joystick.this).repaint();
-				propertySupporter.firePropertyChange(null, null, getOutputPos());
+				propertySupporter.firePropertyChange(null, null, 1);
 			}
 
 			@Override
@@ -77,28 +78,27 @@ public class Joystick extends JPanel {
 
 		addMouseMotionListener(mouseAdapter);
 		addMouseListener(mouseAdapter);
-		setPreferredSize(new java.awt.Dimension(panel_width, panel_width));
-		setOpaque(false);
 
 		centerThumbPad();
 	}
 
 	public void centerThumbPad() {
-		thumbPos.x = panelWidth / 2;
-		thumbPos.y = panelWidth / 2;
+		currentPos = new Point(0, 0);
 	}
 
+	//TODO rework this section, as it does not make sense visually to scaled
 	/**
 	 * update both thumbPos
 	 *
 	 * @param mouseX the x position of cursor that has clicked in the joystick panel
 	 * @param mouseY the y position of cursor that has clicked in the joystick panel
-	 * @return
 	 */
 
 	private void updateThumbPos(int mouseX, int mouseY) {
 		// if the cursor is clicked out of bounds, we'll modify the position
 		// to be the closest point where we can draw the thumb pad completely
+		mouseX -= visualOffset.x;
+		mouseY -= visualOffset.y;
 		if (mouseX < thumbRadius)
 			mouseX = thumbRadius;
 		else if (mouseX > panelWidth - thumbRadius)
@@ -109,14 +109,14 @@ public class Joystick extends JPanel {
 		else if (mouseY > panelWidth - thumbRadius)
 			mouseY = panelWidth - thumbRadius;
 
-		thumbPos.x = mouseX;
-		thumbPos.y = mouseY;
+		currentPos = getOutputPos(new Point(mouseX, mouseY));
 	}
 
 	/**
-	 * @return the scaled position of the joystick thumb pad
+	 * @param thumbPos selected position on the panel (visually)
+	 * @return the scaled position of the joystick thumb pad (in normal range)
 	 */
-	public Point getOutputPos() {
+	public Point getOutputPos(Point thumbPos) {
 		Point result = new Point();
 		result.x = outputMax * (thumbPos.x - panelWidth / 2) / (panelWidth / 2 - thumbDiameter / 2);
 		result.y = -outputMax * (thumbPos.y - panelWidth / 2) / (panelWidth / 2 - thumbDiameter / 2);
@@ -128,10 +128,12 @@ public class Joystick extends JPanel {
 	}
 
 	public void setThumbPos (Point scaled){
-		thumbPos.x = (int)((scaled.x/(double)outputMax) * (panelWidth / 2.0 - thumbDiameter / 2.0) + (panelWidth / 2.0));
-		thumbPos.y = (int)((scaled.y/(double)-outputMax) * (panelWidth / 2.0 - thumbDiameter / 2.0) + (panelWidth / 2.0));
+		currentPos = scaled;
 	}
 
+	public Point getThumbPos(){
+		return currentPos;
+	}
 
 
 	// Overwrites
@@ -140,6 +142,12 @@ public class Joystick extends JPanel {
 	@Override
 	protected void paintComponent(final Graphics g) {
 		super.paintComponent(g);
+
+		panelWidth = Math.min(getHeight(), getWidth());
+		visualOffset = new Point(getWidth()/2-panelWidth/2, getHeight()/2-panelWidth/2);
+		g.translate(visualOffset.x, visualOffset.y);
+		thumbDiameter = panelWidth / 15;
+		thumbRadius = thumbDiameter / 2;
 
 		//joystick background border
 		g.setColor(Color.BLACK);
@@ -168,13 +176,14 @@ public class Joystick extends JPanel {
 			g.fillOval((int)downscaled.getX() - thumbRadius, (int) downscaled.getY() - thumbRadius, thumbRadius * 2, thumbRadius * 2);
 		}
 
-		//thumb pad border
+		Point downscaled = new Point(scaledToVisual(currentPos));
+
 		g.setColor(Color.BLACK);
-		g.fillOval(thumbPos.x - thumbRadius - BORDER_THICKNESS, thumbPos.y - thumbRadius - BORDER_THICKNESS, thumbRadius * 2 + BORDER_THICKNESS * 2, thumbRadius * 2 + BORDER_THICKNESS * 2);
+		g.fillOval((int)downscaled.getX() - thumbRadius - BORDER_THICKNESS, (int) downscaled.getY() - thumbRadius - BORDER_THICKNESS, thumbRadius * 2 + BORDER_THICKNESS * 2, thumbRadius * 2 + BORDER_THICKNESS * 2);
 
 		//thumb pad color
 		g.setColor(Color.RED);
-		g.fillOval(thumbPos.x - thumbRadius, thumbPos.y - thumbRadius, thumbRadius * 2, thumbRadius * 2);
+		g.fillOval((int)downscaled.getX() - thumbRadius, (int) downscaled.getY() - thumbRadius, thumbRadius * 2, thumbRadius * 2);
 	}
 
 	@Override

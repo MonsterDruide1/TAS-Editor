@@ -2,7 +2,7 @@ package io.github.jadefalke2;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
-import io.github.jadefalke2.Components.*;
+import io.github.jadefalke2.components.*;
 import io.github.jadefalke2.actions.Action;
 import io.github.jadefalke2.util.CircularStack;
 import io.github.jadefalke2.util.Stack;
@@ -13,21 +13,18 @@ import java.util.prefs.Preferences;
 
 public class TAS {
 
-	private static TAS instance;
+	private MainEditorWindow mainEditorWindow;
 
 	private Preferences preferences;
 
 	private Stack<Action> undoStack;
 	private Stack<Action> redoStack;
 
-	private MainEditorWindow mainEditorWindow;
-
 	public static void main(String[] args) {
 		new TAS();
 	}
 
 	public TAS() {
-		instance = this;
 		startProgram();
 	}
 
@@ -53,44 +50,46 @@ public class TAS {
 
 		//initialising windows -> set to be invisible by default
 		//will be set visible once they are supposed to
-		mainEditorWindow = new MainEditorWindow(new FunctionEditorWindow());
+
+		mainEditorWindow = new MainEditorWindow(new FunctionEditorWindow(this), this);
 
 		mainEditorWindow.prepareEditor(Script.getEmptyScript(10));
 
+		//set correct UI theme
+		updateLookAndFeel();
 
 	}
 
 
 	// set look and feels
 
+	public void updateLookAndFeel(){
+		if (preferences.getBoolean("dark_theme", false)) {
+			setDarculaLookAndFeel();
+		} else {
+			setDefaultLookAndFeel();
+		}
+	}
+
 	public void setDefaultLookAndFeel() {
 		//sets the look and feel to light mode
-		try {
-			UIManager.setLookAndFeel(new FlatLightLaf());
-
-			for(Window window : JFrame.getWindows()) {
-				SwingUtilities.updateComponentTreeUI(window);
-			}
-
-			setDefaultsAfterThemeChange();
-
-		} catch (UnsupportedLookAndFeelException e) {
-			e.printStackTrace();
-		}
+		setLookAndFeel("com.formdev.flatlaf.FlatLightLaf");
 	}
 
 	public void setDarculaLookAndFeel() {
 		//sets the look and feel to dark mode
-		try {
-			UIManager.setLookAndFeel(new FlatDarkLaf());
+		setLookAndFeel("com.formdev.flatlaf.FlatDarkLaf");
+	}
 
+	public void setLookAndFeel(String lookAndFeel){
+		try {
+			UIManager.setLookAndFeel(lookAndFeel);
 			for(Window window : JFrame.getWindows()) {
 				SwingUtilities.updateComponentTreeUI(window);
 			}
 
 			setDefaultsAfterThemeChange();
-
-		} catch (UnsupportedLookAndFeelException e) {
+		} catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
 	}
@@ -132,10 +131,6 @@ public class TAS {
 
 
 	// getter
-
-	public static TAS getInstance() {
-		return instance;
-	}
 
 	public Preferences getPreferences() {
 		return preferences;

@@ -1,19 +1,19 @@
-package io.github.jadefalke2.Components;
+package io.github.jadefalke2.components;
 
 import io.github.jadefalke2.Script;
-import sun.awt.image.GifImageDecoder;
+import io.github.jadefalke2.TAS;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class FunctionEditorWindow extends JFrame {
 
-	private PianoRoll pianoRoll;
-	private JPanel mainPanel;
+	private final PianoRoll pianoRoll;
+	private final JPanel mainPanel;
 
-	public FunctionEditorWindow (){
+	public FunctionEditorWindow (TAS parent){
 		mainPanel = new JPanel(new GridBagLayout());
-		pianoRoll = new PianoRoll(Script.getEmptyScript(5));
+		pianoRoll = new PianoRoll(Script.getEmptyScript(5), parent);
 	}
 
 	public void startUp (){

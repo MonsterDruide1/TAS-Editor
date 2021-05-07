@@ -31,18 +31,10 @@ public class LineAction implements Action{
 
 	@Override
 	public void execute() {
-		switch (type){
-			case CLONE:
-				cloneRows();
-				break;
-
-			case DELETE:
-				deleteRows();
-				break;
-
-			case INSERT:
-				insertRows();
-				break;
+		switch (type) {
+			case CLONE -> cloneRows();
+			case DELETE -> deleteRows();
+			case INSERT -> insertRows();
 		}
 
 	}
@@ -103,6 +95,7 @@ public class LineAction implements Action{
 	}
 
 	private void insertRows(){
+		InputLine[] newRows = new InputLine[rows.length];
 
 		InputLine[] tmpLines = new InputLine[rows.length];
 

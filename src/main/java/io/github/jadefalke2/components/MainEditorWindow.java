@@ -1,6 +1,8 @@
-package io.github.jadefalke2.Components;
+package io.github.jadefalke2.components;
 
 import io.github.jadefalke2.Script;
+import io.github.jadefalke2.TAS;
+import io.github.jadefalke2.Util;
 import io.github.jadefalke2.util.CorruptedScriptException;
 
 import javax.swing.*;
@@ -9,6 +11,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class MainEditorWindow extends JFrame {
 
@@ -24,15 +27,17 @@ public class MainEditorWindow extends JFrame {
 	private Script script;
 	private File currentScriptFile;
 
+	private final TAS parent;
+
 
 	/**
 	 * Constructor
 	 * @param functionEditorWindow the function editor window that can be opened from within this window
 	 */
-	public MainEditorWindow (FunctionEditorWindow functionEditorWindow){
+	public MainEditorWindow (FunctionEditorWindow functionEditorWindow, TAS parent){
 
 		this.functionEditorWindow = functionEditorWindow;
-		setPreferredSize(new Dimension(1500,700));
+		this.parent = parent;
 		setVisible(false);
 		setResizable(true);
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE); //let the WindowListener handle everything
@@ -60,14 +65,11 @@ public class MainEditorWindow extends JFrame {
 		});
 	}
 
-
 	/**
 	 * Prepares the editor to make it ready to be started
 	 * @param script the script that the editor will be opened with
 	 */
 	public void prepareEditor(Script script) {
-		setVisible(true);
-		setSize(2000,700);
 		try {
 			this.script = new Script(script.getFull());
 		} catch (CorruptedScriptException e) {
@@ -88,15 +90,15 @@ public class MainEditorWindow extends JFrame {
 		currentScriptFile = file;
 
 		try {
-			script = new Script(Script.fileToString(file));
+			script = new Script(Util.fileToString(file));
 		} catch (CorruptedScriptException e) {
 			e.printStackTrace();
 		}
 
-		pianoRoll.setNewScript(script);
+		pianoRoll.setScript(script);
 
 		// reads the file into a string that is returned
-		return Script.fileToString(file);
+		return Util.fileToString(file);
 	}
 
 	/**
@@ -106,7 +108,7 @@ public class MainEditorWindow extends JFrame {
 		editor = new JPanel(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 
-		pianoRoll = new PianoRoll(script);
+		pianoRoll = new PianoRoll(script, parent);
 		pianoRoll.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
 		//Components
@@ -114,7 +116,7 @@ public class MainEditorWindow extends JFrame {
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 
-		MainJMenuBar mainJMenuBar = new MainJMenuBar(this);
+		MainJMenuBar mainJMenuBar = new MainJMenuBar(this, parent);
 
 		JButton functionEditorButton = new JButton("Function editor");
 		functionEditorButton.addActionListener(e -> functionEditorWindow.startUp());
@@ -132,14 +134,18 @@ public class MainEditorWindow extends JFrame {
 		setJMenuBar(mainJMenuBar);
 
 		pack();
+		setVisible(true);
 	}
 
 	/**
 	 * writes the current script into the current file
 	 */
 	public void saveFile() {
-
-		TxtFileChooser.writeToFile(script, currentScriptFile);
+		try {
+			TxtFileChooser.writeToFile(script, currentScriptFile);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 

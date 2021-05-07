@@ -17,7 +17,7 @@ public class Script {
 	}
 
 	public Script (File file) throws CorruptedScriptException, FileNotFoundException {
-		this(fileToString(file));
+		this(Util.fileToString(file));
 	}
 
 	public ArrayList<InputLine> getInputLines() {
@@ -36,7 +36,7 @@ public class Script {
 
 	/**
 	 * prepares the script
-	 * @throws CorruptedScriptException
+	 * @throws CorruptedScriptException if lines are in the wrong order
 	 */
 	private void prepareScript (String script) throws CorruptedScriptException {
 		inputLines.clear();
@@ -84,16 +84,4 @@ public class Script {
 
 		return tmp;
 	}
-
-	/**
-	 * Takes in a file and converts it to a readble string
-	 * @param file the original file
-	 * @return the string
-	 */
-	public static String fileToString (File file) throws FileNotFoundException {
-		BufferedReader br = new BufferedReader(new FileReader(file));
-		return br.lines().map(sCurrentLine -> sCurrentLine + "\n").collect(Collectors.joining());
-	}
-
-
 }

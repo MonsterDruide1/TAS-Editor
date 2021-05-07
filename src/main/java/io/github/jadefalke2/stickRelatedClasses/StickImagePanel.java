@@ -13,6 +13,8 @@ import java.awt.event.*;
 
 public class StickImagePanel extends JPanel {
 
+	private final static int STICK_IMAGE_SIZE = 200;
+
 	// Spinners
     private final JSpinner xSpinner;
     private final JSpinner ySpinner;
@@ -29,6 +31,9 @@ public class StickImagePanel extends JPanel {
 
     private final DefaultTableModel table;
     private final int row;
+    private final TAS parent; //TODO avoid this
+
+	private boolean shouldTriggerUpdate = true;
 
 
     // Used to have a good way to differentiate sticks
@@ -46,7 +51,7 @@ public class StickImagePanel extends JPanel {
 	 * @param table the main table
 	 * @param row the current row
 	 */
-	public StickImagePanel(StickPosition stickPosition, StickType stickType,Script script, DefaultTableModel table, int row) {
+	public StickImagePanel(StickPosition stickPosition, StickType stickType,Script script, DefaultTableModel table, int row, TAS parent) {
 
 		// setting global vars
 		this.row = row;
@@ -54,6 +59,7 @@ public class StickImagePanel extends JPanel {
         this.inputLine = script.getInputLines().get(row);
         this.stickType = stickType;
 		this.stickPosition = stickPosition;
+		this.parent = parent;
 
 		StickPosition[] stickPositions = new StickPosition[Math.min(row,3)];
 
@@ -64,8 +70,7 @@ public class StickImagePanel extends JPanel {
 			stickPositions[i] = stickType == StickType.L_STICK ? currentLine.getStickL() : currentLine.getStickR();
 		}
 
-		final int STICK_IMAGE_SIZE = 200;
-		joystick = new Joystick(32767, STICK_IMAGE_SIZE,stickPositions );
+		joystick = new Joystick(32767, STICK_IMAGE_SIZE,stickPositions);
 
 
 		joystick.setThumbPos(new Point(stickPosition.getX(),stickPosition.getY()));
@@ -85,6 +90,7 @@ public class StickImagePanel extends JPanel {
         add(joyStickPanel);
 
         joyStickPanel.add(joystick);
+        joyStickPanel.setLayout(new GridLayout(0, 1));
 
 
 
@@ -108,41 +114,57 @@ public class StickImagePanel extends JPanel {
         radiusSpinner.setAlignmentX(10);
 
 
+        //TODO simplify these repeating listeners
         xSpinner.addChangeListener(e -> {
             stickPosition.setX((int) xSpinner.getValue());
-           	//updatePolarSpinners();
-			//uncommenting above leads to recursive method calls and a stackOverFlow error! -> fix
-            updateVisual();
-            repaint();
+           	if(shouldTriggerUpdate){
+				shouldTriggerUpdate = false;
+           		updatePolarSpinners();
+				updateVisual();
+				repaint();
+				shouldTriggerUpdate = true;
+			}
         });
         ySpinner.addChangeListener(e -> {
             stickPosition.setY((int) ySpinner.getValue());
-            //updatePolarSpinners();
-			//uncommenting above leads to recursive method calls and a stackOverFlow error! -> fix
-            updateVisual();
-            repaint();
+            if(shouldTriggerUpdate){
+				shouldTriggerUpdate = false;
+				updatePolarSpinners();
+				updateVisual();
+				repaint();
+				shouldTriggerUpdate = true;
+			}
         });
         radiusSpinner.addChangeListener(e -> {
             stickPosition.setRadius((double) radiusSpinner.getValue());
-            updateCartSpinners();
-            updateVisual();
-            repaint();
+            if(shouldTriggerUpdate){
+				shouldTriggerUpdate = false;
+				updateCartSpinners();
+				updateVisual();
+				repaint();
+				shouldTriggerUpdate = true;
+			}
         });
         angleSpinner.addChangeListener(e -> {
             stickPosition.setTheta((int)angleSpinner.getValue());
-            updateCartSpinners();
-            updateVisual();
-            repaint();
+            if(shouldTriggerUpdate){
+				shouldTriggerUpdate = false;
+				updateCartSpinners();
+				updateVisual();
+				repaint();
+				shouldTriggerUpdate = true;
+			}
         });
 
 
 
-        MouseListener mouseListener = new MouseAdapter() {
+        MouseAdapter mouseListener = new MouseAdapter() {
 
-            @Override
-            public void mouseMoved(MouseEvent e){
-                updateStickPosition();
-            }
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				//TODO dont update the mainPanel here, as UndoList will get too clustered
+				updateStickPosition();
+			}
 
             @Override
             public void mouseReleased(MouseEvent e){
@@ -156,27 +178,14 @@ public class StickImagePanel extends JPanel {
 			public void keyPressed(KeyEvent e) {
 
 				//
-				//NOT WORKING AS OF NOW
+				//NOT WORKING AS OF NOW, as focus always is on one of the spinners...
 				//
 
-				switch (e.getKeyCode()){
-
-					case KeyEvent.VK_0:
-						joystick.setThumbPos(new Point(32767,0));
-						break;
-
-					case KeyEvent.VK_KP_LEFT:
-						joystick.setThumbPos(new Point(-32767,0));
-						break;
-
-					case KeyEvent.VK_KP_UP:
-						joystick.setThumbPos(new Point(0,32767));
-						break;
-
-					case KeyEvent.VK_KP_DOWN:
-						joystick.setThumbPos(new Point(0,-32767));
-						break;
-
+				switch (e.getKeyCode()) {
+					case KeyEvent.VK_0 -> joystick.setThumbPos(new Point(32767, 0));
+					case KeyEvent.VK_KP_LEFT -> joystick.setThumbPos(new Point(-32767, 0));
+					case KeyEvent.VK_KP_UP -> joystick.setThumbPos(new Point(0, 32767));
+					case KeyEvent.VK_KP_DOWN -> joystick.setThumbPos(new Point(0, -32767));
 				}
 
 				repaint();
@@ -184,6 +193,7 @@ public class StickImagePanel extends JPanel {
 		};
 
 		joystick.addMouseListener(mouseListener);
+		joystick.addMouseMotionListener(mouseListener);
         joystick.addKeyListener(keyListener);
 
 
@@ -216,7 +226,7 @@ public class StickImagePanel extends JPanel {
 		JButton centerButton = new JButton("center");
 		centerButton.addActionListener(e -> {
 			joystick.centerThumbPad();
-			stickPosition.setPosition((int)joystick.getOutputPos().getX(),(int)joystick.getOutputPos().getY());
+			stickPosition.setPosition((int)joystick.getThumbPos().getX(),(int)joystick.getThumbPos().getY());
 			updateCartSpinners();
 			updatePolarSpinners();
 		});
@@ -259,8 +269,8 @@ public class StickImagePanel extends JPanel {
 
     	StickPosition oldStickPosition = new StickPosition(stickPosition);
 
-        int x = (int)joystick.getOutputPos().getX();
-        int y = (int)joystick.getOutputPos().getY();
+        int x = (int)joystick.getThumbPos().getX();
+        int y = (int)joystick.getThumbPos().getY();
 
         xSpinner.setValue(x);
         ySpinner.setValue(y);
@@ -270,7 +280,7 @@ public class StickImagePanel extends JPanel {
 
         stickPosition.setPosition(x,y);
 
-        TAS.getInstance().executeAction(new StickAction(inputLine, stickType, oldStickPosition, stickPosition, table, row));
+        parent.executeAction(new StickAction(inputLine, stickType, oldStickPosition, stickPosition, table, row));
 
 		repaint();
 	}
@@ -299,9 +309,4 @@ public class StickImagePanel extends JPanel {
 		radiusSpinner.setValue(stickPosition.getRadius());
 	}
 
-	// getter
-
-	public StickPosition getStickPos (){
-    	return stickPosition;
-	}
 }

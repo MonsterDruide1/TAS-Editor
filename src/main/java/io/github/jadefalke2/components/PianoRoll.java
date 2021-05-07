@@ -1,4 +1,4 @@
-package io.github.jadefalke2.Components;
+package io.github.jadefalke2.components;
 
 import io.github.jadefalke2.InputLine;
 import io.github.jadefalke2.Script;
@@ -8,23 +8,18 @@ import io.github.jadefalke2.stickRelatedClasses.StickImagePanel;
 import io.github.jadefalke2.stickRelatedClasses.StickImagePanel.StickType;
 import io.github.jadefalke2.util.Button;
 import io.github.jadefalke2.util.InputDrawMouseListener;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 
 import static io.github.jadefalke2.stickRelatedClasses.StickImagePanel.StickType.L_STICK;
 import static io.github.jadefalke2.stickRelatedClasses.StickImagePanel.StickType.R_STICK;
 
-public class PianoRoll extends JTable {
-
-
-	//used to test if a new window can be opened
-	private boolean stickWindowIsOpen;
+public class PianoRoll extends JTable implements ComponentListener {
 
 	//script
 	private Script script;
@@ -38,10 +33,15 @@ public class PianoRoll extends JTable {
 
 	// table model
 	private final DefaultTableModel model = new DefaultTableModel();
+	private final TAS parent;
 
-	public PianoRoll (Script script){
+	private final JFrame stickWindow;
+
+
+	public PianoRoll (Script script, TAS parent){
 
 		this.script = script;
+		this.parent = parent;
 
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment( SwingConstants.CENTER );
@@ -67,18 +67,8 @@ public class PianoRoll extends JTable {
 			model.addColumn(button.toString());
 		}
 
-		// adjust the size of all columns
-
-		int[] columnsWidth = {
-			45,											   		                // frame number
-			85, 85,										  	                	// sticks
-			18, 18, 18, 18, 25, 25, 18, 18, 18, 18, 30, 30, 30, 30, 50, 50	    // buttons
-		};
-
-
-		for (int i = 0; i < columnsWidth.length && i < getColumnCount(); i++) {
-			getColumnModel().getColumn(i).setPreferredWidth(columnsWidth[i]);
-		}
+		adjustColumnWidth();
+		addComponentListener(this);
 
 		//Center all columns
 		for (int i = 0; i < getColumnCount(); i++){
@@ -86,39 +76,45 @@ public class PianoRoll extends JTable {
 		}
 
 		// Mouse listener
-		InputDrawMouseListener mouseListener = new InputDrawMouseListener(this);
+		InputDrawMouseListener mouseListener = new InputDrawMouseListener(this, parent);
 		addMouseListener(mouseListener);
 		addMouseMotionListener(mouseListener);
 
-		// insert all existing rows
-		for (int i = 0; i < script.getInputLines().size(); i++) {
-			InputLine currentLine = script.getInputLines().get(i);
-			addRow(currentLine, model);
-		}
+		setScript(script);
 
 		add(popupMenu);
-		preparepopUpMenu();
+		preparePopUpMenu();
 
+		stickWindow = new JFrame();
+		stickWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		stickWindow.setLocation(new Point(200, 200));
+
+	}
+
+	public void adjustColumnWidth(){
+		// adjust the size of all columns
+
+		int[] columnsWidth = {
+			45,											   		                // frame number
+			85, 85,										  	                	// sticks
+			18, 18, 18, 18, 25, 25, 18, 18, 18, 18, 30, 30, 30, 30, 50, 50	    // buttons
+		};
+		float sum = 629;
+
+
+		for (int i = 0; i < columnsWidth.length && i < getColumnCount(); i++) {
+			getColumnModel().getColumn(i).setPreferredWidth((int)(getWidth()*(columnsWidth[i]/sum)));
+		}
 	}
 
 
 	/**
-	 * adds an empty line to the end of the script
-	 * @param script the script which the line is being added to
+	 * adds an empty line to the end of the current script
 	 */
-	public void addEmptyRow(Script script) {
-		script.getInputLines().add(InputLine.getEmpty(script.getInputLines().size()));
-		InputLine currentLine = script.getInputLines().get(script.getInputLines().size() - 1);
-		addRow(currentLine, model);
-	}
-
-	/**
-	 * adds a line at a specified place with specified contents
-	 * @param line the InputLine that is being inserted
-	 * @param model the table model
-	 */
-	private void addRow(InputLine line, DefaultTableModel model) {
-		model.addRow(line.getArray());
+	public void addEmptyRow() {
+		InputLine newEmpty = InputLine.getEmpty(script.getInputLines().size() + 1); //TODO doesn't make sense on a script with missing frames
+		script.getInputLines().add(newEmpty);
+		model.addRow(newEmpty.getArray());
 	}
 
 	/**
@@ -128,36 +124,20 @@ public class PianoRoll extends JTable {
 	 * @param script the script
 	 */
 	public void openStickWindow (int row,int col, Script script){
+		if (!stickWindow.isVisible()) {
 
-		StickType stickType = col == 1 ? L_STICK : R_STICK;
-		JFrame stickWindow;
-
-		if (!stickWindowIsOpen) {
-			stickWindowIsOpen = true;
-
-			stickWindow = new JFrame();
-
-			stickWindow.setResizable(false);
-			stickWindow.setVisible(true);
-			stickWindow.setSize(300, 500);
-			stickWindow.setLocation(new Point(200, 200));
+			stickWindow.getContentPane().removeAll();
 
 			// Creates StickImagePanel
+			StickType stickType = col == 1 ? L_STICK : R_STICK;
 			InputLine tmpCurrentInputLine = script.getInputLines().get(row);
-			StickImagePanel stickImagePanel = new StickImagePanel(stickType == L_STICK ? tmpCurrentInputLine.getStickL() : tmpCurrentInputLine.getStickR(), stickType, script, model, row);
-
-
-			stickWindow.addWindowListener(new WindowAdapter() {
-				@Override
-				public void windowClosing(WindowEvent e) {
-					stickWindowIsOpen = false;
-					setValueAt(stickImagePanel.getStickPos().toCartString(),row,col);
-					e.getWindow().dispose();
-				}
-			});
+			//TODO way too many parameters. rework this.
+			StickImagePanel stickImagePanel = new StickImagePanel(stickType == L_STICK ? tmpCurrentInputLine.getStickL() : tmpCurrentInputLine.getStickR(), stickType, script, model, row, parent);
 
 			// adds the panel to the frame
 			stickWindow.add(stickImagePanel);
+			stickWindow.setVisible(true);
+			stickWindow.pack();
 		}
 
 	}
@@ -169,44 +149,32 @@ public class PianoRoll extends JTable {
 	 */
 	public void openPopUpMenu(int[] rows, Point point){
 
-		if (deleteOption.getActionListeners().length != 0){
-			deleteOption.removeActionListener(deleteOption.getActionListeners()[0]);
-		}
-
-		deleteOption.addActionListener(e -> TAS.getInstance().executeAction(new LineAction(this.model,script,rows, LineAction.Type.DELETE)));
-
-		if (insertOption.getActionListeners().length != 0){
-			insertOption.removeActionListener(insertOption.getActionListeners()[0]);
-		}
-		insertOption.addActionListener(e -> TAS.getInstance().executeAction(new LineAction(this.model,script,rows, LineAction.Type.INSERT)));
-
-		if (cloneOption.getActionListeners().length != 0){
-			cloneOption.removeActionListener(cloneOption.getActionListeners()[0]);
-		}
-		cloneOption.addActionListener(e -> TAS.getInstance().executeAction(new LineAction(this.model,script,rows, LineAction.Type.CLONE)));
+		setListener(deleteOption, rows, LineAction.Type.DELETE);
+		setListener(insertOption, rows, LineAction.Type.INSERT);
+		setListener(cloneOption, rows, LineAction.Type.CLONE);
 
 		popupMenu.show(this,(int)point.getX(),(int)point.getY());
+	}
+
+	public void setListener(JMenuItem item, int[] rows, LineAction.Type type){
+		while (item.getActionListeners().length > 0){
+			item.removeActionListener(item.getActionListeners()[0]);
+		}
+
+		item.addActionListener(e -> parent.executeAction(new LineAction(this.model, script, rows, type)));
 	}
 
 	/**
 	 * prepares the popup menu for the line actions to be called at a later point
 	 */
-	private void preparepopUpMenu (){
-
-		deleteOption.setActionCommand("delete");
-		insertOption.setActionCommand("insert");
-		cloneOption.setActionCommand("clone");
-
+	private void preparePopUpMenu (){
 
 		popupMenu.add(deleteOption);
 		popupMenu.add(insertOption);
 		popupMenu.add(cloneOption);
 
-		popupMenu.setVisible(true);
-		popupMenu.setSize(100,100);
-		popupMenu.setVisible(false);
-
 		add(popupMenu);
+		popupMenu.pack();
 	}
 
 	/**
@@ -229,14 +197,10 @@ public class PianoRoll extends JTable {
 	 * sets the script to a new script
 	 * @param script the new script
 	 */
-	public void setNewScript (Script script){
+	public void setScript (Script script){
 		this.script = script;
 
-		int origRowCount = getRowCount();
-
-		for (int i = 0; i < origRowCount; i++) {
-			model.removeRow(0);
-		}
+		model.setRowCount(0);
 
 		for (int i = 0; i < script.getInputLines().size(); i++){
 			model.addRow(script.getInputLines().get(i).getArray());
@@ -261,4 +225,17 @@ public class PianoRoll extends JTable {
 	public boolean isCellEditable(int row, int column) {
 		return false;
 	}
+
+	@Override
+	public void componentResized(ComponentEvent e) {
+		adjustColumnWidth();
+	}
+
+	//unused methods from ComponentListener
+	@Override
+	public void componentMoved(ComponentEvent e) {}
+	@Override
+	public void componentShown(ComponentEvent e) {}
+	@Override
+	public void componentHidden(ComponentEvent e) {}
 }
