@@ -1,7 +1,5 @@
 package io.github.jadefalke2;
 
-import com.formdev.flatlaf.FlatDarkLaf;
-import com.formdev.flatlaf.FlatLightLaf;
 import io.github.jadefalke2.components.*;
 import io.github.jadefalke2.actions.Action;
 import io.github.jadefalke2.util.CircularStack;
