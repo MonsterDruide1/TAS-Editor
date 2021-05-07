@@ -4,6 +4,7 @@ import io.github.jadefalke2.InputLine;
 import io.github.jadefalke2.Script;
 
 import javax.swing.table.DefaultTableModel;
+import java.util.Arrays;
 
 
 public class LineAction implements Action{
@@ -42,14 +43,8 @@ public class LineAction implements Action{
 	@Override
 	public void revert() {
 		switch (type){
-			case CLONE:
-			case INSERT:
-				deleteRows();
-				break;
-
-			case DELETE:
-				//insertRows(previousLines);
-				break;
+			case CLONE, INSERT -> deleteRows();
+			case DELETE -> insertRows(previousLines);
 		}
 	}
 
@@ -78,11 +73,7 @@ public class LineAction implements Action{
 
 	private void deleteRows(){
 
-		previousLines = new InputLine[rows.length];
-
-		for (int i = 0; i < rows.length; i++){
-			previousLines[i] = script.getInputLines().get(i).clone();
-		}
+		previousLines = Arrays.stream(rows).mapToObj(i -> script.getInputLines().get(i)).toArray(InputLine[]::new);
 
 		for (int i = rows.length - 1; i >= 0; i--){
 			int actualIndex = rows[0] + i;
@@ -95,8 +86,6 @@ public class LineAction implements Action{
 	}
 
 	private void insertRows(){
-		InputLine[] newRows = new InputLine[rows.length];
-
 		InputLine[] tmpLines = new InputLine[rows.length];
 
 		for (int i = 0; i < rows.length; i++){
