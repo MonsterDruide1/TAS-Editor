@@ -4,6 +4,7 @@ import io.github.jadefalke2.TAS;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.FileNotFoundException;
@@ -74,23 +75,25 @@ public class MainJMenuBar extends JMenuBar {
 
 		JMenuItem cutJMenuItem = editJMenu.add(new JMenuItem("Cut"));
 		cutJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_DOWN_MASK));
-		cutJMenuItem.addActionListener(e -> {});
-		cutJMenuItem.setEnabled(false);
+		cutJMenuItem.addActionListener(e -> parent.cut());
 
 		JMenuItem copyJMenuItem = editJMenu.add(new JMenuItem("Copy"));
 		copyJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK));
-		copyJMenuItem.addActionListener(e -> {});
-		copyJMenuItem.setEnabled(false);
+		copyJMenuItem.addActionListener(e -> parent.copy());
 
 		JMenuItem pasteJMenuItem = editJMenu.add(new JMenuItem("Paste"));
 		pasteJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, InputEvent.CTRL_DOWN_MASK));
-		pasteJMenuItem.addActionListener(e -> {});
-		pasteJMenuItem.setEnabled(false);
+		pasteJMenuItem.addActionListener(e -> {
+			try {
+				parent.paste();
+			} catch (IOException | UnsupportedFlavorException ioException) {
+				ioException.printStackTrace();
+			}
+		});
 
 		JMenuItem deleteJMenuItem = editJMenu.add(new JMenuItem("Delete"));
 		deleteJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0));
-		deleteJMenuItem.addActionListener(e -> {});
-		deleteJMenuItem.setEnabled(false);
+		deleteJMenuItem.addActionListener(e -> parent.delete());
 
 		JMenuItem addNewLineItem = editJMenu.add(new JMenuItem("Add line"));
 		addNewLineItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));

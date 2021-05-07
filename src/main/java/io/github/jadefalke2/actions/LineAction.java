@@ -12,23 +12,29 @@ public class LineAction implements Action{
 	public enum Type {
 		DELETE,
 		INSERT,
-		CLONE
+		CLONE,
+		REPLACE
 	}
 
 	private final Type type;
 	private final DefaultTableModel table;
 	private final Script script;
 	private final int[] rows;
-	private InputLine[] previousLines;
+	private final InputLine[] replacementLines;
+	private final InputLine[] previousLines;
 
 	public LineAction(DefaultTableModel table, Script script, int[] rows, Type type) {
+		this(table, script, rows, null, type);
+	}
+	public LineAction(DefaultTableModel table, Script script, int[] rows, InputLine[] replacementLines, Type type) {
 		this.table = table;
 		this.script = script;
 		this.rows = rows;
 		this.type = type;
-	}
+		this.replacementLines = replacementLines;
 
-	//TODO UNDO
+		previousLines = Arrays.stream(rows).mapToObj(i -> script.getInputLines().get(i)).toArray(InputLine[]::new);
+	}
 
 	@Override
 	public void execute() {
@@ -36,6 +42,7 @@ public class LineAction implements Action{
 			case CLONE -> cloneRows();
 			case DELETE -> deleteRows();
 			case INSERT -> insertRows();
+			case REPLACE -> replaceRows();
 		}
 
 	}
@@ -45,10 +52,20 @@ public class LineAction implements Action{
 		switch (type){
 			case CLONE, INSERT -> deleteRows();
 			case DELETE -> insertRows(previousLines);
+			case REPLACE -> revertReplaceRows();
 		}
 	}
 
 
+
+	private void replaceRows(){
+		deleteRows();
+		insertRows(replacementLines);
+	}
+	private void revertReplaceRows(){
+		deleteRows(Arrays.stream(replacementLines).mapToInt(InputLine::getFrame).toArray());
+		insertRows(previousLines);
+	}
 
 	private void adjustLines(int start, int amount) {
 		for (int i = start; i < table.getRowCount(); i++){
@@ -72,8 +89,9 @@ public class LineAction implements Action{
 	}
 
 	private void deleteRows(){
-
-		previousLines = Arrays.stream(rows).mapToObj(i -> script.getInputLines().get(i)).toArray(InputLine[]::new);
+		deleteRows(rows);
+	}
+	private void deleteRows(int[] rows){
 
 		for (int i = rows.length - 1; i >= 0; i--){
 			int actualIndex = rows[0] + i;
@@ -97,21 +115,14 @@ public class LineAction implements Action{
 
 	private void insertRows (InputLine[] inputLines){
 
-		// script
-
 		for (int i = 0; i < inputLines.length; i++){
 			int actualIndex = rows[0] + i;
+			inputLines[i].setFrame(actualIndex);
 			script.getInputLines().add(actualIndex, inputLines[i]);
-		}
-
-		// table
-
-		for (int i = 0; i < inputLines.length; i++){
-			int actualIndex = rows[0] + i;
 			table.insertRow(actualIndex, script.getInputLines().get(actualIndex).getArray());
 		}
 
-		adjustLines(rows[0] + rows.length, rows.length);
+		adjustLines(rows[0] + inputLines.length, inputLines.length);
 
 	}
 

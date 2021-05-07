@@ -1,12 +1,20 @@
 package io.github.jadefalke2;
 
+import io.github.jadefalke2.actions.LineAction;
 import io.github.jadefalke2.components.*;
 import io.github.jadefalke2.actions.Action;
 import io.github.jadefalke2.util.CircularStack;
+import io.github.jadefalke2.util.CorruptedScriptException;
 import io.github.jadefalke2.util.Stack;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.prefs.Preferences;
 
 public class TAS {
@@ -125,6 +133,37 @@ public class TAS {
 		Action action = redoStack.pop();
 		action.execute();
 		undoStack.push(action);
+	}
+
+	public void cut(){
+		copy();
+		delete();
+	}
+
+	public void copy(){
+		InputLine[] rows = mainEditorWindow.getPianoRoll().getSelectedInputRows();
+		String[] rowStrings = Arrays.stream(rows).map(InputLine::getFull).toArray(String[]::new);
+		String fullString = String.join("\n", rowStrings);
+
+		StringSelection selection = new StringSelection(fullString);
+		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, selection);
+	}
+
+	public void delete(){
+		mainEditorWindow.getPianoRoll().deleteSelectedRows();
+	}
+
+	public void paste() throws IOException, UnsupportedFlavorException {
+		String clipContent = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getContents(this).getTransferData(DataFlavor.stringFlavor);
+		InputLine[] rows = Arrays.stream(clipContent.split("\n")).map(line -> {
+			try {
+				return new InputLine(line);
+			} catch(CorruptedScriptException e){
+				System.out.println("invalid clipboard content: "+line); //TODO proper error handling here
+				return null;
+			}
+		}).toArray(InputLine[]::new);
+		mainEditorWindow.getPianoRoll().replaceSelectedRows(rows);
 	}
 
 

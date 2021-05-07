@@ -13,8 +13,13 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import java.awt.*;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.event.ActionEvent;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.beans.PropertyChangeListener;
+import java.io.IOException;
+import java.util.Arrays;
 
 import static io.github.jadefalke2.stickRelatedClasses.StickImagePanel.StickType.L_STICK;
 import static io.github.jadefalke2.stickRelatedClasses.StickImagePanel.StickType.R_STICK;
@@ -50,7 +55,6 @@ public class PianoRoll extends JTable implements ComponentListener {
 		setModel(model);
 		setDragEnabled(false);
 		setRowHeight(20);
-		setMinimumSize(new Dimension(1000,200));
 		setShowGrid(true);
 		setFont(new Font("Arial", Font.PLAIN, 15));
 
@@ -89,6 +93,7 @@ public class PianoRoll extends JTable implements ComponentListener {
 		stickWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		stickWindow.setLocation(new Point(200, 200));
 
+		//FIXME Table blocks special key-shortcuts like CTRL+C!
 	}
 
 	public void adjustColumnWidth(){
@@ -175,6 +180,18 @@ public class PianoRoll extends JTable implements ComponentListener {
 
 		add(popupMenu);
 		popupMenu.pack();
+	}
+
+	public void deleteSelectedRows(){
+		parent.executeAction(new LineAction(this.model, script, getSelectedRows(), LineAction.Type.DELETE));
+	}
+
+	public void replaceSelectedRows(InputLine[] rows){
+		parent.executeAction(new LineAction(model, script, getSelectedRows(), rows, LineAction.Type.REPLACE));
+	}
+
+	public InputLine[] getSelectedInputRows(){
+		return Arrays.stream(getSelectedRows()).mapToObj(i -> script.getInputLines().get(i)).toArray(InputLine[]::new);
 	}
 
 	/**

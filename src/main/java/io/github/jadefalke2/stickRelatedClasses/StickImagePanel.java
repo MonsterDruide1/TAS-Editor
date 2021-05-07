@@ -110,10 +110,6 @@ public class StickImagePanel extends JPanel {
 		radiusSpinner.setValue(stickPosition.getRadius());
 		angleSpinner.setValue((int)Math.toDegrees(stickPosition.getTheta()));
 
-        radiusSpinner.setPreferredSize(new Dimension(50,20));
-        radiusSpinner.setAlignmentX(10);
-
-
         //TODO simplify these repeating listeners
         xSpinner.addChangeListener(e -> {
             stickPosition.setX((int) xSpinner.getValue());
