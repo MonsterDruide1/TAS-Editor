@@ -112,7 +112,7 @@ public class PianoRoll extends JTable implements ComponentListener {
 	 * adds an empty line to the end of the current script
 	 */
 	public void addEmptyRow() {
-		InputLine newEmpty = InputLine.getEmpty(script.getInputLines().size() + 1); //TODO doesn't make sense on a script with missing frames
+		InputLine newEmpty = InputLine.getEmpty(script.getInputLines().size()); //TODO doesn't make sense on a script with missing frames
 		script.getInputLines().add(newEmpty);
 		model.addRow(newEmpty.getArray());
 	}
