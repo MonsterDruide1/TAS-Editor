@@ -157,17 +157,18 @@ public class Joystick extends JPanel {
 		g.setColor(Color.GRAY);
 		g.fillOval(thumbRadius + BORDER_THICKNESS, thumbRadius + BORDER_THICKNESS, panelWidth - thumbDiameter - BORDER_THICKNESS * 2, panelWidth - thumbDiameter - BORDER_THICKNESS * 2);
 
-		//Middle lines
-		g.setColor(Color.black);
-		g.drawLine(panelWidth / 2, thumbRadius + BORDER_THICKNESS, panelWidth / 2, panelWidth - thumbRadius - BORDER_THICKNESS);
-		g.drawLine(thumbRadius + BORDER_THICKNESS, panelWidth / 2, panelWidth - thumbRadius - BORDER_THICKNESS, panelWidth / 2);
 
 		for (int i = 0; i < stickPositions.length; i++){
 			Point tmp = new Point(stickPositions[i].getX(),stickPositions[i].getY());
 			Point downscaled = new Point(scaledToVisual(tmp));
 
-			final double percentage = i/(double)stickPositions.length;
+			double percentage = i/(double)stickPositions.length;
 
+			//overdraw positions painted below this one
+			g.setColor(Color.GRAY);
+			g.fillOval((int)downscaled.getX() - thumbRadius - BORDER_THICKNESS, (int) downscaled.getY() - thumbRadius - BORDER_THICKNESS, thumbRadius * 2 + BORDER_THICKNESS * 2, thumbRadius * 2 + BORDER_THICKNESS * 2);
+
+			//black border
 			g.setColor(new Color(0,0,0,(int)(150*percentage)));
 			g.fillOval((int)downscaled.getX() - thumbRadius - BORDER_THICKNESS, (int) downscaled.getY() - thumbRadius - BORDER_THICKNESS, thumbRadius * 2 + BORDER_THICKNESS * 2, thumbRadius * 2 + BORDER_THICKNESS * 2);
 
@@ -184,6 +185,11 @@ public class Joystick extends JPanel {
 		//thumb pad color
 		g.setColor(Color.RED);
 		g.fillOval((int)downscaled.getX() - thumbRadius, (int) downscaled.getY() - thumbRadius, thumbRadius * 2, thumbRadius * 2);
+
+		//Middle lines
+		g.setColor(Color.black);
+		g.drawLine(panelWidth / 2, thumbRadius + BORDER_THICKNESS, panelWidth / 2, panelWidth - thumbRadius - BORDER_THICKNESS);
+		g.drawLine(thumbRadius + BORDER_THICKNESS, panelWidth / 2, panelWidth - thumbRadius - BORDER_THICKNESS, panelWidth / 2);
 	}
 
 	@Override
