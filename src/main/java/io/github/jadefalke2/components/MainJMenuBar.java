@@ -1,6 +1,7 @@
 package io.github.jadefalke2.components;
 
 import io.github.jadefalke2.TAS;
+import io.github.jadefalke2.util.Settings;
 
 import javax.swing.*;
 import java.awt.*;
@@ -99,16 +100,21 @@ public class MainJMenuBar extends JMenuBar {
 		addNewLineItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
 		addNewLineItem.addActionListener(e -> mainEditorWindow.getPianoRoll().addEmptyRow());
 
+		editJMenu.addSeparator();
+
+		JMenuItem settingsItem = editJMenu.add("Settings");
+		settingsItem.addActionListener(e -> parent.openSettings());
+
 		JMenu viewJMenu = add(new JMenu("View"));
 
-		Preferences preferences = parent.getPreferences();
+		Settings preferences = parent.getPreferences();
 
-		JCheckBoxMenuItem darkThemeJMenuItem = new JCheckBoxMenuItem("Toggle Dark Theme", preferences.getBoolean("dark_theme", false));
+		JCheckBoxMenuItem darkThemeJMenuItem = new JCheckBoxMenuItem("Toggle Dark Theme", preferences.darkTheme);
 
 		viewJMenu.add(darkThemeJMenuItem);
 
 		darkThemeJMenuItem.addItemListener(e -> {
-			preferences.putBoolean("dark_theme", darkThemeJMenuItem.getState());
+			preferences.darkTheme = darkThemeJMenuItem.getState();
 			parent.updateLookAndFeel();
 		});
 

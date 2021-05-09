@@ -5,6 +5,7 @@ import io.github.jadefalke2.components.*;
 import io.github.jadefalke2.actions.Action;
 import io.github.jadefalke2.util.CircularStack;
 import io.github.jadefalke2.util.CorruptedScriptException;
+import io.github.jadefalke2.util.Settings;
 import io.github.jadefalke2.util.Stack;
 
 import javax.swing.*;
@@ -15,13 +16,14 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 public class TAS {
 
 	private MainEditorWindow mainEditorWindow;
 
-	private Preferences preferences;
+	private Settings preferences;
 
 	private Stack<Action> undoStack;
 	private Stack<Action> redoStack;
@@ -41,10 +43,21 @@ public class TAS {
 	public void startProgram() {
 
 		//initialising preferences
-		preferences = Preferences.userRoot().node(getClass().getName());
+		try {
+			preferences = new Settings(Preferences.userRoot().node(getClass().getName()));
+		} catch (BackingStoreException e) {
+			e.printStackTrace();
+		}
+		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+			try {
+				preferences.storeSettings();
+			} catch (BackingStoreException e) {
+				e.printStackTrace();
+			}
+		}));
 
 		//set correct UI theme
-		if (preferences.getBoolean("dark_theme", false)) {
+		if (preferences.darkTheme) {
 			setDarculaLookAndFeel();
 		} else {
 			setDefaultLookAndFeel();
@@ -70,7 +83,7 @@ public class TAS {
 	// set look and feels
 
 	public void updateLookAndFeel(){
-		if (preferences.getBoolean("dark_theme", false)) {
+		if (preferences.darkTheme) {
 			setDarculaLookAndFeel();
 		} else {
 			setDefaultLookAndFeel();
@@ -166,10 +179,14 @@ public class TAS {
 		mainEditorWindow.getPianoRoll().replaceSelectedRows(rows);
 	}
 
+	public void openSettings(){
+		new SettingsDialog(preferences).show();
+	}
+
 
 	// getter
 
-	public Preferences getPreferences() {
+	public Settings getPreferences() {
 		return preferences;
 	}
 
