@@ -65,7 +65,7 @@ public class StickImagePanel extends JPanel {
 
 		// sets the contents of the stickpositions array to be the previous stick positions of the same stick
 		for (int i = 0; i < stickPositions.length; i++){
-			InputLine currentLine = script.getInputLines().get(row - i);
+			InputLine currentLine = script.getInputLines().get(row - stickPositions.length + i);
 
 			stickPositions[i] = stickType == StickType.L_STICK ? currentLine.getStickL() : currentLine.getStickR();
 		}
