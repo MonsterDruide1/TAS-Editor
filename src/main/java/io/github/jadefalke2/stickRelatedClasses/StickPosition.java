@@ -129,6 +129,7 @@ public class StickPosition {
 		this.x = x;
 		this.y = y;
 		updatePolar();
+		updateCart(); //to apply clamped radius
 	}
 
 	/**

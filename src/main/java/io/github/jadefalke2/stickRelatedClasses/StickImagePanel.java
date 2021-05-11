@@ -262,13 +262,15 @@ public class StickImagePanel extends JPanel {
         int x = (int)joystick.getThumbPos().getX();
         int y = (int)joystick.getThumbPos().getY();
 
-        xSpinner.setValue(x);
-        ySpinner.setValue(y);
+		stickPosition.setPosition(x,y);
+
+        shouldTriggerUpdate = false;
+        xSpinner.setValue(stickPosition.getX());
+        ySpinner.setValue(stickPosition.getY());
         radiusSpinner.setValue(stickPosition.getRadius());
         angleSpinner.setValue((int) Math.toDegrees(stickPosition.getTheta()));
-
-
-        stickPosition.setPosition(x,y);
+        updateVisual();
+        shouldTriggerUpdate = true;
 
         if(executeAction)
         	parent.executeAction(new StickAction(inputLine, stickType, oldStickPosition, stickPosition, table, row));
