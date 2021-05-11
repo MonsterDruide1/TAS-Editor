@@ -1,5 +1,8 @@
 package io.github.jadefalke2;
 
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.FlatLightLaf;
 import io.github.jadefalke2.actions.LineAction;
 import io.github.jadefalke2.components.*;
 import io.github.jadefalke2.actions.Action;
@@ -88,22 +91,22 @@ public class TAS {
 
 	public void setDefaultLookAndFeel() {
 		//sets the look and feel to light mode
-		setLookAndFeel("com.formdev.flatlaf.FlatLightLaf");
+		setLookAndFeel(new FlatLightLaf());
 	}
 
 	public void setDarculaLookAndFeel() {
 		//sets the look and feel to dark mode
-		setLookAndFeel("com.formdev.flatlaf.FlatDarkLaf");
+		setLookAndFeel(new FlatDarkLaf());
 	}
 
-	public void setLookAndFeel(String lookAndFeel){
+	public void setLookAndFeel(FlatLaf lookAndFeel){
 		try {
 			UIManager.setLookAndFeel(lookAndFeel);
 			for(Window window : JFrame.getWindows()) {
 				SwingUtilities.updateComponentTreeUI(window);
 			}
 			setDefaultsAfterThemeChange();
-		} catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+		} catch (UnsupportedLookAndFeelException e) {
 			e.printStackTrace();
 		}
 	}

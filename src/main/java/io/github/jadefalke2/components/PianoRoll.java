@@ -86,7 +86,6 @@ public class PianoRoll extends JTable implements ComponentListener {
 
 		setScript(script);
 
-		add(popupMenu);
 		preparePopUpMenu();
 
 		stickWindow = new JFrame();
