@@ -233,7 +233,7 @@ public class StickImagePanel extends JPanel {
 		JButton keepStickPosButton = new JButton("keep stick position for # of frames");
 		keepStickPosButton.addActionListener(e -> {
 			int frameNumber = FrameNumberOptionDialog.getFrameNumber();
-			for (int i = row - 1; i < row + frameNumber; i++){
+			for (int i = row; i < row + frameNumber; i++){
 
 				if (i >= script.getInputLines().size()){
 					script.getInputLines().add(InputLine.getEmpty(i + 1));
