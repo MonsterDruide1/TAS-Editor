@@ -29,13 +29,6 @@ public class PianoRoll extends JTable implements ComponentListener {
 	//script
 	private Script script;
 
-	//Components
-	private final JPopupMenu popupMenu = new JPopupMenu();
-
-	private final JMenuItem deleteOption = new JMenuItem("delete");
-	private final JMenuItem insertOption = new JMenuItem("insert");
-	private final JMenuItem cloneOption = new JMenuItem("clone");
-
 	// table model
 	private final DefaultTableModel model = new DefaultTableModel();
 	private final TAS parent;
@@ -86,8 +79,6 @@ public class PianoRoll extends JTable implements ComponentListener {
 
 		setScript(script);
 
-		preparePopUpMenu();
-
 		stickWindow = new JFrame();
 		stickWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		stickWindow.setLocation(new Point(200, 200));
@@ -118,6 +109,15 @@ public class PianoRoll extends JTable implements ComponentListener {
 				parent.cut();
 			}
 		});
+	}
+
+	/**
+	 * opens the popup menu with the line actions
+	 * @param rows all rows affected by this method
+	 * @param point the point at which the menu "spawns"
+	 */
+	public void openPopUpMenu(int[] rows, Point point){
+		new LineRightClickMenu(parent, script, model).openPopUpMenu(rows, point,this);
 	}
 
 	public void adjustColumnWidth(){
@@ -169,40 +169,6 @@ public class PianoRoll extends JTable implements ComponentListener {
 			stickWindow.pack();
 		}
 
-	}
-
-	/**
-	 * opens the popup menu with the line actions
-	 * @param rows all rows affected by this method
-	 * @param point the point at which the menu "spawns"
-	 */
-	public void openPopUpMenu(int[] rows, Point point){
-
-		setListener(deleteOption, rows, LineAction.Type.DELETE);
-		setListener(insertOption, rows, LineAction.Type.INSERT);
-		setListener(cloneOption, rows, LineAction.Type.CLONE);
-
-		popupMenu.show(this,(int)point.getX(),(int)point.getY());
-	}
-
-	public void setListener(JMenuItem item, int[] rows, LineAction.Type type){
-		while (item.getActionListeners().length > 0){
-			item.removeActionListener(item.getActionListeners()[0]);
-		}
-
-		item.addActionListener(e -> parent.executeAction(new LineAction(this.model, script, rows, type)));
-	}
-
-	/**
-	 * prepares the popup menu for the line actions to be called at a later point
-	 */
-	private void preparePopUpMenu (){
-
-		popupMenu.add(deleteOption);
-		popupMenu.add(insertOption);
-		popupMenu.add(cloneOption);
-
-		popupMenu.pack();
 	}
 
 	public void deleteSelectedRows(){
@@ -269,12 +235,6 @@ public class PianoRoll extends JTable implements ComponentListener {
 	@Override
 	public void componentResized(ComponentEvent e) {
 		adjustColumnWidth();
-	}
-
-	//required to change L&F of PopupMenu as well
-	@Override
-	public JPopupMenu getComponentPopupMenu() {
-		return popupMenu;
 	}
 
 	//unused methods from ComponentListener
