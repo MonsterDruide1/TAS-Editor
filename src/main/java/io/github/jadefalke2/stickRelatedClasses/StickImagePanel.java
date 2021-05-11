@@ -158,13 +158,12 @@ public class StickImagePanel extends JPanel {
 
 			@Override
 			public void mouseDragged(MouseEvent e) {
-				//TODO dont update the mainPanel here, as UndoList will get too clustered
-				updateStickPosition();
+				updateStickPosition(false);
 			}
 
             @Override
             public void mouseReleased(MouseEvent e){
-                updateStickPosition();
+                updateStickPosition(true);
             }
 
         };
@@ -222,9 +221,7 @@ public class StickImagePanel extends JPanel {
 		JButton centerButton = new JButton("center");
 		centerButton.addActionListener(e -> {
 			joystick.centerThumbPad();
-			stickPosition.setPosition((int)joystick.getThumbPos().getX(),(int)joystick.getThumbPos().getY());
-			updateCartSpinners();
-			updatePolarSpinners();
+			updateStickPosition(true);
 		});
 
 		spinnerPanel.add(centerButton);
@@ -242,11 +239,11 @@ public class StickImagePanel extends JPanel {
 
 				if (stickType == StickType.L_STICK) {
 					script.getInputLines().get(i).setStickL(script.getInputLines().get(row).getStickL().clone());
-					table.setValueAt(script.getInputLines().get(i - 1).getStickL().toCartString(), i,1);
+					table.setValueAt(script.getInputLines().get(i).getStickL().toCartString(), i,1);
 
 				}else{
 					script.getInputLines().get(i).setStickR(script.getInputLines().get(row).getStickR().clone());
-					table.setValueAt(script.getInputLines().get(i - 1).getStickR().toCartString(), i,2);
+					table.setValueAt(script.getInputLines().get(i).getStickR().toCartString(), i,2);
 				}
 
 			}
@@ -259,7 +256,7 @@ public class StickImagePanel extends JPanel {
 	/**
 	 * Updates the stick position based on the sliders
 	 */
-	private void updateStickPosition() {
+	private void updateStickPosition(boolean executeAction) {
     	StickPosition oldStickPosition = stickPosition.clone();
 
         int x = (int)joystick.getThumbPos().getX();
@@ -273,7 +270,8 @@ public class StickImagePanel extends JPanel {
 
         stickPosition.setPosition(x,y);
 
-        parent.executeAction(new StickAction(inputLine, stickType, oldStickPosition, stickPosition, table, row));
+        if(executeAction)
+        	parent.executeAction(new StickAction(inputLine, stickType, oldStickPosition, stickPosition, table, row));
 
 		repaint();
 	}

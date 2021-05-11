@@ -7,7 +7,7 @@ public class FrameNumberOptionDialog {
 	public static int getFrameNumber (){
 
 		// creates the spinner
-		SpinnerNumberModel model = new SpinnerNumberModel(0, 0, 500, 1);
+		SpinnerNumberModel model = new SpinnerNumberModel(1, 0, 500, 1);
 		JSpinner spinner = new JSpinner(model);
 
 		// opens the dialog and saves the option into an int
