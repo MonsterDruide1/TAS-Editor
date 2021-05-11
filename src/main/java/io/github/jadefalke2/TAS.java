@@ -42,26 +42,7 @@ public class TAS {
 
 	public void startProgram() {
 
-		//initialising preferences
-		try {
-			preferences = new Settings(Preferences.userRoot().node(getClass().getName()), this);
-		} catch (BackingStoreException e) {
-			e.printStackTrace();
-		}
-		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-			try {
-				preferences.storeSettings();
-			} catch (BackingStoreException e) {
-				e.printStackTrace();
-			}
-		}));
-
-		//set correct UI theme
-		if (preferences.isDarkTheme()) {
-			setDarculaLookAndFeel();
-		} else {
-			setDefaultLookAndFeel();
-		}
+		initPreferences();
 
 		//initialising stacks
 		undoStack = new CircularStack<>(1024);
@@ -79,6 +60,21 @@ public class TAS {
 
 	}
 
+
+	private void initPreferences(){
+		try {
+			preferences = new Settings(Preferences.userRoot().node(getClass().getName()), this);
+		} catch (BackingStoreException e) {
+			e.printStackTrace();
+		}
+		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+			try {
+				preferences.storeSettings();
+			} catch (BackingStoreException e) {
+				e.printStackTrace();
+			}
+		}));
+	}
 
 	// set look and feels
 
@@ -179,7 +175,7 @@ public class TAS {
 	}
 
 	public void openSettings(){
-		new SettingsDialog(preferences).show();
+		new SettingsDialog(preferences).setVisible(true);
 	}
 
 

@@ -241,11 +241,11 @@ public class StickImagePanel extends JPanel {
 				}
 
 				if (stickType == StickType.L_STICK) {
-					script.getInputLines().get(i).setStickL(new StickPosition(script.getInputLines().get(row).getStickL()));
+					script.getInputLines().get(i).setStickL(script.getInputLines().get(row).getStickL().clone());
 					table.setValueAt(script.getInputLines().get(i - 1).getStickL().toCartString(), i,1);
 
 				}else{
-					script.getInputLines().get(i).setStickR(new StickPosition(script.getInputLines().get(row).getStickR()));
+					script.getInputLines().get(i).setStickR(script.getInputLines().get(row).getStickR().clone());
 					table.setValueAt(script.getInputLines().get(i - 1).getStickR().toCartString(), i,2);
 				}
 
@@ -253,8 +253,6 @@ public class StickImagePanel extends JPanel {
 		});
 
 		spinnerPanel.add(keepStickPosButton);
-
-
     }
 
 
@@ -262,8 +260,7 @@ public class StickImagePanel extends JPanel {
 	 * Updates the stick position based on the sliders
 	 */
 	private void updateStickPosition() {
-
-    	StickPosition oldStickPosition = new StickPosition(stickPosition);
+    	StickPosition oldStickPosition = stickPosition.clone();
 
         int x = (int)joystick.getThumbPos().getX();
         int y = (int)joystick.getThumbPos().getY();

@@ -30,17 +30,6 @@ public class StickPosition {
 		updatePolar();
 	}
 
-	/**
-	 * Constructor
-	 * @param pos a stick position
-	 */
-	public StickPosition(StickPosition pos) {
-		x = pos.x;
-		y = pos.y;
-		theta = pos.theta;
-		radius = pos.radius;
-	}
-
 	public StickPosition(String component) {
 		this(Integer.parseInt(component.split(";")[0]), Integer.parseInt(component.split(";")[1]));
 		updatePolar();
