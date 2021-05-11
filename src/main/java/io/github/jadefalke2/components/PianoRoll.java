@@ -177,7 +177,6 @@ public class PianoRoll extends JTable implements ComponentListener {
 		popupMenu.add(insertOption);
 		popupMenu.add(cloneOption);
 
-		add(popupMenu);
 		popupMenu.pack();
 	}
 
@@ -247,6 +246,12 @@ public class PianoRoll extends JTable implements ComponentListener {
 		adjustColumnWidth();
 	}
 
+	//required to change L&F of PopupMenu as well
+	@Override
+	public JPopupMenu getComponentPopupMenu() {
+		return popupMenu;
+	}
+
 	//unused methods from ComponentListener
 	@Override
 	public void componentMoved(ComponentEvent e) {}
@@ -254,4 +259,5 @@ public class PianoRoll extends JTable implements ComponentListener {
 	public void componentShown(ComponentEvent e) {}
 	@Override
 	public void componentHidden(ComponentEvent e) {}
+
 }
