@@ -93,6 +93,31 @@ public class PianoRoll extends JTable implements ComponentListener {
 		stickWindow.setLocation(new Point(200, 200));
 
 		//FIXME Table blocks special key-shortcuts like CTRL+C!
+		getInputMap().put(KeyStroke.getKeyStroke("ctrl c"), "copy");
+		getInputMap().put(KeyStroke.getKeyStroke("ctrl v"), "paste");
+		getInputMap().put(KeyStroke.getKeyStroke("ctrl x"), "cut");
+		getActionMap().put("copy", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				parent.copy();
+			}
+		});
+		getActionMap().put("paste", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					parent.paste();
+				} catch (IOException | UnsupportedFlavorException ex) {
+					ex.printStackTrace();
+				}
+			}
+		});
+		getActionMap().put("cut", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				parent.cut();
+			}
+		});
 	}
 
 	public void adjustColumnWidth(){
