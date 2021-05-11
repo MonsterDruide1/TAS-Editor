@@ -109,12 +109,12 @@ public class MainJMenuBar extends JMenuBar {
 
 		Settings preferences = parent.getPreferences();
 
-		JCheckBoxMenuItem darkThemeJMenuItem = new JCheckBoxMenuItem("Toggle Dark Theme", preferences.darkTheme);
+		JCheckBoxMenuItem darkThemeJMenuItem = new JCheckBoxMenuItem("Toggle Dark Theme", preferences.isDarkTheme());
 
 		viewJMenu.add(darkThemeJMenuItem);
 
 		darkThemeJMenuItem.addItemListener(e -> {
-			preferences.darkTheme = darkThemeJMenuItem.getState();
+			preferences.setDarkTheme(darkThemeJMenuItem.getState());
 			parent.updateLookAndFeel();
 		});
 

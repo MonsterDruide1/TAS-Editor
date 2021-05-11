@@ -6,6 +6,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.lang.reflect.Field;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class SettingsDialog extends JDialog {
 
@@ -20,47 +22,40 @@ public class SettingsDialog extends JDialog {
 		c.weightx = 1;
 		c.gridx = 0;
 		c.gridy = 0;
-		for(Field field : Settings.class.getFields()){
-			mainPanel.add(new JLabel(field.getName()), c);
-			c.gridx = 1;
-			try {
-				switch(field.getType().getTypeName()){
-					case "boolean":
-						JCheckBox box = new JCheckBox();
-						box.setSelected((Boolean) field.get(prefs));
-						box.addItemListener((event) -> {
-							try {
-								field.set(prefs, event.getStateChange() == ItemEvent.SELECTED);
-							} catch (IllegalAccessException e) {
-								e.printStackTrace();
-							}
-						});
-						mainPanel.add(box, c);
-						break;
-					case "int":
-						JSpinner spinner = new JSpinner();
-						spinner.setValue(field.get(prefs));
-						spinner.addChangeListener((event) -> {
-							try {
-								field.set(prefs, spinner.getValue());
-							} catch(IllegalAccessException e){
-								e.printStackTrace();
-							}
-						});
-						mainPanel.add(spinner, c);
-						break;
-					default:
-						throw new UnsupportedOperationException("Unexpected settings field type: " + field.getType().getTypeName());
-				}
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			}
-			c.gridy += 1;
-			System.out.println(c.gridy);
-			c.gridx = 0;
-		}
+
+		addCheckboxSetting("Dark Theme", prefs.isDarkTheme(), prefs::setDarkTheme, mainPanel, c); //TODO remove last two?
+		c.gridy += 1;
+
+		addSpinnerSetting("Show last stick positions", prefs.getLastStickPositionCount(), prefs::setLastStickPositionCount, mainPanel, c); //TODO remove last two?
+		c.gridy += 1;
+
 		add(mainPanel);
 		pack();
+	}
+
+	private void addCheckboxSetting(String name, boolean defaultState, Consumer<Boolean> setter, JPanel mainPanel, GridBagConstraints c){
+		mainPanel.add(new JLabel(name), c);
+		c.gridx = 1;
+		JCheckBox box = new JCheckBox();
+		box.setSelected(defaultState);
+		box.addItemListener((event) -> setter.accept(event.getStateChange() == ItemEvent.SELECTED));
+		mainPanel.add(box, c);
+		c.gridx = 0;
+	}
+
+	private void addSpinnerSetting(String name, int defaultState, Consumer<Integer> setter, JPanel mainPanel, GridBagConstraints c){
+		mainPanel.add(new JLabel(name), c);
+		c.gridx = 1;
+		JSpinner spinner = new JSpinner();
+		SpinnerNumberModel model = new SpinnerNumberModel();
+		model.setMinimum(0);
+		spinner.setModel(model);
+		spinner.setValue(defaultState);
+		spinner.addChangeListener((event) -> {
+			setter.accept((Integer)spinner.getValue());
+		});
+		mainPanel.add(spinner, c);
+		c.gridx = 0;
 	}
 
 }

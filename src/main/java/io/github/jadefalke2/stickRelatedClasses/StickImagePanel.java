@@ -61,7 +61,7 @@ public class StickImagePanel extends JPanel {
 		this.stickPosition = stickPosition;
 		this.parent = parent;
 
-		StickPosition[] stickPositions = new StickPosition[Math.min(row, parent.getPreferences().lastStickPositionCount)];
+		StickPosition[] stickPositions = new StickPosition[Math.min(row, parent.getPreferences().getLastStickPositionCount())];
 
 		// sets the contents of the stickpositions array to be the previous stick positions of the same stick
 		for (int i = 0; i < stickPositions.length; i++){

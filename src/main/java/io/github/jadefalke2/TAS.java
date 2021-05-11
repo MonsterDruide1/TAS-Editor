@@ -44,7 +44,7 @@ public class TAS {
 
 		//initialising preferences
 		try {
-			preferences = new Settings(Preferences.userRoot().node(getClass().getName()));
+			preferences = new Settings(Preferences.userRoot().node(getClass().getName()), this);
 		} catch (BackingStoreException e) {
 			e.printStackTrace();
 		}
@@ -57,7 +57,7 @@ public class TAS {
 		}));
 
 		//set correct UI theme
-		if (preferences.darkTheme) {
+		if (preferences.isDarkTheme()) {
 			setDarculaLookAndFeel();
 		} else {
 			setDefaultLookAndFeel();
@@ -83,7 +83,7 @@ public class TAS {
 	// set look and feels
 
 	public void updateLookAndFeel(){
-		if (preferences.darkTheme) {
+		if (preferences.isDarkTheme()) {
 			setDarculaLookAndFeel();
 		} else {
 			setDefaultLookAndFeel();

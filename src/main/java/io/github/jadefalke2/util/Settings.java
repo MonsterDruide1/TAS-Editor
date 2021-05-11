@@ -1,43 +1,26 @@
 package io.github.jadefalke2.util;
 
-import java.lang.reflect.Field;
+import io.github.jadefalke2.TAS;
+
 import java.util.Arrays;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 public class Settings {
 
-	public boolean darkTheme = false;
-	public int lastStickPositionCount = 3;
+	private boolean darkTheme;
+	private int lastStickPositionCount;
 
 
 	private final Preferences backingPrefs;
+	private final TAS parent;
 
-	public Settings(Preferences prefs) throws BackingStoreException {
+	public Settings(Preferences prefs, TAS parent) throws BackingStoreException {
 		this.backingPrefs = prefs;
-		for(String key : prefs.keys()){
-			Field matchingField = Arrays.stream(getClass().getFields())
-				.filter(field -> field.getName().equals(key))
-				.findFirst().orElse(null);
+		this.parent = parent;
 
-			try {
-				setField(matchingField, key, prefs);
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			} catch (NullPointerException e){
-				System.err.println("No such field in Settings: "+key);
-			}
-		}
-	}
-
-	private void setField(Field field, String key, Preferences prefs) throws IllegalAccessException {
-		String stringValue = prefs.get(key, field.get(this).toString());
-		Object value = switch (field.getType().getTypeName()){
-			case "boolean" -> stringValue.equals("true");
-			case "int" -> Integer.parseInt(stringValue);
-			default -> throw new UnsupportedOperationException("Unexpected settings field type: " + field.getType().getTypeName());
-		};
-		field.set(this, value);
+		darkTheme = prefs.get("darkTheme", "false").equals("true");
+		lastStickPositionCount = Integer.parseInt(prefs.get("lastStickPositionCount", "3"));
 	}
 
 	public void storeSettings() throws BackingStoreException {
@@ -52,4 +35,21 @@ public class Settings {
 			});
 	}
 
+
+	public boolean isDarkTheme() {
+		return darkTheme;
+	}
+
+	public void setDarkTheme(boolean darkTheme) {
+		this.darkTheme = darkTheme;
+		parent.updateLookAndFeel();
+	}
+
+	public int getLastStickPositionCount() {
+		return lastStickPositionCount;
+	}
+
+	public void setLastStickPositionCount(int lastStickPositionCount) {
+		this.lastStickPositionCount = lastStickPositionCount;
+	}
 }
