@@ -106,7 +106,6 @@ public class TAS {
 			for(Window window : JFrame.getWindows()) {
 				SwingUtilities.updateComponentTreeUI(window);
 			}
-
 			setDefaultsAfterThemeChange();
 		} catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
 			e.printStackTrace();
