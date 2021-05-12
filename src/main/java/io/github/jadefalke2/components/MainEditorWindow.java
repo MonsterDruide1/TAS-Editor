@@ -39,6 +39,7 @@ public class MainEditorWindow extends JFrame {
 		this.functionEditorWindow = functionEditorWindow;
 		this.parent = parent;
 		setVisible(false);
+		setPreferredSize(Toolkit.getDefaultToolkit().getScreenSize());
 		setResizable(true);
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE); //let the WindowListener handle everything
 
