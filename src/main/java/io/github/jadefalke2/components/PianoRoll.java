@@ -126,9 +126,13 @@ public class PianoRoll extends JTable implements ComponentListener {
 		int[] columnsWidth = {
 			45,											   		                // frame number
 			85, 85,										  	                	// sticks
-			18, 18, 18, 18, 25, 25, 18, 18, 18, 18, 30, 30, 30, 30, 50, 50	    // buttons
+			18, 18, 18, 18, 25, 25, 25, 25, 40, 40, 35, 35, 35, 35, 45, 45	    // buttons
 		};
-		float sum = 629;
+
+		float sum = 0;
+		for (int i: columnsWidth) {
+			sum += i;
+		}
 
 
 		for (int i = 0; i < columnsWidth.length && i < getColumnCount(); i++) {
