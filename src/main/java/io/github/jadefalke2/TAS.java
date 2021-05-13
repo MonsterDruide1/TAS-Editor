@@ -45,26 +45,22 @@ public class TAS {
 
 	public void startProgram() {
 
+		// initialise preferences
+		initPreferences();
+
+		//set correct UI theme
+		updateLookAndFeel();
+
 		//initialising stacks
 		undoStack = new CircularStack<>(1024);
 		redoStack = new CircularStack<>(1024);
 
 		//initialising windows -> set to be invisible by default
 		//will be set visible once they are supposed to
-
-		initPreferences();
-
-		//set correct UI theme
-		updateLookAndFeel();
-
 		mainEditorWindow = new MainEditorWindow(new FunctionEditorWindow(this), this);
 
 
-
-
 		mainEditorWindow.prepareEditor(Script.getEmptyScript(10));
-
-
 	}
 
 
