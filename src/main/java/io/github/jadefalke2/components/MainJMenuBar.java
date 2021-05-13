@@ -22,13 +22,20 @@ public class MainJMenuBar extends JMenuBar {
 		JMenu fileJMenu = add(new JMenu("File"));
 		JMenuItem newJMenuItem = fileJMenu.add(new JMenuItem("New"));
 		newJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK));
-		newJMenuItem.addActionListener(e -> {});
+		newJMenuItem.addActionListener(e -> {
+			try {
+				//TODO new script creation
+				mainEditorWindow.setScript(null);
+			} catch (FileNotFoundException fileNotFoundException) {
+				fileNotFoundException.printStackTrace();
+			}
+		});
 		newJMenuItem.setEnabled(false);
 
 		JMenuItem newWindowJMenuItem = fileJMenu.add(new JMenuItem("New Window"));
 		newWindowJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
 		newWindowJMenuItem.addActionListener(e -> new TAS());
-		newWindowJMenuItem.setEnabled(true);
+		newWindowJMenuItem.setEnabled(false);
 
 		JMenuItem openJMenuItem = fileJMenu.add(new JMenuItem("Open..."));
 		openJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
