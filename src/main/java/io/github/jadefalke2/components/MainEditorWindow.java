@@ -124,6 +124,9 @@ public class MainEditorWindow extends JFrame {
 	 */
 	public void saveFile() {
 		try {
+			if(currentScriptFile == null){
+				currentScriptFile = new TxtFileChooser().getFile(false);
+			}
 			TxtFileChooser.writeToFile(script, currentScriptFile);
 		} catch (IOException e) {
 			e.printStackTrace();
