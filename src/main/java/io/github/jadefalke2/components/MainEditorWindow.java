@@ -3,6 +3,7 @@ package io.github.jadefalke2.components;
 import io.github.jadefalke2.Script;
 import io.github.jadefalke2.TAS;
 import io.github.jadefalke2.Util;
+import io.github.jadefalke2.stickRelatedClasses.StickImagePanel;
 import io.github.jadefalke2.util.CorruptedScriptException;
 
 import javax.swing.*;
@@ -22,6 +23,7 @@ public class MainEditorWindow extends JFrame {
 	private JPanel editor;
 
 	private PianoRoll pianoRoll;
+	private StickImagePanel stickImagePanel;
 
 	//script
 	private Script script;
@@ -39,7 +41,7 @@ public class MainEditorWindow extends JFrame {
 		this.functionEditorWindow = functionEditorWindow;
 		this.parent = parent;
 		setVisible(false);
-		setPreferredSize(Toolkit.getDefaultToolkit().getScreenSize());
+		setExtendedState(MAXIMIZED_BOTH);
 		setResizable(true);
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE); //let the WindowListener handle everything
 
@@ -64,6 +66,8 @@ public class MainEditorWindow extends JFrame {
 				return result != JOptionPane.CANCEL_OPTION && result != JOptionPane.CLOSED_OPTION; //cancel option and dispose option
 			}
 		});
+
+
 	}
 
 	/**
@@ -112,6 +116,8 @@ public class MainEditorWindow extends JFrame {
 		pianoRoll = new PianoRoll(script, parent);
 		pianoRoll.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
+		stickImagePanel = new StickImagePanel(parent, pianoRoll.getModel(), script);
+
 		//Components
 		JScrollPane scrollPane = new JScrollPane(pianoRoll);
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -131,10 +137,24 @@ public class MainEditorWindow extends JFrame {
 		c.weighty = 0;
 		editor.add(functionEditorButton, c);
 
-		add(editor);
+		JPanel combiningPanel = new JPanel(new GridBagLayout());
+
+		c.fill = GridBagConstraints.BOTH;
+		c.weighty = 1;
+		c.ipadx = 1300;
+		combiningPanel.add(editor, c);
+
+
+		c.fill = 0;
+		c.ipadx = 0;
+		c.anchor = GridBagConstraints.NORTH;
+		combiningPanel.add(stickImagePanel, c);
+
+		add(combiningPanel);
+
 		setJMenuBar(mainJMenuBar);
 
-		pack();
+	//	pack();
 		setVisible(true);
 	}
 

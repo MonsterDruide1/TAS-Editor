@@ -17,6 +17,7 @@ public class Joystick extends JPanel {
 	private int thumbRadius;
 	private int panelWidth;
 
+
 	// stick positions
 	private final StickPosition[] stickPositions;
 

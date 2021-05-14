@@ -33,8 +33,6 @@ public class PianoRoll extends JTable implements ComponentListener {
 	private final DefaultTableModel model = new DefaultTableModel();
 	private final TAS parent;
 
-	private final JFrame stickWindow;
-
 
 	public PianoRoll (Script script, TAS parent){
 
@@ -79,9 +77,6 @@ public class PianoRoll extends JTable implements ComponentListener {
 
 		setScript(script);
 
-		stickWindow = new JFrame();
-		stickWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		stickWindow.setLocation(new Point(200, 200));
 
 		//FIXME Table blocks special key-shortcuts like CTRL+C!
 		getInputMap().put(KeyStroke.getKeyStroke("ctrl c"), "copy");
@@ -150,13 +145,8 @@ public class PianoRoll extends JTable implements ComponentListener {
 		model.addRow(newEmpty.getArray());
 	}
 
-	/**
-	 * Opens the Window to control the stick input
-	 * @param row the row the window corresponds to
-	 * @param col the column the window corresponds to (1 -> LSTICK; 2 -> RSTICK)
-	 * @param script the script
-	 */
-	public void openStickWindow (int row,int col, Script script){
+
+	/*public void openStickWindow (int row,int col, Script script){
 		if (!stickWindow.isVisible()) {
 
 			stickWindow.getContentPane().removeAll();
@@ -172,6 +162,16 @@ public class PianoRoll extends JTable implements ComponentListener {
 			stickWindow.setVisible(true);
 			stickWindow.pack();
 		}
+
+	}
+
+	 */
+
+	public void setStickRow (int row, StickType stickType) {
+		InputLine currentLine = script.getInputLines().get(row);
+	}
+
+	public void greyOut () {
 
 	}
 

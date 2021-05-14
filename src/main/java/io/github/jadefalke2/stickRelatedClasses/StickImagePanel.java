@@ -25,12 +25,12 @@ public class StickImagePanel extends JPanel {
     private final Joystick joystick;
 
     // Other stuff
-    private final StickPosition stickPosition;
-    private final StickType stickType;
-	private final InputLine inputLine;
+    private StickPosition stickPosition;
+    private StickType stickType;
+	private InputLine[] inputLines;
+	private int row;
 
     private final DefaultTableModel table;
-    private final int row;
     private final TAS parent; //TODO avoid this
 
 	private boolean shouldTriggerUpdate = true;
@@ -43,22 +43,11 @@ public class StickImagePanel extends JPanel {
     }
 
 
-	/**
-	 * Constructor
-	 * @param stickPosition the stick position
-	 * @param stickType the type of stick
-	 * @param script the script
-	 * @param table the main table
-	 * @param row the current row
-	 */
-	public StickImagePanel(StickPosition stickPosition, StickType stickType,Script script, DefaultTableModel table, int row, TAS parent) {
+	public StickImagePanel(TAS parent, DefaultTableModel table, Script script) {
 
 		// setting global vars
-		this.row = row;
+		stickPosition = new StickPosition(0,0);
     	this.table = table;
-        this.inputLine = script.getInputLines().get(row);
-        this.stickType = stickType;
-		this.stickPosition = stickPosition;
 		this.parent = parent;
 
 		StickPosition[] stickPositions = new StickPosition[Math.min(row, parent.getPreferences().getLastStickPositionCount())];
@@ -75,22 +64,11 @@ public class StickImagePanel extends JPanel {
 
 		joystick.setThumbPos(new Point(stickPosition.getX(),stickPosition.getY()));
 
-        JPanel joyStickPanel = new JPanel();
-        JPanel spinnerPanel = new JPanel();
 
-        GridLayout mainLayout = new GridLayout(2,1,0,20);
-        GridLayout spinnerLayout = new GridLayout(6,2,30,7);
+        setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 
-
-        spinnerPanel.setLayout(spinnerLayout);
-        spinnerPanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
-
-        setLayout(mainLayout);
-        add(spinnerPanel);
-        add(joyStickPanel);
-
-        joyStickPanel.add(joystick);
-        joyStickPanel.setLayout(new GridLayout(0, 1));
+        setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
 
 
 
@@ -203,19 +181,54 @@ public class StickImagePanel extends JPanel {
         JLabel radiusLabel = new JLabel("radius:");
         JLabel thetaLabel = new JLabel("angle:");
 
-        spinnerPanel.add(cartesianLabel);
-        spinnerPanel.add(polarLabel);
+        c.weightx = 5;
+        c.weighty = 5;
 
-        spinnerPanel.add(xLabel);
-        spinnerPanel.add(thetaLabel);
-        spinnerPanel.add(xSpinner);
-        spinnerPanel.add(angleSpinner);
+        c.gridy = 0;
+        c.gridx = 1;
+        add(cartesianLabel, c);
 
+        c.gridx = 3;
+        add(polarLabel, c);
 
-        spinnerPanel.add(yLabel);
-        spinnerPanel.add(radiusLabel);
-        spinnerPanel.add(ySpinner);
-        spinnerPanel.add(radiusSpinner);
+        c.gridy = 1;
+        c.gridx = 0;
+        add(xLabel, c);
+
+        c.gridx = 1;
+		add(xSpinner, c);
+
+		c.gridy = 2;
+		c.gridx = 0;
+		add(yLabel, c);
+
+		c.gridx = 1;
+		add(ySpinner, c);
+
+		c.gridx = 2;
+		c.gridy = 1;
+		add(radiusLabel, c);
+
+		c.gridx = 3;
+		add(radiusSpinner, c);
+
+		c.gridx = 2;
+		c.gridy = 2;
+        add(thetaLabel, c);
+
+        c.gridx = 3;
+        add(angleSpinner, c);
+
+        c.fill = GridBagConstraints.BOTH;
+        c.gridwidth = 4;
+        c.gridheight = 4;
+        c.weighty = 0;
+        c.ipadx = 250;
+        c.ipady = 250;
+        c.gridx = 0;
+        c.gridy = 3;
+
+		add(joystick, c);
 
 
 		JButton centerButton = new JButton("center");
@@ -223,9 +236,6 @@ public class StickImagePanel extends JPanel {
 			joystick.centerThumbPad();
 			updateStickPosition(true);
 		});
-
-		spinnerPanel.add(centerButton);
-
 
 		JButton keepStickPosButton = new JButton("keep stick position for # of frames");
 		keepStickPosButton.addActionListener(e -> {
@@ -249,7 +259,28 @@ public class StickImagePanel extends JPanel {
 			}
 		});
 
-		spinnerPanel.add(keepStickPosButton);
+		JButton smoothTransitionButton = new JButton("smooth transition");
+		smoothTransitionButton.addActionListener(e -> {
+			//int frameNumber = FrameNumberOptionDialog.getSmoothTransitionData();
+			FrameNumberOptionDialog.getSmoothTransitionData();
+		});
+
+
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridheight = 1;
+		c.weighty = 10;
+		c.ipadx = 0;
+		c.ipady = 0;
+
+		c.gridx = 1;
+		c.gridy = 9;
+		add(smoothTransitionButton, c);
+
+		c.gridy = 10;
+		add(centerButton, c);
+
+		c.gridy = 11;
+		add(keepStickPosButton, c);
     }
 
 
@@ -273,7 +304,7 @@ public class StickImagePanel extends JPanel {
         shouldTriggerUpdate = true;
 
         if(executeAction)
-        	parent.executeAction(new StickAction(inputLine, stickType, oldStickPosition, stickPosition, table, row));
+        	parent.executeAction(new StickAction(inputLines, stickType, oldStickPosition, stickPosition, table, row));
 
 		repaint();
 	}
@@ -302,4 +333,35 @@ public class StickImagePanel extends JPanel {
 		radiusSpinner.setValue(stickPosition.getRadius());
 	}
 
+	public StickPosition getStickPosition() {
+		return stickPosition;
+	}
+
+	public void setStickPosition(StickPosition stickPosition) {
+		this.stickPosition = stickPosition;
+	}
+
+	public StickType getStickType() {
+		return stickType;
+	}
+
+	public void setStickType(StickType stickType) {
+		this.stickType = stickType;
+	}
+
+	public InputLine[] getInputLines() {
+		return inputLines;
+	}
+
+	public void setInputLines(InputLine[] inputLines) {
+		this.inputLines = inputLines;
+	}
+
+	public int getRow() {
+		return row;
+	}
+
+	public void setRow(int row) {
+		this.row = row;
+	}
 }

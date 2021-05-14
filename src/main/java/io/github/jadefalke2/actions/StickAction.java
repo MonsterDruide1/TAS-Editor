@@ -8,17 +8,17 @@ import javax.swing.table.DefaultTableModel;
 
 public class StickAction implements Action {
 
-	private final InputLine inputLine;
+	private final InputLine[] inputLines;
 	private final StickImagePanel.StickType stickType;
 	private final StickPosition oldPosition;
 	private final StickPosition newPosition;
 	private final DefaultTableModel table;
 	private final int row;
 
-	public StickAction(InputLine inputLine, StickImagePanel.StickType stickType, StickPosition oldPosition, StickPosition newPosition, DefaultTableModel table, int row) {
+	public StickAction(InputLine[] inputLines, StickImagePanel.StickType stickType, StickPosition oldPosition, StickPosition newPosition, DefaultTableModel table, int row) {
 		this.row = row;
 		this.table = table;
-		this.inputLine = inputLine;
+		this.inputLines = inputLines;
 		this.stickType = stickType;
 		this.oldPosition = oldPosition;
 		this.newPosition = newPosition;
@@ -36,12 +36,14 @@ public class StickAction implements Action {
 
 	private void setPosition(StickPosition position) {
 
-		if (stickType == StickImagePanel.StickType.L_STICK) {
-			inputLine.setStickL(position);
-			table.setValueAt(inputLine.getStickL().toCartString(),row, 1);
-		} else {
-			inputLine.setStickR(position);
-			table.setValueAt(inputLine.getStickR().toCartString(),row,2);
+		for (InputLine i: inputLines) {
+			if (stickType == StickImagePanel.StickType.L_STICK) {
+				i.setStickL(position);
+				table.setValueAt(i.getStickL().toCartString(), row, 1);
+			} else {
+				i.setStickR(position);
+				table.setValueAt(i.getStickR().toCartString(), row, 2);
+			}
 		}
 
 	}

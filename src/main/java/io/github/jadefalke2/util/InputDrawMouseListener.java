@@ -60,7 +60,8 @@ public class InputDrawMouseListener extends MouseAdapter {
 
 			case 1:
 			case 2:
-				table.openStickWindow(row,col,table.getScript());
+				//table.openStickWindow(row,col,table.getScript());
+				//TODO
 				break;
 
 			default:
