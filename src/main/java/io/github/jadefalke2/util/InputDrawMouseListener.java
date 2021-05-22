@@ -60,8 +60,7 @@ public class InputDrawMouseListener extends MouseAdapter {
 
 			case 1:
 			case 2:
-				//table.openStickWindow(row,col,table.getScript());
-				//TODO
+				//TODO set joystick to correct L/R -> what to do when clicked somewhere else?
 				break;
 
 			default:

@@ -116,7 +116,7 @@ public class MainEditorWindow extends JFrame {
 		pianoRoll = new PianoRoll(script, parent);
 		pianoRoll.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
-		stickImagePanel = new StickImagePanel(parent, pianoRoll.getModel(), script);
+		stickImagePanel = new StickImagePanel(parent, pianoRoll, script);
 
 		//Components
 		JScrollPane scrollPane = new JScrollPane(pianoRoll);
@@ -171,6 +171,11 @@ public class MainEditorWindow extends JFrame {
 
 
 	// getter
+
+
+	public StickImagePanel getStickImagePanel() {
+		return stickImagePanel;
+	}
 
 	public PianoRoll getPianoRoll (){
 		return pianoRoll;

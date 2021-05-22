@@ -170,7 +170,7 @@ public class TAS {
 			try {
 				return new InputLine(line);
 			} catch(CorruptedScriptException e){
-				System.out.println("invalid clipboard content: "+line); //TODO proper error handling here
+				System.out.println("invalid clipboard content: " + line); //TODO proper error handling here
 				return null;
 			}
 		}).toArray(InputLine[]::new);
