@@ -6,22 +6,22 @@ import io.github.jadefalke2.TAS;
 import io.github.jadefalke2.actions.StickAction;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
+import javax.swing.event.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
 import java.awt.event.*;
 import java.util.Arrays;
 
-public class StickImagePanel extends JPanel {
+public class JoystickPanel extends JPanel {
 
 	private final static int STICK_IMAGE_SIZE = 200;
 
-	// frame number label
-	private final JLabel frameNumberLabel;
+	//buttons
+
+	JButton centerButton;
+	JButton smoothTransitionButton;
+	JButton keepStickPosButton;
 
 	// Spinners
     private final JSpinner xSpinner;
@@ -34,8 +34,10 @@ public class StickImagePanel extends JPanel {
 
     // Other stuff
     private StickPosition stickPosition;
+    private final Script script;
     private StickType stickType;
 	private InputLine[] inputLines;
+	private StickPosition[] stickPositions;
 	private int row;
 
     private final DefaultTableModel table;
@@ -43,85 +45,57 @@ public class StickImagePanel extends JPanel {
 
 	private boolean shouldTriggerUpdate = true;
 
-
-    // Used to have a good way to differentiate sticks
+	// Used to have a good way to differentiate sticks
 
 	public enum StickType {
         L_STICK,R_STICK
     }
 
 
-	public StickImagePanel(TAS parent, JTable jTable, Script script) {
+	public JoystickPanel(TAS parent, JTable jTable, Script script, StickType stickType) {
 
 		// setting global vars
+		stickPositions = new StickPosition[Math.min(row, parent.getPreferences().getLastStickPositionCount())];
 		stickPosition = new StickPosition(0,0);
-    	this.table = (DefaultTableModel) jTable.getModel();
+		joystick = new Joystick(32767, STICK_IMAGE_SIZE,stickPositions);
+
+		this.script = script;
+		this.table = (DefaultTableModel) jTable.getModel();
 		this.parent = parent;
+		this.stickType = stickType;
 
-		StickPosition[] stickPositions = new StickPosition[Math.min(row, parent.getPreferences().getLastStickPositionCount())];
 
-		frameNumberLabel = new JLabel("Currently editing frames: " + " None");
 
-		jTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-			@Override
-			public void valueChanged(ListSelectionEvent e) {
-				switch (jTable.getSelectedRows().length) {
+		// spinners
+		SpinnerModel xModel = new SpinnerNumberModel(0, -32767, 32767, 100);
+		SpinnerModel yModel = new SpinnerNumberModel(0, -32767, 32767, 100);
+		SpinnerModel radiusModel = new SpinnerNumberModel(0, 0, 1, 0.1);
+		SpinnerModel angleModel = new SpinnerNumberModel(0, 0, 360, 1);
 
-					case 0:
-						// no rows selected
-						setGreyedOut();
-						frameNumberLabel.setText("Currently editing frames: " + " None");
-						break;
+		xSpinner = new JSpinner(xModel);
+		ySpinner = new JSpinner(yModel);
+		radiusSpinner = new JSpinner(radiusModel);
+		angleSpinner = new JSpinner(angleModel);
 
-					case 1:
-						//one row
-						setEditingRows();
-						frameNumberLabel.setText("Currently editing frame: " + jTable.getSelectedRows()[0]);
-						break;
+		xSpinner.setValue(stickPosition.getX());
+		ySpinner.setValue(stickPosition.getY());
+		radiusSpinner.setValue(stickPosition.getRadius());
+		angleSpinner.setValue((int)Math.toDegrees(stickPosition.getTheta()));
 
-					default:
-						//more than one frame
-						setEditingRows();
-						frameNumberLabel.setText("Currently editing frames: " + jTable.getSelectedRows()[0] + " - " + jTable.getSelectedRows()[jTable.getSelectedRows().length - 1]);
-				}
-			}
-		});
+
+
 
 		// sets the contents of the stickpositions array to be the previous stick positions of the same stick
 		for (int i = 0; i < stickPositions.length; i++){
 			InputLine currentLine = script.getInputLines().get(row - stickPositions.length + i);
-
 			stickPositions[i] = stickType == StickType.L_STICK ? currentLine.getStickL() : currentLine.getStickR();
 		}
 
-		joystick = new Joystick(32767, STICK_IMAGE_SIZE,stickPositions);
-
-
-		joystick.setThumbPos(new Point(stickPosition.getX(),stickPosition.getY()));
-
-
         setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
-
         setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
 
-
-
-		SpinnerModel xModel = new SpinnerNumberModel(0, -32767, 32767, 100);
-        SpinnerModel yModel = new SpinnerNumberModel(0, -32767, 32767, 100);
-        SpinnerModel radiusModel = new SpinnerNumberModel(0, 0, 1, 0.1);
-        SpinnerModel angleModel = new SpinnerNumberModel(0, 0, 360, 1);
-
-
-        xSpinner = new JSpinner(xModel);
-        ySpinner = new JSpinner(yModel);
-        radiusSpinner = new JSpinner(radiusModel);
-        angleSpinner = new JSpinner(angleModel);
-
-        xSpinner.setValue(stickPosition.getX());
-		ySpinner.setValue(stickPosition.getY());
-		radiusSpinner.setValue(stickPosition.getRadius());
-		angleSpinner.setValue((int)Math.toDegrees(stickPosition.getTheta()));
+		joystick.setThumbPos(new Point(stickPosition.getX(),stickPosition.getY()));
 
         //TODO simplify these repeating listeners
         xSpinner.addChangeListener(e -> {
@@ -134,6 +108,7 @@ public class StickImagePanel extends JPanel {
 				shouldTriggerUpdate = true;
 			}
         });
+
         ySpinner.addChangeListener(e -> {
             stickPosition.setY((int) ySpinner.getValue());
             if(shouldTriggerUpdate){
@@ -144,6 +119,7 @@ public class StickImagePanel extends JPanel {
 				shouldTriggerUpdate = true;
 			}
         });
+
         radiusSpinner.addChangeListener(e -> {
             stickPosition.setRadius((double) radiusSpinner.getValue());
             if(shouldTriggerUpdate){
@@ -154,6 +130,7 @@ public class StickImagePanel extends JPanel {
 				shouldTriggerUpdate = true;
 			}
         });
+
         angleSpinner.addChangeListener(e -> {
             stickPosition.setTheta((int)angleSpinner.getValue());
             if(shouldTriggerUpdate){
@@ -184,18 +161,15 @@ public class StickImagePanel extends JPanel {
 		KeyListener keyListener = new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-
-				//
+				// FIXME
 				//NOT WORKING AS OF NOW, as focus always is on one of the spinners...
 				//
-
 				switch (e.getKeyCode()) {
 					case KeyEvent.VK_0 -> joystick.setThumbPos(new Point(32767, 0));
 					case KeyEvent.VK_KP_LEFT -> joystick.setThumbPos(new Point(-32767, 0));
 					case KeyEvent.VK_KP_UP -> joystick.setThumbPos(new Point(0, 32767));
 					case KeyEvent.VK_KP_DOWN -> joystick.setThumbPos(new Point(0, -32767));
 				}
-
 				repaint();
 			}
 		};
@@ -203,8 +177,6 @@ public class StickImagePanel extends JPanel {
 		joystick.addMouseListener(mouseListener);
 		joystick.addMouseMotionListener(mouseListener);
         joystick.addKeyListener(keyListener);
-
-
 
 
         JLabel cartesianLabel = new JLabel("Cartesian");
@@ -219,10 +191,6 @@ public class StickImagePanel extends JPanel {
 
 
 		c.insets = new Insets(5,3,5,3);
-
-        c.gridwidth = 4;
-        c.anchor = GridBagConstraints.PAGE_START;
-        add(frameNumberLabel, c);
 
         c.gridwidth = 1;
 		c.weightx = 5;
@@ -274,14 +242,13 @@ public class StickImagePanel extends JPanel {
 
 		add(joystick, c);
 
-
-		JButton centerButton = new JButton("center");
+		centerButton = new JButton("center");
 		centerButton.addActionListener(e -> {
 			joystick.centerThumbPad();
 			updateStickPosition(true);
 		});
 
-		JButton keepStickPosButton = new JButton("keep stick position for # of frames");
+		keepStickPosButton = new JButton("keep stick position for # of frames");
 		keepStickPosButton.addActionListener(e -> {
 			int frameNumber = FrameNumberOptionDialog.getFrameNumber();
 			for (int i = row; i < row + frameNumber; i++){
@@ -303,7 +270,7 @@ public class StickImagePanel extends JPanel {
 			}
 		});
 
-		JButton smoothTransitionButton = new JButton("smooth transition");
+		smoothTransitionButton = new JButton("smooth transition");
 		smoothTransitionButton.addActionListener(e -> {
 			//int frameNumber = FrameNumberOptionDialog.getSmoothTransitionData();
 			FrameNumberOptionDialog.getSmoothTransitionData();
@@ -325,6 +292,8 @@ public class StickImagePanel extends JPanel {
 
 		c.gridy = 12;
 		add(keepStickPosButton, c);
+
+		setGreyedOut();
     }
 
 
@@ -333,7 +302,6 @@ public class StickImagePanel extends JPanel {
 	 */
 	private void updateStickPosition(boolean executeAction) {
     	StickPosition oldStickPosition = stickPosition.clone();
-
 
         int x = (int)joystick.getThumbPos().getX();
         int y = (int)joystick.getThumbPos().getY();
@@ -349,17 +317,36 @@ public class StickImagePanel extends JPanel {
         shouldTriggerUpdate = true;
 
         if(executeAction)
-        	parent.executeAction(new StickAction(inputLines, stickType, oldStickPosition, stickPosition, table, row));
+        	parent.executeAction(new StickAction(inputLines, stickType, oldStickPosition, stickPosition, table));
 
 		repaint();
 	}
 
-	private void setGreyedOut () {
-		//TODO lock spinners + joystick
+	public void setGreyedOut () {
+		//TODO color of stick
+		joystick.lock();
+		setSpinnersAndButtonsEnabled(false);
 	}
 
-	private void setEditingRows () {
+	public void setEditingRows (int[] rows) {
 		//TODO set InputLines and update them
+		InputLine[] tmp = new InputLine[rows.length];
+		Arrays.setAll(tmp, i -> script.getInputLines().get(rows[i]));
+		inputLines = tmp;
+		joystick.unlock();
+		setSpinnersAndButtonsEnabled(true);
+	}
+
+	private void setSpinnersAndButtonsEnabled (boolean enable) {
+		angleSpinner.setEnabled(enable);
+		radiusSpinner.setEnabled(enable);
+
+		xSpinner.setEnabled(enable);
+		ySpinner.setEnabled(enable);
+
+		centerButton.setEnabled(enable);
+		keepStickPosButton.setEnabled(enable);
+		smoothTransitionButton.setEnabled(enable);
 	}
 
 	/**

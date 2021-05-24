@@ -4,8 +4,7 @@ import io.github.jadefalke2.InputLine;
 import io.github.jadefalke2.Script;
 import io.github.jadefalke2.TAS;
 import io.github.jadefalke2.actions.LineAction;
-import io.github.jadefalke2.stickRelatedClasses.StickImagePanel;
-import io.github.jadefalke2.stickRelatedClasses.StickImagePanel.StickType;
+import io.github.jadefalke2.stickRelatedClasses.JoystickPanel.StickType;
 import io.github.jadefalke2.util.Button;
 import io.github.jadefalke2.util.InputDrawMouseListener;
 import javax.swing.*;
@@ -17,12 +16,8 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
-import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.Arrays;
-
-import static io.github.jadefalke2.stickRelatedClasses.StickImagePanel.StickType.L_STICK;
-import static io.github.jadefalke2.stickRelatedClasses.StickImagePanel.StickType.R_STICK;
 
 public class PianoRoll extends JTable implements ComponentListener {
 

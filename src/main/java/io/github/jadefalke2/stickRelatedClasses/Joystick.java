@@ -17,6 +17,7 @@ public class Joystick extends JPanel {
 	private int thumbRadius;
 	private int panelWidth;
 
+	private boolean locked;
 
 	// stick positions
 	private final StickPosition[] stickPositions;
@@ -44,6 +45,8 @@ public class Joystick extends JPanel {
 		panelWidth = panel_width;
 		thumbDiameter = panel_width / 15;
 		thumbRadius = thumbDiameter / 2;
+
+		locked = true;
 
 		MouseAdapter mouseAdapter = new MouseAdapter() {
 
@@ -96,6 +99,10 @@ public class Joystick extends JPanel {
 	 */
 
 	private void updateThumbPos(int mouseX, int mouseY) {
+
+		if (locked)
+			return;
+
 		// if the cursor is clicked out of bounds, we'll modify the position
 		// to be the closest point where we can draw the thumb pad completely
 		mouseX -= visualOffset.x;
@@ -114,6 +121,19 @@ public class Joystick extends JPanel {
 	}
 
 	/**
+	 * locks the joystick
+	 */
+	public void lock () {
+		centerThumbPad();
+		locked = true;
+	}
+
+	public void unlock () {
+		locked = false;
+	}
+
+
+ 	/**
 	 * @param thumbPos selected position on the panel (visually)
 	 * @return the scaled position of the joystick thumb pad (in normal range)
 	 */

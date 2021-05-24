@@ -3,7 +3,7 @@ package io.github.jadefalke2.components;
 import io.github.jadefalke2.Script;
 import io.github.jadefalke2.TAS;
 import io.github.jadefalke2.Util;
-import io.github.jadefalke2.stickRelatedClasses.StickImagePanel;
+import io.github.jadefalke2.stickRelatedClasses.JoystickPanel;
 import io.github.jadefalke2.util.CorruptedScriptException;
 
 import javax.swing.*;
@@ -23,7 +23,7 @@ public class MainEditorWindow extends JFrame {
 	private JPanel editor;
 
 	private PianoRoll pianoRoll;
-	private StickImagePanel stickImagePanel;
+	private SideJoystickPanel joystickPanel;
 
 	//script
 	private Script script;
@@ -116,7 +116,7 @@ public class MainEditorWindow extends JFrame {
 		pianoRoll = new PianoRoll(script, parent);
 		pianoRoll.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
-		stickImagePanel = new StickImagePanel(parent, pianoRoll, script);
+		joystickPanel = new SideJoystickPanel(parent, pianoRoll, script);
 
 		//Components
 		JScrollPane scrollPane = new JScrollPane(pianoRoll);
@@ -148,7 +148,7 @@ public class MainEditorWindow extends JFrame {
 		c.fill = 0;
 		c.ipadx = 0;
 		c.anchor = GridBagConstraints.NORTH;
-		combiningPanel.add(stickImagePanel, c);
+		combiningPanel.add(joystickPanel, c);
 
 		add(combiningPanel);
 
@@ -173,8 +173,8 @@ public class MainEditorWindow extends JFrame {
 	// getter
 
 
-	public StickImagePanel getStickImagePanel() {
-		return stickImagePanel;
+	public SideJoystickPanel getSidejoystickPanel() {
+		return joystickPanel;
 	}
 
 	public PianoRoll getPianoRoll (){
