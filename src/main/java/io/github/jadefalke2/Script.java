@@ -79,7 +79,7 @@ public class Script {
 		Script tmp = new Script();
 
 		for (int i = 0; i < amount; i++){
-			tmp.insertLine(i,InputLine.getEmpty(i+1));
+			tmp.insertLine(i,InputLine.getEmpty(i));
 		}
 
 		return tmp;
