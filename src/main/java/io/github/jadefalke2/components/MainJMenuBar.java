@@ -30,7 +30,6 @@ public class MainJMenuBar extends JMenuBar {
 		JMenuItem newWindowJMenuItem = fileJMenu.add(new JMenuItem("New Window"));
 		newWindowJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
 		newWindowJMenuItem.addActionListener(e -> new TAS());
-		newWindowJMenuItem.setEnabled(false);
 
 		JMenuItem openJMenuItem = fileJMenu.add(new JMenuItem("Open..."));
 		openJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
