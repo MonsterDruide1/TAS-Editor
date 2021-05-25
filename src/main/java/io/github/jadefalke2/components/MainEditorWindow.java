@@ -36,9 +36,10 @@ public class MainEditorWindow extends JFrame {
 	 * Constructor
 	 * @param functionEditorWindow the function editor window that can be opened from within this window
 	 */
-	public MainEditorWindow (FunctionEditorWindow functionEditorWindow, TAS parent){
+	public MainEditorWindow (FunctionEditorWindow functionEditorWindow, Script script, TAS parent){
 
 		this.functionEditorWindow = functionEditorWindow;
+		this.script = script;
 		this.parent = parent;
 		setVisible(false);
 		setExtendedState(MAXIMIZED_BOTH);
@@ -67,49 +68,6 @@ public class MainEditorWindow extends JFrame {
 			}
 		});
 
-
-	}
-
-	/**
-	 * Prepares the editor to make it ready to be started
-	 * @param script the script that the editor will be opened with
-	 */
-	public void prepareEditor(Script script) {
-		try {
-			this.script = new Script(script.getFull());
-		} catch (CorruptedScriptException e) {
-			e.printStackTrace();
-		}
-		startEditor();
-	}
-
-	/**
-	 * Returns the string that is being read from the given file.
-	 * @param file the file to open
-	 * @return the corresponding String
-	 */
-	public String setScript(File file) throws FileNotFoundException {
-
-		// sets the current script file to be the one that the method is called with
-
-		currentScriptFile = file;
-
-		try {
-			script = new Script(Util.fileToString(file));
-		} catch (CorruptedScriptException e) {
-			e.printStackTrace();
-		}
-
-		pianoRoll.setScript(script);
-
-		// reads the file into a string that is returned
-		return Util.fileToString(file);
-	}
-
-	/**
-	 * starts the editor
-	 */
-	public void startEditor() {
 		editor = new JPanel(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 
@@ -153,9 +111,29 @@ public class MainEditorWindow extends JFrame {
 		add(combiningPanel);
 
 		setJMenuBar(mainJMenuBar);
+	}
 
-	//	pack();
-		setVisible(true);
+	/**
+	 * Returns the string that is being read from the given file.
+	 * @param file the file to open
+	 */
+	public void setScript(File file) throws FileNotFoundException {
+
+		// sets the current script file to be the one that the method is called with
+
+		try {
+			setScript(new Script(Util.fileToString(file)));
+		} catch (CorruptedScriptException e) {
+			e.printStackTrace();
+		}
+
+		currentScriptFile = file;
+	}
+
+	public void setScript(Script script){
+		this.script = script;
+		pianoRoll.setScript(script);
+		currentScriptFile = null;
 	}
 
 	/**
