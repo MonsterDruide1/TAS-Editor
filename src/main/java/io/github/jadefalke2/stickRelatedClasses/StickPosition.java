@@ -1,5 +1,7 @@
 package io.github.jadefalke2.stickRelatedClasses;
 
+import java.awt.*;
+
 public class StickPosition {
 
 	//TODO is this double-storage necessary?
@@ -65,6 +67,9 @@ public class StickPosition {
 
 	// getter
 
+	public Point getPoint () {
+		return new Point(x,y);
+	}
 	/**
 	 * @return the x position of the stick
 	 */

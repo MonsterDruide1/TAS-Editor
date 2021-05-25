@@ -17,35 +17,35 @@ public class SideJoystickPanel extends JPanel {
 	private final JoystickPanel lstickPanel;
 	private final JoystickPanel rstickPanel;
 
-	public SideJoystickPanel (TAS parent, JTable jTable, Script script) {
+	public SideJoystickPanel (TAS parent, PianoRoll pianoRoll, Script script) {
 
 		frameAmountLabel = new JLabel("Currently no frames are being edited");
-		lstickPanel = new JoystickPanel(parent, jTable, script, JoystickPanel.StickType.L_STICK);
-		rstickPanel = new JoystickPanel(parent, jTable, script, JoystickPanel.StickType.R_STICK);
+		lstickPanel = new JoystickPanel(parent, pianoRoll, script, JoystickPanel.StickType.L_STICK);
+		rstickPanel = new JoystickPanel(parent, pianoRoll, script, JoystickPanel.StickType.R_STICK);
 
-		jTable.getSelectionModel().addListSelectionListener(e -> {
+		pianoRoll.getSelectionModel().addListSelectionListener(e -> {
 
-			switch (jTable.getSelectedRows().length) {
-				case 0:
+			int[] selectedRows = pianoRoll.getSelectedRows();
+
+			switch (selectedRows.length) {
+				case 0 -> {
 					//no frames selected
 					frameAmountLabel.setText("Currently no frames are being edited");
 					lstickPanel.setGreyedOut();
 					rstickPanel.setGreyedOut();
-					break;
-
-				case 1:
+				}
+				case 1 -> {
 					//one frame is selected
-					frameAmountLabel.setText("Currently editing frame " + jTable.getSelectedRows()[0]);
-					lstickPanel.setStickPosition(script.getInputLines().get(jTable.getSelectedRows()[0]).getStickL());
-					lstickPanel.setEditingRows(jTable.getSelectedRows());
-					rstickPanel.setEditingRows(jTable.getSelectedRows());
-					break;
-
-				default:
+					frameAmountLabel.setText("Currently editing frame " + selectedRows[0]);
+					lstickPanel.setEditingRows(selectedRows);
+					rstickPanel.setEditingRows(selectedRows);
+				}
+				default -> {
 					//more than 1 frame is selected
-					frameAmountLabel.setText("Currently editing frames " + jTable.getSelectedRows()[0] + " - " + jTable.getSelectedRows()[jTable.getSelectedRows().length - 1]);
-					lstickPanel.setEditingRows(jTable.getSelectedRows());
-					rstickPanel.setEditingRows(jTable.getSelectedRows());
+					frameAmountLabel.setText("Currently editing frames " + selectedRows[0] + " - " + selectedRows[selectedRows.length - 1]);
+					lstickPanel.setEditingRows(selectedRows);
+					rstickPanel.setEditingRows(selectedRows);
+				}
 			}
 		});
 

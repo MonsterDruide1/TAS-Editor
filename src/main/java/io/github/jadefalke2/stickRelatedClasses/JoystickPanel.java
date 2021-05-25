@@ -4,6 +4,7 @@ import io.github.jadefalke2.InputLine;
 import io.github.jadefalke2.Script;
 import io.github.jadefalke2.TAS;
 import io.github.jadefalke2.actions.StickAction;
+import io.github.jadefalke2.components.PianoRoll;
 
 import javax.swing.*;
 import javax.swing.event.*;
@@ -52,7 +53,7 @@ public class JoystickPanel extends JPanel {
     }
 
 
-	public JoystickPanel(TAS parent, JTable jTable, Script script, StickType stickType) {
+	public JoystickPanel(TAS parent, PianoRoll pianoRoll, Script script, StickType stickType) {
 
 		// setting global vars
 		stickPositions = new StickPosition[Math.min(row, parent.getPreferences().getLastStickPositionCount())];
@@ -60,7 +61,7 @@ public class JoystickPanel extends JPanel {
 		joystick = new Joystick(32767, STICK_IMAGE_SIZE,stickPositions);
 
 		this.script = script;
-		this.table = (DefaultTableModel) jTable.getModel();
+		this.table = pianoRoll.getModel();
 		this.parent = parent;
 		this.stickType = stickType;
 
@@ -329,11 +330,13 @@ public class JoystickPanel extends JPanel {
 	}
 
 	public void setEditingRows (int[] rows) {
-		//TODO set InputLines and update them
 		InputLine[] tmp = new InputLine[rows.length];
 		Arrays.setAll(tmp, i -> script.getInputLines().get(rows[i]));
 		inputLines = tmp;
 		joystick.unlock();
+		StickPosition tmpStickPosition = stickType == StickType.L_STICK ? tmp[0].getStickL() : tmp[0].getStickR();
+		xSpinner.setValue(tmpStickPosition.getX());
+		ySpinner.setValue(tmpStickPosition.getY());
 		setSpinnersAndButtonsEnabled(true);
 	}
 
