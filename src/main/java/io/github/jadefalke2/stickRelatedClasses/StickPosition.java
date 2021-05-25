@@ -52,7 +52,7 @@ public class StickPosition {
 			radius = 1;
 		}
 
-		theta = Math.atan2(y,x);
+		theta = ((Math.atan2(y,x) + (2*Math.PI)) % (2*Math.PI));
 	}
 
 	/**
