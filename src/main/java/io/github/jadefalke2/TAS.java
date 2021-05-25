@@ -57,10 +57,9 @@ public class TAS {
 
 		//initialising windows -> set to be invisible by default
 		//will be set visible once they are supposed to
-		mainEditorWindow = new MainEditorWindow(new FunctionEditorWindow(this), this);
+		mainEditorWindow = new MainEditorWindow(new FunctionEditorWindow(this), Script.getEmptyScript(10), this);
 
-
-		mainEditorWindow.prepareEditor(Script.getEmptyScript(10));
+		mainEditorWindow.setVisible(true);
 	}
 
 
@@ -181,6 +180,9 @@ public class TAS {
 		new SettingsDialog(preferences).setVisible(true);
 	}
 
+	public void newFile(){
+		mainEditorWindow.setScript(Script.getEmptyScript(10));
+	}
 
 	// getter
 
