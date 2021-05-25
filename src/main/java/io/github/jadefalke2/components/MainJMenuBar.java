@@ -25,7 +25,6 @@ public class MainJMenuBar extends JMenuBar {
 		newJMenuItem.addActionListener(e -> {
 			parent.newFile();
 		});
-		newJMenuItem.setEnabled(false);
 
 		JMenuItem newWindowJMenuItem = fileJMenu.add(new JMenuItem("New Window"));
 		newWindowJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
@@ -41,8 +40,6 @@ public class MainJMenuBar extends JMenuBar {
 				corruptedScriptException.printStackTrace();
 			}
 		});
-
-		openJMenuItem.setEnabled(true);
 
 		JMenuItem saveJMenuItem = fileJMenu.add(new JMenuItem("Save"));
 		saveJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
