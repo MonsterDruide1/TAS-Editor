@@ -151,6 +151,10 @@ public class Joystick extends JPanel {
 		return currentPos;
 	}
 
+	public StickPosition getStickPosition(){
+		return new StickPosition(currentPos.x, currentPos.y);
+	}
+
 
 	// Overwrites
 

@@ -88,7 +88,6 @@ public class JoystickPanel extends JPanel {
 
 		ChangeListener spinnerListener = e -> {
 			if(shouldTriggerUpdate){
-				shouldTriggerUpdate = false;
 				StickPosition oldPos = stickPosition;
 
 				if(e.getSource().equals(xSpinner))
@@ -103,11 +102,7 @@ public class JoystickPanel extends JPanel {
 					throw new IllegalArgumentException("Common ChangeListener called on unknown Spinner: "+e.getSource());
 
 				applyPosition(stickPosition, oldPos);
-				updateCartSpinners();
-				updatePolarSpinners();
-				updateVisual();
-				repaint();
-				shouldTriggerUpdate = true;
+				updateAll();
 			}
 		};
 
@@ -290,25 +285,14 @@ public class JoystickPanel extends JPanel {
 	private void updateStickPosition(boolean executeAction, StickPosition oldStickPosition) {
 		if(inputLines == null) return;
 
-        int x = (int)joystick.getThumbPos().getX();
-        int y = (int)joystick.getThumbPos().getY();
-
-		StickPosition unCropped = new StickPosition(x, y);
+		StickPosition unCropped = joystick.getStickPosition();
 		double radius = Math.min(unCropped.getRadius(), 1);
 		stickPosition = new StickPosition(unCropped.getTheta(), radius);
 
-        shouldTriggerUpdate = false;
-        xSpinner.setValue(stickPosition.getX());
-        ySpinner.setValue(stickPosition.getY());
-        radiusSpinner.setValue(stickPosition.getRadius());
-        angleSpinner.setValue((int) Math.toDegrees(stickPosition.getTheta()));
-        updateVisual();
-        shouldTriggerUpdate = true;
+        updateAll();
 
         if(executeAction)
-        	parent.executeAction(new StickAction(inputLines, stickType, oldStickPosition, stickPosition, table));
-
-		repaint();
+        	applyPosition(stickPosition, oldStickPosition);
 	}
 
 	public void setGreyedOut () {
@@ -324,9 +308,7 @@ public class JoystickPanel extends JPanel {
 		inputLines = tmp;
 		joystick.unlock();
 		stickPosition = stickType == StickType.L_STICK ? tmp[0].getStickL() : tmp[0].getStickR();
-		updateVisual();
-		updateCartSpinners();
-		updatePolarSpinners();
+		updateAll();
 		setSpinnersAndButtonsEnabled(true);
 
 		selectedRows = rows;
@@ -351,6 +333,14 @@ public class JoystickPanel extends JPanel {
 		centerButton.setEnabled(enable);
 		keepStickPosButton.setEnabled(enable);
 		smoothTransitionButton.setEnabled(enable);
+	}
+
+	private void updateAll(){
+		shouldTriggerUpdate = false;
+		updateVisual();
+		updateCartSpinners();
+		updatePolarSpinners();
+		shouldTriggerUpdate = true;
 	}
 
 	/**
