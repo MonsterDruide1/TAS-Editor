@@ -18,6 +18,7 @@ public class MainEditorWindow extends JFrame {
 
 	// frame that can be opened from this one
 	private final FunctionEditorWindow functionEditorWindow;
+	private final MainJMenuBar mainJMenuBar;
 
 	//JPanel
 	private JPanel editor;
@@ -81,7 +82,7 @@ public class MainEditorWindow extends JFrame {
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 
-		MainJMenuBar mainJMenuBar = new MainJMenuBar(this, parent);
+		mainJMenuBar = new MainJMenuBar(this, parent);
 
 		JButton functionEditorButton = new JButton("Function editor");
 		functionEditorButton.addActionListener(e -> functionEditorWindow.startUp());
@@ -163,4 +164,7 @@ public class MainEditorWindow extends JFrame {
 		return script;
 	}
 
+	public void updateUndoMenu(boolean enableUndo, boolean enableRedo) {
+		mainJMenuBar.updateUndoMenu(enableUndo, enableRedo);
+	}
 }

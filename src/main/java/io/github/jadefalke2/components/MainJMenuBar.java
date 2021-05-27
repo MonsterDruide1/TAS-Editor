@@ -16,6 +16,8 @@ import java.util.prefs.Preferences;
 
 public class MainJMenuBar extends JMenuBar {
 
+	private final JMenuItem undo, redo;
+
 	public MainJMenuBar(MainEditorWindow mainEditorWindow, TAS parent){
 		// TODO: Handle the rest of the listeners and make things enabled or disabled correctly
 
@@ -62,13 +64,13 @@ public class MainJMenuBar extends JMenuBar {
 
 		JMenu editJMenu = add(new JMenu("Edit"));
 
-		JMenuItem undoJMenuItem = editJMenu.add(new JMenuItem("Undo"));
-		undoJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK));
-		undoJMenuItem.addActionListener(e -> parent.undo());
+		undo = editJMenu.add(new JMenuItem("Undo"));
+		undo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK));
+		undo.addActionListener(e -> parent.undo());
 
-		JMenuItem redoJMenuItem = editJMenu.add(new JMenuItem("Redo"));
-		redoJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
-		redoJMenuItem.addActionListener(e -> parent.redo());
+		redo = editJMenu.add(new JMenuItem("Redo"));
+		redo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
+		redo.addActionListener(e -> parent.redo());
 
 		editJMenu.addSeparator();
 
@@ -137,5 +139,11 @@ public class MainJMenuBar extends JMenuBar {
 			}
 		});
 
+		updateUndoMenu(false, false);
+	}
+
+	public void updateUndoMenu(boolean enableUndo, boolean enableRedo) {
+		undo.setEnabled(enableUndo);
+		redo.setEnabled(enableRedo);
 	}
 }

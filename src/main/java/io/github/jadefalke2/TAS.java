@@ -123,6 +123,7 @@ public class TAS {
 		action.execute();
 		undoStack.push(action);
 		redoStack.clear();
+		mainEditorWindow.updateUndoMenu(!undoStack.isEmpty(), !redoStack.isEmpty());
 	}
 
 	public void undo() {
@@ -132,6 +133,7 @@ public class TAS {
 		Action action = undoStack.pop();
 		action.revert();
 		redoStack.push(action);
+		mainEditorWindow.updateUndoMenu(!undoStack.isEmpty(), !redoStack.isEmpty());
 	}
 
 	public void redo() {
@@ -141,6 +143,7 @@ public class TAS {
 		Action action = redoStack.pop();
 		action.execute();
 		undoStack.push(action);
+		mainEditorWindow.updateUndoMenu(!undoStack.isEmpty(), !redoStack.isEmpty());
 	}
 
 	public void cut(){
