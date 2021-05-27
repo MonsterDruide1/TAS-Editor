@@ -4,19 +4,11 @@ import java.awt.*;
 
 public class StickPosition {
 
-	//TODO is this double-storage necessary?
-
 	// the cartesian coordinates
 	// Range of x: -32767;32767
 	// Range of y: -32767;32767
 	private int x;
 	private int y;
-
-	// the polar coordinates
-	// Range of theta: 0;2π/0;360
-	// Range of radius: 0;1
-	private double theta;
-	private double radius;
 
 	// The max x/y range0
 	private final static int MAX_SIZE = 32767;
@@ -29,7 +21,6 @@ public class StickPosition {
 	public StickPosition(int x, int y) {
 		this.x = x;
 		this.y = y;
-		updatePolar();
 	}
 
 	/**
@@ -38,9 +29,8 @@ public class StickPosition {
 	 * @param radius radius of this position from 0;0
 	 */
 	public StickPosition(double theta, double radius) {
-		this.theta = theta;
-		this.radius = radius;
-		updateCart();
+		x = (int) ((radius * MAX_SIZE) * Math.cos(theta));
+		y = (int) ((radius * MAX_SIZE) * Math.sin(theta));
 	}
 	/**
 	 * Constructor
@@ -59,29 +49,6 @@ public class StickPosition {
 	public StickPosition clone(){
 		return new StickPosition(x, y);
 	}
-
-	/**
-	 * Updates the polar coordinates based on the cartesian coordinates
-	 */
-	private void updatePolar() {
-		radius = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)) / (double) MAX_SIZE;
-
-		if (radius > 1) {
-			radius = 1;
-		}
-
-		theta = ((Math.atan2(y,x) + (2*Math.PI)) % (2*Math.PI));
-	}
-
-	/**
-	 * Updates the cartesian coordinates based on the polar coordinates
-	 */
-	private void updateCart() {
-		x = (int) ((radius * MAX_SIZE) * Math.cos(theta));
-		y = (int) ((radius * MAX_SIZE) * Math.sin(theta));
-		updatePolar();
-	}
-
 
 	// getter
 
@@ -103,17 +70,17 @@ public class StickPosition {
 	}
 
 	/**
-	 * @return the angle of the stick
+	 * @return the angle of the stick (0-2π)
 	 */
 	public double getTheta() {
-		return theta;
+		return ((Math.atan2(y,x) + (2*Math.PI)) % (2*Math.PI));
 	}
 
 	/**
 	 * @return the radius of the stick (distance from middle)
 	 */
 	public double getRadius() {
-		return radius;
+		return Math.sqrt(Math.pow(x / (double) MAX_SIZE, 2) + Math.pow(y / (double) MAX_SIZE, 2));
 	}
 
 	/**
@@ -134,7 +101,7 @@ public class StickPosition {
 	 * @return a string in polar coordinates
 	 */
 	public String toPolarString (){
-		return Math.floor(Math.toDegrees(theta)) + "°, " + radius;
+		return Math.floor(Math.toDegrees(getTheta())) + "°, " + getRadius();
 	}
 
 	@Override
