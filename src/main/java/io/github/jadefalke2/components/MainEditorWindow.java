@@ -152,7 +152,9 @@ public class MainEditorWindow extends JFrame {
 
 	public void saveFileAs() {
 		try {
-			currentScriptFile = new TxtFileChooser().saveFileAs(script);
+			File savedFile = new TxtFileChooser().saveFileAs(script);
+			if(savedFile != null)
+				currentScriptFile = savedFile;
 		} catch(IOException err){
 			err.printStackTrace();
 		}

@@ -52,6 +52,26 @@ public class TxtFileChooser extends JFileChooser {
 		return file;
 	}
 
+	@Override
+	public void approveSelection(){
+		File file = getSelectedFile();
+		if(file.exists() && getDialogType() == SAVE_DIALOG){
+			int result = JOptionPane.showConfirmDialog(this, "This file already exists, overwrite it?", "Existing file", JOptionPane.YES_NO_CANCEL_OPTION);
+			switch (result){
+				case JOptionPane.YES_OPTION:
+					super.approveSelection();
+					return;
+				case JOptionPane.NO_OPTION:
+				case JOptionPane.CLOSED_OPTION:
+					return;
+				case JOptionPane.CANCEL_OPTION:
+					cancelSelection();
+					return;
+			}
+		}
+		super.approveSelection();
+	}
+
 	public static void writeToFile(Script scriptToSave, File file) throws IOException {
 		Util.writeFile(scriptToSave.getFull(), file);
 	}
