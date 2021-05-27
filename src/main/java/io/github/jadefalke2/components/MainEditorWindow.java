@@ -138,10 +138,23 @@ public class MainEditorWindow extends JFrame {
 	 * writes the current script into the current file
 	 */
 	public void saveFile() {
+		if(currentScriptFile == null){
+			saveFileAs();
+			return;
+		}
+
 		try {
 			TxtFileChooser.writeToFile(script, currentScriptFile);
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+	}
+
+	public void saveFileAs() {
+		try {
+			currentScriptFile = new TxtFileChooser().saveFileAs(script);
+		} catch(IOException err){
+			err.printStackTrace();
 		}
 	}
 
