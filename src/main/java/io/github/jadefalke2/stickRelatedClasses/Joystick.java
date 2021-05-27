@@ -1,5 +1,7 @@
 package io.github.jadefalke2.stickRelatedClasses;
 
+import io.github.jadefalke2.util.Settings;
+
 import javax.swing.*;
 import javax.swing.event.SwingPropertyChangeSupport;
 import java.awt.*;
@@ -18,6 +20,7 @@ public class Joystick extends JPanel {
 	private int panelWidth;
 
 	private boolean locked;
+	private Settings settings;
 
 	// stick positions
 	private StickPosition[] stickPositions = new StickPosition[0];
@@ -33,9 +36,10 @@ public class Joystick extends JPanel {
 	 *                    would be (-5,5)
 	 */
 
-	public Joystick(int output_max) {
+	public Joystick(int output_max, Settings settings) {
 		assert output_max > 0;
 
+		this.settings = settings;
 		outputMax = output_max;
 		panelWidth = Math.min(getWidth(), getHeight());
 		thumbDiameter = panelWidth / 15;
@@ -210,6 +214,14 @@ public class Joystick extends JPanel {
 		g.setColor(Color.black);
 		g.drawLine(panelWidth / 2, thumbRadius + BORDER_THICKNESS, panelWidth / 2, panelWidth - thumbRadius - BORDER_THICKNESS);
 		g.drawLine(thumbRadius + BORDER_THICKNESS, panelWidth / 2, panelWidth - thumbRadius - BORDER_THICKNESS, panelWidth / 2);
+
+		if(locked){
+			if(settings.isDarkTheme())
+				g.setColor(new Color(0, 0, 0, 150));
+			else
+				g.setColor(new Color(255, 255, 255, 150));
+			g.fillOval(thumbRadius, thumbRadius, panelWidth - thumbDiameter, panelWidth - thumbDiameter);
+		}
 	}
 
 	@Override

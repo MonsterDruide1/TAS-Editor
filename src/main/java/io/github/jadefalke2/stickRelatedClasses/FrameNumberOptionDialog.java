@@ -1,5 +1,7 @@
 package io.github.jadefalke2.stickRelatedClasses;
 
+import io.github.jadefalke2.util.Settings;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -23,7 +25,7 @@ public class FrameNumberOptionDialog {
 		return 0;
 	}
 
-	public static StickPosition[] getSmoothTransitionData () {
+	public static StickPosition[] getSmoothTransitionData (Settings settings) {
 		// creates the spinner
 		SpinnerNumberModel model = new SpinnerNumberModel(1, 0, 500, 1);
 		JSpinner spinner = new JSpinner(model);
@@ -34,9 +36,9 @@ public class FrameNumberOptionDialog {
 		dropdownMenu.addItem("Linear");
 
 
-		Joystick startJoystick = new Joystick(32767);
+		Joystick startJoystick = new Joystick(32767, settings);
 		startJoystick.unlock();
-		Joystick endJoystick =   new Joystick(32767);
+		Joystick endJoystick =   new Joystick(32767, settings);
 		endJoystick.unlock();
 
 		JPanel panel = new JPanel();

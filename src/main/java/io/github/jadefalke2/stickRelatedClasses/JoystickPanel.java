@@ -54,7 +54,7 @@ public class JoystickPanel extends JPanel {
 
 		// setting global vars
 		stickPosition = new StickPosition(0,0);
-		joystick = new Joystick(32767);
+		joystick = new Joystick(32767, parent.getPreferences());
 
 		this.script = script;
 		this.table = pianoRoll.getModel();
@@ -249,7 +249,7 @@ public class JoystickPanel extends JPanel {
 		smoothTransitionButton = new JButton("smooth transition");
 		smoothTransitionButton.addActionListener(e -> {
 			//int frameNumber = FrameNumberOptionDialog.getSmoothTransitionData();
-			FrameNumberOptionDialog.getSmoothTransitionData();
+			FrameNumberOptionDialog.getSmoothTransitionData(parent.getPreferences());
 		});
 
 
@@ -296,7 +296,6 @@ public class JoystickPanel extends JPanel {
 	}
 
 	public void setGreyedOut () {
-		//TODO color of stick
 		joystick.lock();
 		setSpinnersAndButtonsEnabled(false);
 	}
