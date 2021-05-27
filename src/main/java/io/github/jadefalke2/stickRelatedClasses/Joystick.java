@@ -19,8 +19,7 @@ public class Joystick extends JPanel {
 	private int thumbRadius;
 	private int panelWidth;
 
-	private boolean locked;
-	private Settings settings;
+	private final Settings settings;
 
 	// stick positions
 	private StickPosition[] stickPositions = new StickPosition[0];
@@ -44,8 +43,6 @@ public class Joystick extends JPanel {
 		panelWidth = Math.min(getWidth(), getHeight());
 		thumbDiameter = panelWidth / 15;
 		thumbRadius = thumbDiameter / 2;
-
-		locked = true;
 
 		MouseAdapter mouseAdapter = new MouseAdapter() {
 
@@ -99,7 +96,7 @@ public class Joystick extends JPanel {
 
 	private void updateThumbPos(int mouseX, int mouseY) {
 
-		if (locked)
+		if (!isEnabled())
 			return;
 
 		// if the cursor is clicked out of bounds, we'll modify the position
@@ -119,19 +116,6 @@ public class Joystick extends JPanel {
 		currentPos = getOutputPos(new Point(mouseX, mouseY));
 	}
 
-	/**
-	 * locks the joystick
-	 */
-	public void lock () {
-		centerThumbPad();
-		locked = true;
-	}
-
-	public void unlock () {
-		locked = false;
-	}
-
-
  	/**
 	 * @param thumbPos selected position on the panel (visually)
 	 * @return the scaled position of the joystick thumb pad (in normal range)
@@ -149,10 +133,6 @@ public class Joystick extends JPanel {
 
 	public void setThumbPos (Point scaled){
 		currentPos = scaled;
-	}
-
-	public Point getThumbPos(){
-		return currentPos;
 	}
 
 	public StickPosition getStickPosition(){
@@ -215,7 +195,7 @@ public class Joystick extends JPanel {
 		g.drawLine(panelWidth / 2, thumbRadius + BORDER_THICKNESS, panelWidth / 2, panelWidth - thumbRadius - BORDER_THICKNESS);
 		g.drawLine(thumbRadius + BORDER_THICKNESS, panelWidth / 2, panelWidth - thumbRadius - BORDER_THICKNESS, panelWidth / 2);
 
-		if(locked){
+		if(!isEnabled()){
 			if(settings.isDarkTheme())
 				g.setColor(new Color(0, 0, 0, 150));
 			else
@@ -236,5 +216,13 @@ public class Joystick extends JPanel {
 
 	public void setStickPositions(StickPosition[] stickPositions) {
 		this.stickPositions = stickPositions;
+	}
+
+	@Override
+	public void setEnabled(boolean enabled){
+		super.setEnabled(enabled);
+
+		if(!isEnabled())
+			centerThumbPad();
 	}
 }

@@ -269,7 +269,7 @@ public class JoystickPanel extends JPanel {
 		c.gridy = 12;
 		add(keepStickPosButton, c);
 
-		setGreyedOut();
+		setAllEnabled(false);
     }
 
 
@@ -295,20 +295,14 @@ public class JoystickPanel extends JPanel {
         	applyPosition(stickPosition, oldStickPosition);
 	}
 
-	public void setGreyedOut () {
-		joystick.lock();
-		setSpinnersAndButtonsEnabled(false);
-	}
-
 	public void setEditingRows (int[] rows) {
 		shouldTriggerUpdate = false;
 		InputLine[] tmp = new InputLine[rows.length];
 		Arrays.setAll(tmp, i -> script.getInputLines().get(rows[i]));
 		inputLines = tmp;
-		joystick.unlock();
 		stickPosition = stickType == StickType.L_STICK ? tmp[0].getStickL() : tmp[0].getStickR();
 		updateAll();
-		setSpinnersAndButtonsEnabled(true);
+		setAllEnabled(true);
 
 		selectedRows = rows;
 		StickPosition[] stickPositions = new StickPosition[Math.min(rows[0], parent.getPreferences().getLastStickPositionCount())];
@@ -322,7 +316,7 @@ public class JoystickPanel extends JPanel {
 		shouldTriggerUpdate = true;
 	}
 
-	private void setSpinnersAndButtonsEnabled (boolean enable) {
+	public void setAllEnabled(boolean enable) {
 		angleSpinner.setEnabled(enable);
 		radiusSpinner.setEnabled(enable);
 
@@ -332,6 +326,8 @@ public class JoystickPanel extends JPanel {
 		centerButton.setEnabled(enable);
 		keepStickPosButton.setEnabled(enable);
 		smoothTransitionButton.setEnabled(enable);
+
+		joystick.setEnabled(enable);
 	}
 
 	private void updateAll(){

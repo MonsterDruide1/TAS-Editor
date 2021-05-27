@@ -32,8 +32,8 @@ public class SideJoystickPanel extends JPanel {
 				case 0 -> {
 					//no frames selected
 					frameAmountLabel.setText("Currently no frames are being edited");
-					lstickPanel.setGreyedOut();
-					rstickPanel.setGreyedOut();
+					lstickPanel.setAllEnabled(false);
+					rstickPanel.setAllEnabled(false);
 				}
 				case 1 -> {
 					//one frame is selected

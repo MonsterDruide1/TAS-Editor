@@ -37,9 +37,7 @@ public class FrameNumberOptionDialog {
 
 
 		Joystick startJoystick = new Joystick(32767, settings);
-		startJoystick.unlock();
 		Joystick endJoystick =   new Joystick(32767, settings);
-		endJoystick.unlock();
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridBagLayout());
