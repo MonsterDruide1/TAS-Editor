@@ -21,6 +21,8 @@ import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 public class TAS {
+	public static TAS INITIAL_MAIN_TAS_FOR_DEBUGGING;
+
 
 	private MainEditorWindow mainEditorWindow;
 
@@ -30,7 +32,7 @@ public class TAS {
 	private Stack<Action> redoStack;
 
 	public static void main(String[] args) {
-		new TAS();
+		INITIAL_MAIN_TAS_FOR_DEBUGGING = new TAS();
 	}
 
 	public TAS() {
