@@ -321,7 +321,9 @@ public class JoystickPanel extends JPanel {
         int x = (int)joystick.getThumbPos().getX();
         int y = (int)joystick.getThumbPos().getY();
 
-		stickPosition = new StickPosition(x, y);
+		StickPosition unCropped = new StickPosition(x, y);
+		double radius = Math.min(unCropped.getRadius(), 1);
+		stickPosition = new StickPosition(unCropped.getTheta(), radius);
 
         shouldTriggerUpdate = false;
         xSpinner.setValue(stickPosition.getX());
