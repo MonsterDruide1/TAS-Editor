@@ -25,14 +25,11 @@ public class Settings {
 
 	public void storeSettings() throws BackingStoreException {
 		backingPrefs.clear();
-		Arrays.stream(getClass().getFields())
-			.forEach(field -> {
-				try {
-					backingPrefs.put(field.getName(), field.get(this).toString());
-				} catch (IllegalAccessException e) {
-					e.printStackTrace();
-				}
-			});
+
+		backingPrefs.put("darkTheme", darkTheme+"");
+		backingPrefs.put("lastStickPositionCount", lastStickPositionCount+"");
+
+		backingPrefs.flush();
 	}
 
 
