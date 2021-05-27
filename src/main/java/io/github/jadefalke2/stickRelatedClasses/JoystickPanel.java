@@ -98,7 +98,9 @@ public class JoystickPanel extends JPanel {
 
         //TODO simplify these repeating listeners
         xSpinner.addChangeListener(e -> {
-            stickPosition.setX((int) xSpinner.getValue());
+        	StickPosition oldPos = stickPosition;
+        	stickPosition = new StickPosition((int) xSpinner.getValue(), stickPosition.getY());
+			applyPosition(stickPosition, oldPos);
            	if(shouldTriggerUpdate){
 				shouldTriggerUpdate = false;
            		updatePolarSpinners();
@@ -109,7 +111,9 @@ public class JoystickPanel extends JPanel {
         });
 
         ySpinner.addChangeListener(e -> {
-            stickPosition.setY((int) ySpinner.getValue());
+			StickPosition oldPos = stickPosition;
+			stickPosition = new StickPosition(stickPosition.getX(), (int) ySpinner.getValue());
+			applyPosition(stickPosition, oldPos);
             if(shouldTriggerUpdate){
 				shouldTriggerUpdate = false;
 				updatePolarSpinners();
@@ -120,7 +124,9 @@ public class JoystickPanel extends JPanel {
         });
 
         radiusSpinner.addChangeListener(e -> {
-            stickPosition.setRadius((double) radiusSpinner.getValue());
+			StickPosition oldPos = stickPosition;
+        	stickPosition = new StickPosition(stickPosition.getTheta(), (double)radiusSpinner.getValue());
+			applyPosition(stickPosition, oldPos);
             if(shouldTriggerUpdate){
 				shouldTriggerUpdate = false;
 				updateCartSpinners();
@@ -131,7 +137,9 @@ public class JoystickPanel extends JPanel {
         });
 
         angleSpinner.addChangeListener(e -> {
-            stickPosition.setTheta((int)angleSpinner.getValue());
+			StickPosition oldPos = stickPosition;
+        	stickPosition = new StickPosition((int)angleSpinner.getValue(), stickPosition.getRadius());
+			applyPosition(stickPosition, oldPos);
             if(shouldTriggerUpdate){
 				shouldTriggerUpdate = false;
 				updateCartSpinners();
@@ -296,16 +304,20 @@ public class JoystickPanel extends JPanel {
     }
 
 
+    private void applyPosition(StickPosition newPos, StickPosition oldPos){
+		parent.executeAction(new StickAction(inputLines, stickType, oldPos, newPos, table));
+	}
+
 	/**
 	 * Updates the stick position based on the sliders
 	 */
 	private void updateStickPosition(boolean executeAction) {
-    	StickPosition oldStickPosition = stickPosition.clone();
+    	StickPosition oldStickPosition = stickPosition;
 
         int x = (int)joystick.getThumbPos().getX();
         int y = (int)joystick.getThumbPos().getY();
 
-		stickPosition.setPosition(x,y);
+		stickPosition = new StickPosition(x, y);
 
         shouldTriggerUpdate = false;
         xSpinner.setValue(stickPosition.getX());
@@ -328,6 +340,7 @@ public class JoystickPanel extends JPanel {
 	}
 
 	public void setEditingRows (int[] rows) {
+		shouldTriggerUpdate = false;
 		InputLine[] tmp = new InputLine[rows.length];
 		Arrays.setAll(tmp, i -> script.getInputLines().get(rows[i]));
 		inputLines = tmp;
@@ -336,6 +349,7 @@ public class JoystickPanel extends JPanel {
 		xSpinner.setValue(tmpStickPosition.getX());
 		ySpinner.setValue(tmpStickPosition.getY());
 		setSpinnersAndButtonsEnabled(true);
+		shouldTriggerUpdate = true;
 	}
 
 	private void setSpinnersAndButtonsEnabled (boolean enable) {

@@ -32,9 +32,27 @@ public class StickPosition {
 		updatePolar();
 	}
 
+	/**
+	 * Constructor
+	 * @param theta the angle of this position (0-2π)
+	 * @param radius radius of this position from 0;0
+	 */
+	public StickPosition(double theta, double radius) {
+		this.theta = theta;
+		this.radius = radius;
+		updateCart();
+	}
+	/**
+	 * Constructor
+	 * @param angle the angle of this position (0-360)
+	 * @param radius radius of this position from 0;0
+	 */
+	public StickPosition(int angle, double radius) {
+		this(Math.toRadians(angle), radius);
+	}
+
 	public StickPosition(String component) {
 		this(Integer.parseInt(component.split(";")[0]), Integer.parseInt(component.split(";")[1]));
-		updatePolar();
 	}
 
 	@Override
@@ -104,57 +122,6 @@ public class StickPosition {
 	public boolean isZeroZero (){
 		return x == 0 && y == 0;
 	}
-
-	// setter
-
-	/**
-	 * sets the x coordinate of the stick
-	 * @param x the value it is being set to
-	 */
-	public void setX(int x) {
-		this.x = x;
-		updatePolar();
-	}
-
-	/**
-	 * sets the y coordinate of the stick
-	 * @param y the value it is being set to
-	 */
-	public void setY(int y) {
-		this.y = y;
-		updatePolar();
-	}
-
-	/**
-	 * sets the x and y position of the stick
-	 * @param x the x value that x is being set to
-	 * @param y the y value that y is being set to
-	 */
-	public void setPosition(int x, int y) {
-		this.x = x;
-		this.y = y;
-		updatePolar();
-		updateCart(); //to apply clamped radius
-	}
-
-	/**
-	 * sets the angle of the stick position
-	 * @param theta the new angle
-	 */
-	public void setTheta(int theta) {
-		this.theta = Math.toRadians(theta);
-		updateCart();
-	}
-
-	/**
-	 * sets the radius of the new stick position
-	 * @param radius the new radius
-	 */
-	public void setRadius(double radius) {
-		this.radius = radius;
-		updateCart();
-	}
-
 
 	/**
 	 * @return a string in cartesian coordinates

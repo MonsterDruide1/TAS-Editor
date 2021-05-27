@@ -3,7 +3,6 @@ package io.github.jadefalke2;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
-import io.github.jadefalke2.actions.LineAction;
 import io.github.jadefalke2.components.*;
 import io.github.jadefalke2.actions.Action;
 import io.github.jadefalke2.util.CircularStack;
@@ -13,7 +12,6 @@ import io.github.jadefalke2.util.Stack;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.UnsupportedFlavorException;
