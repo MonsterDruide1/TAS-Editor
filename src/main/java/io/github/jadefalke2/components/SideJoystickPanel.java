@@ -1,15 +1,11 @@
 package io.github.jadefalke2.components;
 
-import io.github.jadefalke2.InputLine;
 import io.github.jadefalke2.Script;
 import io.github.jadefalke2.TAS;
 import io.github.jadefalke2.stickRelatedClasses.JoystickPanel;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.awt.*;
-import java.util.Arrays;
 
 public class SideJoystickPanel extends JPanel {
 

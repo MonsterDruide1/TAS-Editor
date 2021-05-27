@@ -7,8 +7,8 @@ public class StickPosition {
 	// the cartesian coordinates
 	// Range of x: -32767;32767
 	// Range of y: -32767;32767
-	private int x;
-	private int y;
+	private final int x;
+	private final int y;
 
 	// The max x/y range0
 	private final static int MAX_SIZE = 32767;

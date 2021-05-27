@@ -12,7 +12,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.prefs.Preferences;
 
 public class MainJMenuBar extends JMenuBar {
 
@@ -24,9 +23,7 @@ public class MainJMenuBar extends JMenuBar {
 		JMenu fileJMenu = add(new JMenu("File"));
 		JMenuItem newJMenuItem = fileJMenu.add(new JMenuItem("New"));
 		newJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK));
-		newJMenuItem.addActionListener(e -> {
-			parent.newFile();
-		});
+		newJMenuItem.addActionListener(e -> parent.newFile());
 
 		JMenuItem newWindowJMenuItem = fileJMenu.add(new JMenuItem("New Window"));
 		newWindowJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
@@ -49,7 +46,7 @@ public class MainJMenuBar extends JMenuBar {
 
 		JMenuItem saveAsJMenuItem = fileJMenu.add(new JMenuItem("Save As..."));
 		saveAsJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
-		saveAsJMenuItem.addActionListener(e -> {mainEditorWindow.saveFileAs();});
+		saveAsJMenuItem.addActionListener(e -> mainEditorWindow.saveFileAs());
 
 		fileJMenu.addSeparator();
 

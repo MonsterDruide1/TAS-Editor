@@ -64,11 +64,7 @@ public class TAS {
 
 
 	private void initPreferences(){
-		try {
-			preferences = new Settings(Preferences.userRoot().node(getClass().getName()), this);
-		} catch (BackingStoreException e) {
-			e.printStackTrace();
-		}
+		preferences = new Settings(Preferences.userRoot().node(getClass().getName()), this);
 		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
 			try {
 				preferences.storeSettings();

@@ -3,7 +3,6 @@ package io.github.jadefalke2.components;
 import io.github.jadefalke2.Script;
 import io.github.jadefalke2.TAS;
 import io.github.jadefalke2.Util;
-import io.github.jadefalke2.stickRelatedClasses.JoystickPanel;
 import io.github.jadefalke2.util.CorruptedScriptException;
 
 import javax.swing.*;
@@ -21,10 +20,10 @@ public class MainEditorWindow extends JFrame {
 	private final MainJMenuBar mainJMenuBar;
 
 	//JPanel
-	private JPanel editor;
+	private final JPanel editor;
 
-	private PianoRoll pianoRoll;
-	private SideJoystickPanel joystickPanel;
+	private final PianoRoll pianoRoll;
+	private final SideJoystickPanel joystickPanel;
 
 	//script
 	private Script script;

@@ -166,10 +166,6 @@ public class PianoRoll extends JTable implements ComponentListener {
 		InputLine currentLine = script.getInputLines().get(row);
 	}
 
-	public void greyOut () {
-
-	}
-
 	public void deleteSelectedRows(){
 		parent.executeAction(new LineAction(this.model, script, getSelectedRows(), LineAction.Type.DELETE));
 	}

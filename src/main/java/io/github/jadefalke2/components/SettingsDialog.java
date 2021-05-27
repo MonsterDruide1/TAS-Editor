@@ -5,9 +5,7 @@ import io.github.jadefalke2.util.Settings;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;
-import java.lang.reflect.Field;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 public class SettingsDialog extends JDialog {
 
@@ -51,9 +49,7 @@ public class SettingsDialog extends JDialog {
 		model.setMinimum(0);
 		spinner.setModel(model);
 		spinner.setValue(defaultState);
-		spinner.addChangeListener((event) -> {
-			setter.accept((Integer)spinner.getValue());
-		});
+		spinner.addChangeListener((event) -> setter.accept((Integer)spinner.getValue()));
 		mainPanel.add(spinner, c);
 		c.gridx = 0;
 	}

@@ -15,7 +15,7 @@ public class Settings {
 	private final Preferences backingPrefs;
 	private final TAS parent;
 
-	public Settings(Preferences prefs, TAS parent) throws BackingStoreException {
+	public Settings(Preferences prefs, TAS parent) {
 		this.backingPrefs = prefs;
 		this.parent = parent;
 

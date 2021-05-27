@@ -18,9 +18,9 @@ public class JoystickPanel extends JPanel {
 
 	//buttons
 
-	JButton centerButton;
-	JButton smoothTransitionButton;
-	JButton keepStickPosButton;
+	private final JButton centerButton;
+	private final JButton smoothTransitionButton;
+	private final JButton keepStickPosButton;
 
 	// Spinners
     private final JSpinner xSpinner;
@@ -342,7 +342,7 @@ public class JoystickPanel extends JPanel {
 	 * Updates the visual stickPosition -> is called on changes
 	 */
 	private void updateVisual (){
-		joystick.setThumbPos(new Point((int)stickPosition.getX(),(int)stickPosition.getY()));
+		joystick.setThumbPos(new Point(stickPosition.getX(), stickPosition.getY()));
 		repaint();
 	}
 
