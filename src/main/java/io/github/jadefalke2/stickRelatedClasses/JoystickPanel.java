@@ -96,60 +96,35 @@ public class JoystickPanel extends JPanel {
 
 		joystick.setThumbPos(new Point(stickPosition.getX(),stickPosition.getY()));
 
-        //TODO simplify these repeating listeners
-        xSpinner.addChangeListener(e -> {
-           	if(shouldTriggerUpdate){
+		ChangeListener spinnerListener = e -> {
+			if(shouldTriggerUpdate){
 				shouldTriggerUpdate = false;
 				StickPosition oldPos = stickPosition;
-				stickPosition = new StickPosition((int) xSpinner.getValue(), stickPosition.getY());
-				applyPosition(stickPosition, oldPos);
-           		updatePolarSpinners();
-				updateVisual();
-				repaint();
-				shouldTriggerUpdate = true;
-			}
-        });
 
-        ySpinner.addChangeListener(e -> {
-            if(shouldTriggerUpdate){
-				shouldTriggerUpdate = false;
-				StickPosition oldPos = stickPosition;
-				stickPosition = new StickPosition(stickPosition.getX(), (int) ySpinner.getValue());
+				if(e.getSource().equals(xSpinner))
+					stickPosition = new StickPosition((int) xSpinner.getValue(), stickPosition.getY());
+				else if(e.getSource().equals(ySpinner))
+					stickPosition = new StickPosition(stickPosition.getX(), (int) ySpinner.getValue());
+				else if(e.getSource().equals(radiusSpinner))
+					stickPosition = new StickPosition(stickPosition.getTheta(), (double)radiusSpinner.getValue());
+				else if(e.getSource().equals(angleSpinner))
+					stickPosition = new StickPosition((int)angleSpinner.getValue(), stickPosition.getRadius());
+				else
+					throw new IllegalArgumentException("Common ChangeListener called on unknown Spinner: "+e.getSource());
+
 				applyPosition(stickPosition, oldPos);
+				updateCartSpinners();
 				updatePolarSpinners();
 				updateVisual();
 				repaint();
 				shouldTriggerUpdate = true;
 			}
-        });
+		};
 
-        radiusSpinner.addChangeListener(e -> {
-            if(shouldTriggerUpdate){
-				shouldTriggerUpdate = false;
-				StickPosition oldPos = stickPosition;
-				stickPosition = new StickPosition(stickPosition.getTheta(), (double)radiusSpinner.getValue());
-				applyPosition(stickPosition, oldPos);
-				updateCartSpinners();
-				updateVisual();
-				repaint();
-				shouldTriggerUpdate = true;
-			}
-        });
-
-        angleSpinner.addChangeListener(e -> {
-            if(shouldTriggerUpdate){
-				shouldTriggerUpdate = false;
-				StickPosition oldPos = stickPosition;
-				stickPosition = new StickPosition((int)angleSpinner.getValue(), stickPosition.getRadius());
-				applyPosition(stickPosition, oldPos);
-				updateCartSpinners();
-				updateVisual();
-				repaint();
-				shouldTriggerUpdate = true;
-			}
-        });
-
-
+		xSpinner.addChangeListener(spinnerListener);
+		ySpinner.addChangeListener(spinnerListener);
+		radiusSpinner.addChangeListener(spinnerListener);
+		angleSpinner.addChangeListener(spinnerListener);
 
         MouseAdapter mouseListener = new MouseAdapter() {
         	private StickPosition oldStickPos = null;
