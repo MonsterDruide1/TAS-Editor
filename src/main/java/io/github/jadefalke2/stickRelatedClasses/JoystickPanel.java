@@ -332,9 +332,10 @@ public class JoystickPanel extends JPanel {
 		Arrays.setAll(tmp, i -> script.getInputLines().get(rows[i]));
 		inputLines = tmp;
 		joystick.unlock();
-		StickPosition tmpStickPosition = stickType == StickType.L_STICK ? tmp[0].getStickL() : tmp[0].getStickR();
-		xSpinner.setValue(tmpStickPosition.getX());
-		ySpinner.setValue(tmpStickPosition.getY());
+		stickPosition = stickType == StickType.L_STICK ? tmp[0].getStickL() : tmp[0].getStickR();
+		updateVisual();
+		updateCartSpinners();
+		updatePolarSpinners();
 		setSpinnersAndButtonsEnabled(true);
 		shouldTriggerUpdate = true;
 	}
@@ -355,7 +356,7 @@ public class JoystickPanel extends JPanel {
 	 * Updates the visual stickPosition -> is called on changes
 	 */
 	private void updateVisual (){
-		joystick.setThumbPos(new Point((int)xSpinner.getValue(),(int)ySpinner.getValue()));
+		joystick.setThumbPos(new Point((int)stickPosition.getX(),(int)stickPosition.getY()));
 		repaint();
 	}
 
