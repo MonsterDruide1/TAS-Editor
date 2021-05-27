@@ -16,8 +16,6 @@ import java.util.Arrays;
 
 public class JoystickPanel extends JPanel {
 
-	private final static int STICK_IMAGE_SIZE = 200;
-
 	//buttons
 
 	JButton centerButton;
@@ -58,7 +56,7 @@ public class JoystickPanel extends JPanel {
 		// setting global vars
 		stickPositions = new StickPosition[Math.min(row, parent.getPreferences().getLastStickPositionCount())];
 		stickPosition = new StickPosition(0,0);
-		joystick = new Joystick(32767, STICK_IMAGE_SIZE,stickPositions);
+		joystick = new Joystick(32767, stickPositions);
 
 		this.script = script;
 		this.table = pianoRoll.getModel();
@@ -263,7 +261,7 @@ public class JoystickPanel extends JPanel {
 					script.getInputLines().get(i).setStickL(script.getInputLines().get(row).getStickL().clone());
 					table.setValueAt(script.getInputLines().get(i).getStickL().toCartString(), i,1);
 
-				}else{
+				} else{
 					script.getInputLines().get(i).setStickR(script.getInputLines().get(row).getStickR().clone());
 					table.setValueAt(script.getInputLines().get(i).getStickR().toCartString(), i,2);
 				}

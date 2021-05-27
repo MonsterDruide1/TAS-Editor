@@ -34,8 +34,10 @@ public class FrameNumberOptionDialog {
 		dropdownMenu.addItem("Linear");
 
 
-		Joystick startJoystick = new Joystick(32767, 75, new StickPosition[] {new StickPosition(0,0)});
-		Joystick endJoystick =   new Joystick(32767, 75, new StickPosition[] {new StickPosition(0,0)});
+		Joystick startJoystick = new Joystick(32767, new StickPosition[] {new StickPosition(0,0)});
+		startJoystick.unlock();
+		Joystick endJoystick =   new Joystick(32767, new StickPosition[] {new StickPosition(0,0)});
+		endJoystick.unlock();
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridBagLayout());
@@ -67,6 +69,9 @@ public class FrameNumberOptionDialog {
 		JDialog dialog = new JDialog();
 		dialog.setSize(500,500);
 		dialog.add(panel);
+		dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		dialog.setLocationRelativeTo(null);
+		dialog.setModal(true);
 		dialog.setVisible(true);
 
 		// TODO 2 joysticks (start and end)

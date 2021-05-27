@@ -31,19 +31,16 @@ public class Joystick extends JPanel {
 	 * @param output_max  The maximum value to scale output to. If this value was
 	 *                    5 and the joystick thumb was dragged to the top-left corner, the output
 	 *                    would be (-5,5)
-	 * @param panel_width how big the JPanel will be. The sizes of the joystick's
-	 *                    visual components are proportional to this value
 	 */
 
-	public Joystick(int output_max, int panel_width, StickPosition[] stickPositions) {
+	public Joystick(int output_max, StickPosition[] stickPositions) {
 
 		assert output_max > 0;
-		assert panel_width > 0;
 
 		this.stickPositions = stickPositions;
 		outputMax = output_max;
-		panelWidth = panel_width;
-		thumbDiameter = panel_width / 15;
+		panelWidth = Math.min(getWidth(), getHeight());
+		thumbDiameter = panelWidth / 15;
 		thumbRadius = thumbDiameter / 2;
 
 		locked = true;
