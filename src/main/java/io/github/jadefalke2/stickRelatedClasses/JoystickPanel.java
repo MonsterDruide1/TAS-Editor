@@ -36,8 +36,7 @@ public class JoystickPanel extends JPanel {
     private final Script script;
     private StickType stickType;
 	private InputLine[] inputLines;
-	private StickPosition[] stickPositions;
-	private int row;
+	private int[] selectedRows;
 
     private final DefaultTableModel table;
     private final TAS parent; //TODO avoid this
@@ -54,9 +53,8 @@ public class JoystickPanel extends JPanel {
 	public JoystickPanel(TAS parent, PianoRoll pianoRoll, Script script, StickType stickType) {
 
 		// setting global vars
-		stickPositions = new StickPosition[Math.min(row, parent.getPreferences().getLastStickPositionCount())];
 		stickPosition = new StickPosition(0,0);
-		joystick = new Joystick(32767, stickPositions);
+		joystick = new Joystick(32767);
 
 		this.script = script;
 		this.table = pianoRoll.getModel();
@@ -81,14 +79,6 @@ public class JoystickPanel extends JPanel {
 		radiusSpinner.setValue(stickPosition.getRadius());
 		angleSpinner.setValue((int)Math.toDegrees(stickPosition.getTheta()));
 
-
-
-
-		// sets the contents of the stickpositions array to be the previous stick positions of the same stick
-		for (int i = 0; i < stickPositions.length; i++){
-			InputLine currentLine = script.getInputLines().get(row - stickPositions.length + i);
-			stickPositions[i] = stickType == StickType.L_STICK ? currentLine.getStickL() : currentLine.getStickR();
-		}
 
         setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
         setLayout(new GridBagLayout());
@@ -239,9 +229,10 @@ public class JoystickPanel extends JPanel {
 		});
 
 		keepStickPosButton = new JButton("keep stick position for # of frames");
-		keepStickPosButton.addActionListener(e -> {
+		keepStickPosButton.addActionListener(e -> { //TODO counting options: first frame, last frame, ...
 			int frameNumber = FrameNumberOptionDialog.getFrameNumber();
-			for (int i = row; i < row + frameNumber; i++){
+			int lastSelected = selectedRows[selectedRows.length-1];
+			for (int i = lastSelected; i < lastSelected + frameNumber; i++){
 
 				if (i >= script.getInputLines().size()){
 					script.getInputLines().add(InputLine.getEmpty(i + 1));
@@ -249,11 +240,11 @@ public class JoystickPanel extends JPanel {
 				}
 
 				if (stickType == StickType.L_STICK) {
-					script.getInputLines().get(i).setStickL(script.getInputLines().get(row).getStickL().clone());
+					script.getInputLines().get(i).setStickL(script.getInputLines().get(lastSelected).getStickL().clone());
 					table.setValueAt(script.getInputLines().get(i).getStickL().toCartString(), i,1);
 
 				} else{
-					script.getInputLines().get(i).setStickR(script.getInputLines().get(row).getStickR().clone());
+					script.getInputLines().get(i).setStickR(script.getInputLines().get(lastSelected).getStickR().clone());
 					table.setValueAt(script.getInputLines().get(i).getStickR().toCartString(), i,2);
 				}
 
@@ -337,6 +328,16 @@ public class JoystickPanel extends JPanel {
 		updateCartSpinners();
 		updatePolarSpinners();
 		setSpinnersAndButtonsEnabled(true);
+
+		selectedRows = rows;
+		StickPosition[] stickPositions = new StickPosition[Math.min(rows[0], parent.getPreferences().getLastStickPositionCount())];
+		// sets the contents of the stickpositions array to be the previous stick positions of the same stick
+		for (int i = 0; i < stickPositions.length; i++){
+			InputLine currentLine = script.getInputLines().get(rows[0] - stickPositions.length + i);
+			stickPositions[i] = stickType == StickType.L_STICK ? currentLine.getStickL() : currentLine.getStickR();
+		}
+		joystick.setStickPositions(stickPositions);
+
 		shouldTriggerUpdate = true;
 	}
 
@@ -398,13 +399,5 @@ public class JoystickPanel extends JPanel {
 
 	public void setInputLines(InputLine[] inputLines) {
 		this.inputLines = inputLines;
-	}
-
-	public int getRow() {
-		return row;
-	}
-
-	public void setRow(int row) {
-		this.row = row;
 	}
 }

@@ -20,7 +20,7 @@ public class Joystick extends JPanel {
 	private boolean locked;
 
 	// stick positions
-	private final StickPosition[] stickPositions;
+	private StickPosition[] stickPositions = new StickPosition[0];
 
 	private Point currentPos;
 	private Point visualOffset;
@@ -33,11 +33,9 @@ public class Joystick extends JPanel {
 	 *                    would be (-5,5)
 	 */
 
-	public Joystick(int output_max, StickPosition[] stickPositions) {
-
+	public Joystick(int output_max) {
 		assert output_max > 0;
 
-		this.stickPositions = stickPositions;
 		outputMax = output_max;
 		panelWidth = Math.min(getWidth(), getHeight());
 		thumbDiameter = panelWidth / 15;
@@ -218,5 +216,9 @@ public class Joystick extends JPanel {
 	@Override
 	public void removePropertyChangeListener(PropertyChangeListener listener) {
 		propertySupporter.removePropertyChangeListener(listener);
+	}
+
+	public void setStickPositions(StickPosition[] stickPositions) {
+		this.stickPositions = stickPositions;
 	}
 }

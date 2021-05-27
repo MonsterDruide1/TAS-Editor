@@ -34,9 +34,9 @@ public class FrameNumberOptionDialog {
 		dropdownMenu.addItem("Linear");
 
 
-		Joystick startJoystick = new Joystick(32767, new StickPosition[] {new StickPosition(0,0)});
+		Joystick startJoystick = new Joystick(32767);
 		startJoystick.unlock();
-		Joystick endJoystick =   new Joystick(32767, new StickPosition[] {new StickPosition(0,0)});
+		Joystick endJoystick =   new Joystick(32767);
 		endJoystick.unlock();
 
 		JPanel panel = new JPanel();
