@@ -42,8 +42,6 @@ public class MainEditorWindow extends JFrame {
 		this.functionEditorWindow = functionEditorWindow;
 		this.script = script;
 		this.parent = parent;
-		setVisible(false);
-		setExtendedState(MAXIMIZED_BOTH);
 		setResizable(true);
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE); //let the WindowListener handle everything
 
@@ -80,7 +78,6 @@ public class MainEditorWindow extends JFrame {
 		//Components
 		JScrollPane scrollPane = new JScrollPane(pianoRoll);
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollPane.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 
 		mainJMenuBar = new MainJMenuBar(this, parent);
 
@@ -100,18 +97,18 @@ public class MainEditorWindow extends JFrame {
 
 		c.fill = GridBagConstraints.BOTH;
 		c.weighty = 1;
-		c.ipadx = 1300;
 		combiningPanel.add(editor, c);
 
-
-		c.fill = 0;
-		c.ipadx = 0;
-		c.anchor = GridBagConstraints.NORTH;
+		c.weightx = 0;
+		c.gridwidth = 200; //TODO do not specify a fixed width here
 		combiningPanel.add(joystickPanel, c);
 
 		add(combiningPanel);
 
 		setJMenuBar(mainJMenuBar);
+
+		pack();
+		setExtendedState(MAXIMIZED_BOTH);
 	}
 
 	/**
