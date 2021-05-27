@@ -152,15 +152,23 @@ public class JoystickPanel extends JPanel {
 
 
         MouseAdapter mouseListener = new MouseAdapter() {
+        	private StickPosition oldStickPos = null;
+
+        	@Override
+			public void mousePressed(MouseEvent e){
+        		oldStickPos = stickPosition;
+				updateStickPosition(false, oldStickPos);
+			}
 
 			@Override
 			public void mouseDragged(MouseEvent e) {
-				updateStickPosition(false);
+				updateStickPosition(false, oldStickPos);
 			}
 
             @Override
             public void mouseReleased(MouseEvent e){
-                updateStickPosition(true);
+                updateStickPosition(true, oldStickPos);
+                oldStickPos = null;
             }
 
         };
@@ -252,7 +260,7 @@ public class JoystickPanel extends JPanel {
 		centerButton = new JButton("center");
 		centerButton.addActionListener(e -> {
 			joystick.centerThumbPad();
-			updateStickPosition(true);
+			updateStickPosition(true, stickPosition);
 		});
 
 		keepStickPosButton = new JButton("keep stick position for # of frames");
@@ -313,10 +321,8 @@ public class JoystickPanel extends JPanel {
 	/**
 	 * Updates the stick position based on the sliders
 	 */
-	private void updateStickPosition(boolean executeAction) {
+	private void updateStickPosition(boolean executeAction, StickPosition oldStickPosition) {
 		if(inputLines == null) return;
-
-    	StickPosition oldStickPosition = stickPosition;
 
         int x = (int)joystick.getThumbPos().getX();
         int y = (int)joystick.getThumbPos().getY();
