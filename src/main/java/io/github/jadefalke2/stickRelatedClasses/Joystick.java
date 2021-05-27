@@ -178,7 +178,7 @@ public class Joystick extends JPanel {
 			Point tmp = new Point(stickPositions[i].getX(),stickPositions[i].getY());
 			Point downscaled = new Point(scaledToVisual(tmp));
 
-			double percentage = i/(double)stickPositions.length;
+			double percentage = (i+1)/(double)(stickPositions.length+1);
 
 			//overdraw positions painted below this one
 			g.setColor(Color.GRAY);
