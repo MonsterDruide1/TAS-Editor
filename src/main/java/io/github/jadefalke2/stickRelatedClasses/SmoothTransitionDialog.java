@@ -5,27 +5,27 @@ import io.github.jadefalke2.util.Settings;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
-import java.util.Arrays;
 
-public class FrameNumberOptionDialog {
+public class SmoothTransitionDialog extends JDialog {
 
-	public static StickPosition[] getSmoothTransitionData (Settings settings, int frames) {
-		JDialog dialog = new JDialog();
+	private final JComboBox<String> dropdownMenu;
+	private final JoystickPanel startJoystick,  endJoystick;
+
+	public SmoothTransitionDialog(Settings settings){
+		super();
 
 		//option
-		JComboBox<String> dropdownMenu = new JComboBox<>();
+		dropdownMenu = new JComboBox<>();
 		dropdownMenu.addItem("Angular (Closest)");
 		dropdownMenu.addItem("Linear");
 		dropdownMenu.addItem("Angular (Clockwise)");
 		dropdownMenu.addItem("Angular (Counter-Clockwise)");
 
 		JButton okButton = new JButton("OK");
-		okButton.addActionListener(e -> {
-			dialog.dispatchEvent(new WindowEvent(dialog, WindowEvent.WINDOW_CLOSING));
-		});
+		okButton.addActionListener(e -> dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING)));
 
-		JoystickPanel startJoystick = new JoystickPanel(settings);
-		JoystickPanel endJoystick = new JoystickPanel(settings);
+		startJoystick = new JoystickPanel(settings);
+		endJoystick = new JoystickPanel(settings);
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridBagLayout());
@@ -52,34 +52,31 @@ public class FrameNumberOptionDialog {
 		c.gridx = 1;
 		panel.add(endJoystick, c);
 
+		c.gridwidth = 2;
+		c.weighty = 0;
 		c.gridx = 0;
 		c.gridy = 2;
 		panel.add(okButton, c);
 
 
-		dialog.add(panel);
-		dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		dialog.setLocationRelativeTo(null);
-		dialog.setModal(true);
-		dialog.setSize(500,500);
-		dialog.setVisible(true);
+		add(panel);
+		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		setLocationRelativeTo(null);
+		setModal(true);
+		setSize(500,500);
+	}
 
-
-
+	public StickPosition[] getSmoothTransitionData (int frames) {
 		StickPosition firstPos = startJoystick.getStickPosition();
 		StickPosition endPos = endJoystick.getStickPosition();
 
-		StickPosition[] result = switch(dropdownMenu.getSelectedIndex()){
+		return switch(dropdownMenu.getSelectedIndex()){
 			case 0 -> transitionAngularClosest(firstPos, endPos, frames);
 			case 1 -> transitionLinearClosest(firstPos, endPos, frames);
 			case 2 -> transitionAngularClockwise(firstPos, endPos, frames);
 			case 3 -> transitionAngularCounterClockwise(firstPos, endPos, frames);
 			default -> throw new UnsupportedOperationException("Selected unknown item in interpolation type dropdown: "+dropdownMenu.getSelectedItem()+" ("+dropdownMenu.getSelectedIndex()+")");
 		};
-
-		System.out.println(Arrays.toString(result));
-
-		return result;
 	}
 
 	public static StickPosition[] transitionAngularClosest(StickPosition firstPos, StickPosition endPos, int frames){
