@@ -65,7 +65,7 @@ public class TxtFileChooser extends JFileChooser {
 		File file = getSelectedFile();
 		if(file.exists() && getDialogType() == SAVE_DIALOG){
 			int result = JOptionPane.showConfirmDialog(this, "This file already exists, overwrite it?", "Existing file", JOptionPane.YES_NO_CANCEL_OPTION);
-			switch (result){
+			switch (result) {
 				case JOptionPane.YES_OPTION:
 					super.approveSelection();
 					return;

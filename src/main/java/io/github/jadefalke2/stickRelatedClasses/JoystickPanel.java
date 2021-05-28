@@ -214,8 +214,7 @@ public class JoystickPanel extends JPanel {
 
 		smoothTransitionButton = new JButton("smooth transition");
 		smoothTransitionButton.addActionListener(e -> {
-			//int frameNumber = FrameNumberOptionDialog.getSmoothTransitionData();
-			FrameNumberOptionDialog.getSmoothTransitionData(parent.getPreferences());
+			FrameNumberOptionDialog.getSmoothTransitionData(parent);
 		});
 
 
