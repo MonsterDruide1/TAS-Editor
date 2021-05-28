@@ -8,6 +8,7 @@ import java.awt.*;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -23,7 +24,7 @@ public class MainJMenuBar extends JMenuBar {
 		JMenu fileJMenu = add(new JMenu("File"));
 		JMenuItem newJMenuItem = fileJMenu.add(new JMenuItem("New"));
 		newJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK));
-		newJMenuItem.addActionListener(e -> parent.newFile());
+		newJMenuItem.addActionListener(e -> parent.newFile()); //ask for closing the current project?
 
 		JMenuItem newWindowJMenuItem = fileJMenu.add(new JMenuItem("New Window"));
 		newWindowJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
@@ -51,7 +52,7 @@ public class MainJMenuBar extends JMenuBar {
 		fileJMenu.addSeparator();
 
 		JMenuItem exitJMenuItem = fileJMenu.add(new JMenuItem("Exit"));
-		exitJMenuItem.addActionListener(e -> System.exit(0));
+		exitJMenuItem.addActionListener(e -> mainEditorWindow.dispatchEvent(new WindowEvent(mainEditorWindow, WindowEvent.WINDOW_CLOSING)));
 
 		JMenu editJMenu = add(new JMenu("Edit"));
 
