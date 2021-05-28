@@ -48,9 +48,6 @@ public class TAS {
 		// initialise preferences
 		initPreferences();
 
-		//set correct UI theme
-		updateLookAndFeel();
-
 		//initialising stacks
 		undoStack = new CircularStack<>(1024);
 		redoStack = new CircularStack<>(1024);
