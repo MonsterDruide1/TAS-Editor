@@ -153,7 +153,8 @@ public class JoystickPanel extends JPanel {
 
 
 		c.insets = new Insets(5,3,5,3);
-
+		c.fill = GridBagConstraints.BOTH;
+		c.weightx = 1;
         c.gridwidth = 2;
         add(cartesianLabel, c);
 
@@ -206,7 +207,7 @@ public class JoystickPanel extends JPanel {
 
 		c.fill = GridBagConstraints.HORIZONTAL;
 
-		c.gridx = 1;
+		c.gridx = 0;
 		c.gridy = 4;
 
 		if(smoothTransitionListener != null){
