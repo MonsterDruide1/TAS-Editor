@@ -25,12 +25,31 @@ public class SideJoystickPanel extends JPanel {
 
 		frameAmountLabel = new JLabel("Currently no frames are being edited");
 		settings = parent.getPreferences();
-		ActionListener smoothTransitionListener = e -> {
-			FrameNumberOptionDialog.getSmoothTransitionData(settings, inputLines.length);
+
+		//TODO remove the duplicate listener here
+		ActionListener smoothTransitionListenerL = e -> {
+			StickPosition[] replacementStickPos = FrameNumberOptionDialog.getSmoothTransitionData(settings, inputLines.length);
+			InputLine[] originalLines = pianoRoll.getSelectedInputRows();
+			InputLine[] replacementLines = Arrays.stream(originalLines).map(InputLine::clone).toArray(InputLine[]::new);
+
+			for(int i = 0;i<originalLines.length;i++){
+				replacementLines[i].setStickL(replacementStickPos[i]);
+			}
+			pianoRoll.replaceSelectedRows(replacementLines);
+		};
+		ActionListener smoothTransitionListenerR = e -> {
+			StickPosition[] replacementStickPos = FrameNumberOptionDialog.getSmoothTransitionData(settings, inputLines.length);
+			InputLine[] originalLines = pianoRoll.getSelectedInputRows();
+			InputLine[] replacementLines = Arrays.stream(originalLines).map(InputLine::clone).toArray(InputLine[]::new);
+
+			for(int i = 0;i<originalLines.length;i++){
+				replacementLines[i].setStickR(replacementStickPos[i]);
+			}
+			pianoRoll.replaceSelectedRows(replacementLines);
 		};
 		CustomChangeListener joystickPanelListener = e -> parent.executeAction(new StickAction(inputLines, getStickType(e.getSource()), e.getOldValue(), e.getNewValue(), pianoRoll.getModel()));
-		lstickPanel = new JoystickPanel(parent.getPreferences(), smoothTransitionListener);
-		rstickPanel = new JoystickPanel(parent.getPreferences(), smoothTransitionListener);
+		lstickPanel = new JoystickPanel(parent.getPreferences(), smoothTransitionListenerL);
+		rstickPanel = new JoystickPanel(parent.getPreferences(), smoothTransitionListenerR);
 		lstickPanel.setOnChangeListener(joystickPanelListener);
 		rstickPanel.setOnChangeListener(joystickPanelListener);
 

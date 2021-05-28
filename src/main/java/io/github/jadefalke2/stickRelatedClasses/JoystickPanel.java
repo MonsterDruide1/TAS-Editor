@@ -251,6 +251,10 @@ public class JoystickPanel extends JPanel {
 		joystick.setStickPositions(stickPositions);
 	}
 
+	public StickPosition getStickPosition(){
+		return stickPosition;
+	}
+
 	public void setOnChangeListener(CustomChangeListener onChange){
 		this.onChange = onChange;
 	}
