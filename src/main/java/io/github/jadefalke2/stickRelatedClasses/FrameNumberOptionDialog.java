@@ -18,8 +18,8 @@ public class FrameNumberOptionDialog {
 		dropdownMenu.addItem("Linear");
 
 
-		JoystickPanel startJoystick = new JoystickPanel(settings, JoystickPanel.StickType.L_STICK, e->{}); //TODO remove L_STICK from here
-		JoystickPanel endJoystick = new JoystickPanel(settings, JoystickPanel.StickType.L_STICK, e->{}); //TODO remove L_STICK from here
+		JoystickPanel startJoystick = new JoystickPanel(settings, e->{});
+		JoystickPanel endJoystick = new JoystickPanel(settings, e->{});
 		startJoystick.setAllEnabled(true); //TODO remove this, make it enabled as default
 		endJoystick.setAllEnabled(true); //TODO remove this, make it enabled as default
 		//Joystick startJoystick = new Joystick(32767, settings);

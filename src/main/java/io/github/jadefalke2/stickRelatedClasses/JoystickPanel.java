@@ -31,11 +31,8 @@ public class JoystickPanel extends JPanel {
 
     // Other stuff
     private StickPosition stickPosition;
-    private final StickType stickType;
-	private InputLine[] inputLines;
 
 	private final CustomChangeListener onChange;
-	private final Settings settings;
 
 	private boolean shouldTriggerUpdate = true;
 
@@ -46,12 +43,9 @@ public class JoystickPanel extends JPanel {
     }
 
 
-	public JoystickPanel(Settings settings, StickType stickType, CustomChangeListener onChange) {
+	public JoystickPanel(Settings settings, CustomChangeListener onChange) {
 
 		this.onChange = onChange;
-		this.stickType = stickType;
-		this.settings = settings;
-
 
 		// setting global vars
 		stickPosition = new StickPosition(0,0);
@@ -227,14 +221,10 @@ public class JoystickPanel extends JPanel {
 
 		c.gridy = 5;
 		add(centerButton, c);
-
-		setAllEnabled(false);
     }
 
 
     private void applyPosition(StickPosition newPos, StickPosition oldPos){
-		if(inputLines == null) return;
-
 		onChange.stateChanged(new ChangeObject<>(oldPos, newPos, this));
 	}
 
@@ -242,8 +232,6 @@ public class JoystickPanel extends JPanel {
 	 * Updates the stick position based on the sliders
 	 */
 	private void updateStickPosition(boolean executeAction, StickPosition oldStickPosition) {
-		if(inputLines == null) return;
-
 		StickPosition unCropped = joystick.getStickPosition();
 		double radius = Math.min(unCropped.getRadius(), 1);
 		stickPosition = new StickPosition(unCropped.getTheta(), radius);
@@ -254,24 +242,13 @@ public class JoystickPanel extends JPanel {
         	applyPosition(stickPosition, oldStickPosition);
 	}
 
-	public void setEditingRows (int[] rows, Script script) {
-		shouldTriggerUpdate = false;
-		InputLine[] tmp = new InputLine[rows.length];
-		Arrays.setAll(tmp, i -> script.getInputLines().get(rows[i]));
-		inputLines = tmp;
-		stickPosition = stickType == StickType.L_STICK ? tmp[0].getStickL() : tmp[0].getStickR();
+	public void setStickPosition(StickPosition stickPosition){
+		this.stickPosition = stickPosition;
 		updateAll();
-		setAllEnabled(true);
+	}
 
-		StickPosition[] stickPositions = new StickPosition[Math.min(rows[0], settings.getLastStickPositionCount())];
-		// sets the contents of the stickpositions array to be the previous stick positions of the same stick
-		for (int i = 0; i < stickPositions.length; i++){
-			InputLine currentLine = script.getInputLines().get(rows[0] - stickPositions.length + i);
-			stickPositions[i] = stickType == StickType.L_STICK ? currentLine.getStickL() : currentLine.getStickR();
-		}
+	public void setStickPositions(StickPosition[] stickPositions){
 		joystick.setStickPositions(stickPositions);
-
-		shouldTriggerUpdate = true;
 	}
 
 	public void setAllEnabled(boolean enable) {
@@ -317,12 +294,5 @@ public class JoystickPanel extends JPanel {
 	private void updatePolarSpinners(){
 		angleSpinner.setValue((int)Math.toDegrees(stickPosition.getTheta()));
 		radiusSpinner.setValue(stickPosition.getRadius());
-	}
-
-	public InputLine[] getInputLines() {
-		return inputLines;
-	}
-	public StickType getStickType(){
-		return stickType;
 	}
 }
