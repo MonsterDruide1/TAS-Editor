@@ -14,16 +14,14 @@ public class FrameNumberOptionDialog {
 
 		//option
 		JComboBox<String> dropdownMenu = new JComboBox<>();
-		dropdownMenu.addItem("Angular");
+		dropdownMenu.addItem("Angular (Closest)");
 		dropdownMenu.addItem("Linear");
+		dropdownMenu.addItem("Angular (Clockwise)");
+		dropdownMenu.addItem("Angular (Counter-Clockwise)");
 
 
-		JoystickPanel startJoystick = new JoystickPanel(settings, e->{});
-		JoystickPanel endJoystick = new JoystickPanel(settings, e->{});
-		startJoystick.setAllEnabled(true); //TODO remove this, make it enabled as default
-		endJoystick.setAllEnabled(true); //TODO remove this, make it enabled as default
-		//Joystick startJoystick = new Joystick(32767, settings);
-		//Joystick endJoystick =   new Joystick(32767, settings);
+		JoystickPanel startJoystick = new JoystickPanel(settings);
+		JoystickPanel endJoystick = new JoystickPanel(settings);
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridBagLayout());
@@ -53,11 +51,11 @@ public class FrameNumberOptionDialog {
 		panel.add(endJoystick, c);
 
 		JDialog dialog = new JDialog();
-		dialog.setSize(500,500);
 		dialog.add(panel);
 		dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		dialog.setLocationRelativeTo(null);
 		dialog.setModal(true);
+		dialog.setSize(500,500);
 		dialog.setVisible(true);
 
 		// TODO 2 joysticks (start and end)
