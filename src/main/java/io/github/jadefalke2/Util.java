@@ -6,6 +6,11 @@ import java.util.stream.Collectors;
 public class Util {
 
 	/**
+	 * the file extension that is currently used. Might be changed to a custom file extension in the future
+	 */
+	public final static String fileExtension = ".txt";
+
+	/**
 	 * Takes in a file and converts it to a readable string
 	 * @param file the file to be read
 	 * @return the contents of the file

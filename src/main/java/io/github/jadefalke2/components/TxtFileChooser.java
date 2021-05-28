@@ -46,6 +46,12 @@ public class TxtFileChooser extends JFileChooser {
 
 		if (file != null) {
 			file.createNewFile();
+
+			if (!file.getName().endsWith(".txt")) {
+				File destination = new File(file.getAbsolutePath() + Util.fileExtension);
+				file.renameTo(destination);
+			}
+
 			writeToFile(scriptToSave, file);
 		}
 
