@@ -4,14 +4,12 @@ import io.github.jadefalke2.InputLine;
 import io.github.jadefalke2.Script;
 import io.github.jadefalke2.TAS;
 import io.github.jadefalke2.actions.StickAction;
-import io.github.jadefalke2.stickRelatedClasses.CustomChangeListener;
-import io.github.jadefalke2.stickRelatedClasses.ChangeObject;
-import io.github.jadefalke2.stickRelatedClasses.JoystickPanel;
-import io.github.jadefalke2.stickRelatedClasses.StickPosition;
+import io.github.jadefalke2.stickRelatedClasses.*;
 import io.github.jadefalke2.util.Settings;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.util.Arrays;
 
 public class SideJoystickPanel extends JPanel {
@@ -27,10 +25,12 @@ public class SideJoystickPanel extends JPanel {
 
 		frameAmountLabel = new JLabel("Currently no frames are being edited");
 		settings = parent.getPreferences();
-
+		ActionListener smoothTransitionListener = e -> {
+			FrameNumberOptionDialog.getSmoothTransitionData(settings, inputLines.length);
+		};
 		CustomChangeListener joystickPanelListener = e -> parent.executeAction(new StickAction(inputLines, getStickType(e.getSource()), e.getOldValue(), e.getNewValue(), pianoRoll.getModel()));
-		lstickPanel = new JoystickPanel(parent.getPreferences());
-		rstickPanel = new JoystickPanel(parent.getPreferences());
+		lstickPanel = new JoystickPanel(parent.getPreferences(), smoothTransitionListener);
+		rstickPanel = new JoystickPanel(parent.getPreferences(), smoothTransitionListener);
 		lstickPanel.setOnChangeListener(joystickPanelListener);
 		rstickPanel.setOnChangeListener(joystickPanelListener);
 

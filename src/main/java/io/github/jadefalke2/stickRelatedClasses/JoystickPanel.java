@@ -42,8 +42,10 @@ public class JoystickPanel extends JPanel {
         L_STICK,R_STICK
     }
 
-
 	public JoystickPanel(Settings settings) {
+		this(settings, null);
+	}
+	public JoystickPanel(Settings settings, ActionListener smoothTransitionListener) {
 
 		// setting global vars
 		stickPosition = new StickPosition(0,0);
@@ -202,17 +204,18 @@ public class JoystickPanel extends JPanel {
 			updateStickPosition(true, stickPosition);
 		});
 
-		smoothTransitionButton = new JButton("smooth transition");
-		smoothTransitionButton.addActionListener(e -> {
-			FrameNumberOptionDialog.getSmoothTransitionData(settings);
-		});
-
-
 		c.fill = GridBagConstraints.HORIZONTAL;
 
 		c.gridx = 1;
 		c.gridy = 4;
-		add(smoothTransitionButton, c);
+
+		if(smoothTransitionListener != null){
+			smoothTransitionButton = new JButton("smooth transition");
+			smoothTransitionButton.addActionListener(smoothTransitionListener);
+			add(smoothTransitionButton, c);
+		} else {
+			smoothTransitionButton = null;
+		}
 
 		c.gridy = 5;
 		add(centerButton, c);

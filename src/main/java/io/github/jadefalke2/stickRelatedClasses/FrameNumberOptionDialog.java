@@ -7,7 +7,7 @@ import java.awt.*;
 
 public class FrameNumberOptionDialog {
 
-	public static StickPosition[] getSmoothTransitionData (Settings settings) {
+	public static StickPosition[] getSmoothTransitionData (Settings settings, int frames) {
 		// creates the spinner
 		SpinnerNumberModel model = new SpinnerNumberModel(1, 0, 500, 1);
 		JSpinner spinner = new JSpinner(model);
