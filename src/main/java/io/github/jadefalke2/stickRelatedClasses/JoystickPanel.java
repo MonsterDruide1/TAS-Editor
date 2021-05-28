@@ -32,7 +32,7 @@ public class JoystickPanel extends JPanel {
     // Other stuff
     private StickPosition stickPosition;
 
-	private final CustomChangeListener onChange;
+	private CustomChangeListener onChange = null;
 
 	private boolean shouldTriggerUpdate = true;
 
@@ -43,9 +43,7 @@ public class JoystickPanel extends JPanel {
     }
 
 
-	public JoystickPanel(Settings settings, CustomChangeListener onChange) {
-
-		this.onChange = onChange;
+	public JoystickPanel(Settings settings) {
 
 		// setting global vars
 		stickPosition = new StickPosition(0,0);
@@ -206,7 +204,6 @@ public class JoystickPanel extends JPanel {
 
 		smoothTransitionButton = new JButton("smooth transition");
 		smoothTransitionButton.addActionListener(e -> {
-			//int frameNumber = FrameNumberOptionDialog.getSmoothTransitionData();
 			FrameNumberOptionDialog.getSmoothTransitionData(settings);
 		});
 
@@ -223,6 +220,8 @@ public class JoystickPanel extends JPanel {
 
 
     private void applyPosition(StickPosition newPos, StickPosition oldPos){
+		if(onChange == null) return;
+
 		onChange.stateChanged(new ChangeObject<>(oldPos, newPos, this));
 	}
 
@@ -247,6 +246,10 @@ public class JoystickPanel extends JPanel {
 
 	public void setStickPositions(StickPosition[] stickPositions){
 		joystick.setStickPositions(stickPositions);
+	}
+
+	public void setOnChangeListener(CustomChangeListener onChange){
+		this.onChange = onChange;
 	}
 
 	public void setAllEnabled(boolean enable) {

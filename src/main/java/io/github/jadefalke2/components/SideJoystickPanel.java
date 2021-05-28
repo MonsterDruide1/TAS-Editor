@@ -29,8 +29,10 @@ public class SideJoystickPanel extends JPanel {
 		settings = parent.getPreferences();
 
 		CustomChangeListener joystickPanelListener = e -> parent.executeAction(new StickAction(inputLines, getStickType(e.getSource()), e.getOldValue(), e.getNewValue(), pianoRoll.getModel()));
-		lstickPanel = new JoystickPanel(parent.getPreferences(), joystickPanelListener);
-		rstickPanel = new JoystickPanel(parent.getPreferences(), joystickPanelListener);
+		lstickPanel = new JoystickPanel(parent.getPreferences());
+		rstickPanel = new JoystickPanel(parent.getPreferences());
+		lstickPanel.setOnChangeListener(joystickPanelListener);
+		rstickPanel.setOnChangeListener(joystickPanelListener);
 
 		lstickPanel.setAllEnabled(false);
 		rstickPanel.setAllEnabled(false);
