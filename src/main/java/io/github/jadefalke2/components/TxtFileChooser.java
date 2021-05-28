@@ -42,21 +42,22 @@ public class TxtFileChooser extends JFileChooser {
 
 	public File saveFileAs (Script scriptToSave) throws IOException {
 
-		File file = getFile(false);
+		File originalFile = getFile(false);
 
-		if (file != null) {
-			file.createNewFile();
+		if (originalFile != null) {
+			originalFile.createNewFile();
 
-			if (file.getName().endsWith(".txt")) {
-				writeToFile(scriptToSave, file);
+			if (originalFile.getName().endsWith(".txt")) {
+				writeToFile(scriptToSave, originalFile);
 			} else {
-				File newFile = new File(file.getAbsolutePath() + Util.fileExtension);
+				File newFile = new File(originalFile.getAbsolutePath() + Util.fileExtension);
 				writeToFile(scriptToSave, newFile);
+				originalFile.delete();
 			}
 
 		}
 
-		return file;
+		return originalFile;
 	}
 
 	@Override
