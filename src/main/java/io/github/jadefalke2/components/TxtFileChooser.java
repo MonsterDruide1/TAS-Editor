@@ -27,7 +27,7 @@ public class TxtFileChooser extends JFileChooser {
 
 		setDialogTitle(openFile ? "Choose existing TAS file" : "Choose place to save");
 		setCurrentDirectory(new File(System.getProperty("user.home")));
-		FileNameExtensionFilter filter = new FileNameExtensionFilter(".txt files", "txt", "text");
+		FileNameExtensionFilter filter = new FileNameExtensionFilter(Util.fileExtension + " files", Util.fileExtension.substring(1), "text");
 		setFileFilter(filter);
 
 		int option = openFile ? showOpenDialog(null) : showSaveDialog(null);
@@ -47,7 +47,7 @@ public class TxtFileChooser extends JFileChooser {
 		if (originalFile != null) {
 			originalFile.createNewFile();
 
-			if (originalFile.getName().endsWith(".txt")) {
+			if (originalFile.getName().endsWith(Util.fileExtension)) {
 				writeToFile(scriptToSave, originalFile);
 			} else {
 				File newFile = new File(originalFile.getAbsolutePath() + Util.fileExtension);
