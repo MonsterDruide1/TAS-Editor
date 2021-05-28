@@ -26,22 +26,27 @@ public class FrameNumberOptionDialog {
 		return 0;
 	}
 
-	public static StickPosition[] getSmoothTransitionData (TAS parent) {
+	public static StickPosition[] getSmoothTransitionData (Settings settings) {
 
-		Settings settings = parent.getPreferences();
 		//option
 		JComboBox<String> dropdownMenu = new JComboBox<>();
 		dropdownMenu.addItem("Angular");
 		dropdownMenu.addItem("Linear");
 
 
-		// TODO create table independend JoystickPanels -> requires rework of JoystickPanel constructor(s)
+		JoystickPanel startPanel = new JoystickPanel(settings, null, e -> {});
+		JoystickPanel endPanel   = new JoystickPanel(settings, null, e -> {});
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridBagLayout());
 		panel.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
 		GridBagConstraints c = new GridBagConstraints();
 
+		c.gridx = 0;
+		panel.add(startPanel, c);
+
+		c.gridx = 1;
+		panel.add(endPanel, c);
 
 		JDialog dialog = new JDialog();
 		dialog.setSize(500,500);
