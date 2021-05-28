@@ -2,7 +2,11 @@ package io.github.jadefalke2.components;
 
 import io.github.jadefalke2.Script;
 import io.github.jadefalke2.TAS;
+import io.github.jadefalke2.actions.StickAction;
+import io.github.jadefalke2.stickRelatedClasses.CustomChangeListener;
+import io.github.jadefalke2.stickRelatedClasses.ChangeObject;
 import io.github.jadefalke2.stickRelatedClasses.JoystickPanel;
+import io.github.jadefalke2.stickRelatedClasses.StickPosition;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,8 +20,10 @@ public class SideJoystickPanel extends JPanel {
 	public SideJoystickPanel (TAS parent, PianoRoll pianoRoll, Script script) {
 
 		frameAmountLabel = new JLabel("Currently no frames are being edited");
-		lstickPanel = new JoystickPanel(parent, pianoRoll.getModel(), JoystickPanel.StickType.L_STICK);
-		rstickPanel = new JoystickPanel(parent, pianoRoll.getModel(), JoystickPanel.StickType.R_STICK);
+
+		CustomChangeListener joystickPanelListener = e -> parent.executeAction(new StickAction(((JoystickPanel)e.getSource()).getInputLines(), ((JoystickPanel)e.getSource()).getStickType(), e.getOldValue(), e.getNewValue(), pianoRoll.getModel()));
+		lstickPanel = new JoystickPanel(parent.getPreferences(), JoystickPanel.StickType.L_STICK, joystickPanelListener);
+		rstickPanel = new JoystickPanel(parent.getPreferences(), JoystickPanel.StickType.R_STICK, joystickPanelListener);
 
 		pianoRoll.getSelectionModel().addListSelectionListener(e -> {
 			int[] selectedRows = pianoRoll.getSelectedRows();

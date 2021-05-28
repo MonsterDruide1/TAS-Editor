@@ -3,12 +3,10 @@ package io.github.jadefalke2.stickRelatedClasses;
 import io.github.jadefalke2.InputLine;
 import io.github.jadefalke2.Script;
 import io.github.jadefalke2.TAS;
-import io.github.jadefalke2.actions.StickAction;
-import io.github.jadefalke2.components.PianoRoll;
+import io.github.jadefalke2.util.Settings;
 
 import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.event.ChangeListener;
 import javax.swing.table.TableModel;
 import java.awt.*;
 
@@ -36,8 +34,8 @@ public class JoystickPanel extends JPanel {
     private final StickType stickType;
 	private InputLine[] inputLines;
 
-    private final TableModel table;
-    private final TAS parent; //TODO avoid this
+	private final CustomChangeListener onChange;
+	private final Settings settings;
 
 	private boolean shouldTriggerUpdate = true;
 
@@ -48,16 +46,16 @@ public class JoystickPanel extends JPanel {
     }
 
 
-	public JoystickPanel(TAS parent, TableModel table, StickType stickType) {
+	public JoystickPanel(Settings settings, StickType stickType, CustomChangeListener onChange) {
 
-		this.table = table;
-		this.parent = parent;
+		this.onChange = onChange;
 		this.stickType = stickType;
+		this.settings = settings;
 
 
 		// setting global vars
 		stickPosition = new StickPosition(0,0);
-		joystick = new Joystick(32767, parent.getPreferences());
+		joystick = new Joystick(32767, settings);
 		joystick.setThumbPos(new Point(stickPosition.getX(),stickPosition.getY()));
 
 
@@ -215,7 +213,7 @@ public class JoystickPanel extends JPanel {
 		smoothTransitionButton = new JButton("smooth transition");
 		smoothTransitionButton.addActionListener(e -> {
 			//int frameNumber = FrameNumberOptionDialog.getSmoothTransitionData();
-			FrameNumberOptionDialog.getSmoothTransitionData(parent.getPreferences());
+			FrameNumberOptionDialog.getSmoothTransitionData(settings);
 		});
 
 
@@ -237,7 +235,7 @@ public class JoystickPanel extends JPanel {
     private void applyPosition(StickPosition newPos, StickPosition oldPos){
 		if(inputLines == null) return;
 
-		parent.executeAction(new StickAction(inputLines, stickType, oldPos, newPos, table));
+		onChange.stateChanged(new ChangeObject<>(oldPos, newPos, this));
 	}
 
 	/**
@@ -265,7 +263,7 @@ public class JoystickPanel extends JPanel {
 		updateAll();
 		setAllEnabled(true);
 
-		StickPosition[] stickPositions = new StickPosition[Math.min(rows[0], parent.getPreferences().getLastStickPositionCount())];
+		StickPosition[] stickPositions = new StickPosition[Math.min(rows[0], settings.getLastStickPositionCount())];
 		// sets the contents of the stickpositions array to be the previous stick positions of the same stick
 		for (int i = 0; i < stickPositions.length; i++){
 			InputLine currentLine = script.getInputLines().get(rows[0] - stickPositions.length + i);
@@ -319,5 +317,12 @@ public class JoystickPanel extends JPanel {
 	private void updatePolarSpinners(){
 		angleSpinner.setValue((int)Math.toDegrees(stickPosition.getTheta()));
 		radiusSpinner.setValue(stickPosition.getRadius());
+	}
+
+	public InputLine[] getInputLines() {
+		return inputLines;
+	}
+	public StickType getStickType(){
+		return stickType;
 	}
 }
