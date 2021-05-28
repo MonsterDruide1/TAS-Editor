@@ -27,7 +27,7 @@ public class TxtFileChooser extends JFileChooser {
 
 		setDialogTitle(openFile ? "Choose existing TAS file" : "Choose place to save");
 		setCurrentDirectory(new File(System.getProperty("user.home")));
-		FileNameExtensionFilter filter = new FileNameExtensionFilter(Util.fileExtension + " files", Util.fileExtension.substring(1), "text");
+		FileNameExtensionFilter filter = new FileNameExtensionFilter(Util.fileExtension + " files", Util.fileExtension, "text");
 		setFileFilter(filter);
 
 		int option = openFile ? showOpenDialog(null) : showSaveDialog(null);
@@ -45,16 +45,7 @@ public class TxtFileChooser extends JFileChooser {
 		File originalFile = getFile(false);
 
 		if (originalFile != null) {
-			originalFile.createNewFile();
-
-			if (originalFile.getName().endsWith(Util.fileExtension)) {
-				writeToFile(scriptToSave, originalFile);
-			} else {
-				File newFile = new File(originalFile.getAbsolutePath() + Util.fileExtension);
-				writeToFile(scriptToSave, newFile);
-				originalFile.delete();
-			}
-
+			writeToFile(scriptToSave, originalFile);
 		}
 
 		return originalFile;
@@ -63,6 +54,10 @@ public class TxtFileChooser extends JFileChooser {
 	@Override
 	public void approveSelection(){
 		File file = getSelectedFile();
+		if(!file.getAbsolutePath().endsWith("."+Util.fileExtension)){
+			file = new File(file.getAbsolutePath()+"."+Util.fileExtension);
+			setSelectedFile(file);
+		}
 		if(file.exists() && getDialogType() == SAVE_DIALOG){
 			int result = JOptionPane.showConfirmDialog(this, "This file already exists, overwrite it?", "Existing file", JOptionPane.YES_NO_CANCEL_OPTION);
 			switch (result) {

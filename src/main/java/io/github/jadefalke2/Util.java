@@ -8,7 +8,7 @@ public class Util {
 	/**
 	 * the file extension that is currently used. Might be changed to a custom file extension in the future
 	 */
-	public final static String fileExtension = ".txt";
+	public final static String fileExtension = "txt";
 
 	/**
 	 * Takes in a file and converts it to a readable string
