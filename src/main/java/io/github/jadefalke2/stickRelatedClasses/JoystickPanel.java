@@ -20,7 +20,6 @@ public class JoystickPanel extends JPanel {
 
 	private final JButton centerButton;
 	private final JButton smoothTransitionButton;
-	private final JButton keepStickPosButton;
 
 	// Spinners
     private final JSpinner xSpinner;
@@ -223,29 +222,6 @@ public class JoystickPanel extends JPanel {
 			updateStickPosition(true, stickPosition);
 		});
 
-		keepStickPosButton = new JButton("keep stick position for # of frames");
-		keepStickPosButton.addActionListener(e -> { //TODO counting options: first frame, last frame, ...
-			int frameNumber = FrameNumberOptionDialog.getFrameNumber();
-			int lastSelected = selectedRows[selectedRows.length-1];
-			for (int i = lastSelected; i < lastSelected + frameNumber; i++){
-
-				if (i >= script.getInputLines().size()){
-					script.getInputLines().add(InputLine.getEmpty(i + 1));
-					table.addRow(script.getInputLines().get(i).getArray());
-				}
-
-				if (stickType == StickType.L_STICK) {
-					script.getInputLines().get(i).setStickL(script.getInputLines().get(lastSelected).getStickL().clone());
-					table.setValueAt(script.getInputLines().get(i).getStickL().toCartString(), i,1);
-
-				} else{
-					script.getInputLines().get(i).setStickR(script.getInputLines().get(lastSelected).getStickR().clone());
-					table.setValueAt(script.getInputLines().get(i).getStickR().toCartString(), i,2);
-				}
-
-			}
-		});
-
 		smoothTransitionButton = new JButton("smooth transition");
 		smoothTransitionButton.addActionListener(e -> {
 			//int frameNumber = FrameNumberOptionDialog.getSmoothTransitionData();
@@ -265,9 +241,6 @@ public class JoystickPanel extends JPanel {
 
 		c.gridy = 11;
 		add(centerButton, c);
-
-		c.gridy = 12;
-		add(keepStickPosButton, c);
 
 		setAllEnabled(false);
     }
@@ -324,7 +297,6 @@ public class JoystickPanel extends JPanel {
 		ySpinner.setEnabled(enable);
 
 		centerButton.setEnabled(enable);
-		keepStickPosButton.setEnabled(enable);
 		smoothTransitionButton.setEnabled(enable);
 
 		joystick.setEnabled(enable);
