@@ -51,15 +51,16 @@ public class JoystickPanel extends JPanel {
 
 	public JoystickPanel(TAS parent, PianoRoll pianoRoll, Script script, StickType stickType) {
 
-		// setting global vars
-		stickPosition = new StickPosition(0,0);
-		joystick = new Joystick(32767, parent.getPreferences());
-
 		this.script = script;
 		this.table = pianoRoll.getModel();
 		this.parent = parent;
 		this.stickType = stickType;
 
+
+		// setting global vars
+		stickPosition = new StickPosition(0,0);
+		joystick = new Joystick(32767, parent.getPreferences());
+		joystick.setThumbPos(new Point(stickPosition.getX(),stickPosition.getY()));
 
 
 		// spinners
@@ -78,12 +79,9 @@ public class JoystickPanel extends JPanel {
 		radiusSpinner.setValue(stickPosition.getRadius());
 		angleSpinner.setValue((int)Math.toDegrees(stickPosition.getTheta()));
 
-
         setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
         setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
-
-		joystick.setThumbPos(new Point(stickPosition.getX(),stickPosition.getY()));
 
 		ChangeListener spinnerListener = e -> {
 			if(shouldTriggerUpdate){
@@ -166,25 +164,21 @@ public class JoystickPanel extends JPanel {
 
 		c.insets = new Insets(5,3,5,3);
 
-        c.gridwidth = 1;
-		c.weightx = 5;
-		c.weighty = 5;
-
-        c.gridy = 1;
-        c.gridx = 1;
+        c.gridwidth = 2;
         add(cartesianLabel, c);
 
         c.gridx = 3;
         add(polarLabel, c);
 
-        c.gridy = 2;
+        c.gridwidth = 1;
+        c.gridy = 1;
         c.gridx = 0;
         add(xLabel, c);
 
         c.gridx = 1;
 		add(xSpinner, c);
 
-		c.gridy = 3;
+		c.gridy = 2;
 		c.gridx = 0;
 		add(yLabel, c);
 
@@ -192,14 +186,14 @@ public class JoystickPanel extends JPanel {
 		add(ySpinner, c);
 
 		c.gridx = 2;
-		c.gridy = 2;
+		c.gridy = 1;
 		add(radiusLabel, c);
 
 		c.gridx = 3;
 		add(radiusSpinner, c);
 
 		c.gridx = 2;
-		c.gridy = 3;
+		c.gridy = 2;
         add(thetaLabel, c);
 
         c.gridx = 3;
@@ -207,14 +201,12 @@ public class JoystickPanel extends JPanel {
 
         c.fill = GridBagConstraints.BOTH;
         c.gridwidth = 4;
-        c.gridheight = 4;
-        c.weighty = 0;
-        c.ipadx = 250;
-        c.ipady = 250;
+        c.weighty = 1;
         c.gridx = 0;
-        c.gridy = 4;
+        c.gridy = 3;
 
 		add(joystick, c);
+		c.weighty = 0;
 
 		centerButton = new JButton("center");
 		centerButton.addActionListener(e -> {
@@ -230,16 +222,14 @@ public class JoystickPanel extends JPanel {
 
 
 		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridheight = 1;
-		c.weighty = 10;
 		c.ipadx = 0;
 		c.ipady = 0;
 
 		c.gridx = 1;
-		c.gridy = 10;
+		c.gridy = 4;
 		add(smoothTransitionButton, c);
 
-		c.gridy = 11;
+		c.gridy = 5;
 		add(centerButton, c);
 
 		setAllEnabled(false);

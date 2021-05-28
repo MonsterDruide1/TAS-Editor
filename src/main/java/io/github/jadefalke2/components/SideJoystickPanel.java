@@ -49,9 +49,12 @@ public class SideJoystickPanel extends JPanel {
 		setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 
+		c.fill = GridBagConstraints.BOTH;
+		c.weighty = 0;
 		c.gridy = 0;
 		add(frameAmountLabel, c);
 
+		c.weighty = 1;
 		c.gridy = 1;
 		add(lstickPanel, c);
 

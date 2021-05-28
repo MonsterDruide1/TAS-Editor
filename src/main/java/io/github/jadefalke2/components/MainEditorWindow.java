@@ -94,12 +94,14 @@ public class MainEditorWindow extends JFrame {
 
 		JPanel combiningPanel = new JPanel(new GridBagLayout());
 
+		c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
 		c.weighty = 1;
+		c.weightx = 1;
 		combiningPanel.add(editor, c);
 
+		c.gridx = 1;
 		c.weightx = 0;
-		c.gridwidth = 200; //TODO do not specify a fixed width here
 		combiningPanel.add(joystickPanel, c);
 
 		add(combiningPanel);
