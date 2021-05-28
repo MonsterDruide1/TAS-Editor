@@ -5,6 +5,7 @@ import io.github.jadefalke2.stickRelatedClasses.JoystickPanel;
 import io.github.jadefalke2.stickRelatedClasses.StickPosition;
 
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 public class StickAction implements Action {
 
@@ -12,9 +13,9 @@ public class StickAction implements Action {
 	private final JoystickPanel.StickType stickType;
 	private final StickPosition oldPosition;
 	private final StickPosition newPosition;
-	private final DefaultTableModel table;
+	private final TableModel table;
 
-	public StickAction(InputLine[] inputLines, JoystickPanel.StickType stickType, StickPosition oldPosition, StickPosition newPosition, DefaultTableModel table) {
+	public StickAction(InputLine[] inputLines, JoystickPanel.StickType stickType, StickPosition oldPosition, StickPosition newPosition, TableModel table) {
 		this.table = table;
 		this.inputLines = inputLines;
 		this.stickType = stickType;

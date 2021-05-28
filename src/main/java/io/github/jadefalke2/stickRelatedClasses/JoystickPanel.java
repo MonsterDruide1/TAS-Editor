@@ -9,6 +9,7 @@ import io.github.jadefalke2.components.PianoRoll;
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import java.awt.*;
 
 import java.awt.event.*;
@@ -32,12 +33,10 @@ public class JoystickPanel extends JPanel {
 
     // Other stuff
     private StickPosition stickPosition;
-    private final Script script;
-    private StickType stickType;
+    private final StickType stickType;
 	private InputLine[] inputLines;
-	private int[] selectedRows;
 
-    private final DefaultTableModel table;
+    private final TableModel table;
     private final TAS parent; //TODO avoid this
 
 	private boolean shouldTriggerUpdate = true;
@@ -49,10 +48,9 @@ public class JoystickPanel extends JPanel {
     }
 
 
-	public JoystickPanel(TAS parent, PianoRoll pianoRoll, Script script, StickType stickType) {
+	public JoystickPanel(TAS parent, TableModel table, StickType stickType) {
 
-		this.script = script;
-		this.table = pianoRoll.getModel();
+		this.table = table;
 		this.parent = parent;
 		this.stickType = stickType;
 
@@ -258,7 +256,7 @@ public class JoystickPanel extends JPanel {
         	applyPosition(stickPosition, oldStickPosition);
 	}
 
-	public void setEditingRows (int[] rows) {
+	public void setEditingRows (int[] rows, Script script) {
 		shouldTriggerUpdate = false;
 		InputLine[] tmp = new InputLine[rows.length];
 		Arrays.setAll(tmp, i -> script.getInputLines().get(rows[i]));
@@ -267,7 +265,6 @@ public class JoystickPanel extends JPanel {
 		updateAll();
 		setAllEnabled(true);
 
-		selectedRows = rows;
 		StickPosition[] stickPositions = new StickPosition[Math.min(rows[0], parent.getPreferences().getLastStickPositionCount())];
 		// sets the contents of the stickpositions array to be the previous stick positions of the same stick
 		for (int i = 0; i < stickPositions.length; i++){
@@ -322,29 +319,5 @@ public class JoystickPanel extends JPanel {
 	private void updatePolarSpinners(){
 		angleSpinner.setValue((int)Math.toDegrees(stickPosition.getTheta()));
 		radiusSpinner.setValue(stickPosition.getRadius());
-	}
-
-	public StickPosition getStickPosition() {
-		return stickPosition;
-	}
-
-	public void setStickPosition(StickPosition stickPosition) {
-		this.stickPosition = stickPosition;
-	}
-
-	public StickType getStickType() {
-		return stickType;
-	}
-
-	public void setStickType(StickType stickType) {
-		this.stickType = stickType;
-	}
-
-	public InputLine[] getInputLines() {
-		return inputLines;
-	}
-
-	public void setInputLines(InputLine[] inputLines) {
-		this.inputLines = inputLines;
 	}
 }

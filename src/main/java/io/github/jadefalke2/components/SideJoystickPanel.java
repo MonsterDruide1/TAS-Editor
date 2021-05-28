@@ -16,8 +16,8 @@ public class SideJoystickPanel extends JPanel {
 	public SideJoystickPanel (TAS parent, PianoRoll pianoRoll, Script script) {
 
 		frameAmountLabel = new JLabel("Currently no frames are being edited");
-		lstickPanel = new JoystickPanel(parent, pianoRoll, script, JoystickPanel.StickType.L_STICK);
-		rstickPanel = new JoystickPanel(parent, pianoRoll, script, JoystickPanel.StickType.R_STICK);
+		lstickPanel = new JoystickPanel(parent, pianoRoll.getModel(), JoystickPanel.StickType.L_STICK);
+		rstickPanel = new JoystickPanel(parent, pianoRoll.getModel(), JoystickPanel.StickType.R_STICK);
 
 		pianoRoll.getSelectionModel().addListSelectionListener(e -> {
 			if(!e.getValueIsAdjusting()) return;
@@ -34,14 +34,14 @@ public class SideJoystickPanel extends JPanel {
 				case 1 -> {
 					//one frame is selected
 					frameAmountLabel.setText("Currently editing frame " + selectedRows[0]);
-					lstickPanel.setEditingRows(selectedRows);
-					rstickPanel.setEditingRows(selectedRows);
+					lstickPanel.setEditingRows(selectedRows, script);
+					rstickPanel.setEditingRows(selectedRows, script);
 				}
 				default -> {
 					//more than 1 frame is selected
 					frameAmountLabel.setText("Currently editing frames " + selectedRows[0] + " - " + selectedRows[selectedRows.length - 1]);
-					lstickPanel.setEditingRows(selectedRows);
-					rstickPanel.setEditingRows(selectedRows);
+					lstickPanel.setEditingRows(selectedRows, script);
+					rstickPanel.setEditingRows(selectedRows, script);
 				}
 			}
 		});
