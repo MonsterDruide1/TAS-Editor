@@ -32,6 +32,9 @@ public class SideJoystickPanel extends JPanel {
 		lstickPanel = new JoystickPanel(parent.getPreferences(), joystickPanelListener);
 		rstickPanel = new JoystickPanel(parent.getPreferences(), joystickPanelListener);
 
+		lstickPanel.setAllEnabled(false);
+		rstickPanel.setAllEnabled(false);
+
 		pianoRoll.getSelectionModel().addListSelectionListener(e -> {
 			int[] selectedRows = pianoRoll.getSelectedRows();
 
@@ -80,11 +83,15 @@ public class SideJoystickPanel extends JPanel {
 	public void setEditingRows(int[] rows, Script script){
 		inputLines = new InputLine[rows.length];
 		Arrays.setAll(inputLines, i -> script.getInputLines().get(rows[i]));
-		setEditingRows(rows[0], inputLines, script, lstickPanel, JoystickPanel.StickType.L_STICK);
-		setEditingRows(rows[0], inputLines, script, rstickPanel, JoystickPanel.StickType.R_STICK);
+
+		setEditingRows(rows[0], inputLines[0], script, lstickPanel, JoystickPanel.StickType.L_STICK);
+		setEditingRows(rows[0], inputLines[0], script, rstickPanel, JoystickPanel.StickType.R_STICK);
+		lstickPanel.setAllEnabled(true);
+		rstickPanel.setAllEnabled(true);
 	}
 
-	public void setEditingRows(int firstIndex, InputLine[] tmp, Script script, JoystickPanel joystickPanel, JoystickPanel.StickType stickType){
+	//TODO clean up this mess
+	public void setEditingRows(int firstIndex, InputLine firstLine, Script script, JoystickPanel joystickPanel, JoystickPanel.StickType stickType){
 		StickPosition[] stickPositions = new StickPosition[Math.min(firstIndex, settings.getLastStickPositionCount())];
 		// sets the contents of the stickpositions array to be the previous stick positions of the same stick
 		for (int i = 0; i < stickPositions.length; i++){
@@ -92,7 +99,7 @@ public class SideJoystickPanel extends JPanel {
 			stickPositions[i] = stickType == JoystickPanel.StickType.L_STICK ? currentLine.getStickL() : currentLine.getStickR();
 		}
 		joystickPanel.setStickPositions(stickPositions);
-		joystickPanel.setStickPosition(stickType == JoystickPanel.StickType.L_STICK ? tmp[0].getStickL() : tmp[0].getStickR());
+		joystickPanel.setStickPosition(stickType == JoystickPanel.StickType.L_STICK ? firstLine.getStickL() : firstLine.getStickR());
 	}
 
 

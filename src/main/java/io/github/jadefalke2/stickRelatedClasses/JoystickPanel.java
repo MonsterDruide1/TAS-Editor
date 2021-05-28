@@ -212,8 +212,6 @@ public class JoystickPanel extends JPanel {
 
 
 		c.fill = GridBagConstraints.HORIZONTAL;
-		c.ipadx = 0;
-		c.ipady = 0;
 
 		c.gridx = 1;
 		c.gridy = 4;
