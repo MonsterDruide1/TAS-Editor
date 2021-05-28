@@ -11,7 +11,7 @@ public class SmoothTransitionDialog extends JDialog {
 	private final JComboBox<String> dropdownMenu;
 	private final JoystickPanel startJoystick,  endJoystick;
 
-	public SmoothTransitionDialog(Settings settings){
+	public SmoothTransitionDialog(Settings settings, StickPosition startPos, StickPosition endPos){
 		super();
 
 		//option
@@ -25,7 +25,9 @@ public class SmoothTransitionDialog extends JDialog {
 		okButton.addActionListener(e -> dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING)));
 
 		startJoystick = new JoystickPanel(settings);
+		startJoystick.setStickPosition(startPos);
 		endJoystick = new JoystickPanel(settings);
+		endJoystick.setStickPosition(endPos);
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridBagLayout());
