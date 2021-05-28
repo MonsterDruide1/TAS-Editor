@@ -20,8 +20,6 @@ public class SideJoystickPanel extends JPanel {
 		rstickPanel = new JoystickPanel(parent, pianoRoll.getModel(), JoystickPanel.StickType.R_STICK);
 
 		pianoRoll.getSelectionModel().addListSelectionListener(e -> {
-			if(!e.getValueIsAdjusting()) return;
-
 			int[] selectedRows = pianoRoll.getSelectedRows();
 
 			switch (selectedRows.length) {
