@@ -73,8 +73,8 @@ public class TAS {
 
 	// set look and feels
 
-	public void updateLookAndFeel(){
-		if (preferences.isDarkTheme()) {
+	public void setLookAndFeel(boolean darkTheme){
+		if (darkTheme) {
 			setDarculaLookAndFeel();
 		} else {
 			setDefaultLookAndFeel();

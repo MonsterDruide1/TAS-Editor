@@ -39,7 +39,7 @@ public class Settings {
 
 	public void setDarkTheme(boolean darkTheme) {
 		this.darkTheme = darkTheme;
-		parent.updateLookAndFeel();
+		parent.setLookAndFeel(darkTheme);
 	}
 
 	public int getLastStickPositionCount() {

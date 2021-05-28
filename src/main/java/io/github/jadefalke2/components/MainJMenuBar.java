@@ -106,7 +106,6 @@ public class MainJMenuBar extends JMenuBar {
 
 		darkThemeJMenuItem.addItemListener(e -> {
 			preferences.setDarkTheme(darkThemeJMenuItem.getState());
-			parent.updateLookAndFeel();
 		});
 
 		JMenu helpJMenu = add(new JMenu("Help"));
