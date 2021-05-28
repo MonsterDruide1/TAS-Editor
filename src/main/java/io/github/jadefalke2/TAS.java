@@ -48,9 +48,6 @@ public class TAS {
 		// initialise preferences
 		initPreferences();
 
-		//set correct UI theme
-		updateLookAndFeel();
-
 		//initialising stacks
 		undoStack = new CircularStack<>(1024);
 		redoStack = new CircularStack<>(1024);
@@ -76,8 +73,8 @@ public class TAS {
 
 	// set look and feels
 
-	public void updateLookAndFeel(){
-		if (preferences.isDarkTheme()) {
+	public void setLookAndFeel(boolean darkTheme){
+		if (darkTheme) {
 			setDarculaLookAndFeel();
 		} else {
 			setDefaultLookAndFeel();
