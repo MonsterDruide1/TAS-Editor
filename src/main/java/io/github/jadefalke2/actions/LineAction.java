@@ -59,12 +59,24 @@ public class LineAction implements Action{
 
 
 	private void replaceRows(){
-		deleteRows();
-		insertRows(replacementLines);
+		replaceRows(rows, replacementLines);
 	}
 	private void revertReplaceRows(){
-		deleteRows(Arrays.stream(replacementLines).mapToInt(InputLine::getFrame).toArray());
-		insertRows(previousLines);
+		replaceRows(Arrays.stream(replacementLines).mapToInt(InputLine::getFrame).toArray(), previousLines);
+	}
+
+	private void replaceRows(int[] rows, InputLine[] replacement){
+		for(int i=0;i<rows.length;i++){
+			replaceRow(rows[i], replacement[i]);
+		}
+	}
+
+	private void replaceRow(int row, InputLine replacement){
+		script.getInputLines().set(row, replacement);
+		Object[] tableArray = replacement.getArray();
+		for(int i=0;i<tableArray.length;i++){
+			table.setValueAt(tableArray[i], row, i);
+		}
 	}
 
 	private void adjustLines(int start, int amount) {
