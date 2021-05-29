@@ -216,6 +216,7 @@ public class Joystick extends JPanel {
 
 	public void setStickPositions(StickPosition[] stickPositions) {
 		this.stickPositions = stickPositions;
+		repaint();
 	}
 
 	@Override
