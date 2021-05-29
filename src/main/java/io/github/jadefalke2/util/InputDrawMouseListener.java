@@ -53,14 +53,11 @@ public class InputDrawMouseListener extends MouseAdapter {
 
 		switch (col){
 			case 0:
+			case 1:
+			case 2:
 				if (e.getButton() == MouseEvent.BUTTON3 && table.isRowSelected(row)) {
 					table.openPopUpMenu(table.getSelectedRows(),e.getPoint());
 				}
-				break;
-
-			case 1:
-			case 2:
-				//TODO set joystick to correct L/R -> what to do when clicked somewhere else?
 				break;
 
 			default:
