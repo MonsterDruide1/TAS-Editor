@@ -1,7 +1,7 @@
 package io.github.jadefalke2.components;
 
 import io.github.jadefalke2.Script;
-import io.github.jadefalke2.Util;
+import io.github.jadefalke2.util.Util;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -37,7 +37,6 @@ public class TxtFileChooser extends JFileChooser {
 		}
 
 		return null;
-
 	}
 
 	public File saveFileAs (Script scriptToSave) throws IOException {
@@ -54,13 +53,15 @@ public class TxtFileChooser extends JFileChooser {
 	@Override
 	public void approveSelection(){
 		File file = getSelectedFile();
-		if(!file.getAbsolutePath().endsWith("."+Util.fileExtension)){
-			file = new File(file.getAbsolutePath()+"."+Util.fileExtension);
+
+		if(!file.getAbsolutePath().endsWith( "." + Util.fileExtension)){
+			file = new File(file.getAbsolutePath() + "." + Util.fileExtension);
 			setSelectedFile(file);
 		}
+
 		if(file.exists() && getDialogType() == SAVE_DIALOG){
 			int result = JOptionPane.showConfirmDialog(this, "This file already exists, overwrite it?", "Existing file", JOptionPane.YES_NO_CANCEL_OPTION);
-			switch (result){
+			switch (result) {
 				case JOptionPane.YES_OPTION:
 					super.approveSelection();
 					return;

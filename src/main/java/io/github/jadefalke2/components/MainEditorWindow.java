@@ -2,7 +2,7 @@ package io.github.jadefalke2.components;
 
 import io.github.jadefalke2.Script;
 import io.github.jadefalke2.TAS;
-import io.github.jadefalke2.Util;
+import io.github.jadefalke2.util.Util;
 import io.github.jadefalke2.util.CorruptedScriptException;
 
 import javax.swing.*;
