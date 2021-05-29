@@ -82,7 +82,12 @@ public class SmoothTransitionDialog extends JDialog {
 	}
 
 	public static StickPosition[] transitionAngularClosest(StickPosition firstPos, StickPosition endPos, int frames){
-		if(endPos.getTheta()-firstPos.getTheta() > 0)
+		double diffThetaCounterClockwise = endPos.getTheta() - firstPos.getTheta();
+		double diffThetaClockwise = diffThetaCounterClockwise;
+		if(diffThetaCounterClockwise < 0) diffThetaCounterClockwise += 2*Math.PI;
+		if(diffThetaClockwise > 0) diffThetaClockwise -= 2*Math.PI;
+
+		if(Math.abs(diffThetaClockwise) < Math.abs(diffThetaCounterClockwise))
 			return transitionAngularClockwise(firstPos, endPos, frames);
 		else
 			return transitionAngularCounterClockwise(firstPos, endPos, frames);
