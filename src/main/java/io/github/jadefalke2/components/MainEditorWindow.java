@@ -108,7 +108,7 @@ public class MainEditorWindow extends JFrame {
 
 		setJMenuBar(mainJMenuBar);
 
-		pack();
+		pack(); //TODO is still too small, the joystick is too little to use
 		setExtendedState(MAXIMIZED_BOTH);
 	}
 
