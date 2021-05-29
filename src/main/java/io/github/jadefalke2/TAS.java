@@ -5,10 +5,8 @@ import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import io.github.jadefalke2.components.*;
 import io.github.jadefalke2.actions.Action;
-import io.github.jadefalke2.util.CircularStack;
 import io.github.jadefalke2.util.CorruptedScriptException;
 import io.github.jadefalke2.util.Settings;
-import io.github.jadefalke2.util.Stack;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,6 +15,7 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Stack;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
@@ -49,8 +48,8 @@ public class TAS {
 		initPreferences();
 
 		//initialising stacks
-		undoStack = new CircularStack<>(1024);
-		redoStack = new CircularStack<>(1024);
+		undoStack = new Stack<>();
+		redoStack = new Stack<>();
 
 		//initialising windows -> set to be invisible by default
 		//will be set visible once they are supposed to
