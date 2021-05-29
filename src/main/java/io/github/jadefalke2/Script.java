@@ -1,6 +1,7 @@
 package io.github.jadefalke2;
 
 import io.github.jadefalke2.util.CorruptedScriptException;
+import io.github.jadefalke2.util.Util;
 
 import java.io.*;
 import java.util.ArrayList;
