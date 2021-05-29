@@ -50,7 +50,7 @@ public class Script {
 			InputLine currentInputLine = new InputLine(line);
 
 			if (currentInputLine.getFrame() < currentFrame){
-				throw new CorruptedScriptException("Line numbers misordered");
+				throw new CorruptedScriptException("Line numbers misordered", currentFrame);
 			}
 
 			while(currentFrame < currentInputLine.getFrame()){

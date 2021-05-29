@@ -29,7 +29,6 @@ public class TxtFileChooser extends JFileChooser {
 		setCurrentDirectory(new File(System.getProperty("user.home")));
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(Util.fileExtension + " files", Util.fileExtension, "text");
 		setFileFilter(filter);
-
 		int option = openFile ? showOpenDialog(null) : showSaveDialog(null);
 
 		if (option == JFileChooser.APPROVE_OPTION) {

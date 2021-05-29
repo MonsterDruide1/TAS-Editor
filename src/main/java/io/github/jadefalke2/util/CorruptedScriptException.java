@@ -1,8 +1,13 @@
 package io.github.jadefalke2.util;
 
+import javax.swing.*;
+
 public class CorruptedScriptException extends Exception {
 
-	public CorruptedScriptException (String s){
-		super(s);
+	public CorruptedScriptException (String errorMessage, int frame){
+		super(errorMessage);
+
+		String fullErrorMessage = errorMessage + " \nPlease check your script manually " + (frame == -1 ? "" : " \nat frame " + frame);
+		JOptionPane.showMessageDialog(null, fullErrorMessage, "An exception occured", JOptionPane.ERROR_MESSAGE);
 	}
 }

@@ -38,28 +38,33 @@ public class InputLine {
 	private void splitIntoComponents(String full) throws CorruptedScriptException {
 
 		if (full.equals("")){
-			throw new CorruptedScriptException("empty script");
+			throw new CorruptedScriptException("empty script", -1);
 		}
 
-		String[] components = full.split(" ");
+		try {
+			String[] components = full.split(" ");
 
-		frame = Integer.parseInt(components[0]);
-		String buttons = components[1];
-		String[] buttonsPressed = buttons.split(";");
+			frame = Integer.parseInt(components[0]);
+			String buttons = components[1];
+			String[] buttonsPressed = buttons.split(";");
 
-		for (String s : buttonsPressed) {
-			//TODO better way to handle this?
-			try {
-				this.buttons.add(Button.valueOf(s));
-			} catch(IllegalArgumentException e){
-				if(!s.equals("NONE")){
-					throw new CorruptedScriptException("Unknown button encountered: " + s);
+			for (String s : buttonsPressed) {
+				//TODO better way to handle this?
+				try {
+					this.buttons.add(Button.valueOf(s));
+				} catch (IllegalArgumentException e) {
+					if (!s.equals("NONE")) {
+						throw new CorruptedScriptException("Unknown button encountered: " + s, frame);
+					}
 				}
 			}
-		}
 
-		stickL = new StickPosition(components[2]);
-		stickR = new StickPosition(components[3]);
+			stickL = new StickPosition(components[2]);
+			stickR = new StickPosition(components[3]);
+
+		} catch (Exception e) {
+			throw new CorruptedScriptException("Script corrupted", frame);
+		}
 	}
 
 	/**
