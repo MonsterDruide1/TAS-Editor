@@ -20,11 +20,13 @@ public class SideJoystickPanel extends JPanel {
 	private final Settings settings;
 
 	private InputLine[] inputLines;
+	private Script script;
 
-	public SideJoystickPanel (TAS parent, PianoRoll pianoRoll, Script script) {
+	public SideJoystickPanel (TAS parent, PianoRoll pianoRoll, Script startScript) {
 
 		frameAmountLabel = new JLabel("Currently no frames are being edited");
 		settings = parent.getPreferences();
+		this.script = startScript;
 
 		//TODO remove the duplicate listener here
 		ActionListener smoothTransitionListenerL = e -> {
@@ -127,5 +129,8 @@ public class SideJoystickPanel extends JPanel {
 		joystickPanel.setStickPosition(stickType == JoystickPanel.StickType.L_STICK ? firstLine.getStickL() : firstLine.getStickR());
 	}
 
+	public void setScript(Script script){
+		this.script = script;
+	}
 
 }

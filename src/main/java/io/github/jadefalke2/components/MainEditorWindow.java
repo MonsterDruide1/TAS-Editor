@@ -132,6 +132,7 @@ public class MainEditorWindow extends JFrame {
 	public void setScript(Script script){
 		this.script = script;
 		pianoRoll.setScript(script);
+		joystickPanel.setScript(script);
 		currentScriptFile = null;
 	}
 
