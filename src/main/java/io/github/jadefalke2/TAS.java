@@ -164,7 +164,7 @@ public class TAS {
 		mainEditorWindow.getPianoRoll().deleteSelectedRows();
 	}
 
-	public void paste() throws IOException, UnsupportedFlavorException, CorruptedScriptException {
+	public void paste() throws IOException, UnsupportedFlavorException {
 		String clipContent = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getContents(this).getTransferData(DataFlavor.stringFlavor);
 		InputLine[] rows = Arrays.stream(clipContent.split("[\r\n]+")).map(line -> {
 			try {

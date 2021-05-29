@@ -21,16 +21,18 @@ public class CellAction implements Action {
 
 	@Override
 	public void execute() {
+		String colName = table.getColumnName(col);
+		Button buttonTriggered = Button.valueOf("KEY_" + colName);
 
 		if (table.getValueAt(row, col).equals("")) {
 
 			table.setValueAt(table.getColumnName(col), row, col);
-			script.getInputLines().get(row).buttons.add(Button.valueOf("KEY_" + table.getColumnName(col)));
+			script.getInputLines().get(row).buttons.add(buttonTriggered);
 
-		} else if (table.getValueAt(row, col).equals(table.getColumnName(col))) {
+		} else if (table.getValueAt(row, col).equals(colName)) {
 
 			table.setValueAt("", row, col);
-			script.getInputLines().get(row).buttons.remove(Button.valueOf("KEY_" + table.getColumnName(col)));
+			script.getInputLines().get(row).buttons.remove(buttonTriggered);
 
 		}
 

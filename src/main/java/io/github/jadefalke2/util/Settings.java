@@ -2,7 +2,6 @@ package io.github.jadefalke2.util;
 
 import io.github.jadefalke2.TAS;
 
-import java.util.Arrays;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 

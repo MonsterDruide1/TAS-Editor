@@ -5,7 +5,6 @@ import io.github.jadefalke2.Script;
 
 import javax.swing.table.DefaultTableModel;
 import java.util.Arrays;
-import java.util.stream.IntStream;
 
 
 public class LineAction implements Action{

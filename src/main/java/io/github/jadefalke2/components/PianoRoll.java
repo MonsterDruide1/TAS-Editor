@@ -89,7 +89,7 @@ public class PianoRoll extends JTable implements ComponentListener {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					parent.paste();
-				} catch (IOException | UnsupportedFlavorException | CorruptedScriptException ex) {
+				} catch (IOException | UnsupportedFlavorException ex) {
 					ex.printStackTrace();
 				}
 			}
@@ -139,32 +139,6 @@ public class PianoRoll extends JTable implements ComponentListener {
 		InputLine newEmpty = InputLine.getEmpty();
 		script.getInputLines().add(newEmpty);
 		model.addRow(newEmpty.getArray(script.getInputLines().size()-1)); //TODO doesn't make sense on a script with missing frames
-	}
-
-
-	/*public void openStickWindow (int row,int col, Script script){
-		if (!stickWindow.isVisible()) {
-
-			stickWindow.getContentPane().removeAll();
-
-			// Creates StickImagePanel
-			StickType stickType = col == 1 ? L_STICK : R_STICK;
-			InputLine tmpCurrentInputLine = script.getInputLines().get(row);
-			//TODO way too many parameters. rework this.
-			StickImagePanel stickImagePanel = new StickImagePanel(stickType == L_STICK ? tmpCurrentInputLine.getStickL() : tmpCurrentInputLine.getStickR(), stickType, script, model, row, parent);
-
-			// adds the panel to the frame
-			stickWindow.add(stickImagePanel);
-			stickWindow.setVisible(true);
-			stickWindow.pack();
-		}
-
-	}
-
-	 */
-
-	public void setStickRow (int row, StickType stickType) {
-		InputLine currentLine = script.getInputLines().get(row);
 	}
 
 	public void deleteSelectedRows(){

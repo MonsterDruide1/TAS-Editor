@@ -1,17 +1,12 @@
 package io.github.jadefalke2.stickRelatedClasses;
 
-import io.github.jadefalke2.InputLine;
-import io.github.jadefalke2.Script;
-import io.github.jadefalke2.TAS;
 import io.github.jadefalke2.util.Settings;
 
 import javax.swing.*;
 import javax.swing.event.ChangeListener;
-import javax.swing.table.TableModel;
 import java.awt.*;
 
 import java.awt.event.*;
-import java.util.Arrays;
 
 public class JoystickPanel extends JPanel {
 

@@ -4,7 +4,6 @@ import io.github.jadefalke2.InputLine;
 import io.github.jadefalke2.stickRelatedClasses.JoystickPanel;
 import io.github.jadefalke2.stickRelatedClasses.StickPosition;
 
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 public class StickAction implements Action {
