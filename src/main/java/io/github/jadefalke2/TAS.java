@@ -161,7 +161,7 @@ public class TAS {
 
 	public void paste() throws IOException, UnsupportedFlavorException {
 		String clipContent = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getContents(this).getTransferData(DataFlavor.stringFlavor);
-		InputLine[] rows = Arrays.stream(clipContent.split("\n")).map(line -> {
+		InputLine[] rows = Arrays.stream(clipContent.split("[\r\n]+")).map(line -> {
 			try {
 				return new InputLine(line);
 			} catch(CorruptedScriptException e){
