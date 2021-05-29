@@ -13,11 +13,10 @@ public class Function extends Script{
 	public void callFunction (DefaultTableModel table, Script mainScript, int row){
 		for (int i = row; i < row + getInputLines().size(); i++){
 			InputLine currentLineToInsert = getInputLines().get(i - row);
-			currentLineToInsert.setFrame(i);
 
 			if (i > table.getRowCount()){
 				mainScript.getInputLines().add(currentLineToInsert);
-				table.addRow(currentLineToInsert.getArray());
+				table.addRow(currentLineToInsert.getArray(i));
 			} else {
 				for (int j = 0; j < table.getColumnCount(); j++){
 					switch (j){

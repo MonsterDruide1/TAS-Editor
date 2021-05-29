@@ -1,6 +1,7 @@
 package io.github.jadefalke2.components;
 
 import io.github.jadefalke2.TAS;
+import io.github.jadefalke2.util.CorruptedScriptException;
 import io.github.jadefalke2.util.Settings;
 
 import javax.swing.*;
@@ -79,7 +80,7 @@ public class MainJMenuBar extends JMenuBar {
 		pasteJMenuItem.addActionListener(e -> {
 			try {
 				parent.paste();
-			} catch (IOException | UnsupportedFlavorException ioException) {
+			} catch (IOException | UnsupportedFlavorException | CorruptedScriptException ioException) {
 				ioException.printStackTrace();
 			}
 		});

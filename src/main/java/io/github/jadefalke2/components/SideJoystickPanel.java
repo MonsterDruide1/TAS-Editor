@@ -51,7 +51,7 @@ public class SideJoystickPanel extends JPanel {
 			}
 			pianoRoll.replaceSelectedRows(replacementLines);
 		};
-		CustomChangeListener joystickPanelListener = e -> parent.executeAction(new StickAction(inputLines, getStickType(e.getSource()), e.getOldValue(), e.getNewValue(), pianoRoll.getModel()));
+		CustomChangeListener joystickPanelListener = e -> parent.executeAction(new StickAction(inputLines, getStickType(e.getSource()), e.getOldValue(), e.getNewValue(), pianoRoll.getModel(), pianoRoll.getSelectedRows()));
 		lstickPanel = new JoystickPanel(parent.getPreferences(), smoothTransitionListenerL);
 		rstickPanel = new JoystickPanel(parent.getPreferences(), smoothTransitionListenerR);
 		lstickPanel.setOnChangeListener(joystickPanelListener);

@@ -5,6 +5,7 @@ import io.github.jadefalke2.Script;
 
 import javax.swing.table.DefaultTableModel;
 import java.util.Arrays;
+import java.util.stream.IntStream;
 
 
 public class LineAction implements Action{
@@ -51,7 +52,7 @@ public class LineAction implements Action{
 	public void revert() {
 		switch (type){
 			case CLONE, INSERT -> deleteRows();
-			case DELETE -> insertRows(previousLines);
+			case DELETE -> insertRows(previousLines, rows[0]);
 			case REPLACE -> revertReplaceRows();
 		}
 	}
@@ -62,18 +63,28 @@ public class LineAction implements Action{
 		replaceRows(rows, replacementLines);
 	}
 	private void revertReplaceRows(){
-		replaceRows(Arrays.stream(replacementLines).mapToInt(InputLine::getFrame).toArray(), previousLines);
+		int[] rowsToReplace = new int[replacementLines.length];
+		for(int i=0;i< replacementLines.length;i++){
+			rowsToReplace[i] = i < rows.length ? rows[i] : rows[rows.length-1] + (i - rows.length);
+		}
+		replaceRows(rowsToReplace, previousLines);
 	}
 
 	private void replaceRows(int[] rows, InputLine[] replacement){
-		for(int i=0;i<rows.length;i++){
-			replaceRow(rows[i], replacement[i]);
+		if(rows.length < replacement.length) //missing frames -> add emptys that there are enough to replace
+			insertRows(replacement.length - rows.length);
+		if(rows.length > replacement.length) //too many frames -> remove redundant lines
+			deleteRows(Arrays.copyOfRange(rows, replacement.length, rows.length));
+
+		for(int i=0;i<replacement.length;i++){
+			int row = i < rows.length ? rows[i] : rows[rows.length-1] + (i - rows.length) + 1;
+			replaceRow(row, replacement[i]);
 		}
 	}
 
 	private void replaceRow(int row, InputLine replacement){
 		script.getInputLines().set(row, replacement);
-		Object[] tableArray = replacement.getArray();
+		Object[] tableArray = replacement.getArray(row);
 		for(int i=0;i<tableArray.length;i++){
 			table.setValueAt(tableArray[i], row, i);
 		}
@@ -81,14 +92,9 @@ public class LineAction implements Action{
 
 	private void adjustLines(int start, int amount) {
 		for (int i = start; i < table.getRowCount(); i++){
-
-			InputLine currentLine = script.getInputLines().get(i);
-
-			currentLine.increaseFrameBy(amount);
-			table.setValueAt(currentLine.getFrame(),i,0);
+			table.setValueAt(i,i,0);
 		}
 	}
-
 
 	private void cloneRows(){
 		InputLine[] tmpLines = new InputLine[rows.length];
@@ -97,7 +103,7 @@ public class LineAction implements Action{
 			tmpLines[i] = script.getInputLines().get(rows[0] + i).clone();
 		}
 
-		insertRows(tmpLines);
+		insertRows(tmpLines, rows[rows.length-1]+1);
 	}
 
 	private void deleteRows(){
@@ -116,26 +122,26 @@ public class LineAction implements Action{
 	}
 
 	private void insertRows(){
-		InputLine[] tmpLines = new InputLine[rows.length];
+		insertRows(rows.length);
+	}
+	private void insertRows(int amount){
+		InputLine[] tmpLines = new InputLine[amount];
 
-		for (int i = 0; i < rows.length; i++){
-			tmpLines[i] = InputLine.getEmpty(rows[0] + i);
+		for (int i = 0; i < amount; i++){
+			tmpLines[i] = InputLine.getEmpty();
 		}
 
-		insertRows(tmpLines);
+		insertRows(tmpLines, rows[rows.length-1]+1);
 	}
 
-	private void insertRows (InputLine[] inputLines){
-
+	private void insertRows (InputLine[] inputLines, int index){
 		for (int i = 0; i < inputLines.length; i++){
-			int actualIndex = rows[0] + i;
-			inputLines[i].setFrame(actualIndex);
+			int actualIndex = index + i;
 			script.getInputLines().add(actualIndex, inputLines[i]);
-			table.insertRow(actualIndex, script.getInputLines().get(actualIndex).getArray());
+			table.insertRow(actualIndex, script.getInputLines().get(actualIndex).getArray(actualIndex));
 		}
 
-		adjustLines(rows[0] + inputLines.length, inputLines.length);
-
+		adjustLines(index + inputLines.length, inputLines.length);
 	}
 
 

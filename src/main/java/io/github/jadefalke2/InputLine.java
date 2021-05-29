@@ -8,9 +8,6 @@ import java.util.EnumSet;
 
 public class InputLine {
 
-	// the frame, starting at 0
-	private int frame;
-
 	// the buttons currently pressed
 	public EnumSet<Button> buttons = EnumSet.noneOf(Button.class);
 
@@ -20,8 +17,7 @@ public class InputLine {
 
 	// Contructors
 
-	public InputLine(int frame) {
-		this.frame = frame;
+	public InputLine() {
 		stickL = new StickPosition(0,0);
 		stickR = new StickPosition(0,0);
 	}
@@ -41,6 +37,7 @@ public class InputLine {
 			throw new CorruptedScriptException("empty script", -1);
 		}
 
+		int frame = 0;
 		try {
 			String[] components = full.split(" ");
 
@@ -63,17 +60,17 @@ public class InputLine {
 			stickR = new StickPosition(components[3]);
 
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new CorruptedScriptException("Script corrupted", frame);
 		}
 	}
 
 	/**
 	 * Returns a new Inputline with no buttons pressed and both sticks at 0;0
-	 * @param frame the frame number of the input line
 	 * @return the new input line
 	 */
-	public static InputLine getEmpty (int frame){
-		return new InputLine(frame);
+	public static InputLine getEmpty (){
+		return new InputLine();
 	}
 
 
@@ -83,7 +80,7 @@ public class InputLine {
 	 * creates and returns a new string that contains all information about this input line
 	 * @return the created string
 	 */
-	public String getFull() {
+	public String getFull(int frame) {
 		StringBuilder tmpString = new StringBuilder();
 
 		tmpString.append(frame).append(" ");
@@ -117,7 +114,7 @@ public class InputLine {
 	 * creates and returns an array with all data of the lines, used to display it in a JTable
 	 * @return the Object array
 	 */
-	public Object[] getArray (){
+	public Object[] getArray (int frame){
 		Object[] tmp = new Object[3+Button.values().length];
 		tmp[0] = frame;
 		tmp[1] = stickL.toCartString();
@@ -137,20 +134,7 @@ public class InputLine {
 		return buttons.isEmpty() && stickR.isZeroZero() && stickL.isZeroZero();
 	}
 
-	/**
-	 * Increases the frame number by a specified amount
-	 * @param amount the amount to increase by
-	 */
-	public void increaseFrameBy (int amount){
-		frame += amount;
-	}
-
-
 	// Getter + setter (normal)
-
-	public int getFrame() {
-		return frame;
-	}
 
 	public StickPosition getStickL() {
 		return stickL;
@@ -168,10 +152,6 @@ public class InputLine {
 		this.stickR = stickR;
 	}
 
-	public void setFrame(int frame) {
-		this.frame = frame;
-	}
-
 
 	// Overwriting methods
 
@@ -181,7 +161,7 @@ public class InputLine {
 	 */
 	@Override
 	public InputLine clone(){
-		InputLine newLine = new InputLine(frame);
+		InputLine newLine = new InputLine();
 		newLine.buttons = buttons.clone();
 		newLine.stickL = stickL.clone();
 		newLine.stickR = stickR.clone();

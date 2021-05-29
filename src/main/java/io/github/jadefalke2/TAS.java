@@ -148,7 +148,12 @@ public class TAS {
 
 	public void copy(){
 		InputLine[] rows = mainEditorWindow.getPianoRoll().getSelectedInputRows();
-		String[] rowStrings = Arrays.stream(rows).map(InputLine::getFull).toArray(String[]::new);
+		int[] rowsIndex = mainEditorWindow.getPianoRoll().getSelectedRows();
+
+		String[] rowStrings = new String[rows.length];
+		for(int i=0;i<rows.length;i++){
+			rowStrings[i] = rows[i].getFull(rowsIndex[i]);
+		}
 		String fullString = String.join("\n", rowStrings);
 
 		StringSelection selection = new StringSelection(fullString);
@@ -159,7 +164,7 @@ public class TAS {
 		mainEditorWindow.getPianoRoll().deleteSelectedRows();
 	}
 
-	public void paste() throws IOException, UnsupportedFlavorException {
+	public void paste() throws IOException, UnsupportedFlavorException, CorruptedScriptException {
 		String clipContent = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getContents(this).getTransferData(DataFlavor.stringFlavor);
 		InputLine[] rows = Arrays.stream(clipContent.split("[\r\n]+")).map(line -> {
 			try {

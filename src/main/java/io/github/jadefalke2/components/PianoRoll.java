@@ -6,6 +6,7 @@ import io.github.jadefalke2.TAS;
 import io.github.jadefalke2.actions.LineAction;
 import io.github.jadefalke2.stickRelatedClasses.JoystickPanel.StickType;
 import io.github.jadefalke2.util.Button;
+import io.github.jadefalke2.util.CorruptedScriptException;
 import io.github.jadefalke2.util.InputDrawMouseListener;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -88,7 +89,7 @@ public class PianoRoll extends JTable implements ComponentListener {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					parent.paste();
-				} catch (IOException | UnsupportedFlavorException ex) {
+				} catch (IOException | UnsupportedFlavorException | CorruptedScriptException ex) {
 					ex.printStackTrace();
 				}
 			}
@@ -135,9 +136,9 @@ public class PianoRoll extends JTable implements ComponentListener {
 	 * adds an empty line to the end of the current script
 	 */
 	public void addEmptyRow() {
-		InputLine newEmpty = InputLine.getEmpty(script.getInputLines().size()); //TODO doesn't make sense on a script with missing frames
+		InputLine newEmpty = InputLine.getEmpty();
 		script.getInputLines().add(newEmpty);
-		model.addRow(newEmpty.getArray());
+		model.addRow(newEmpty.getArray(script.getInputLines().size()-1)); //TODO doesn't make sense on a script with missing frames
 	}
 
 
@@ -204,7 +205,7 @@ public class PianoRoll extends JTable implements ComponentListener {
 		model.setRowCount(0);
 
 		for (int i = 0; i < script.getInputLines().size(); i++){
-			model.addRow(script.getInputLines().get(i).getArray());
+			model.addRow(script.getInputLines().get(i).getArray(i));
 		}
 	}
 

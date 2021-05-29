@@ -6,6 +6,7 @@ import io.github.jadefalke2.util.Util;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Script {
 
@@ -26,13 +27,7 @@ public class Script {
 	}
 
 	public void insertLine(int row, InputLine inputLine){
-
 		inputLines.add(row,inputLine);
-
-		for (int i = row + 1; i < inputLines.size(); i++){
-			inputLines.get(i).setFrame(inputLines.get(i).getFrame() + 1);
-		}
-
 	}
 
 	/**
@@ -48,13 +43,15 @@ public class Script {
 		for (String line : lines) {
 
 			InputLine currentInputLine = new InputLine(line);
+			int frame = Integer.parseInt(line.split(" ")[0]);
 
-			if (currentInputLine.getFrame() < currentFrame){
+			if (frame < currentFrame){
 				throw new CorruptedScriptException("Line numbers misordered", currentFrame);
 			}
 
-			while(currentFrame < currentInputLine.getFrame()){
-				inputLines.add(InputLine.getEmpty(currentFrame++));
+			while(currentFrame < frame){
+				inputLines.add(InputLine.getEmpty());
+				currentFrame++;
 			}
 
 			inputLines.add(currentInputLine);
@@ -68,7 +65,7 @@ public class Script {
 	 * @return the script as a string
 	 */
 	public String getFull (){
-		return inputLines.stream().map(inputLine -> inputLine.getFull() + "\n").collect(Collectors.joining());
+		return IntStream.range(0, inputLines.size()).mapToObj(i -> inputLines.get(i).getFull(i)+"\n").collect(Collectors.joining());
 	}
 
 	/**
@@ -80,7 +77,7 @@ public class Script {
 		Script tmp = new Script();
 
 		for (int i = 0; i < amount; i++){
-			tmp.insertLine(i,InputLine.getEmpty(i));
+			tmp.insertLine(i,InputLine.getEmpty());
 		}
 
 		return tmp;

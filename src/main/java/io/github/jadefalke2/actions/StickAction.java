@@ -14,13 +14,15 @@ public class StickAction implements Action {
 	private final StickPosition oldPosition;
 	private final StickPosition newPosition;
 	private final TableModel table;
+	private final int[] rows;
 
-	public StickAction(InputLine[] inputLines, JoystickPanel.StickType stickType, StickPosition oldPosition, StickPosition newPosition, TableModel table) {
+	public StickAction(InputLine[] inputLines, JoystickPanel.StickType stickType, StickPosition oldPosition, StickPosition newPosition, TableModel table, int[] rows) {
 		this.table = table;
 		this.inputLines = inputLines;
 		this.stickType = stickType;
 		this.oldPosition = oldPosition;
 		this.newPosition = newPosition;
+		this.rows = rows;
 	}
 
 	@Override
@@ -35,13 +37,13 @@ public class StickAction implements Action {
 
 	private void setPosition(StickPosition position) {
 
-		for (InputLine i: inputLines) {
+		for (int i=0;i<inputLines.length;i++) {
 			if (stickType == JoystickPanel.StickType.L_STICK) {
-				i.setStickL(position);
-				table.setValueAt(i.getStickL().toCartString(), i.getFrame(), 1);
+				inputLines[i].setStickL(position);
+				table.setValueAt(inputLines[i].getStickL().toCartString(), rows[i], 1);
 			} else {
-				i.setStickR(position);
-				table.setValueAt(i.getStickR().toCartString(), i.getFrame(), 2);
+				inputLines[i].setStickR(position);
+				table.setValueAt(inputLines[i].getStickR().toCartString(), rows[i], 2);
 			}
 		}
 
