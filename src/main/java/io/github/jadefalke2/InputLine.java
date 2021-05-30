@@ -46,13 +46,8 @@ public class InputLine {
 			String[] buttonsPressed = buttons.split(";");
 
 			for (String s : buttonsPressed) {
-				//TODO better way to handle this?
-				try {
+				if(!s.equals("NONE")) {
 					this.buttons.add(Button.valueOf(s));
-				} catch (IllegalArgumentException e) {
-					if (!s.equals("NONE")) {
-						throw new CorruptedScriptException("Unknown button encountered: " + s, frame);
-					}
 				}
 			}
 
