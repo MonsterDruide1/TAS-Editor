@@ -78,12 +78,12 @@ public class SideJoystickPanel extends JPanel {
 				case 1 -> {
 					//one frame is selected
 					frameAmountLabel.setText("Currently editing frame " + selectedRows[0]);
-					setEditingRows(selectedRows, script); //TODO script has way too much information
+					setEditingRows(selectedRows, script.getInputLines().toArray(new InputLine[0]));
 				}
 				default -> {
 					//more than 1 frame is selected
 					frameAmountLabel.setText("Currently editing frames " + selectedRows[0] + " - " + selectedRows[selectedRows.length - 1]);
-					setEditingRows(selectedRows, script);
+					setEditingRows(selectedRows, script.getInputLines().toArray(new InputLine[0]));
 				}
 			}
 		});
@@ -110,22 +110,22 @@ public class SideJoystickPanel extends JPanel {
 		throw new IllegalArgumentException("Unknown StickType of panel: "+joystickPanel);
 	}
 
-	public void setEditingRows(int[] rows, Script script){
+	public void setEditingRows(int[] rows, InputLine[] scriptLines){
 		inputLines = new InputLine[rows.length];
 		Arrays.setAll(inputLines, i -> script.getInputLines().get(rows[i]));
 
-		setEditingRows(rows[0], inputLines[0], script, lstickPanel, JoystickPanel.StickType.L_STICK);
-		setEditingRows(rows[0], inputLines[0], script, rstickPanel, JoystickPanel.StickType.R_STICK);
+		setEditingRows(rows[0], inputLines[0], scriptLines, lstickPanel, JoystickPanel.StickType.L_STICK);
+		setEditingRows(rows[0], inputLines[0], scriptLines, rstickPanel, JoystickPanel.StickType.R_STICK);
 		lstickPanel.setAllEnabled(true);
 		rstickPanel.setAllEnabled(true);
 	}
 
 	//TODO clean up this mess
-	public void setEditingRows(int firstIndex, InputLine firstLine, Script script, JoystickPanel joystickPanel, JoystickPanel.StickType stickType){
+	public void setEditingRows(int firstIndex, InputLine firstLine, InputLine[] inputLines, JoystickPanel joystickPanel, JoystickPanel.StickType stickType){
 		StickPosition[] stickPositions = new StickPosition[Math.min(firstIndex, settings.getLastStickPositionCount())];
 		// sets the contents of the stickpositions array to be the previous stick positions of the same stick
 		for (int i = 0; i < stickPositions.length; i++){
-			InputLine currentLine = script.getInputLines().get(firstIndex - stickPositions.length + i);
+			InputLine currentLine = inputLines[firstIndex - stickPositions.length + i];
 			stickPositions[i] = stickType == JoystickPanel.StickType.L_STICK ? currentLine.getStickL() : currentLine.getStickR();
 		}
 		joystickPanel.setStickPositions(stickPositions);
