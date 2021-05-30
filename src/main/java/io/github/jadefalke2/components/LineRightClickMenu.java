@@ -10,13 +10,13 @@ import java.awt.*;
 
 public class LineRightClickMenu extends JPopupMenu {
 
-	private final JMenuItem deleteOption = new JMenuItem("delete");
-	private final JMenuItem insertOption = new JMenuItem("insert");
-	private final JMenuItem cloneOption = new JMenuItem("clone");
+	private final JMenuItem deleteOption;
+	private final JMenuItem insertOption;
+	private final JMenuItem cloneOption;
 
-	private final JMenuItem copyOption = new JMenuItem("copy");
-	private final JMenuItem pasteOption = new JMenuItem("paste");
-	private final JMenuItem cutOption = new JMenuItem("cut");
+	private final JMenuItem copyOption;
+	private final JMenuItem pasteOption;
+	private final JMenuItem cutOption;
 
 	private final TAS parent;
 	private final Script script;
@@ -26,6 +26,18 @@ public class LineRightClickMenu extends JPopupMenu {
 		this.parent = parent;
 		this.script = script;
 		this.model = model;
+
+		copyOption = add("copy");
+		pasteOption = add("paste");
+		cutOption = add("cut");
+
+		addSeparator();
+
+		deleteOption = add("delete");
+		insertOption = add("insert");
+		cloneOption = add("clone");
+
+		pack();
 	}
 
 	/**
@@ -34,23 +46,14 @@ public class LineRightClickMenu extends JPopupMenu {
 	 * @param point the point at which the menu "spawns"
 	 */
 	public void openPopUpMenu(int[] rows, Point point, Component invoker){
-		add(deleteOption);
-		add(insertOption);
-		add(cloneOption);
 
 		setListener(deleteOption, rows, LineAction.Type.DELETE);
 		setListener(insertOption, rows, LineAction.Type.INSERT);
 		setListener(cloneOption, rows, LineAction.Type.CLONE);
 
-		add(copyOption);
-		add(pasteOption);
-		add(cutOption);
-
 		setListener(copyOption, rows, LineAction.Type.COPY);
 		setListener(pasteOption, rows, LineAction.Type.PASTE);
 		setListener(cutOption, rows, LineAction.Type.CUT);
-
-		pack();
 		show(invoker,(int)point.getX(),(int)point.getY());
 	}
 
@@ -59,6 +62,6 @@ public class LineRightClickMenu extends JPopupMenu {
 			item.removeActionListener(item.getActionListeners()[0]);
 		}
 
-		item.addActionListener(e -> parent.executeAction(new LineAction(parent,model, script, rows, type)));
+		item.addActionListener(e -> parent.executeAction(new LineAction(parent, model, script, rows, type)));
 	}
 }
