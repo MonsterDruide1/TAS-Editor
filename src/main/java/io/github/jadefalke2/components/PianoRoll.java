@@ -4,9 +4,7 @@ import io.github.jadefalke2.InputLine;
 import io.github.jadefalke2.Script;
 import io.github.jadefalke2.TAS;
 import io.github.jadefalke2.actions.LineAction;
-import io.github.jadefalke2.stickRelatedClasses.JoystickPanel.StickType;
 import io.github.jadefalke2.util.Button;
-import io.github.jadefalke2.util.CorruptedScriptException;
 import io.github.jadefalke2.util.InputDrawMouseListener;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -15,8 +13,6 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.io.IOException;
 import java.util.Arrays;
 

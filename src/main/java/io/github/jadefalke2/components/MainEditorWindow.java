@@ -29,8 +29,6 @@ public class MainEditorWindow extends JFrame {
 	private Script script;
 	private File currentScriptFile;
 
-	private final TAS parent;
-
 
 	/**
 	 * Constructor
@@ -40,7 +38,6 @@ public class MainEditorWindow extends JFrame {
 
 		this.functionEditorWindow = functionEditorWindow;
 		this.script = script;
-		this.parent = parent;
 		setResizable(true);
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE); //let the WindowListener handle everything
 
