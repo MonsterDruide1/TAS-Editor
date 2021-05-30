@@ -142,7 +142,7 @@ public class MainEditorWindow extends JFrame {
 		}
 
 		try {
-			TxtFileChooser.writeToFile(script, currentScriptFile);
+			Util.writeFile(script.getFull(), currentScriptFile);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
