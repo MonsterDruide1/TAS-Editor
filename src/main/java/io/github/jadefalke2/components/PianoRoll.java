@@ -183,10 +183,6 @@ public class PianoRoll extends JTable implements ComponentListener {
 		}
 	}
 
-	public boolean isCellEmpty (int row, int column) {
-		return getValueAt(row, column) == "" || getValueAt(row, column) == "-";
-	}
-
 	//always fill the available parent container space
 	//idea stolen from https://stackoverflow.com/questions/6104916/how-to-make-jtable-both-autoresize-and-horizontall-scrollable/6104955
 	//but always making it true as if it were bigger than the preferred size
