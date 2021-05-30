@@ -9,6 +9,7 @@ public class Settings {
 
 	private boolean darkTheme;
 	private int lastStickPositionCount;
+	private JoystickPanelPosition joystickPanelPosition; //FIXME change this without restarting?
 
 
 	private final Preferences backingPrefs;
@@ -20,6 +21,7 @@ public class Settings {
 
 		setDarkTheme(prefs.get("darkTheme", "false").equals("true"));
 		setLastStickPositionCount(Integer.parseInt(prefs.get("lastStickPositionCount", "3")));
+		setJoystickPanelPosition(JoystickPanelPosition.valueOf(prefs.get("joystickPanelPosition", "RIGHT")));
 	}
 
 	public void storeSettings() throws BackingStoreException {
@@ -27,6 +29,7 @@ public class Settings {
 
 		backingPrefs.put("darkTheme", darkTheme+"");
 		backingPrefs.put("lastStickPositionCount", lastStickPositionCount+"");
+		backingPrefs.put("joystickPanelPosition", joystickPanelPosition+"");
 
 		backingPrefs.flush();
 	}
@@ -47,5 +50,17 @@ public class Settings {
 
 	public void setLastStickPositionCount(int lastStickPositionCount) {
 		this.lastStickPositionCount = lastStickPositionCount;
+	}
+
+	public void setJoystickPanelPosition(JoystickPanelPosition joystickPanelPosition){
+		this.joystickPanelPosition = joystickPanelPosition;
+	}
+
+	public JoystickPanelPosition getJoystickPanelPosition(){
+		return joystickPanelPosition;
+	}
+
+	public enum JoystickPanelPosition {
+		LEFT, RIGHT;
 	}
 }

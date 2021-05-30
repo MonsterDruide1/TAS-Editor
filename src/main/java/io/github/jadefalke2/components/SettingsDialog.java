@@ -28,7 +28,8 @@ public class SettingsDialog extends JDialog {
 		addSpinnerSetting("Show last stick positions", prefs.getLastStickPositionCount(), prefs::setLastStickPositionCount, mainPanel, c);
 		c.gridy += 1;
 
-		addRadioButtonSetting("IntTest", 2, e -> {}, new Integer[]{1,2,3}, new String[]{"One", "Two", "Three"}, Integer::parseInt, mainPanel, c);
+		addRadioButtonSetting("JoystickPanel Position: ", prefs.getJoystickPanelPosition(), prefs::setJoystickPanelPosition, Settings.JoystickPanelPosition.values(), new String[]{"Left", "Right"}, Settings.JoystickPanelPosition::valueOf, mainPanel, c);
+		c.gridy += 1;
 
 		add(mainPanel);
 		setLocationRelativeTo(null);
@@ -59,6 +60,9 @@ public class SettingsDialog extends JDialog {
 	}
 
 	private <T> void addRadioButtonSetting(String name, T defaultState, Consumer<T> setter, T[] values, String[] descriptions, Function<String, T> creator, JPanel mainPanel, GridBagConstraints c){
+		if(values.length != descriptions.length)
+			throw new IllegalArgumentException("Length of values differs from descriptions");
+
 		mainPanel.add(new JLabel(name), c);
 		c.gridx = 1;
 		JPanel buttonPanel = new JPanel();

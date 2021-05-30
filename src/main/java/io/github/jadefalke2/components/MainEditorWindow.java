@@ -95,11 +95,14 @@ public class MainEditorWindow extends JFrame {
 		c.fill = GridBagConstraints.BOTH;
 		c.weighty = 1;
 
-		c.gridx = 0;
+		c.gridx = 1; //leave 0 and 2 open for the JoystickPanel
 		c.weightx = 1;
 		combiningPanel.add(editor, c);
 
-		c.gridx = 1;
+		c.gridx = switch(parent.getPreferences().getJoystickPanelPosition()){
+			case LEFT -> 0;
+			case RIGHT -> 2;
+		};
 		c.weightx = 0;
 		combiningPanel.add(joystickPanel, c);
 
