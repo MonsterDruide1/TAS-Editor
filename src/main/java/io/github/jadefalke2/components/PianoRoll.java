@@ -43,6 +43,7 @@ public class PianoRoll extends JTable {
 		setDragEnabled(false);
 		setRowHeight(20);
 		setShowGrid(true);
+		setFillsViewportHeight(true);
 		setFont(new Font("Arial", Font.PLAIN, 15));
 
 		getTableHeader().setResizingAllowed(false);

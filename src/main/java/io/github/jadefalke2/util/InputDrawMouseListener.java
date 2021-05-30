@@ -49,6 +49,14 @@ public class InputDrawMouseListener extends MouseAdapter {
 		int row = table.rowAtPoint(e.getPoint());
 		int col = table.columnAtPoint(e.getPoint());
 
+		//TODO maybe find a cleaner/better way to do this?
+		if(row == -1 || col == -1) { //clicked out of bounds -> deselect all
+			table.clearSelection();
+			//set it to the last one so if you start dragging from below, it will start selecting
+			table.getSelectionModel().setAnchorSelectionIndex(table.getRowCount()-1);
+			return;
+		}
+
 		rows.add(getCell(e)[0]);
 
 		switch (col){
