@@ -9,8 +9,8 @@ import java.util.function.Consumer;
 
 public class SettingsDialog extends JDialog {
 
-	public SettingsDialog(Settings prefs){
-		super(null, "Settings", ModalityType.APPLICATION_MODAL);
+	public SettingsDialog(Window owner, Settings prefs){
+		super(owner, "Settings", ModalityType.APPLICATION_MODAL);
 
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		JPanel mainPanel = new JPanel(new GridBagLayout());
@@ -28,6 +28,7 @@ public class SettingsDialog extends JDialog {
 		c.gridy += 1;
 
 		add(mainPanel);
+		setLocationRelativeTo(null);
 		pack();
 	}
 

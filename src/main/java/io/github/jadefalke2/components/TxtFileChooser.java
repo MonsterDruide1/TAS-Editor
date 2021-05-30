@@ -43,7 +43,7 @@ public class TxtFileChooser extends JFileChooser {
 		File originalFile = getFile(false);
 
 		if (originalFile != null) {
-			writeToFile(scriptToSave, originalFile);
+			Util.writeFile(scriptToSave.getFull(), originalFile);
 		}
 
 		return originalFile;
@@ -73,10 +73,6 @@ public class TxtFileChooser extends JFileChooser {
 			}
 		}
 		super.approveSelection();
-	}
-
-	public static void writeToFile(Script scriptToSave, File file) throws IOException {
-		Util.writeFile(scriptToSave.getFull(), file);
 	}
 
 }

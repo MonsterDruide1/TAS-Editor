@@ -179,7 +179,7 @@ public class TAS {
 	}
 
 	public void openSettings(){
-		new SettingsDialog(preferences).setVisible(true);
+		new SettingsDialog(mainEditorWindow, preferences).setVisible(true);
 	}
 
 	public void newFile(){
