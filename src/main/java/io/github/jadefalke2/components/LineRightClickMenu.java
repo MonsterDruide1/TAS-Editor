@@ -14,6 +14,10 @@ public class LineRightClickMenu extends JPopupMenu {
 	private final JMenuItem insertOption = new JMenuItem("insert");
 	private final JMenuItem cloneOption = new JMenuItem("clone");
 
+	private final JMenuItem copyOption = new JMenuItem("copy");
+	private final JMenuItem pasteOption = new JMenuItem("paste");
+	private final JMenuItem cutOption = new JMenuItem("cut");
+
 	private final TAS parent;
 	private final Script script;
 	private final DefaultTableModel model;
@@ -38,6 +42,14 @@ public class LineRightClickMenu extends JPopupMenu {
 		setListener(insertOption, rows, LineAction.Type.INSERT);
 		setListener(cloneOption, rows, LineAction.Type.CLONE);
 
+		add(copyOption);
+		add(pasteOption);
+		add(cutOption);
+
+		setListener(copyOption, rows, LineAction.Type.COPY);
+		setListener(pasteOption, rows, LineAction.Type.PASTE);
+		setListener(cutOption, rows, LineAction.Type.CUT);
+
 		pack();
 		show(invoker,(int)point.getX(),(int)point.getY());
 	}
@@ -47,6 +59,6 @@ public class LineRightClickMenu extends JPopupMenu {
 			item.removeActionListener(item.getActionListeners()[0]);
 		}
 
-		item.addActionListener(e -> parent.executeAction(new LineAction(model, script, rows, type)));
+		item.addActionListener(e -> parent.executeAction(new LineAction(parent,model, script, rows, type)));
 	}
 }

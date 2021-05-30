@@ -2,8 +2,11 @@ package io.github.jadefalke2.actions;
 
 import io.github.jadefalke2.InputLine;
 import io.github.jadefalke2.Script;
+import io.github.jadefalke2.TAS;
 
 import javax.swing.table.DefaultTableModel;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.IOException;
 import java.util.Arrays;
 
 
@@ -13,8 +16,13 @@ public class LineAction implements Action{
 		DELETE,
 		INSERT,
 		CLONE,
-		REPLACE
+		REPLACE,
+		COPY,
+		PASTE,
+		CUT
 	}
+
+	private final TAS parent;
 
 	private final Type type;
 	private final DefaultTableModel table;
@@ -23,10 +31,11 @@ public class LineAction implements Action{
 	private final InputLine[] replacementLines;
 	private final InputLine[] previousLines;
 
-	public LineAction(DefaultTableModel table, Script script, int[] rows, Type type) {
-		this(table, script, rows, null, type);
+	public LineAction(TAS parent, DefaultTableModel table, Script script, int[] rows, Type type) {
+		this(parent,table, script, rows, null, type);
 	}
-	public LineAction(DefaultTableModel table, Script script, int[] rows, InputLine[] replacementLines, Type type) {
+	public LineAction(TAS parent, DefaultTableModel table, Script script, int[] rows, InputLine[] replacementLines, Type type) {
+		this.parent = parent;
 		this.table = table;
 		this.script = script;
 		this.rows = rows;
@@ -43,6 +52,15 @@ public class LineAction implements Action{
 			case DELETE -> deleteRows();
 			case INSERT -> insertRows();
 			case REPLACE -> replaceRows();
+			case CUT -> parent.cut();
+			case COPY -> parent.copy();
+			case PASTE -> {
+				try {
+					parent.paste();
+				} catch (IOException | UnsupportedFlavorException exception) {
+					exception.printStackTrace();
+				}
+			}
 		}
 
 	}
