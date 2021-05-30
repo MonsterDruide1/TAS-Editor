@@ -19,9 +19,6 @@ public class MainEditorWindow extends JFrame {
 	private final FunctionEditorWindow functionEditorWindow;
 	private final MainJMenuBar mainJMenuBar;
 
-	//JPanel
-	private final JPanel editor;
-
 	private final PianoRoll pianoRoll;
 	private final SideJoystickPanel joystickPanel;
 
@@ -41,6 +38,7 @@ public class MainEditorWindow extends JFrame {
 		setResizable(true);
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE); //let the WindowListener handle everything
 
+		MainEditorWindow self = this; //TODO there has to be a better way to do this...
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
@@ -54,7 +52,7 @@ public class MainEditorWindow extends JFrame {
 			 * @return whether it should actually close
 			 */
 			private boolean askForFileSave() {
-				int result = JOptionPane.showConfirmDialog(editor, "Save Project changes?", "Save before exiting", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+				int result = JOptionPane.showConfirmDialog(self, "Save Project changes?", "Save before exiting", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 				if (result == 0){
 					//opens a new dialog that asks about saving, then exit
 					saveFile();
@@ -63,36 +61,41 @@ public class MainEditorWindow extends JFrame {
 			}
 		});
 
-		editor = new JPanel(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
+		mainJMenuBar = new MainJMenuBar(this, parent);
+		setJMenuBar(mainJMenuBar);
 
 		pianoRoll = new PianoRoll(script, parent);
-
 		joystickPanel = new SideJoystickPanel(parent, pianoRoll, script);
+
+		JPanel editor = new JPanel(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
 
 		//Components
 		JScrollPane scrollPane = new JScrollPane(pianoRoll);
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-
-		mainJMenuBar = new MainJMenuBar(this, parent);
-
-		JButton functionEditorButton = new JButton("Function editor");
-		functionEditorButton.addActionListener(e -> functionEditorWindow.startUp());
 
 		c.fill = GridBagConstraints.BOTH;
 		c.weighty = 1;
 		c.weightx = 1;
 		editor.add(scrollPane, c);
 
+		JButton functionEditorButton = new JButton("Function editor");
+		functionEditorButton.addActionListener(e -> functionEditorWindow.startUp());
+
 		c.gridy = 1;
 		c.weighty = 0;
 		editor.add(functionEditorButton, c);
+
+
+
 
 		JPanel combiningPanel = new JPanel(new GridBagLayout());
 
 		c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
 		c.weighty = 1;
+
+		c.gridx = 0;
 		c.weightx = 1;
 		combiningPanel.add(editor, c);
 
@@ -101,8 +104,6 @@ public class MainEditorWindow extends JFrame {
 		combiningPanel.add(joystickPanel, c);
 
 		add(combiningPanel);
-
-		setJMenuBar(mainJMenuBar);
 
 		pack(); //TODO is still too small, the joystick is too little to use
 		setExtendedState(MAXIMIZED_BOTH);
