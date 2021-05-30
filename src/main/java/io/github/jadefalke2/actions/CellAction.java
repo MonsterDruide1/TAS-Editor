@@ -47,4 +47,8 @@ public class CellAction implements Action {
 		execute();
 	}
 
+	public void removeRemovedIndicator() {
+		tableModel.setValueAt("", row, col);
+	}
+
 }
