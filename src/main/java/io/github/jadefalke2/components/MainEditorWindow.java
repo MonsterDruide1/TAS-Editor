@@ -70,7 +70,6 @@ public class MainEditorWindow extends JFrame {
 		GridBagConstraints c = new GridBagConstraints();
 
 		pianoRoll = new PianoRoll(script, parent);
-		pianoRoll.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
 		joystickPanel = new SideJoystickPanel(parent, pianoRoll, script);
 

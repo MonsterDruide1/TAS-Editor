@@ -20,7 +20,7 @@ import java.awt.event.ComponentListener;
 import java.io.IOException;
 import java.util.Arrays;
 
-public class PianoRoll extends JTable implements ComponentListener {
+public class PianoRoll extends JTable {
 
 	//script
 	private Script script;
@@ -38,7 +38,7 @@ public class PianoRoll extends JTable implements ComponentListener {
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment( SwingConstants.CENTER );
 
-		setAutoResizeMode(AUTO_RESIZE_OFF);
+		setAutoResizeMode(AUTO_RESIZE_ALL_COLUMNS);
 		setModel(model);
 		setDragEnabled(false);
 		setRowHeight(20);
@@ -57,9 +57,6 @@ public class PianoRoll extends JTable implements ComponentListener {
 		for (Button button : Button.values()) {
 			model.addColumn(button.toString());
 		}
-
-		adjustColumnWidth();
-		addComponentListener(this);
 
 		//Center all columns
 		for (int i = 0; i < getColumnCount(); i++){
@@ -100,6 +97,8 @@ public class PianoRoll extends JTable implements ComponentListener {
 				parent.cut();
 			}
 		});
+
+		adjustColumnWidth();
 	}
 
 	/**
@@ -120,14 +119,8 @@ public class PianoRoll extends JTable implements ComponentListener {
 			18, 18, 18, 18, 25, 25, 25, 25, 40, 40, 35, 35, 35, 35, 45, 45	    // buttons
 		};
 
-		float sum = 0;
-		for (int i: columnsWidth) {
-			sum += i;
-		}
-
-
 		for (int i = 0; i < columnsWidth.length && i < getColumnCount(); i++) {
-			getColumnModel().getColumn(i).setPreferredWidth((int)(getWidth()*(columnsWidth[i]/sum)));
+			getColumnModel().getColumn(i).setPreferredWidth(columnsWidth[i]);
 		}
 	}
 
@@ -183,14 +176,6 @@ public class PianoRoll extends JTable implements ComponentListener {
 		}
 	}
 
-	//always fill the available parent container space
-	//idea stolen from https://stackoverflow.com/questions/6104916/how-to-make-jtable-both-autoresize-and-horizontall-scrollable/6104955
-	//but always making it true as if it were bigger than the preferred size
-	@Override
-	public boolean getScrollableTracksViewportWidth(){
-		return true;
-	}
-
 	/**
 	 * Overwriting the table to make all cells uneditable -> might change in the future due to functions
 	 * @param row the row
@@ -201,18 +186,5 @@ public class PianoRoll extends JTable implements ComponentListener {
 	public boolean isCellEditable(int row, int column) {
 		return false;
 	}
-
-	@Override
-	public void componentResized(ComponentEvent e) {
-		adjustColumnWidth();
-	}
-
-	//unused methods from ComponentListener
-	@Override
-	public void componentMoved(ComponentEvent e) {}
-	@Override
-	public void componentShown(ComponentEvent e) {}
-	@Override
-	public void componentHidden(ComponentEvent e) {}
 
 }
