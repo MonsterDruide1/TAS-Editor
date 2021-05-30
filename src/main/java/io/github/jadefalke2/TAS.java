@@ -13,6 +13,8 @@ import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Stack;
@@ -181,7 +183,21 @@ public class TAS {
 	}
 
 	public void newFile(){
-		mainEditorWindow.setScript(Script.getEmptyScript(10));
+		openScript(Script.getEmptyScript(10));
+	}
+
+	public void openScript(File file) throws FileNotFoundException {
+		//TODO ask for closing current project?
+		mainEditorWindow.setScript(file); //do it like this to set the currentScriptFile of MainEditorWindow
+		//TODO move this here, as well as all important file operations
+		undoStack.clear();
+		redoStack.clear();
+	}
+	public void openScript(Script script) {
+		//TODO ask for closing current project?
+		mainEditorWindow.setScript(script);
+		undoStack.clear();
+		redoStack.clear();
 	}
 
 	// getter
@@ -189,5 +205,4 @@ public class TAS {
 	public Settings getPreferences() {
 		return preferences;
 	}
-
 }

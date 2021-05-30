@@ -39,7 +39,7 @@ public class MainJMenuBar extends JMenuBar {
 
 		JMenuItem newJMenuItem = fileJMenu.add("New");
 		newJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK));
-		newJMenuItem.addActionListener(e -> parent.newFile()); //TODO ask for closing the current project?
+		newJMenuItem.addActionListener(e -> parent.newFile());
 
 		JMenuItem newWindowJMenuItem = fileJMenu.add("New Window");
 		newWindowJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
@@ -49,7 +49,7 @@ public class MainJMenuBar extends JMenuBar {
 		openJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
 		openJMenuItem.addActionListener(e -> {
 			try {
-				mainEditorWindow.setScript(new TxtFileChooser().getFile(true));
+				parent.openScript(new TxtFileChooser().getFile(true));
 			} catch (FileNotFoundException ex) {
 				ex.printStackTrace();
 			}
