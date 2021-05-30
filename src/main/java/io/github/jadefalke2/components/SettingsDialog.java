@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class SettingsDialog extends JDialog {
 
@@ -21,11 +22,13 @@ public class SettingsDialog extends JDialog {
 		c.gridx = 0;
 		c.gridy = 0;
 
-		addCheckboxSetting("Dark Theme", prefs.isDarkTheme(), prefs::setDarkTheme, mainPanel, c); //TODO remove last two?
+		addCheckboxSetting("Dark Theme", prefs.isDarkTheme(), prefs::setDarkTheme, mainPanel, c);
 		c.gridy += 1;
 
-		addSpinnerSetting("Show last stick positions", prefs.getLastStickPositionCount(), prefs::setLastStickPositionCount, mainPanel, c); //TODO remove last two?
+		addSpinnerSetting("Show last stick positions", prefs.getLastStickPositionCount(), prefs::setLastStickPositionCount, mainPanel, c);
 		c.gridy += 1;
+
+		addRadioButtonSetting("IntTest", 2, e -> {}, new Integer[]{1,2,3}, new String[]{"One", "Two", "Three"}, Integer::parseInt, mainPanel, c);
 
 		add(mainPanel);
 		setLocationRelativeTo(null);
@@ -52,6 +55,25 @@ public class SettingsDialog extends JDialog {
 		spinner.setValue(defaultState);
 		spinner.addChangeListener((event) -> setter.accept((Integer)spinner.getValue()));
 		mainPanel.add(spinner, c);
+		c.gridx = 0;
+	}
+
+	private <T> void addRadioButtonSetting(String name, T defaultState, Consumer<T> setter, T[] values, String[] descriptions, Function<String, T> creator, JPanel mainPanel, GridBagConstraints c){
+		mainPanel.add(new JLabel(name), c);
+		c.gridx = 1;
+		JPanel buttonPanel = new JPanel();
+		ButtonGroup group = new ButtonGroup();
+		for(int i=0;i<values.length;i++){
+			JRadioButton button = new JRadioButton(descriptions[i]);
+			button.setActionCommand(values[i].toString());
+			button.addActionListener(e -> setter.accept(creator.apply(((JRadioButton)e.getSource()).getActionCommand())));
+
+			group.add(button);
+			buttonPanel.add(button);
+			if(values[i] == defaultState)
+				button.setSelected(true);
+		}
+		mainPanel.add(buttonPanel, c);
 		c.gridx = 0;
 	}
 
