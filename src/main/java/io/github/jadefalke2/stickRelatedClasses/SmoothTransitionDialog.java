@@ -8,6 +8,14 @@ import java.awt.event.WindowEvent;
 
 public class SmoothTransitionDialog extends JDialog {
 
+	public static final String[] dropdownOptions = new String[]{
+		"Angular (Closest)",
+		"Linear",
+		"Angular (Clockwise)",
+		"Angular (Counter-Clockwise)"
+	};
+
+
 	private final JComboBox<String> dropdownMenu;
 	private final JoystickPanel startJoystick,  endJoystick;
 
@@ -16,10 +24,11 @@ public class SmoothTransitionDialog extends JDialog {
 
 		//option
 		dropdownMenu = new JComboBox<>();
-		dropdownMenu.addItem("Angular (Closest)");
-		dropdownMenu.addItem("Linear");
-		dropdownMenu.addItem("Angular (Clockwise)");
-		dropdownMenu.addItem("Angular (Counter-Clockwise)");
+		if(dropdownOptions.length != 4) throw new UnsupportedOperationException("Too many items in options list...");
+		for(String option : dropdownOptions)
+			dropdownMenu.addItem(option);
+
+		dropdownMenu.setSelectedIndex(0);
 
 		JButton okButton = new JButton("OK");
 		okButton.addActionListener(e -> dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING)));
