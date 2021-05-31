@@ -10,6 +10,7 @@ public class Settings {
 	private boolean darkTheme;
 	private int lastStickPositionCount;
 	private JoystickPanelPosition joystickPanelPosition; //FIXME change this without restarting?
+	private SmoothTransitionType smoothTransitionType;
 
 
 	private final Preferences backingPrefs;
@@ -22,6 +23,7 @@ public class Settings {
 		setDarkTheme(prefs.get("darkTheme", "false").equals("true"));
 		setLastStickPositionCount(Integer.parseInt(prefs.get("lastStickPositionCount", "3")));
 		setJoystickPanelPosition(JoystickPanelPosition.valueOf(prefs.get("joystickPanelPosition", "RIGHT")));
+		setSmoothTransitionType(SmoothTransitionType.valueOf(prefs.get("smoothTransitionType", "ANGULAR_CLOSEST")));
 	}
 
 	public void storeSettings() throws BackingStoreException {
@@ -30,6 +32,7 @@ public class Settings {
 		backingPrefs.put("darkTheme", darkTheme+"");
 		backingPrefs.put("lastStickPositionCount", lastStickPositionCount+"");
 		backingPrefs.put("joystickPanelPosition", joystickPanelPosition+"");
+		backingPrefs.put("smoothTransitionType", smoothTransitionType+"");
 
 		backingPrefs.flush();
 	}
@@ -60,7 +63,18 @@ public class Settings {
 		return joystickPanelPosition;
 	}
 
+	public void setSmoothTransitionType(SmoothTransitionType smoothTransitionType){
+		this.smoothTransitionType = smoothTransitionType;
+	}
+
+	public SmoothTransitionType getSmoothTransitionType(){
+		return smoothTransitionType;
+	}
+
 	public enum JoystickPanelPosition {
 		LEFT, RIGHT;
+	}
+	public enum SmoothTransitionType {
+		ANGULAR_CLOSEST, LINEAR, ANGULAR_CLOCKWISE, ANGULAR_COUNTERCLOCKWISE
 	}
 }

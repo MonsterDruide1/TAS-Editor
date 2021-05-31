@@ -28,7 +28,7 @@ public class SmoothTransitionDialog extends JDialog {
 		for(String option : dropdownOptions)
 			dropdownMenu.addItem(option);
 
-		dropdownMenu.setSelectedIndex(0);
+		dropdownMenu.setSelectedIndex(settings.getSmoothTransitionType().ordinal());
 
 		JButton okButton = new JButton("OK");
 		okButton.addActionListener(e -> dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING)));

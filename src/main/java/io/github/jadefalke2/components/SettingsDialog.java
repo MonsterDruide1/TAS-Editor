@@ -1,5 +1,6 @@
 package io.github.jadefalke2.components;
 
+import io.github.jadefalke2.stickRelatedClasses.SmoothTransitionDialog;
 import io.github.jadefalke2.util.Settings;
 
 import javax.swing.*;
@@ -30,6 +31,9 @@ public class SettingsDialog extends JDialog {
 		c.gridy += 1;
 
 		addRadioButtonSetting("JoystickPanel Position: ", prefs.getJoystickPanelPosition(), prefs::setJoystickPanelPosition, Settings.JoystickPanelPosition.values(), new String[]{"Left", "Right"}, Settings.JoystickPanelPosition::valueOf, mainPanel, c);
+		c.gridy += 1;
+
+		addDropdownSetting("Default SmoothTransition-Type: ", prefs.getSmoothTransitionType(), prefs::setSmoothTransitionType, Settings.SmoothTransitionType.values(), SmoothTransitionDialog.dropdownOptions, mainPanel, c);
 		c.gridy += 1;
 
 		add(mainPanel);
