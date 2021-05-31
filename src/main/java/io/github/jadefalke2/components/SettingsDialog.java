@@ -5,6 +5,7 @@ import io.github.jadefalke2.util.Settings;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;
+import java.util.Arrays;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -59,7 +60,7 @@ public class SettingsDialog extends JDialog {
 		c.gridx = 0;
 	}
 
-	private <T> void addRadioButtonSetting(String name, T defaultState, Consumer<T> setter, T[] values, String[] descriptions, Function<String, T> creator, JPanel mainPanel, GridBagConstraints c){
+	private <T extends Enum<T>> void addRadioButtonSetting(String name, T defaultState, Consumer<T> setter, T[] values, String[] descriptions, Function<String, T> creator, JPanel mainPanel, GridBagConstraints c){
 		if(values.length != descriptions.length)
 			throw new IllegalArgumentException("Length of values differs from descriptions");
 
@@ -78,6 +79,22 @@ public class SettingsDialog extends JDialog {
 				button.setSelected(true);
 		}
 		mainPanel.add(buttonPanel, c);
+		c.gridx = 0;
+	}
+
+	private <T extends Enum<T>> void addDropdownSetting(String name, T defaultState, Consumer<T> setter, T[] values, String[] descriptions, JPanel mainPanel, GridBagConstraints c){
+		if(values.length != descriptions.length)
+			throw new IllegalArgumentException("Length of values differs from descriptions");
+
+		mainPanel.add(new JLabel(name), c);
+		c.gridx = 1;
+		JComboBox<String> comboBox = new JComboBox<>();
+		for(int i=0;i< values.length;i++){
+			comboBox.addItem(descriptions[i]);
+		}
+		comboBox.setSelectedIndex(Arrays.asList(values).indexOf(defaultState));
+		comboBox.addActionListener(e -> setter.accept(values[comboBox.getSelectedIndex()]));
+		mainPanel.add(comboBox, c);
 		c.gridx = 0;
 	}
 
