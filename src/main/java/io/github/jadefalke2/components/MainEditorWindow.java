@@ -15,6 +15,7 @@ import java.io.IOException;
 
 public class MainEditorWindow extends JFrame {
 
+	private final TAS parent;
 	// frame that can be opened from this one
 	private final FunctionEditorWindow functionEditorWindow;
 	private final MainJMenuBar mainJMenuBar;
@@ -33,6 +34,7 @@ public class MainEditorWindow extends JFrame {
 	 */
 	public MainEditorWindow (FunctionEditorWindow functionEditorWindow, Script script, TAS parent){
 
+		this.parent = parent;
 		this.functionEditorWindow = functionEditorWindow;
 		this.script = script;
 		setResizable(true);
@@ -154,7 +156,7 @@ public class MainEditorWindow extends JFrame {
 
 	public void saveFileAs() {
 		try {
-			File savedFile = new TxtFileChooser().saveFileAs(script);
+			File savedFile = new TxtFileChooser(parent.getPreferences()).saveFileAs(script);
 			if(savedFile != null)
 				currentScriptFile = savedFile;
 		} catch(IOException err){

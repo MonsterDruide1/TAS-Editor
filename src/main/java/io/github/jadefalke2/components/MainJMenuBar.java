@@ -49,7 +49,7 @@ public class MainJMenuBar extends JMenuBar {
 		openJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
 		openJMenuItem.addActionListener(e -> {
 			try {
-				parent.openScript(new TxtFileChooser().getFile(true));
+				parent.openScript(new TxtFileChooser(parent.getPreferences()).getFile(true));
 			} catch (FileNotFoundException ex) {
 				ex.printStackTrace();
 			}

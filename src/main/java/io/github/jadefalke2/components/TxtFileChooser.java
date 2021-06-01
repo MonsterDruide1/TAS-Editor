@@ -1,6 +1,7 @@
 package io.github.jadefalke2.components;
 
 import io.github.jadefalke2.Script;
+import io.github.jadefalke2.util.Settings;
 import io.github.jadefalke2.util.Util;
 
 import javax.swing.*;
@@ -11,11 +12,13 @@ import java.io.IOException;
 
 public class TxtFileChooser extends JFileChooser {
 
+	private final Settings settings;
 	/**
 	 * Constructor
 	 */
-	public TxtFileChooser (){
+	public TxtFileChooser (Settings settings){
 		super(FileSystemView.getFileSystemView());
+		this.settings = settings;
 	}
 
 	/**
@@ -26,7 +29,7 @@ public class TxtFileChooser extends JFileChooser {
 	public File getFile (boolean openFile){
 
 		setDialogTitle(openFile ? "Choose existing TAS file" : "Choose place to save");
-		setCurrentDirectory(new File(System.getProperty("user.home")));
+		setCurrentDirectory(settings.getDirectory());
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(Util.fileExtension + " files", Util.fileExtension, "text");
 		setFileFilter(filter);
 		int option = openFile ? showOpenDialog(null) : showSaveDialog(null);

@@ -6,6 +6,7 @@ import io.github.jadefalke2.util.Settings;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;
+import java.io.File;
 import java.util.Arrays;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -24,21 +25,47 @@ public class SettingsDialog extends JDialog {
 		c.gridx = 0;
 		c.gridy = 0;
 
+		addFileSelectionSetting("directory", prefs.getDirectory(), prefs::setDirectory, mainPanel, c);
+		c.gridy++;
+
 		addCheckboxSetting("Dark Theme", prefs.isDarkTheme(), prefs::setDarkTheme, mainPanel, c);
-		c.gridy += 1;
+		c.gridy++;
 
 		addSpinnerSetting("Show last stick positions", prefs.getLastStickPositionCount(), prefs::setLastStickPositionCount, mainPanel, c);
-		c.gridy += 1;
+		c.gridy++;
 
 		addRadioButtonSetting("JoystickPanel Position: ", prefs.getJoystickPanelPosition(), prefs::setJoystickPanelPosition, Settings.JoystickPanelPosition.values(), new String[]{"Left", "Right"}, Settings.JoystickPanelPosition::valueOf, mainPanel, c);
-		c.gridy += 1;
+		c.gridy++;
 
 		addDropdownSetting("Default SmoothTransition-Type: ", prefs.getSmoothTransitionType(), prefs::setSmoothTransitionType, Settings.SmoothTransitionType.values(), SmoothTransitionDialog.dropdownOptions, mainPanel, c);
-		c.gridy += 1;
+		c.gridy++;
 
 		add(mainPanel);
 		setLocationRelativeTo(null);
 		pack();
+	}
+
+	private void addFileSelectionSetting (String name, File defaultState,Consumer<File> setter, JPanel mainPanel, GridBagConstraints c) {
+		mainPanel.add(new JLabel(name), c);
+		c.gridx = 1;
+		JButton openFileChooserButton = new JButton("open file chooser");
+
+		openFileChooserButton.addActionListener(e -> {
+			JFileChooser fileChooser = new JFileChooser();
+			fileChooser.setCurrentDirectory(defaultState);
+
+			fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+			fileChooser.setAcceptAllFileFilterUsed(false);
+
+			int option = fileChooser.showDialog(openFileChooserButton, "select");
+
+			if (option == JFileChooser.APPROVE_OPTION) {
+				setter.accept(fileChooser.getSelectedFile());
+			}
+		});
+
+		mainPanel.add(openFileChooserButton, c);
+		c.gridx = 0;
 	}
 
 	private void addCheckboxSetting(String name, boolean defaultState, Consumer<Boolean> setter, JPanel mainPanel, GridBagConstraints c){

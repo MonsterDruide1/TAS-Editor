@@ -2,11 +2,13 @@ package io.github.jadefalke2.util;
 
 import io.github.jadefalke2.TAS;
 
+import java.io.File;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 public class Settings {
 
+	private File directory;
 	private boolean darkTheme;
 	private int lastStickPositionCount;
 	private JoystickPanelPosition joystickPanelPosition; //FIXME change this without restarting?
@@ -20,6 +22,7 @@ public class Settings {
 		this.backingPrefs = prefs;
 		this.parent = parent;
 
+		setDirectory(new File(prefs.get("directory", "user.home")));
 		setDarkTheme(prefs.get("darkTheme", "false").equals("true"));
 		setLastStickPositionCount(Integer.parseInt(prefs.get("lastStickPositionCount", "3")));
 		setJoystickPanelPosition(JoystickPanelPosition.valueOf(prefs.get("joystickPanelPosition", "RIGHT")));
@@ -29,14 +32,23 @@ public class Settings {
 	public void storeSettings() throws BackingStoreException {
 		backingPrefs.clear();
 
-		backingPrefs.put("darkTheme", darkTheme+"");
-		backingPrefs.put("lastStickPositionCount", lastStickPositionCount+"");
-		backingPrefs.put("joystickPanelPosition", joystickPanelPosition+"");
-		backingPrefs.put("smoothTransitionType", smoothTransitionType+"");
+		backingPrefs.put("directory", directory + "");
+		backingPrefs.put("darkTheme", darkTheme + "");
+		backingPrefs.put("lastStickPositionCount", lastStickPositionCount + "");
+		backingPrefs.put("joystickPanelPosition", joystickPanelPosition + "");
+		backingPrefs.put("smoothTransitionType", smoothTransitionType + "");
 
 		backingPrefs.flush();
 	}
 
+
+	public File getDirectory () {
+		return directory;
+	}
+
+	public void setDirectory (File directory) {
+		this.directory = directory;
+	}
 
 	public boolean isDarkTheme() {
 		return darkTheme;
