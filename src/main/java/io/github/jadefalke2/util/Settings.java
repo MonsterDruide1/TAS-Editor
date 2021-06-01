@@ -2,6 +2,7 @@ package io.github.jadefalke2.util;
 
 import io.github.jadefalke2.TAS;
 
+import javax.swing.filechooser.FileSystemView;
 import java.io.File;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
@@ -22,7 +23,7 @@ public class Settings {
 		this.backingPrefs = prefs;
 		this.parent = parent;
 
-		setDirectory(new File(prefs.get("directory", "user.home")));
+		setDirectory(new File(prefs.get("directory", System.getProperty("user.home"))));
 		setDarkTheme(prefs.get("darkTheme", "false").equals("true"));
 		setLastStickPositionCount(Integer.parseInt(prefs.get("lastStickPositionCount", "3")));
 		setJoystickPanelPosition(JoystickPanelPosition.valueOf(prefs.get("joystickPanelPosition", "RIGHT")));
