@@ -21,6 +21,7 @@ public class SettingsDialog extends JDialog {
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(5,15,10,15));
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.HORIZONTAL;
+		c.ipadx = 15;
 		c.insets = new Insets(5,0,0,0);
 		c.weighty = 1;
 		c.weightx = 1;
