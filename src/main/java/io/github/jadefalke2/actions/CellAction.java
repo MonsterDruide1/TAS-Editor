@@ -50,7 +50,7 @@ public class CellAction implements Action {
 
 	@Override
 	public String toString() {
-		return "Cell Action, at frame: " + row + "; " + (remove ? "removing " : "inputing ") + colName;
+		return "Cell Action at frame: " + row + "; " + (remove ? "removing " : "inputing ") + colName;
 	}
 
 }

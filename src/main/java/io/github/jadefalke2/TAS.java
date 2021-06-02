@@ -133,7 +133,7 @@ public class TAS {
 		redoStack.push(action);
 		mainEditorWindow.updateUndoMenu(!undoStack.isEmpty(), !redoStack.isEmpty());
 
-		Logger.log("undoing action " + action);
+		Logger.log("undoing action: " + action);
 	}
 
 	public void redo() {
@@ -145,7 +145,7 @@ public class TAS {
 		undoStack.push(action);
 		mainEditorWindow.updateUndoMenu(!undoStack.isEmpty(), !redoStack.isEmpty());
 
-		Logger.log("redoing action " + action);
+		Logger.log("redoing action: " + action);
 	}
 
 	public void cut(){
