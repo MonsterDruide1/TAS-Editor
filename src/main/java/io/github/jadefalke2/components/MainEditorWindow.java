@@ -41,7 +41,6 @@ public class MainEditorWindow extends JFrame {
 		setResizable(true);
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE); //let the WindowListener handle everything
 
-		MainEditorWindow self = this; //TODO there has to be a better way to do this...
 		addWindowListener(new WindowAdapter() {
 
 			@Override
@@ -57,7 +56,7 @@ public class MainEditorWindow extends JFrame {
 			 * @return whether it should actually close
 			 */
 			private boolean askForFileSave() {
-				int result = JOptionPane.showConfirmDialog(self, "Save Project changes?", "Save before exiting", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+				int result = JOptionPane.showConfirmDialog(MainEditorWindow.this, "Save Project changes?", "Save before exiting", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 				if (result == 0){
 					//opens a new dialog that asks about saving, then exit
 					saveFile();
