@@ -30,10 +30,10 @@ public class SettingsDialog extends JDialog {
 		addCheckboxSetting("Dark Theme", prefs.isDarkTheme(), prefs::setDarkTheme, mainPanel, c);
 		c.gridy++;
 
-		addSeperator(mainPanel, c);
-		c.gridy++;
+		//addSeperator(mainPanel, c);
+		//c.gridy++;
 
-		addFileSelectionSetting("directory", prefs.getDirectory(), prefs::setDirectory, mainPanel, c);
+		addFileSelectionSetting("Directory", prefs.getDirectory(), prefs::setDirectory, mainPanel, c);
 		c.gridy++;
 
 		addSpinnerSetting("Show last stick positions", prefs.getLastStickPositionCount(), prefs::setLastStickPositionCount, mainPanel, c);
