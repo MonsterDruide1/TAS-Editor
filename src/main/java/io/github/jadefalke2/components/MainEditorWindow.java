@@ -43,10 +43,12 @@ public class MainEditorWindow extends JFrame {
 
 		MainEditorWindow self = this; //TODO there has to be a better way to do this...
 		addWindowListener(new WindowAdapter() {
+
 			@Override
 			public void windowClosing(WindowEvent e) {
 				//TODO ONLY IF IN EDITOR + CHANGES DONE
 				if(askForFileSave())
+					Logger.log("exiting program");
 					dispose();
 			}
 
