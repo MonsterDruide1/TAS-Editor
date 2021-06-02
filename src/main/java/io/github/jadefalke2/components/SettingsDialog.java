@@ -30,21 +30,32 @@ public class SettingsDialog extends JDialog {
 		addCheckboxSetting("Dark Theme", prefs.isDarkTheme(), prefs::setDarkTheme, mainPanel, c);
 		c.gridy++;
 
+		addSeperator(mainPanel, c);
+		c.gridy++;
+
 		addFileSelectionSetting("directory", prefs.getDirectory(), prefs::setDirectory, mainPanel, c);
 		c.gridy++;
 
 		addSpinnerSetting("Show last stick positions", prefs.getLastStickPositionCount(), prefs::setLastStickPositionCount, mainPanel, c);
 		c.gridy++;
 
-		addRadioButtonSetting("JoystickPanel Position: ", prefs.getJoystickPanelPosition(), prefs::setJoystickPanelPosition, Settings.JoystickPanelPosition.values(), new String[]{"Left", "Right"}, Settings.JoystickPanelPosition::valueOf, mainPanel, c);
+		addDropdownSetting("Default SmoothTransition-Type: ", prefs.getSmoothTransitionType(), prefs::setSmoothTransitionType, Settings.SmoothTransitionType.values(), SmoothTransitionDialog.dropdownOptions, mainPanel, c);
 		c.gridy++;
 
-		addDropdownSetting("Default SmoothTransition-Type: ", prefs.getSmoothTransitionType(), prefs::setSmoothTransitionType, Settings.SmoothTransitionType.values(), SmoothTransitionDialog.dropdownOptions, mainPanel, c);
+		addRadioButtonSetting("JoystickPanel Position: ", prefs.getJoystickPanelPosition(), prefs::setJoystickPanelPosition, Settings.JoystickPanelPosition.values(), new String[]{"Left", "Right"}, Settings.JoystickPanelPosition::valueOf, mainPanel, c);
 		c.gridy++;
 
 		add(mainPanel);
 		setLocationRelativeTo(null);
 		pack();
+	}
+
+	private void addSeperator (JPanel mainPanel, GridBagConstraints c) {
+		c.insets = new Insets(0,0,0,0);
+		c.gridwidth = 2;
+		mainPanel.add(new JSeparator(JSeparator.HORIZONTAL), c);
+		c.insets = new Insets(5,0,0,0);
+		c.gridwidth = 1;
 	}
 
 	private void addFileSelectionSetting (String name, File defaultState,Consumer<File> setter, JPanel mainPanel, GridBagConstraints c) {
