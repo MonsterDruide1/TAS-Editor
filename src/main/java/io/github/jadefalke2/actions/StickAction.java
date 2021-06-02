@@ -5,6 +5,7 @@ import io.github.jadefalke2.stickRelatedClasses.JoystickPanel;
 import io.github.jadefalke2.stickRelatedClasses.StickPosition;
 
 import javax.swing.table.TableModel;
+import java.util.Arrays;
 
 public class StickAction implements Action {
 
@@ -46,5 +47,10 @@ public class StickAction implements Action {
 			}
 		}
 
+	}
+
+	@Override
+	public String toString() {
+		return "Stick Action, at frames: " + Arrays.toString(rows) + "; " + stickType + "; new Stickpostion:" + newPosition;
 	}
 }

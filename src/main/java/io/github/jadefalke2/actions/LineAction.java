@@ -161,5 +161,10 @@ public class LineAction implements Action{
 		adjustLines(index + inputLines.length, inputLines.length);
 	}
 
+	@Override
+	public String toString() {
+		return "Line Action, at frames: " + Arrays.toString(rows) + "; " + type;
+	}
+
 
 }

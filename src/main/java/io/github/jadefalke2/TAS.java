@@ -6,6 +6,7 @@ import com.formdev.flatlaf.FlatLightLaf;
 import io.github.jadefalke2.components.*;
 import io.github.jadefalke2.actions.Action;
 import io.github.jadefalke2.util.CorruptedScriptException;
+import io.github.jadefalke2.util.Logger;
 import io.github.jadefalke2.util.Settings;
 
 import javax.swing.*;
@@ -23,7 +24,6 @@ import java.util.prefs.Preferences;
 
 public class TAS {
 	public static TAS INITIAL_MAIN_TAS_FOR_DEBUGGING;
-
 
 	private MainEditorWindow mainEditorWindow;
 
@@ -120,6 +120,8 @@ public class TAS {
 		undoStack.push(action);
 		redoStack.clear();
 		mainEditorWindow.updateUndoMenu(!undoStack.isEmpty(), !redoStack.isEmpty());
+
+		Logger.log("executing action: " + action);
 	}
 
 	public void undo() {
@@ -130,6 +132,8 @@ public class TAS {
 		action.revert();
 		redoStack.push(action);
 		mainEditorWindow.updateUndoMenu(!undoStack.isEmpty(), !redoStack.isEmpty());
+
+		Logger.log("undoing action " + action);
 	}
 
 	public void redo() {
@@ -140,6 +144,8 @@ public class TAS {
 		action.execute();
 		undoStack.push(action);
 		mainEditorWindow.updateUndoMenu(!undoStack.isEmpty(), !redoStack.isEmpty());
+
+		Logger.log("redoing action " + action);
 	}
 
 	public void cut(){
