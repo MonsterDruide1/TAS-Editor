@@ -46,6 +46,8 @@ public class TAS {
 
 	public void startProgram() {
 
+		Logger.log("boot up");
+
 		// initialise preferences
 		initPreferences();
 
@@ -62,6 +64,8 @@ public class TAS {
 
 
 	private void initPreferences(){
+
+		Logger.log("initialising settings");
 		preferences = new Settings(Preferences.userRoot().node(getClass().getName()), this);
 		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
 			try {
@@ -75,6 +79,8 @@ public class TAS {
 	// set look and feels
 
 	public void setLookAndFeel(boolean darkTheme){
+		Logger.log("Changing theme: " + (darkTheme ? "Dark theme" : "Light theme"));
+
 		if (darkTheme) {
 			setDarculaLookAndFeel();
 		} else {
@@ -185,14 +191,17 @@ public class TAS {
 	}
 
 	public void openSettings(){
+		Logger.log("opening settings");
 		new SettingsDialog(mainEditorWindow, preferences).setVisible(true);
 	}
 
 	public void newFile(){
+		Logger.log("opening a new, empty script");
 		openScript(Script.getEmptyScript(10));
 	}
 
 	public void openScript(File file) throws FileNotFoundException {
+		Logger.log("loading script from " + file.getAbsolutePath());
 		//TODO ask for closing current project?
 		mainEditorWindow.setScript(file); //do it like this to set the currentScriptFile of MainEditorWindow
 		//TODO move this here, as well as all important file operations

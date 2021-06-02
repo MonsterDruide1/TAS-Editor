@@ -2,6 +2,7 @@ package io.github.jadefalke2.components;
 
 import io.github.jadefalke2.Script;
 import io.github.jadefalke2.TAS;
+import io.github.jadefalke2.util.Logger;
 import io.github.jadefalke2.util.Util;
 import io.github.jadefalke2.util.CorruptedScriptException;
 
@@ -147,6 +148,8 @@ public class MainEditorWindow extends JFrame {
 			return;
 		}
 
+		Logger.log("saving script to " + currentScriptFile.getAbsolutePath());
+
 		try {
 			Util.writeFile(script.getFull(), currentScriptFile);
 		} catch (IOException e) {
@@ -158,6 +161,7 @@ public class MainEditorWindow extends JFrame {
 		try {
 			File savedFile = new TxtFileChooser(parent.getPreferences()).saveFileAs(script);
 			if(savedFile != null)
+				Logger.log("saved file as " + savedFile.getAbsolutePath());
 				currentScriptFile = savedFile;
 		} catch(IOException err){
 			err.printStackTrace();
