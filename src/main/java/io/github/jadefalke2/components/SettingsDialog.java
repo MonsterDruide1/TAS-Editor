@@ -18,6 +18,7 @@ public class SettingsDialog extends JDialog {
 
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		JPanel mainPanel = new JPanel(new GridBagLayout());
+		mainPanel.setBorder(BorderFactory.createEmptyBorder(10,15,10,15));
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.weighty = 1;
