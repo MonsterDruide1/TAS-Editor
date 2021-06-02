@@ -18,18 +18,19 @@ public class SettingsDialog extends JDialog {
 
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		JPanel mainPanel = new JPanel(new GridBagLayout());
-		mainPanel.setBorder(BorderFactory.createEmptyBorder(10,15,10,15));
+		mainPanel.setBorder(BorderFactory.createEmptyBorder(5,15,10,15));
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.HORIZONTAL;
+		c.insets = new Insets(5,0,0,0);
 		c.weighty = 1;
 		c.weightx = 1;
 		c.gridx = 0;
 		c.gridy = 0;
 
-		addFileSelectionSetting("directory", prefs.getDirectory(), prefs::setDirectory, mainPanel, c);
+		addCheckboxSetting("Dark Theme", prefs.isDarkTheme(), prefs::setDarkTheme, mainPanel, c);
 		c.gridy++;
 
-		addCheckboxSetting("Dark Theme", prefs.isDarkTheme(), prefs::setDarkTheme, mainPanel, c);
+		addFileSelectionSetting("directory", prefs.getDirectory(), prefs::setDirectory, mainPanel, c);
 		c.gridy++;
 
 		addSpinnerSetting("Show last stick positions", prefs.getLastStickPositionCount(), prefs::setLastStickPositionCount, mainPanel, c);
