@@ -52,7 +52,7 @@ public class JoystickPanel extends JPanel {
 		SpinnerModel xModel = new SpinnerNumberModel(0, -32767, 32767, 100);
 		SpinnerModel yModel = new SpinnerNumberModel(0, -32767, 32767, 100);
 		SpinnerModel radiusModel = new SpinnerNumberModel(0, 0, 1, 0.1);
-		SpinnerModel angleModel = new SpinnerNumberModel(0, 0, 360, 1);
+		SpinnerModel angleModel = new SpinnerNumberModel(0, -1, 361, 1);
 
 		xSpinner = new JSpinner(xModel);
 		ySpinner = new JSpinner(yModel);
@@ -79,7 +79,7 @@ public class JoystickPanel extends JPanel {
 				else if(e.getSource().equals(radiusSpinner))
 					stickPosition = new StickPosition(stickPosition.getTheta(), (double)radiusSpinner.getValue());
 				else if(e.getSource().equals(angleSpinner))
-					stickPosition = new StickPosition((int)angleSpinner.getValue(), stickPosition.getRadius());
+					stickPosition = new StickPosition((((int)angleSpinner.getValue() + 360) % 360), stickPosition.getRadius());
 				else
 					throw new IllegalArgumentException("Common ChangeListener called on unknown Spinner: "+e.getSource());
 
