@@ -1,6 +1,8 @@
 package io.github.jadefalke2;
 
+import io.github.jadefalke2.components.TxtFileChooser;
 import io.github.jadefalke2.util.CorruptedScriptException;
+import io.github.jadefalke2.util.Logger;
 import io.github.jadefalke2.util.Util;
 
 import java.io.*;
@@ -11,6 +13,23 @@ import java.util.stream.IntStream;
 
 public class Script {
 
+	/**
+	 * returns an empty string with a specified length of lines
+	 * @param amount the number of lines
+	 * @return the created script
+	 */
+	public static Script getEmptyScript (int amount){
+		Script tmp = new Script();
+
+		for (int i = 0; i < amount; i++){
+			tmp.insertLine(i,InputLine.getEmpty());
+		}
+
+		return tmp;
+	}
+
+
+	private File file = null;
 	private final ArrayList<InputLine> inputLines = new ArrayList<>();
 
 	public Script(){}
@@ -20,6 +39,7 @@ public class Script {
 	}
 	public Script (File file) throws CorruptedScriptException, IOException {
 		this(Util.fileToString(file));
+		this.file = file;
 	}
 
 	public void insertLine(int row, InputLine inputLine){
@@ -65,18 +85,38 @@ public class Script {
 	}
 
 	/**
-	 * returns an empty string with a specified length of lines
-	 * @param amount the number of lines
-	 * @return the created script
+	 * Saves the script (itself) to that last saved/opened file
+	 * @param defaultDir The directory to open the TxtFileChooser in if no file is stored
 	 */
-	public static Script getEmptyScript (int amount){
-		Script tmp = new Script();
-
-		for (int i = 0; i < amount; i++){
-			tmp.insertLine(i,InputLine.getEmpty());
+	public void saveFile(File defaultDir){ //TODO don't have that as a parameter, as it is only passed down to the next layer...
+		if(file == null){
+			saveFileAs(defaultDir);
+			return;
 		}
 
-		return tmp;
+		Logger.log("saving script to " + file.getAbsolutePath());
+
+		try {
+			Util.writeFile(getFull(), file);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Opens a file selector popup and then saves the script (itself) to that file
+	 * @param defaultDir The directory to open the TxtFileChooser in
+	 */
+	public void saveFileAs(File defaultDir){
+		try {
+			File savedFile = new TxtFileChooser(defaultDir).saveFileAs(this);
+			if(savedFile != null){
+				Logger.log("saved file as " + savedFile.getAbsolutePath());
+				file = savedFile;
+			}
+		} catch(IOException err){
+			err.printStackTrace();
+		}
 	}
 
 	public InputLine[] getLines(int[] rows){

@@ -25,7 +25,6 @@ public class MainEditorWindow extends JFrame {
 
 	//script
 	private Script script;
-	private File currentScriptFile;
 
 
 	/**
@@ -124,48 +123,27 @@ public class MainEditorWindow extends JFrame {
 		// sets the current script file to be the one that the method is called with
 
 		try {
-			setScript(new Script(Util.fileToString(file)));
+			setScript(new Script(file));
 		} catch (CorruptedScriptException e) {
 			e.printStackTrace();
 		}
-
-		currentScriptFile = file;
 	}
 
 	public void setScript(Script script){
 		this.script = script;
 		pianoRoll.setScript(script);
 		sideJoystickPanel.setScript(script);
-		currentScriptFile = null;
 	}
 
 	/**
 	 * writes the current script into the current file
 	 */
 	public void saveFile() {
-		if(currentScriptFile == null){
-			saveFileAs();
-			return;
-		}
-
-		Logger.log("saving script to " + currentScriptFile.getAbsolutePath());
-
-		try {
-			Util.writeFile(script.getFull(), currentScriptFile);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		script.saveFile(parent.getPreferences().getDirectory());
 	}
 
 	public void saveFileAs() {
-		try {
-			File savedFile = new TxtFileChooser(parent.getPreferences()).saveFileAs(script);
-			if(savedFile != null)
-				Logger.log("saved file as " + savedFile.getAbsolutePath());
-				currentScriptFile = savedFile;
-		} catch(IOException err){
-			err.printStackTrace();
-		}
+		script.saveFileAs(parent.getPreferences().getDirectory());
 	}
 
 

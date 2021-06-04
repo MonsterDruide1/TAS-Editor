@@ -12,13 +12,13 @@ import java.io.IOException;
 
 public class TxtFileChooser extends JFileChooser {
 
-	private final Settings settings;
+	private final File defaultDir;
 	/**
 	 * Constructor
 	 */
-	public TxtFileChooser (Settings settings){
+	public TxtFileChooser (File defaultDir){
 		super(FileSystemView.getFileSystemView());
-		this.settings = settings;
+		this.defaultDir = defaultDir;
 	}
 
 	/**
@@ -29,7 +29,7 @@ public class TxtFileChooser extends JFileChooser {
 	public File getFile (boolean openFile){
 
 		setDialogTitle(openFile ? "Choose existing TAS file" : "Choose place to save");
-		setCurrentDirectory(settings.getDirectory());
+		setCurrentDirectory(defaultDir);
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(Util.fileExtension + " files", Util.fileExtension, "text");
 		setFileFilter(filter);
 		int option = openFile ? showOpenDialog(null) : showSaveDialog(null);
