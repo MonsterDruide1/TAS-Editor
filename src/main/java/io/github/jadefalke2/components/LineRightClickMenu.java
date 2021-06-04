@@ -7,6 +7,9 @@ import io.github.jadefalke2.actions.LineAction;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.IOException;
+import java.util.concurrent.Callable;
 
 public class LineRightClickMenu extends JPopupMenu {
 
@@ -51,17 +54,27 @@ public class LineRightClickMenu extends JPopupMenu {
 		setListener(insertOption, rows, LineAction.Type.INSERT);
 		setListener(cloneOption, rows, LineAction.Type.CLONE);
 
-		setListener(copyOption, rows, LineAction.Type.COPY);
-		setListener(pasteOption, rows, LineAction.Type.PASTE);
-		setListener(cutOption, rows, LineAction.Type.CUT);
+		setListener(copyOption, parent::copy);
+		setListener(pasteOption, () -> {
+			try {
+				parent.paste();
+			} catch (IOException | UnsupportedFlavorException ioException) {
+				ioException.printStackTrace(); //TODO error handling
+			}
+		});
+		setListener(cutOption, parent::cut);
 		show(invoker,(int)point.getX(),(int)point.getY());
 	}
 
-	public void setListener(JMenuItem item, int[] rows, LineAction.Type type){
+	public void setListener(JMenuItem item, Runnable action){
 		while (item.getActionListeners().length > 0){
 			item.removeActionListener(item.getActionListeners()[0]);
 		}
 
-		item.addActionListener(e -> parent.executeAction(new LineAction(parent, model, script, rows, type)));
+		item.addActionListener(e -> action.run());
+	}
+
+	public void setListener(JMenuItem item, int[] rows, LineAction.Type type){
+		setListener(item, () -> parent.executeAction(new LineAction(parent, model, script, rows, type)));
 	}
 }

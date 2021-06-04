@@ -16,10 +16,7 @@ public class LineAction implements Action{
 		DELETE,
 		INSERT,
 		CLONE,
-		REPLACE,
-		COPY,
-		PASTE,
-		CUT
+		REPLACE
 	}
 
 	private final TAS parent;
@@ -52,15 +49,6 @@ public class LineAction implements Action{
 			case DELETE -> deleteRows();
 			case INSERT -> insertRows();
 			case REPLACE -> replaceRows();
-			case CUT -> parent.cut();
-			case COPY -> parent.copy();
-			case PASTE -> {
-				try {
-					parent.paste();
-				} catch (IOException | UnsupportedFlavorException exception) {
-					exception.printStackTrace();
-				}
-			}
 		}
 
 	}
