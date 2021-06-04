@@ -5,6 +5,7 @@ import io.github.jadefalke2.util.Util;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -81,5 +82,12 @@ public class Script {
 		}
 
 		return tmp;
+	}
+
+	public InputLine[] getLines(int[] rows){
+		return Arrays.stream(rows).mapToObj(inputLines::get).toArray(InputLine[]::new);
+	}
+	public InputLine[] getLines(){
+		return inputLines.toArray(InputLine[]::new);
 	}
 }

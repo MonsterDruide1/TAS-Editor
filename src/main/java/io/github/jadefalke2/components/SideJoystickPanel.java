@@ -78,12 +78,12 @@ public class SideJoystickPanel extends JPanel {
 				case 1 -> {
 					//one frame is selected
 					frameAmountLabel.setText("Currently editing frame " + selectedRows[0]);
-					setEditingRows(selectedRows, script.getInputLines().toArray(new InputLine[0]));
+					setEditingRows(selectedRows, script.getLines());
 				}
 				default -> {
 					//more than 1 frame is selected
 					frameAmountLabel.setText("Currently editing frames " + selectedRows[0] + " - " + selectedRows[selectedRows.length - 1]);
-					setEditingRows(selectedRows, script.getInputLines().toArray(new InputLine[0]));
+					setEditingRows(selectedRows, script.getLines());
 				}
 			}
 		});
@@ -111,8 +111,7 @@ public class SideJoystickPanel extends JPanel {
 	}
 
 	public void setEditingRows(int[] rows, InputLine[] scriptLines){
-		inputLines = new InputLine[rows.length];
-		Arrays.setAll(inputLines, i -> script.getInputLines().get(rows[i]));
+		inputLines = script.getLines(rows);
 
 		setEditingRows(rows[0], inputLines[0], scriptLines, lstickPanel, JoystickPanel.StickType.L_STICK);
 		setEditingRows(rows[0], inputLines[0], scriptLines, rstickPanel, JoystickPanel.StickType.R_STICK);

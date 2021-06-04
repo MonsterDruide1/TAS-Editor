@@ -140,7 +140,7 @@ public class PianoRoll extends JTable {
 	}
 
 	public InputLine[] getSelectedInputRows(){
-		return Arrays.stream(getSelectedRows()).mapToObj(i -> script.getInputLines().get(i)).toArray(InputLine[]::new);
+		return script.getLines(getSelectedRows());
 	}
 
 	/**

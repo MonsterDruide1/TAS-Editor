@@ -33,7 +33,7 @@ public class LineAction implements Action{
 		this.type = type;
 		this.replacementLines = replacementLines;
 
-		previousLines = Arrays.stream(rows).mapToObj(i -> script.getInputLines().get(i)).toArray(InputLine[]::new);
+		previousLines = script.getLines(rows);
 	}
 
 	@Override
