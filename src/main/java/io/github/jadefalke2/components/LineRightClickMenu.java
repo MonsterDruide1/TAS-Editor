@@ -75,6 +75,6 @@ public class LineRightClickMenu extends JPopupMenu {
 	}
 
 	public void setListener(JMenuItem item, int[] rows, LineAction.Type type){
-		setListener(item, () -> parent.executeAction(new LineAction(parent, model, script, rows, type)));
+		setListener(item, () -> parent.executeAction(new LineAction(model, script, rows, type)));
 	}
 }

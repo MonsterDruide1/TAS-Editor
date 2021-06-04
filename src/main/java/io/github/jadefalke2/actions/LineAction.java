@@ -2,11 +2,8 @@ package io.github.jadefalke2.actions;
 
 import io.github.jadefalke2.InputLine;
 import io.github.jadefalke2.Script;
-import io.github.jadefalke2.TAS;
 
 import javax.swing.table.DefaultTableModel;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.io.IOException;
 import java.util.Arrays;
 
 
@@ -19,8 +16,6 @@ public class LineAction implements Action{
 		REPLACE
 	}
 
-	private final TAS parent;
-
 	private final Type type;
 	private final DefaultTableModel table;
 	private final Script script;
@@ -28,11 +23,10 @@ public class LineAction implements Action{
 	private final InputLine[] replacementLines;
 	private final InputLine[] previousLines;
 
-	public LineAction(TAS parent, DefaultTableModel table, Script script, int[] rows, Type type) {
-		this(parent,table, script, rows, null, type);
+	public LineAction(DefaultTableModel table, Script script, int[] rows, Type type) {
+		this(table, script, rows, null, type);
 	}
-	public LineAction(TAS parent, DefaultTableModel table, Script script, int[] rows, InputLine[] replacementLines, Type type) {
-		this.parent = parent;
+	public LineAction(DefaultTableModel table, Script script, int[] rows, InputLine[] replacementLines, Type type) {
 		this.table = table;
 		this.script = script;
 		this.rows = rows;
@@ -95,7 +89,7 @@ public class LineAction implements Action{
 		}
 	}
 
-	private void adjustLines(int start, int amount) {
+	private void adjustLines(int start) {
 		for (int i = start; i < table.getRowCount(); i++){
 			table.setValueAt(i,i,0);
 		}
@@ -123,7 +117,7 @@ public class LineAction implements Action{
 			table.removeRow(actualIndex);
 		}
 
-		adjustLines(rows[0], -rows.length);
+		adjustLines(rows[0]);
 	}
 
 	private void insertRows(){
@@ -146,7 +140,7 @@ public class LineAction implements Action{
 			table.insertRow(actualIndex, script.getInputLines().get(actualIndex).getArray(actualIndex));
 		}
 
-		adjustLines(index + inputLines.length, inputLines.length);
+		adjustLines(index + inputLines.length);
 	}
 
 	@Override
