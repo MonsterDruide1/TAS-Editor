@@ -2,7 +2,6 @@ package io.github.jadefalke2.util;
 
 import io.github.jadefalke2.TAS;
 
-import javax.swing.filechooser.FileSystemView;
 import java.io.File;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
@@ -85,7 +84,7 @@ public class Settings {
 	}
 
 	public enum JoystickPanelPosition {
-		LEFT, RIGHT;
+		LEFT, RIGHT
 	}
 	public enum SmoothTransitionType {
 		ANGULAR_CLOSEST, LINEAR, ANGULAR_CLOCKWISE, ANGULAR_COUNTERCLOCKWISE

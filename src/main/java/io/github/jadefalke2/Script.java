@@ -14,17 +14,12 @@ public class Script {
 	private final ArrayList<InputLine> inputLines = new ArrayList<>();
 
 	public Script(){}
-
 	public Script(String script) throws CorruptedScriptException {
+		this();
 		prepareScript(script);
 	}
-
-	public Script (File file) throws CorruptedScriptException, FileNotFoundException {
+	public Script (File file) throws CorruptedScriptException, IOException {
 		this(Util.fileToString(file));
-	}
-
-	public ArrayList<InputLine> getInputLines() {
-		return inputLines;
 	}
 
 	public void insertLine(int row, InputLine inputLine){
@@ -89,5 +84,10 @@ public class Script {
 	}
 	public InputLine[] getLines(){
 		return inputLines.toArray(InputLine[]::new);
+	}
+
+	//TODO remove this and handle all accesses to that with functions
+	public ArrayList<InputLine> getInputLines() {
+		return inputLines;
 	}
 }

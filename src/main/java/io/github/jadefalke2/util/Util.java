@@ -15,9 +15,10 @@ public class Util {
 	 * @param file the file to be read
 	 * @return the contents of the file
 	 */
-	public static String fileToString (File file) throws FileNotFoundException {
-		BufferedReader br = new BufferedReader(new FileReader(file));
-		return br.lines().map(sCurrentLine -> sCurrentLine + "\n").collect(Collectors.joining());
+	public static String fileToString (File file) throws IOException {
+		try(BufferedReader br = new BufferedReader(new FileReader(file))){
+			return br.lines().collect(Collectors.joining("\n"));
+		}
 	}
 
 	/**
@@ -28,7 +29,6 @@ public class Util {
 	public static void writeFile(String string, File file) throws IOException {
 		BufferedWriter writer = new BufferedWriter(new FileWriter(file));
 		writer.write(string);
-		writer.flush();
 		writer.close();
 	}
 

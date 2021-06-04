@@ -14,7 +14,6 @@ import java.awt.*;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
-import java.util.Arrays;
 
 public class PianoRoll extends JTable {
 

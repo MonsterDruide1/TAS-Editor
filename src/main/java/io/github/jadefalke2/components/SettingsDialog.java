@@ -31,9 +31,6 @@ public class SettingsDialog extends JDialog {
 		addCheckboxSetting("Dark Theme", prefs.isDarkTheme(), prefs::setDarkTheme, mainPanel, c);
 		c.gridy++;
 
-		//addSeperator(mainPanel, c);
-		//c.gridy++;
-
 		addFileSelectionSetting("Directory", prefs.getDirectory(), prefs::setDirectory, mainPanel, c);
 		c.gridy++;
 

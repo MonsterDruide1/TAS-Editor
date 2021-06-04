@@ -9,7 +9,6 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
-import java.util.concurrent.Callable;
 
 public class LineRightClickMenu extends JPopupMenu {
 
@@ -58,8 +57,8 @@ public class LineRightClickMenu extends JPopupMenu {
 		setListener(pasteOption, () -> {
 			try {
 				parent.paste();
-			} catch (IOException | UnsupportedFlavorException ioException) {
-				ioException.printStackTrace(); //TODO error handling
+			} catch (IOException | UnsupportedFlavorException e) {
+				e.printStackTrace(); //TODO error handling
 			}
 		});
 		setListener(cutOption, parent::cut);

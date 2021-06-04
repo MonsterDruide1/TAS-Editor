@@ -9,7 +9,6 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -50,7 +49,7 @@ public class MainJMenuBar extends JMenuBar {
 		openJMenuItem.addActionListener(e -> {
 			try {
 				parent.openScript(new TxtFileChooser(parent.getPreferences()).getFile(true));
-			} catch (FileNotFoundException ex) {
+			} catch (IOException ex) {
 				ex.printStackTrace();
 			}
 		});

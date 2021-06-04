@@ -15,7 +15,6 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Stack;
@@ -200,7 +199,7 @@ public class TAS {
 		openScript(Script.getEmptyScript(10));
 	}
 
-	public void openScript(File file) throws FileNotFoundException {
+	public void openScript(File file) throws IOException {
 		Logger.log("loading script from " + file.getAbsolutePath());
 		//TODO ask for closing current project?
 		mainEditorWindow.setScript(file); //do it like this to set the currentScriptFile of MainEditorWindow

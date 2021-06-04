@@ -11,7 +11,6 @@ import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class MainEditorWindow extends JFrame {
@@ -120,7 +119,7 @@ public class MainEditorWindow extends JFrame {
 	 * Returns the string that is being read from the given file.
 	 * @param file the file to open
 	 */
-	public void setScript(File file) throws FileNotFoundException {
+	public void setScript(File file) throws IOException {
 
 		// sets the current script file to be the one that the method is called with
 
