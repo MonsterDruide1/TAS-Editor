@@ -22,7 +22,7 @@ public class MainEditorWindow extends JFrame {
 	private final MainJMenuBar mainJMenuBar;
 
 	private final PianoRoll pianoRoll;
-	private final SideJoystickPanel joystickPanel;
+	private final SideJoystickPanel sideJoystickPanel;
 
 	//script
 	private Script script;
@@ -69,7 +69,7 @@ public class MainEditorWindow extends JFrame {
 		setJMenuBar(mainJMenuBar);
 
 		pianoRoll = new PianoRoll(script, parent);
-		joystickPanel = new SideJoystickPanel(parent, pianoRoll, script);
+		sideJoystickPanel = new SideJoystickPanel(parent, pianoRoll, script);
 
 		JPanel editor = new JPanel(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
@@ -108,7 +108,7 @@ public class MainEditorWindow extends JFrame {
 			case RIGHT -> 2;
 		};
 		c.weightx = 0;
-		combiningPanel.add(joystickPanel, c);
+		combiningPanel.add(sideJoystickPanel, c);
 
 		add(combiningPanel);
 
@@ -136,7 +136,7 @@ public class MainEditorWindow extends JFrame {
 	public void setScript(Script script){
 		this.script = script;
 		pianoRoll.setScript(script);
-		joystickPanel.setScript(script);
+		sideJoystickPanel.setScript(script);
 		currentScriptFile = null;
 	}
 
@@ -172,11 +172,6 @@ public class MainEditorWindow extends JFrame {
 
 	// getter
 
-
-	public SideJoystickPanel getSidejoystickPanel() {
-		return joystickPanel;
-	}
-
 	public PianoRoll getPianoRoll (){
 		return pianoRoll;
 	}
@@ -185,7 +180,8 @@ public class MainEditorWindow extends JFrame {
 		return script;
 	}
 
-	public void updateUndoMenu(boolean enableUndo, boolean enableRedo) {
+	public void onUndoRedo(boolean enableUndo, boolean enableRedo) {
+		sideJoystickPanel.setEditingRows(pianoRoll.getSelectedRows(), script.getLines());
 		mainJMenuBar.updateUndoMenu(enableUndo, enableRedo);
 	}
 }

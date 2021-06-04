@@ -125,7 +125,7 @@ public class TAS {
 		action.execute();
 		undoStack.push(action);
 		redoStack.clear();
-		mainEditorWindow.updateUndoMenu(!undoStack.isEmpty(), !redoStack.isEmpty());
+		mainEditorWindow.onUndoRedo(!undoStack.isEmpty(), !redoStack.isEmpty());
 
 		Logger.log("executing action: " + action);
 	}
@@ -137,7 +137,7 @@ public class TAS {
 		Action action = undoStack.pop();
 		action.revert();
 		redoStack.push(action);
-		mainEditorWindow.updateUndoMenu(!undoStack.isEmpty(), !redoStack.isEmpty());
+		mainEditorWindow.onUndoRedo(!undoStack.isEmpty(), !redoStack.isEmpty());
 
 		Logger.log("undoing action: " + action);
 	}
@@ -149,7 +149,7 @@ public class TAS {
 		Action action = redoStack.pop();
 		action.execute();
 		undoStack.push(action);
-		mainEditorWindow.updateUndoMenu(!undoStack.isEmpty(), !redoStack.isEmpty());
+		mainEditorWindow.onUndoRedo(!undoStack.isEmpty(), !redoStack.isEmpty());
 
 		Logger.log("redoing action: " + action);
 	}
