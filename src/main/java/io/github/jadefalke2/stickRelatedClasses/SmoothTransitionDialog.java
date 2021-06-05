@@ -33,9 +33,9 @@ public class SmoothTransitionDialog extends JDialog {
 		JButton okButton = new JButton("OK");
 		okButton.addActionListener(e -> dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING)));
 
-		startJoystick = new JoystickPanel(settings);
+		startJoystick = new JoystickPanel(settings, "Start");
 		startJoystick.setStickPosition(startPos);
-		endJoystick = new JoystickPanel(settings);
+		endJoystick = new JoystickPanel(settings, "End");
 		endJoystick.setStickPosition(endPos);
 
 		JPanel panel = new JPanel();

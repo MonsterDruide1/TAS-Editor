@@ -10,8 +10,11 @@ import java.awt.event.*;
 
 public class JoystickPanel extends JPanel {
 
-	//buttons
+	//Labels
+	private final JLabel stickTypeIndicator;
 
+
+	//buttons
 	private final JButton centerButton;
 	private final JButton smoothTransitionButton;
 
@@ -37,17 +40,18 @@ public class JoystickPanel extends JPanel {
         L_STICK,R_STICK
     }
 
-	public JoystickPanel(Settings settings) {
-		this(settings, null);
+	public JoystickPanel(Settings settings, String descriptor) {
+		this(settings, null, descriptor);
 	}
-	public JoystickPanel(Settings settings, ActionListener smoothTransitionListener) {
+	public JoystickPanel(Settings settings, ActionListener smoothTransitionListener, String descriptor) {
 
 		// setting global vars
 		stickPosition = new StickPosition(0,0);
 		joystick = new Joystick(32767, settings);
 		joystick.setThumbPos(new Point(stickPosition.getX(),stickPosition.getY()));
 
-
+		stickTypeIndicator = new JLabel(descriptor);
+		stickTypeIndicator.setHorizontalAlignment(JLabel.CENTER);
 		// spinners
 		SpinnerModel xModel = new SpinnerNumberModel(0, -32767, 32767, 100);
 		SpinnerModel yModel = new SpinnerNumberModel(0, -32767, 32767, 100);
@@ -136,6 +140,7 @@ public class JoystickPanel extends JPanel {
         joystick.addKeyListener(keyListener);
 
 
+
         JLabel cartesianLabel = new JLabel("Cartesian");
         JLabel polarLabel = new JLabel("Polar");
 
@@ -146,25 +151,28 @@ public class JoystickPanel extends JPanel {
         JLabel thetaLabel = new JLabel("angle:");
 
 
-
 		c.insets = new Insets(5,3,5,3);
 		c.fill = GridBagConstraints.BOTH;
+		c.gridwidth = 4;
+		add(stickTypeIndicator, c);
+
 		c.weightx = 1;
         c.gridwidth = 2;
+        c.gridy = 1;
         add(cartesianLabel, c);
 
         c.gridx = 3;
         add(polarLabel, c);
 
         c.gridwidth = 1;
-        c.gridy = 1;
+        c.gridy = 2;
         c.gridx = 0;
         add(xLabel, c);
 
         c.gridx = 1;
 		add(xSpinner, c);
 
-		c.gridy = 2;
+		c.gridy = 3;
 		c.gridx = 0;
 		add(yLabel, c);
 
@@ -172,14 +180,14 @@ public class JoystickPanel extends JPanel {
 		add(ySpinner, c);
 
 		c.gridx = 2;
-		c.gridy = 1;
+		c.gridy = 2;
 		add(radiusLabel, c);
 
 		c.gridx = 3;
 		add(radiusSpinner, c);
 
 		c.gridx = 2;
-		c.gridy = 2;
+		c.gridy = 3;
         add(thetaLabel, c);
 
         c.gridx = 3;
@@ -189,7 +197,7 @@ public class JoystickPanel extends JPanel {
         c.gridwidth = 4;
         c.weighty = 1;
         c.gridx = 0;
-        c.gridy = 3;
+        c.gridy = 4;
 
 		add(joystick, c);
 		c.weighty = 0;
@@ -203,7 +211,7 @@ public class JoystickPanel extends JPanel {
 		c.fill = GridBagConstraints.HORIZONTAL;
 
 		c.gridx = 0;
-		c.gridy = 4;
+		c.gridy = 5;
 
 		if(smoothTransitionListener != null){
 			smoothTransitionButton = new JButton("smooth transition");
@@ -213,7 +221,7 @@ public class JoystickPanel extends JPanel {
 			smoothTransitionButton = null;
 		}
 
-		c.gridy = 5;
+		c.gridy = 6;
 		add(centerButton, c);
     }
 

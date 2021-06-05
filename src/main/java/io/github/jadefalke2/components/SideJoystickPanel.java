@@ -59,8 +59,8 @@ public class SideJoystickPanel extends JPanel {
 
 		CustomChangeListener joystickPanelListener = e -> parent.executeAction(new StickAction(inputLines, getStickType(e.getSource()), e.getOldValue(), e.getNewValue(), pianoRoll.getModel(), pianoRoll.getSelectedRows()));
 
-		lstickPanel = new JoystickPanel(parent.getPreferences(), smoothTransitionListenerL);
-		rstickPanel = new JoystickPanel(parent.getPreferences(), smoothTransitionListenerR);
+		lstickPanel = new JoystickPanel(parent.getPreferences(), smoothTransitionListenerL, "Left-stick");
+		rstickPanel = new JoystickPanel(parent.getPreferences(), smoothTransitionListenerR, "Right-Stick");
 		lstickPanel.setOnChangeListener(joystickPanelListener);
 		rstickPanel.setOnChangeListener(joystickPanelListener);
 
@@ -109,7 +109,7 @@ public class SideJoystickPanel extends JPanel {
 	public JoystickPanel.StickType getStickType(Object joystickPanel){
 		if(joystickPanel == lstickPanel) return JoystickPanel.StickType.L_STICK;
 		if(joystickPanel == rstickPanel) return JoystickPanel.StickType.R_STICK;
-		throw new IllegalArgumentException("Unknown StickType of panel: "+joystickPanel);
+		throw new IllegalArgumentException("Unknown StickType of panel: " + joystickPanel);
 	}
 
 	public void setEditingRows(int[] rows, InputLine[] scriptLines){
