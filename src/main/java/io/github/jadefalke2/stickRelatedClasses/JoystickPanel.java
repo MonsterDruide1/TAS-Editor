@@ -264,6 +264,11 @@ public class JoystickPanel extends JPanel {
 	}
 
 	public void setAllEnabled(boolean enable) {
+		if(!enable){
+			setStickPosition(new StickPosition(0, 0));
+			setStickPositions(new StickPosition[0]);
+		}
+
 		angleSpinner.setEnabled(enable);
 		radiusSpinner.setEnabled(enable);
 
