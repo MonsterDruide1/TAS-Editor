@@ -25,6 +25,8 @@ public class SideJoystickPanel extends JPanel {
 	public SideJoystickPanel (TAS parent, PianoRoll pianoRoll, Script startScript) {
 
 		frameAmountLabel = new JLabel("Currently no frames are being edited");
+		frameAmountLabel.setHorizontalAlignment(JLabel.CENTER);
+		frameAmountLabel.setFont(new Font(frameAmountLabel.getFont().getName(), frameAmountLabel.getFont().getStyle(), 15));
 		settings = parent.getPreferences();
 		this.script = startScript;
 
