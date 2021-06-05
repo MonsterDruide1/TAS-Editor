@@ -44,9 +44,10 @@ public class MainEditorWindow extends JFrame {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				//TODO ONLY IF IN EDITOR + CHANGES DONE
-				if(askForFileSave())
+				if(askForFileSave()) {
 					Logger.log("exiting program");
 					dispose();
+				}
 			}
 
 			/**
