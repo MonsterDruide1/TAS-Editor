@@ -29,10 +29,13 @@ public class Script {
 	}
 
 
-	private File file = null;
-	private final ArrayList<InputLine> inputLines = new ArrayList<>();
+	private File file;
+	private final ArrayList<InputLine> inputLines;
 
-	public Script(){}
+	public Script() {
+		inputLines = new ArrayList<>();
+		file = null;
+	}
 	public Script(String script) throws CorruptedScriptException {
 		this();
 		prepareScript(script);

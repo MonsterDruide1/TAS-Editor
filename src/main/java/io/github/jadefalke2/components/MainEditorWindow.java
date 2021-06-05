@@ -153,10 +153,6 @@ public class MainEditorWindow extends JFrame {
 		return pianoRoll;
 	}
 
-	public Script getScript (){
-		return script;
-	}
-
 	public void onUndoRedo(boolean enableUndo, boolean enableRedo) {
 		if (!(pianoRoll.getSelectedRows().length == 0))
 			sideJoystickPanel.setEditingRows(pianoRoll.getSelectedRows(), script.getLines());
