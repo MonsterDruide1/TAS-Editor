@@ -86,7 +86,7 @@ public class MainEditorWindow extends JFrame {
 
 		c.gridy = 1;
 		c.weighty = 0;
-		editor.add(functionEditorButton, c);
+		// editor.add(functionEditorButton, c);
 
 
 
