@@ -158,7 +158,8 @@ public class MainEditorWindow extends JFrame {
 	}
 
 	public void onUndoRedo(boolean enableUndo, boolean enableRedo) {
-		sideJoystickPanel.setEditingRows(pianoRoll.getSelectedRows(), script.getLines());
+		if (!(pianoRoll.getSelectedRows().length == 0))
+			sideJoystickPanel.setEditingRows(pianoRoll.getSelectedRows(), script.getLines());
 		mainJMenuBar.updateUndoMenu(enableUndo, enableRedo);
 	}
 }
