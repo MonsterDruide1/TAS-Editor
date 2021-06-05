@@ -304,7 +304,7 @@ public class JoystickPanel extends JPanel {
 	 * Updates the polar spinners
 	 */
 	private void updatePolarSpinners(){
-		angleSpinner.setValue((int)Math.toDegrees(stickPosition.getTheta()));
+		angleSpinner.setValue((int)Math.round(Math.toDegrees(stickPosition.getTheta())));
 		radiusSpinner.setValue(stickPosition.getRadius());
 	}
 }
