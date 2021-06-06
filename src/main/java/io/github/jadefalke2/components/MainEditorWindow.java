@@ -33,6 +33,8 @@ public class MainEditorWindow extends JFrame {
 	 */
 	public MainEditorWindow (FunctionEditorWindow functionEditorWindow, Script script, TAS parent){
 
+		Logger.log("Initialising window");
+
 		this.parent = parent;
 		this.functionEditorWindow = functionEditorWindow;
 		this.script = script;

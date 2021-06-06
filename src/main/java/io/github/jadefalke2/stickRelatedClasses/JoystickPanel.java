@@ -200,6 +200,7 @@ public class JoystickPanel extends JPanel {
         c.gridy = 4;
 
 		add(joystick, c);
+
 		c.weighty = 0;
 
 		centerButton = new JButton("center");
