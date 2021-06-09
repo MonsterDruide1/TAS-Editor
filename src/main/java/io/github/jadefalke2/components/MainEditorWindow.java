@@ -26,6 +26,9 @@ public class MainEditorWindow extends JFrame {
 	//script
 	private Script script;
 
+	//layout
+	private JPanel editor, combiningPanel;
+
 
 	/**
 	 * Constructor
@@ -72,7 +75,7 @@ public class MainEditorWindow extends JFrame {
 		pianoRoll = new PianoRoll(script, parent);
 		sideJoystickPanel = new SideJoystickPanel(parent, pianoRoll, script);
 
-		JPanel editor = new JPanel(new GridBagLayout());
+		editor = new JPanel(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 
 		//Components
@@ -94,9 +97,17 @@ public class MainEditorWindow extends JFrame {
 
 
 
-		JPanel combiningPanel = new JPanel(new GridBagLayout());
+		recreateLayoutPanel();
 
-		c = new GridBagConstraints();
+		pack(); //TODO is still too small, the joystick is too little to use
+		setExtendedState(MAXIMIZED_BOTH);
+	}
+
+	public void recreateLayoutPanel(){
+		if(combiningPanel != null) remove(combiningPanel);
+		combiningPanel = new JPanel(new GridBagLayout());
+
+		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;
 		c.weighty = 1;
 
@@ -113,8 +124,7 @@ public class MainEditorWindow extends JFrame {
 
 		add(combiningPanel);
 
-		pack(); //TODO is still too small, the joystick is too little to use
-		setExtendedState(MAXIMIZED_BOTH);
+		revalidate(); //force layout update
 	}
 
 	/**

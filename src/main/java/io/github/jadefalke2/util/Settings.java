@@ -69,6 +69,7 @@ public class Settings {
 
 	public void setJoystickPanelPosition(JoystickPanelPosition joystickPanelPosition){
 		this.joystickPanelPosition = joystickPanelPosition;
+		parent.recreateMainPanelWindowLayout();
 	}
 
 	public JoystickPanelPosition getJoystickPanelPosition(){

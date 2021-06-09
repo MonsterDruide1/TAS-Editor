@@ -219,4 +219,9 @@ public class TAS {
 	public Settings getPreferences() {
 		return preferences;
 	}
+
+	public void recreateMainPanelWindowLayout() {
+		if(mainEditorWindow == null) return; //just skip it if the mainEditorWindow has not been created yet, as the setting will be applied on creation as well
+		mainEditorWindow.recreateLayoutPanel();
+	}
 }
