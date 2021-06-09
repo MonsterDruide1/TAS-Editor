@@ -124,6 +124,19 @@ public class SideJoystickPanel extends JPanel {
 
 		setEditingRows(rows[0], inputLines[0], scriptLines, lstickPanel, JoystickPanel.StickType.L_STICK);
 		setEditingRows(rows[0], inputLines[0], scriptLines, rstickPanel, JoystickPanel.StickType.R_STICK);
+
+		if(rows.length > 1){ //override past stick positions if more than one row is selected
+			StickPosition[] stickPositionsL = new StickPosition[rows.length];
+			StickPosition[] stickPositionsR = new StickPosition[rows.length];
+			for(int i=0;i<rows.length;i++){
+				int realIndex = rows.length - 1 - i;
+				stickPositionsL[i] = scriptLines[rows[realIndex]].getStickL();
+				stickPositionsR[i] = scriptLines[rows[realIndex]].getStickR();
+			}
+			lstickPanel.setStickPositions(stickPositionsL);
+			rstickPanel.setStickPositions(stickPositionsR);
+		}
+
 		lstickPanel.setAllEnabled(true);
 		rstickPanel.setAllEnabled(true);
 	}
