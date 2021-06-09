@@ -3,7 +3,6 @@ package io.github.jadefalke2.components;
 import io.github.jadefalke2.Script;
 import io.github.jadefalke2.TAS;
 import io.github.jadefalke2.util.Logger;
-import io.github.jadefalke2.util.Util;
 import io.github.jadefalke2.util.CorruptedScriptException;
 
 import javax.swing.*;
@@ -27,7 +26,8 @@ public class MainEditorWindow extends JFrame {
 	private Script script;
 
 	//layout
-	private JPanel editor, combiningPanel;
+	private final JPanel editor;
+	private JPanel combiningPanel;
 
 
 	/**

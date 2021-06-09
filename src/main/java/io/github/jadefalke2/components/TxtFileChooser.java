@@ -1,7 +1,6 @@
 package io.github.jadefalke2.components;
 
 import io.github.jadefalke2.Script;
-import io.github.jadefalke2.util.Settings;
 import io.github.jadefalke2.util.Util;
 
 import javax.swing.*;

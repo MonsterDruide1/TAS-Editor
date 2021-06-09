@@ -11,7 +11,7 @@ public class Settings {
 	private File directory;
 	private boolean darkTheme;
 	private int lastStickPositionCount;
-	private JoystickPanelPosition joystickPanelPosition; //FIXME change this without restarting?
+	private JoystickPanelPosition joystickPanelPosition;
 	private SmoothTransitionType smoothTransitionType;
 
 

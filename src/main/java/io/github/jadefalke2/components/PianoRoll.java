@@ -66,8 +66,6 @@ public class PianoRoll extends JTable {
 
 		setScript(script);
 
-
-		//FIXME Table blocks special key-shortcuts like CTRL+C!
 		getInputMap().put(KeyStroke.getKeyStroke("ctrl c"), "copy");
 		getInputMap().put(KeyStroke.getKeyStroke("ctrl v"), "paste");
 		getInputMap().put(KeyStroke.getKeyStroke("ctrl x"), "cut");
