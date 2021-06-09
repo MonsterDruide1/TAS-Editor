@@ -84,7 +84,14 @@ public class SideJoystickPanel extends JPanel {
 				}
 				default -> {
 					//more than 1 frame is selected
-					frameAmountLabel.setText("Currently editing frames " + selectedRows[0] + " - " + selectedRows[selectedRows.length - 1]);
+					String text = "Currently editing frames ";
+					if((selectedRows.length-1) == (selectedRows[selectedRows.length-1]-selectedRows[0])){
+						text += selectedRows[0] + " - " + selectedRows[selectedRows.length - 1];
+					} else {
+						text += Arrays.toString(selectedRows).substring(1); //add all rows to it, but skipping [
+						text = text.substring(0, text.length()-1); //removing ] from it
+					}
+					frameAmountLabel.setText(text);
 					setEditingRows(selectedRows, script.getLines());
 				}
 			}
