@@ -32,9 +32,9 @@ public class SideJoystickPanel extends JPanel {
 
 		//TODO remove the duplicate listener here
 		ActionListener smoothTransitionListenerL = e -> {
-			SmoothTransitionDialog dialog = new SmoothTransitionDialog(settings, inputLines[0].getStickL(), inputLines[inputLines.length-1].getStickL());
+			SmoothTransitionDialog dialog = new SmoothTransitionDialog(settings, inputLines[0].getStickL(), inputLines[inputLines.length-1].getStickL(), inputLines.length);
 			dialog.setVisible(true);
-			StickPosition[] replacementStickPos = dialog.getSmoothTransitionData(inputLines.length);
+			StickPosition[] replacementStickPos = dialog.getSmoothTransitionData();
 			InputLine[] originalLines = pianoRoll.getSelectedInputRows();
 			InputLine[] replacementLines = Arrays.stream(originalLines).map(InputLine::clone).toArray(InputLine[]::new);
 
@@ -45,9 +45,9 @@ public class SideJoystickPanel extends JPanel {
 		};
 
 		ActionListener smoothTransitionListenerR = e -> {
-			SmoothTransitionDialog dialog = new SmoothTransitionDialog(settings, inputLines[0].getStickR(), inputLines[inputLines.length-1].getStickR());
+			SmoothTransitionDialog dialog = new SmoothTransitionDialog(settings, inputLines[0].getStickR(), inputLines[inputLines.length-1].getStickR(), inputLines.length);
 			dialog.setVisible(true);
-			StickPosition[] replacementStickPos = dialog.getSmoothTransitionData(inputLines.length);
+			StickPosition[] replacementStickPos = dialog.getSmoothTransitionData();
 			InputLine[] originalLines = pianoRoll.getSelectedInputRows();
 			InputLine[] replacementLines = Arrays.stream(originalLines).map(InputLine::clone).toArray(InputLine[]::new);
 

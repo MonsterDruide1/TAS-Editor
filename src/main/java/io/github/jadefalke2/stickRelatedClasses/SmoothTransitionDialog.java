@@ -3,8 +3,14 @@ package io.github.jadefalke2.stickRelatedClasses;
 import io.github.jadefalke2.util.Settings;
 
 import javax.swing.*;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.IntStream;
 
 public class SmoothTransitionDialog extends JDialog {
 
@@ -15,13 +21,14 @@ public class SmoothTransitionDialog extends JDialog {
 		"Angular (Counter-Clockwise)"
 	};
 
-
+	private int frames;
 	private final JComboBox<String> dropdownMenu;
 	private final JoystickPanel startJoystick,  endJoystick;
 
-	public SmoothTransitionDialog(Settings settings, StickPosition startPos, StickPosition endPos){
+	public SmoothTransitionDialog(Settings settings, StickPosition startPos, StickPosition endPos, int frames){
 		super();
 
+		this.frames = frames;
 		//option
 		dropdownMenu = new JComboBox<>();
 		if(dropdownOptions.length != 4) throw new UnsupportedOperationException("Too many items in options list...");
@@ -75,9 +82,32 @@ public class SmoothTransitionDialog extends JDialog {
 		setLocationRelativeTo(null);
 		setModal(true);
 		setSize(500,500); //TODO don't do this
+
+		startJoystick.setOnChangeListener(e -> {
+			if(frames > 1){
+				StickPosition[] stickPositionsPreview = getSmoothTransitionData();
+				startJoystick.setStickPositions(reverse(stickPositionsPreview));
+				endJoystick.setStickPositions(stickPositionsPreview);
+			}
+		});
+
+		endJoystick.setOnChangeListener(e -> {
+			if(frames > 1){
+				StickPosition[] stickPositionsPreview = getSmoothTransitionData();
+				startJoystick.setStickPositions(reverse(stickPositionsPreview));
+				endJoystick.setStickPositions(stickPositionsPreview);
+			}
+		});
+		
 	}
 
-	public StickPosition[] getSmoothTransitionData (int frames) {
+	private StickPosition[] reverse (StickPosition[] old) {
+		StickPosition[] newArray = new StickPosition[old.length];
+		IntStream.iterate(newArray.length - 1, i -> i >= 0, i -> i - 1).forEach(i -> newArray[i] = old[old.length - i - 1]);
+		return newArray;
+	}
+
+	public StickPosition[] getSmoothTransitionData () {
 		StickPosition firstPos = startJoystick.getStickPosition();
 		StickPosition endPos = endJoystick.getStickPosition();
 
