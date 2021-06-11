@@ -83,22 +83,15 @@ public class SmoothTransitionDialog extends JDialog {
 		setModal(true);
 		setSize(500,500); //TODO don't do this
 
-		startJoystick.setOnChangeListener(e -> {
-			if(frames > 1){
-				StickPosition[] stickPositionsPreview = getSmoothTransitionData();
-				startJoystick.setStickPositions(reverse(stickPositionsPreview));
-				endJoystick.setStickPositions(stickPositionsPreview);
-			}
-		});
-
-		endJoystick.setOnChangeListener(e -> {
-			if(frames > 1){
-				StickPosition[] stickPositionsPreview = getSmoothTransitionData();
-				startJoystick.setStickPositions(reverse(stickPositionsPreview));
-				endJoystick.setStickPositions(stickPositionsPreview);
-			}
-		});
-		
+		for (JoystickPanel stick: new JoystickPanel[]{startJoystick, endJoystick}) {
+			stick.setOnChangeListener(e -> {
+				if(frames > 1){
+					StickPosition[] stickPositionsPreview = getSmoothTransitionData();
+					startJoystick.setStickPositions(reverse(stickPositionsPreview));
+					endJoystick.setStickPositions(stickPositionsPreview);
+				}
+			});
+		}
 	}
 
 	private StickPosition[] reverse (StickPosition[] old) {
