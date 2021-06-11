@@ -66,11 +66,10 @@ public class JoystickPanel extends JPanel {
 		xSpinner.setValue(stickPosition.getX());
 		ySpinner.setValue(stickPosition.getY());
 		radiusSpinner.setValue(stickPosition.getRadius());
-		angleSpinner.setValue((int)Math.toDegrees(stickPosition.getTheta()));
+		angleSpinner.setValue(Math.toDegrees(stickPosition.getTheta()));
 
         setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
         setLayout(new GridBagLayout());
-        GridBagConstraints c = new GridBagConstraints();
 
 		ChangeListener spinnerListener = e -> {
 			if(shouldTriggerUpdate){
@@ -83,7 +82,7 @@ public class JoystickPanel extends JPanel {
 				else if(e.getSource().equals(radiusSpinner))
 					stickPosition = new StickPosition(stickPosition.getTheta(), (double)radiusSpinner.getValue());
 				else if(e.getSource().equals(angleSpinner))
-					stickPosition = new StickPosition((((int)angleSpinner.getValue() + 360) % 360), stickPosition.getRadius());
+					stickPosition = new StickPosition((((double)angleSpinner.getValue() + 360) % 360), stickPosition.getRadius());
 				else
 					throw new IllegalArgumentException("Common ChangeListener called on unknown Spinner: "+e.getSource());
 
@@ -142,7 +141,9 @@ public class JoystickPanel extends JPanel {
 
 
         JLabel cartesianLabel = new JLabel("Cartesian");
+        cartesianLabel.setHorizontalAlignment(SwingConstants.CENTER);
         JLabel polarLabel = new JLabel("Polar");
+        polarLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
         JLabel xLabel = new JLabel("x:");
         JLabel yLabel = new JLabel("y:");
@@ -151,50 +152,70 @@ public class JoystickPanel extends JPanel {
         JLabel thetaLabel = new JLabel("angle:");
 
 
-		c.insets = new Insets(5,3,5,3);
-		c.fill = GridBagConstraints.BOTH;
-		c.gridwidth = 4;
-		add(stickTypeIndicator, c);
+        //TODO simplify these duplicate JPanels?
+        JPanel cartesianPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.BOTH;
+        c.weightx = 1;
+        c.weighty = 1;
+        c.insets = new Insets(5,3,5,3);
 
-		c.weightx = 1;
         c.gridwidth = 2;
-        c.gridy = 1;
-        add(cartesianLabel, c);
-
-        c.gridx = 3;
-        add(polarLabel, c);
+        cartesianPanel.add(cartesianLabel, c);
 
         c.gridwidth = 1;
+        c.gridy = 1;
+        cartesianPanel.add(xLabel, c);
+        c.gridx = 1;
+        cartesianPanel.add(xSpinner, c);
+
         c.gridy = 2;
         c.gridx = 0;
-        add(xLabel, c);
+        cartesianPanel.add(yLabel, c);
+        c.gridx = 1;
+        cartesianPanel.add(ySpinner, c);
+
+
+		JPanel polarPanel = new JPanel(new GridBagLayout());
+		c = new GridBagConstraints();
+		c.fill = GridBagConstraints.BOTH;
+		c.weightx = 1;
+		c.insets = new Insets(5,3,5,3);
+
+		c.gridwidth = 2;
+		polarPanel.add(polarLabel, c);
+
+		c.gridwidth = 1;
+		c.gridy = 1;
+		polarPanel.add(radiusLabel, c);
+		c.gridx = 1;
+		polarPanel.add(radiusSpinner, c);
+
+		c.gridy = 2;
+		c.gridx = 0;
+		polarPanel.add(thetaLabel, c);
+		c.gridx = 1;
+		polarPanel.add(angleSpinner, c);
+
+
+
+		c = new GridBagConstraints();
+		c.insets = new Insets(5,3,5,3);
+		c.fill = GridBagConstraints.BOTH;
+		c.anchor = GridBagConstraints.CENTER;
+		c.gridwidth = 2;
+		c.weightx = 1;
+		add(stickTypeIndicator, c);
+
+		//TODO width is not distributed equally...
+        c.gridy = 2;
+        c.gridwidth = 1;
+        add(cartesianPanel, c);
 
         c.gridx = 1;
-		add(xSpinner, c);
+        add(polarPanel, c);
 
-		c.gridy = 3;
-		c.gridx = 0;
-		add(yLabel, c);
-
-		c.gridx = 1;
-		add(ySpinner, c);
-
-		c.gridx = 2;
-		c.gridy = 2;
-		add(radiusLabel, c);
-
-		c.gridx = 3;
-		add(radiusSpinner, c);
-
-		c.gridx = 2;
-		c.gridy = 3;
-        add(thetaLabel, c);
-
-        c.gridx = 3;
-        add(angleSpinner, c);
-
-        c.fill = GridBagConstraints.BOTH;
-        c.gridwidth = 4;
+        c.gridwidth = 2;
         c.weighty = 1;
         c.gridx = 0;
         c.gridy = 4;
@@ -208,8 +229,6 @@ public class JoystickPanel extends JPanel {
 			joystick.centerThumbPad();
 			updateStickPosition(true, stickPosition);
 		});
-
-		c.fill = GridBagConstraints.HORIZONTAL;
 
 		c.gridx = 0;
 		c.gridy = 5;
@@ -310,7 +329,7 @@ public class JoystickPanel extends JPanel {
 	 * Updates the polar spinners
 	 */
 	private void updatePolarSpinners(){
-		angleSpinner.setValue((int)Math.round(Math.toDegrees(stickPosition.getTheta())));
+		angleSpinner.setValue(Math.toDegrees(stickPosition.getTheta()));
 		radiusSpinner.setValue(stickPosition.getRadius());
 	}
 }
