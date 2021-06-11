@@ -62,6 +62,7 @@ public class JoystickPanel extends JPanel {
 		ySpinner = new JSpinner(yModel);
 		radiusSpinner = new JSpinner(radiusModel);
 		angleSpinner = new JSpinner(angleModel);
+		angleSpinner.setEditor(new JSpinner.NumberEditor(angleSpinner, "#.#")); //one decimal digit
 
 		xSpinner.setValue(stickPosition.getX());
 		ySpinner.setValue(stickPosition.getY());
