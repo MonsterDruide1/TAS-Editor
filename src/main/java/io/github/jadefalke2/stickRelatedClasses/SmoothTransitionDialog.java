@@ -45,6 +45,16 @@ public class SmoothTransitionDialog extends JDialog {
 		endJoystick = new JoystickPanel(settings, "End");
 		endJoystick.setStickPosition(endPos);
 
+		CustomChangeListener joystickPanelListener = e -> {
+			if(frames > 1){
+				StickPosition[] stickPositionsPreview = getSmoothTransitionData();
+				startJoystick.setStickPositions(reverse(stickPositionsPreview));
+				endJoystick.setStickPositions(stickPositionsPreview);
+			}
+		};
+		startJoystick.setOnChangeListener(joystickPanelListener);
+		endJoystick.setOnChangeListener(joystickPanelListener);
+
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridBagLayout());
 		panel.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
@@ -82,21 +92,11 @@ public class SmoothTransitionDialog extends JDialog {
 		setLocationRelativeTo(null);
 		setModal(true);
 		setSize(500,500); //TODO don't do this
-
-		for (JoystickPanel stick: new JoystickPanel[]{startJoystick, endJoystick}) {
-			stick.setOnChangeListener(e -> {
-				if(frames > 1){
-					StickPosition[] stickPositionsPreview = getSmoothTransitionData();
-					startJoystick.setStickPositions(reverse(stickPositionsPreview));
-					endJoystick.setStickPositions(stickPositionsPreview);
-				}
-			});
-		}
 	}
 
 	private StickPosition[] reverse (StickPosition[] old) {
 		StickPosition[] newArray = new StickPosition[old.length];
-		IntStream.iterate(newArray.length - 1, i -> i >= 0, i -> i - 1).forEach(i -> newArray[i] = old[old.length - i - 1]);
+		IntStream.range(0, old.length).forEach(i -> newArray[i] = old[old.length - i - 1]);
 		return newArray;
 	}
 
