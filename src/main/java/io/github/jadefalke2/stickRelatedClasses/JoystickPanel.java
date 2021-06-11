@@ -138,68 +138,10 @@ public class JoystickPanel extends JPanel {
 		joystick.addMouseMotionListener(mouseListener);
         joystick.addKeyListener(keyListener);
 
+        JPanel cartesianPanel = createSpinnerPanel("Cartesian", "x", xSpinner, "y", ySpinner);
+        JPanel polarPanel = createSpinnerPanel("Polar", "radius", radiusSpinner, "angle", angleSpinner);
 
-
-        JLabel cartesianLabel = new JLabel("Cartesian");
-        cartesianLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        JLabel polarLabel = new JLabel("Polar");
-        polarLabel.setHorizontalAlignment(SwingConstants.CENTER);
-
-        JLabel xLabel = new JLabel("x:");
-        JLabel yLabel = new JLabel("y:");
-
-        JLabel radiusLabel = new JLabel("radius:");
-        JLabel thetaLabel = new JLabel("angle:");
-
-
-        //TODO simplify these duplicate JPanels?
-        JPanel cartesianPanel = new JPanel(new GridBagLayout());
-        GridBagConstraints c = new GridBagConstraints();
-        c.fill = GridBagConstraints.BOTH;
-        c.weightx = 1;
-        c.weighty = 1;
-        c.insets = new Insets(5,3,5,3);
-
-        c.gridwidth = 2;
-        cartesianPanel.add(cartesianLabel, c);
-
-        c.gridwidth = 1;
-        c.gridy = 1;
-        cartesianPanel.add(xLabel, c);
-        c.gridx = 1;
-        cartesianPanel.add(xSpinner, c);
-
-        c.gridy = 2;
-        c.gridx = 0;
-        cartesianPanel.add(yLabel, c);
-        c.gridx = 1;
-        cartesianPanel.add(ySpinner, c);
-
-
-		JPanel polarPanel = new JPanel(new GridBagLayout());
-		c = new GridBagConstraints();
-		c.fill = GridBagConstraints.BOTH;
-		c.weightx = 1;
-		c.insets = new Insets(5,3,5,3);
-
-		c.gridwidth = 2;
-		polarPanel.add(polarLabel, c);
-
-		c.gridwidth = 1;
-		c.gridy = 1;
-		polarPanel.add(radiusLabel, c);
-		c.gridx = 1;
-		polarPanel.add(radiusSpinner, c);
-
-		c.gridy = 2;
-		c.gridx = 0;
-		polarPanel.add(thetaLabel, c);
-		c.gridx = 1;
-		polarPanel.add(angleSpinner, c);
-
-
-
-		c = new GridBagConstraints();
+		GridBagConstraints c = new GridBagConstraints();
 		c.insets = new Insets(5,3,5,3);
 		c.fill = GridBagConstraints.BOTH;
 		c.anchor = GridBagConstraints.CENTER;
@@ -237,6 +179,35 @@ public class JoystickPanel extends JPanel {
 		c.gridy = 4;
 		add(centerButton, c);
     }
+
+    private static JPanel createSpinnerPanel(String title, String name1, JSpinner spinner1, String name2, JSpinner spinner2){
+		JLabel titleLabel = new JLabel(title);
+		titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
+		JPanel panel = new JPanel(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		c.fill = GridBagConstraints.BOTH;
+		c.weightx = 1;
+		c.weighty = 1;
+		c.insets = new Insets(5,3,5,3);
+
+		c.gridwidth = 2;
+		panel.add(titleLabel, c);
+
+		c.gridwidth = 1;
+		c.gridy = 1;
+		panel.add(new JLabel(name1+":"), c);
+		c.gridx = 1;
+		panel.add(spinner1, c);
+
+		c.gridy = 2;
+		c.gridx = 0;
+		panel.add(new JLabel(name2+":"), c);
+		c.gridx = 1;
+		panel.add(spinner2, c);
+
+		return panel;
+	}
 
 
     private void applyPosition(StickPosition newPos, StickPosition oldPos){
