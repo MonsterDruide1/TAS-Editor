@@ -3,13 +3,8 @@ package io.github.jadefalke2.stickRelatedClasses;
 import io.github.jadefalke2.util.Settings;
 
 import javax.swing.*;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.WindowEvent;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 import java.util.stream.IntStream;
 
 public class SmoothTransitionDialog extends JDialog {
@@ -21,7 +16,7 @@ public class SmoothTransitionDialog extends JDialog {
 		"Angular (Counter-Clockwise)"
 	};
 
-	private int frames;
+	private final int frames;
 	private final JComboBox<String> dropdownMenu;
 	private final JoystickPanel startJoystick,  endJoystick;
 
