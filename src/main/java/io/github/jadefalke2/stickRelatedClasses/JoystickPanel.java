@@ -62,7 +62,6 @@ public class JoystickPanel extends JPanel {
 		ySpinner = new JSpinner(yModel);
 		radiusSpinner = new JSpinner(radiusModel);
 		angleSpinner = new JSpinner(angleModel);
-		angleSpinner.setEditor(new JSpinner.NumberEditor(angleSpinner, "#.#")); //one decimal digit
 
 		xSpinner.setValue(stickPosition.getX());
 		ySpinner.setValue(stickPosition.getY());
@@ -204,25 +203,19 @@ public class JoystickPanel extends JPanel {
 		c.insets = new Insets(5,3,5,3);
 		c.fill = GridBagConstraints.BOTH;
 		c.anchor = GridBagConstraints.CENTER;
-		c.gridwidth = 2;
 		c.weightx = 1;
 		add(stickTypeIndicator, c);
 
-		//TODO width is not distributed equally...
-        c.gridy = 2;
-        c.gridwidth = 1;
-        add(cartesianPanel, c);
+		JPanel coordPanel = new JPanel(new GridLayout(0,2));
+		coordPanel.add(cartesianPanel);
+		coordPanel.add(polarPanel);
 
-        c.gridx = 1;
-        add(polarPanel, c);
+		c.gridy = 1;
+		add(coordPanel, c);
 
-        c.gridwidth = 2;
         c.weighty = 1;
-        c.gridx = 0;
-        c.gridy = 4;
-
+        c.gridy = 2;
 		add(joystick, c);
-
 		c.weighty = 0;
 
 		centerButton = new JButton("center");
@@ -231,8 +224,7 @@ public class JoystickPanel extends JPanel {
 			updateStickPosition(true, stickPosition);
 		});
 
-		c.gridx = 0;
-		c.gridy = 5;
+		c.gridy = 3;
 
 		if(smoothTransitionListener != null){
 			smoothTransitionButton = new JButton("smooth transition");
@@ -242,7 +234,7 @@ public class JoystickPanel extends JPanel {
 			smoothTransitionButton = null;
 		}
 
-		c.gridy = 6;
+		c.gridy = 4;
 		add(centerButton, c);
     }
 
