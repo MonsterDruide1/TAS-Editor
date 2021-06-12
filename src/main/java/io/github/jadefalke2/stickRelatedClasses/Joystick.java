@@ -80,8 +80,7 @@ public class Joystick extends JPanel {
 
 		KeyListener keyListener = new KeyAdapter() {
 
-			boolean apply = false;
-			Point newPos = new Point(0,0);
+			StickPosition newPos = null;
 
 			//TODO repeating anonymous method @see line 48
 			private void repaintAndTriggerListeners() {
@@ -89,36 +88,31 @@ public class Joystick extends JPanel {
 				propertySupporter.firePropertyChange(null, null, 1);
 			}
 
-			private void setPoint (int x, int y) {
-				newPos.setLocation(x,y);
-				apply = true;
+			private void setPos(int angle) {
+				newPos = new StickPosition(angle,1f);
 			}
 
 			@Override
 			public void keyPressed(KeyEvent e) {
 
-				newPos = new Point(0,0);
-				apply = false;
+				newPos = null;
 
 				switch (e.getKeyCode()) {
-					// straight
-					case KeyEvent.VK_NUMPAD8 -> setPoint(0,32767);
-					case KeyEvent.VK_NUMPAD2 -> setPoint(0,-32767);
-					case KeyEvent.VK_NUMPAD4 -> setPoint(-32767,0);
-					case KeyEvent.VK_NUMPAD6 -> setPoint(32767,0);
-
-					// digonal
-					case KeyEvent.VK_NUMPAD1 -> setPoint(-23169, -23169);
-					case KeyEvent.VK_NUMPAD7 -> setPoint(-23169, 23169);
-					case KeyEvent.VK_NUMPAD9 -> setPoint(23169, 23169);
-					case KeyEvent.VK_NUMPAD3 -> setPoint(23169, -23169);
+					case KeyEvent.VK_NUMPAD6 -> setPos(0);
+					case KeyEvent.VK_NUMPAD9 -> setPos(45);
+					case KeyEvent.VK_NUMPAD8 -> setPos(90);
+					case KeyEvent.VK_NUMPAD7 -> setPos(135);
+					case KeyEvent.VK_NUMPAD4 -> setPos(180);
+					case KeyEvent.VK_NUMPAD1 -> setPos(225);
+					case KeyEvent.VK_NUMPAD2 -> setPos(270);
+					case KeyEvent.VK_NUMPAD3 -> setPos(315);
 
 					// middle
-					case KeyEvent.VK_NUMPAD5 -> setPoint(0,0);
+					case KeyEvent.VK_NUMPAD5 -> centerThumbPad();
 				}
 
-				if (apply) {
-					setThumbPos(newPos);
+				if (newPos != null) {
+					setThumbPos(newPos.getPoint());
 					repaintAndTriggerListeners();
 				}
 			}
