@@ -118,25 +118,8 @@ public class JoystickPanel extends JPanel {
 
         };
 
-		KeyListener keyListener = new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				// FIXME
-				//NOT WORKING AS OF NOW, as focus always is on one of the spinners...
-				//
-				switch (e.getKeyCode()) {
-					case KeyEvent.VK_0 -> joystick.setThumbPos(new Point(32767, 0));
-					case KeyEvent.VK_KP_LEFT -> joystick.setThumbPos(new Point(-32767, 0));
-					case KeyEvent.VK_KP_UP -> joystick.setThumbPos(new Point(0, 32767));
-					case KeyEvent.VK_KP_DOWN -> joystick.setThumbPos(new Point(0, -32767));
-				}
-				repaint();
-			}
-		};
-
 		joystick.addMouseListener(mouseListener);
 		joystick.addMouseMotionListener(mouseListener);
-        joystick.addKeyListener(keyListener);
 
         JPanel cartesianPanel = createSpinnerPanel("Cartesian", "x", xSpinner, "y", ySpinner);
         JPanel polarPanel = createSpinnerPanel("Polar", "radius", radiusSpinner, "angle", angleSpinner);

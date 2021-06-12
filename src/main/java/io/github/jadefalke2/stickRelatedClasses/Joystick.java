@@ -5,8 +5,7 @@ import io.github.jadefalke2.util.Settings;
 import javax.swing.*;
 import javax.swing.event.SwingPropertyChangeSupport;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.beans.PropertyChangeListener;
 
 public class Joystick extends JPanel {
@@ -53,6 +52,9 @@ public class Joystick extends JPanel {
 
 			@Override
 			public void mousePressed(final MouseEvent e) {
+
+				requestFocus();
+
 				if (SwingUtilities.isLeftMouseButton(e)) {
 					updateThumbPos(e.getX(), e.getY());
 					repaintAndTriggerListeners();
@@ -76,11 +78,30 @@ public class Joystick extends JPanel {
 			}
 		};
 
+		KeyListener keyListener = new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				switch (e.getKeyCode()) {
+					case KeyEvent.VK_RIGHT -> setThumbPos(new Point(32767, 0));
+					case KeyEvent.VK_LEFT  -> setThumbPos(new Point(-32767, 0));
+					case KeyEvent.VK_UP    -> setThumbPos(new Point(0, 32767));
+					case KeyEvent.VK_DOWN  -> setThumbPos(new Point(0, -32767));
+				}
+
+				repaint();
+
+				//TODO UPDATE PARENT PANEL
+			}
+		};
+
 		addMouseMotionListener(mouseAdapter);
 		addMouseListener(mouseAdapter);
+		addKeyListener(keyListener);
 
 		centerThumbPad();
 	}
+
+
 
 	public void centerThumbPad() {
 		currentPos = new Point(0, 0);
