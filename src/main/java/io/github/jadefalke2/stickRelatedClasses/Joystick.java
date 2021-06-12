@@ -54,7 +54,7 @@ public class Joystick extends JPanel {
 			public void mousePressed(final MouseEvent e) {
 
 				requestFocus();
-				
+
 				if (SwingUtilities.isLeftMouseButton(e)) {
 					updateThumbPos(e.getX(), e.getY());
 					repaintAndTriggerListeners();

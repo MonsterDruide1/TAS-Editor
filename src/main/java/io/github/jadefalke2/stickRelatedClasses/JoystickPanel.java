@@ -10,9 +10,6 @@ import java.awt.event.*;
 
 public class JoystickPanel extends JPanel {
 
-	//Labels
-	private final JLabel stickTypeIndicator;
-
 
 	//buttons
 	private final JButton centerButton;
@@ -43,6 +40,7 @@ public class JoystickPanel extends JPanel {
 	public JoystickPanel(Settings settings, String descriptor) {
 		this(settings, null, descriptor);
 	}
+
 	public JoystickPanel(Settings settings, ActionListener smoothTransitionListener, String descriptor) {
 
 		// setting global vars
@@ -50,8 +48,10 @@ public class JoystickPanel extends JPanel {
 		joystick = new Joystick(32767, settings);
 		joystick.setThumbPos(new Point(stickPosition.getX(),stickPosition.getY()));
 
-		stickTypeIndicator = new JLabel(descriptor);
+		//Labels
+		JLabel stickTypeIndicator = new JLabel(descriptor);
 		stickTypeIndicator.setHorizontalAlignment(JLabel.CENTER);
+
 		// spinners
 		SpinnerModel xModel = new SpinnerNumberModel(0, -32767, 32767, 100);
 		SpinnerModel yModel = new SpinnerNumberModel(0, -32767, 32767, 100);

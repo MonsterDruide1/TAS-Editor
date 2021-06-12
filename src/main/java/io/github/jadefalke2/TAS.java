@@ -124,7 +124,7 @@ public class TAS {
 		action.execute();
 		undoStack.push(action);
 		redoStack.clear();
-		mainEditorWindow.onUndoRedo(!undoStack.isEmpty(), !redoStack.isEmpty());
+		mainEditorWindow.onUndoRedo(!undoStack.isEmpty(), false);
 
 		Logger.log("executing action: " + action);
 	}

@@ -129,12 +129,7 @@ public class SmoothTransitionDialog extends JDialog {
 
 		if(diffTheta < 0) diffTheta += 2*Math.PI;
 
-		for(int i=0;i<frames-1;i++){
-			result[i] = new StickPosition(firstTheta+((i/((double)frames-1))*diffTheta), firstRadius+((i/((double)frames-1))*diffRadius));
-		}
-		result[frames-1] = endPos;
-
-		return result;
+		return calculatePositions(endPos, frames, result, firstTheta, firstRadius, diffTheta, diffRadius);
 	}
 
 	public static StickPosition[] transitionAngularClockwise(StickPosition firstPos, StickPosition endPos, int frames){
@@ -146,6 +141,10 @@ public class SmoothTransitionDialog extends JDialog {
 
 		if(diffTheta > 0) diffTheta -= 2*Math.PI;
 
+		return calculatePositions(endPos, frames, result, firstTheta, firstRadius, diffTheta, diffRadius);
+	}
+
+	private static StickPosition[] calculatePositions(StickPosition endPos, int frames, StickPosition[] result, double firstTheta, double firstRadius, double diffTheta, double diffRadius) {
 		for(int i=0;i<frames-1;i++){
 			result[i] = new StickPosition(firstTheta+((i/((double)frames-1))*diffTheta), firstRadius+((i/((double)frames-1))*diffRadius));
 		}
