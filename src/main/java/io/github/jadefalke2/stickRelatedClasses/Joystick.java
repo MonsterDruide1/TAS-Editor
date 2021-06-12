@@ -79,6 +79,14 @@ public class Joystick extends JPanel {
 		};
 
 		KeyListener keyListener = new KeyAdapter() {
+
+			//TODO repeating anonymous method @see line 48
+
+			private void repaintAndTriggerListeners() {
+				SwingUtilities.getRoot(Joystick.this).repaint();
+				propertySupporter.firePropertyChange(null, null, 1);
+			}
+
 			@Override
 			public void keyPressed(KeyEvent e) {
 				switch (e.getKeyCode()) {
@@ -88,9 +96,7 @@ public class Joystick extends JPanel {
 					case KeyEvent.VK_DOWN  -> setThumbPos(new Point(0, -32767));
 				}
 
-				repaint();
-
-				//TODO UPDATE PARENT PANEL
+				repaintAndTriggerListeners();
 			}
 		};
 

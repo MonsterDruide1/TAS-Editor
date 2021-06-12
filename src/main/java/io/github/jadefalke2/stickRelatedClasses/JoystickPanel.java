@@ -115,9 +115,17 @@ public class JoystickPanel extends JPanel {
                 updateStickPosition(true, oldStickPos);
                 oldStickPos = null;
             }
-
         };
 
+        KeyListener keyListener = new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				updateStickPosition(true, stickPosition);
+			}
+		};
+
+
+		joystick.addKeyListener(keyListener);
 		joystick.addMouseListener(mouseListener);
 		joystick.addMouseMotionListener(mouseListener);
 
