@@ -80,21 +80,44 @@ public class Joystick extends JPanel {
 
 		KeyListener keyListener = new KeyAdapter() {
 
-			//TODO repeating anonymous method @see line 48
+			boolean apply = false;
+			Point newPos = new Point(0,0);
 
+			//TODO repeating anonymous method @see line 48
 			private void repaintAndTriggerListeners() {
 				SwingUtilities.getRoot(Joystick.this).repaint();
 				propertySupporter.firePropertyChange(null, null, 1);
 			}
 
+			private void setPoint (int x, int y) {
+				newPos.setLocation(x,y);
+				apply = true;
+			}
+
 			@Override
 			public void keyPressed(KeyEvent e) {
+
+				newPos = new Point(0,0);
+				apply = false;
+
+
 				switch (e.getKeyCode()) {
-					case KeyEvent.VK_RIGHT -> setThumbPos(new Point(32767, 0));
-					case KeyEvent.VK_LEFT  -> setThumbPos(new Point(-32767, 0));
-					case KeyEvent.VK_UP    -> setThumbPos(new Point(0, 32767));
-					case KeyEvent.VK_DOWN  -> setThumbPos(new Point(0, -32767));
+
+					case KeyEvent.VK_NUMPAD8 -> setPoint(0,32767);
+					case KeyEvent.VK_NUMPAD2 -> setPoint(0,-32767);
+					case KeyEvent.VK_NUMPAD4 -> setPoint(-32767,0);
+					case KeyEvent.VK_NUMPAD6 -> setPoint(32767,0);
+
+					case KeyEvent.VK_NUMPAD5 -> setPoint(0,0);
+
+					case KeyEvent.VK_NUMPAD1 -> setPoint(-23169, -23169);
+					case KeyEvent.VK_NUMPAD7 -> setPoint(-23169, 23169);
+					case KeyEvent.VK_NUMPAD9 -> setPoint(23169, 23169);
+					case KeyEvent.VK_NUMPAD3 -> setPoint(23169, -23169);
 				}
+
+				if (apply)
+					setThumbPos(newPos);
 
 				repaintAndTriggerListeners();
 			}
