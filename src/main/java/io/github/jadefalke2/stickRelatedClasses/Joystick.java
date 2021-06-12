@@ -54,7 +54,7 @@ public class Joystick extends JPanel {
 			public void mousePressed(final MouseEvent e) {
 
 				requestFocus();
-
+				
 				if (SwingUtilities.isLeftMouseButton(e)) {
 					updateThumbPos(e.getX(), e.getY());
 					repaintAndTriggerListeners();
@@ -100,26 +100,27 @@ public class Joystick extends JPanel {
 				newPos = new Point(0,0);
 				apply = false;
 
-
 				switch (e.getKeyCode()) {
-
+					// straight
 					case KeyEvent.VK_NUMPAD8 -> setPoint(0,32767);
 					case KeyEvent.VK_NUMPAD2 -> setPoint(0,-32767);
 					case KeyEvent.VK_NUMPAD4 -> setPoint(-32767,0);
 					case KeyEvent.VK_NUMPAD6 -> setPoint(32767,0);
 
-					case KeyEvent.VK_NUMPAD5 -> setPoint(0,0);
-
+					// digonal
 					case KeyEvent.VK_NUMPAD1 -> setPoint(-23169, -23169);
 					case KeyEvent.VK_NUMPAD7 -> setPoint(-23169, 23169);
 					case KeyEvent.VK_NUMPAD9 -> setPoint(23169, 23169);
 					case KeyEvent.VK_NUMPAD3 -> setPoint(23169, -23169);
+
+					// middle
+					case KeyEvent.VK_NUMPAD5 -> setPoint(0,0);
 				}
 
-				if (apply)
+				if (apply) {
 					setThumbPos(newPos);
-
-				repaintAndTriggerListeners();
+					repaintAndTriggerListeners();
+				}
 			}
 		};
 
