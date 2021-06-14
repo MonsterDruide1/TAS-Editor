@@ -40,7 +40,7 @@ public class SmoothTransitionDialog extends JDialog {
 		endJoystick = new JoystickPanel(settings, "End");
 		endJoystick.setStickPosition(endPos);
 
-		CustomChangeListener joystickPanelListener = e -> {
+		CustomChangeListener<StickPosition> joystickPanelListener = e -> {
 			if(frames > 1){
 				StickPosition[] stickPositionsPreview = getSmoothTransitionData();
 				startJoystick.setStickPositions(reverse(stickPositionsPreview));

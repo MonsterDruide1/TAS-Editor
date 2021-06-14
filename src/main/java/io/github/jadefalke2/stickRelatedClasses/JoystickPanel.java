@@ -27,7 +27,7 @@ public class JoystickPanel extends JPanel {
     // Other stuff
     private StickPosition stickPosition;
 
-	private CustomChangeListener onChange = null;
+	private CustomChangeListener<StickPosition> onChange = null;
 
 	private boolean shouldTriggerUpdate = true;
 
@@ -220,7 +220,7 @@ public class JoystickPanel extends JPanel {
 		return stickPosition;
 	}
 
-	public void setOnChangeListener(CustomChangeListener onChange){
+	public void setOnChangeListener(CustomChangeListener<StickPosition> onChange){
 		this.onChange = onChange;
 	}
 
