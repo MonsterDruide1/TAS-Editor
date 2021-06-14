@@ -128,11 +128,11 @@ public class PianoRoll extends JTable {
 	}
 
 	public void deleteSelectedRows(){
-		parent.executeAction(new LineAction(this.model, script, getSelectedRows(), LineAction.Type.DELETE));
+		parent.executeAction(new LineAction(script, getSelectedRows(), LineAction.Type.DELETE));
 	}
 
 	public void replaceSelectedRows(InputLine[] rows){
-		parent.executeAction(new LineAction(model, script, getSelectedRows(), rows, LineAction.Type.REPLACE));
+		parent.executeAction(new LineAction(script, getSelectedRows(), rows, LineAction.Type.REPLACE));
 	}
 
 	public InputLine[] getSelectedInputRows(){

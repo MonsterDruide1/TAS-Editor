@@ -17,17 +17,15 @@ public class LineAction implements Action{
 	}
 
 	private final Type type;
-	private final DefaultTableModel table;
 	private final Script script;
 	private final int[] rows;
 	private final InputLine[] replacementLines;
 	private final InputLine[] previousLines;
 
-	public LineAction(DefaultTableModel table, Script script, int[] rows, Type type) {
-		this(table, script, rows, null, type);
+	public LineAction(Script script, int[] rows, Type type) {
+		this(script, rows, null, type);
 	}
-	public LineAction(DefaultTableModel table, Script script, int[] rows, InputLine[] replacementLines, Type type) {
-		this.table = table;
+	public LineAction(Script script, int[] rows, InputLine[] replacementLines, Type type) {
 		this.script = script;
 		this.rows = rows;
 		this.type = type;
@@ -85,17 +83,11 @@ public class LineAction implements Action{
 		script.replaceRow(row, replacement);
 	}
 
-	private void adjustLines(int start) {
-		for (int i = start; i < table.getRowCount(); i++){
-			table.setValueAt(i,i,0);
-		}
-	}
-
 	private void cloneRows(){
 		InputLine[] tmpLines = new InputLine[rows.length];
 
 		for (int i = 0; i < rows.length; i++){
-			tmpLines[i] = script.getLines()[rows[0] + i].clone();
+			tmpLines[i] = script.getLines()[rows[0] + i].clone(); //FIXME bug?
 		}
 
 		insertRows(tmpLines, rows[rows.length-1]+1);
@@ -105,13 +97,10 @@ public class LineAction implements Action{
 		deleteRows(rows);
 	}
 	private void deleteRows(int[] rows){
-
 		for (int i = rows.length - 1; i >= 0; i--){
-			int actualIndex = rows[0] + i;
+			int actualIndex = rows[0] + i; //FIXME bug?
 			script.removeRow(actualIndex);
 		}
-
-		adjustLines(rows[0]);
 	}
 
 	private void insertRows(){
@@ -132,8 +121,6 @@ public class LineAction implements Action{
 			int actualIndex = index + i;
 			script.insertRow(actualIndex, inputLines[i]);
 		}
-
-		adjustLines(index + inputLines.length);
 	}
 
 	@Override

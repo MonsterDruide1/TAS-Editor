@@ -7,34 +7,23 @@ import javax.swing.table.TableModel;
 
 public class CellAction implements Action {
 
-	private final TableModel table;
 	private final Script script;
 	private final int row;
-	private final int col;
-	private String colName;
+	private final Button button;
 
 	private boolean remove;
 
-	public CellAction(TableModel table, Script script, int row, int col) {
-		this.table = table;
+	public CellAction(Script script, int row, int col) {
 		this.script = script;
 		this.row = row;
-		this.col = col;
+		this.button = Button.values()[col-3]; //TODO find a better way than -3
 	}
 
 	@Override
 	public void execute() {
-		colName = table.getColumnName(col);
-		Button buttonTriggered = Button.valueOf("KEY_" + colName);
+		script.toggleButton(row, button);
 
-		script.toggleButton(row, buttonTriggered);
-
-		if (table.getValueAt(row, col).equals("")) {
-			remove = false;
-		} else if (table.getValueAt(row, col).equals(colName)) {
-			remove = true;
-		}
-
+		remove = !script.getLine(row).buttons.contains(button);
 	}
 
 	@Override
@@ -45,7 +34,7 @@ public class CellAction implements Action {
 
 	@Override
 	public String toString() {
-		return "Cell Action at frame: " + row + "; " + (remove ? "removing " : "inputing ") + colName;
+		return "Cell Action at frame: " + row + "; " + (remove ? "removing " : "inputing ") + button;
 	}
 
 }

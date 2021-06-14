@@ -1,6 +1,8 @@
 package io.github.jadefalke2;
 
 import io.github.jadefalke2.components.TxtFileChooser;
+import io.github.jadefalke2.stickRelatedClasses.JoystickPanel;
+import io.github.jadefalke2.stickRelatedClasses.StickPosition;
 import io.github.jadefalke2.util.Button;
 import io.github.jadefalke2.util.CorruptedScriptException;
 import io.github.jadefalke2.util.Logger;
@@ -125,6 +127,9 @@ public class Script {
 		}
 	}
 
+	public InputLine getLine(int row){
+		return inputLines.get(row);
+	}
 	public InputLine[] getLines(int[] rows){
 		return Arrays.stream(rows).mapToObj(inputLines::get).toArray(InputLine[]::new);
 	}
@@ -163,15 +168,23 @@ public class Script {
 	public void removeRow(int row){
 		inputLines.remove(row);
 		table.removeRow(row);
+		adjustLines(row);
 	}
 
 	public void insertRow(int row, InputLine line) {
 		inputLines.add(row, line);
 		table.insertRow(row, line.getArray(row));
+		adjustLines(row);
 	}
 
 	public void appendRow(InputLine line) {
 		insertRow(inputLines.size()-1, line);
+	}
+
+	private void adjustLines(int start) {
+		for (int i = start; i < table.getRowCount(); i++){
+			table.setValueAt(i,i,0);
+		}
 	}
 
 	public void toggleButton(int row, Button button) {
@@ -184,5 +197,10 @@ public class Script {
 			inputLines.get(row).buttons.remove(button);
 			table.setValueAt("", row, col);
 		}
+	}
+
+	public void setStickPos(int row, JoystickPanel.StickType stickType, StickPosition position) {
+		inputLines.get(row).setStickL(position);
+		table.setValueAt(position.toCartString(), row, stickType == JoystickPanel.StickType.L_STICK ? 1 : 2); //TODO find a better way to differentiate sticks?
 	}
 }
