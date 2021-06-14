@@ -73,8 +73,6 @@ public class JoystickPanel extends JPanel {
 
 		ChangeListener spinnerListener = e -> {
 			if(shouldTriggerUpdate){
-				StickPosition oldPos = stickPosition;
-
 				if(e.getSource().equals(xSpinner))
 					stickPosition = new StickPosition((int) xSpinner.getValue(), stickPosition.getY());
 				else if(e.getSource().equals(ySpinner))
@@ -86,7 +84,7 @@ public class JoystickPanel extends JPanel {
 				else
 					throw new IllegalArgumentException("Common ChangeListener called on unknown Spinner: "+e.getSource());
 
-				applyPosition(stickPosition, oldPos);
+				applyPosition(stickPosition);
 				updateAll();
 			}
 		};
@@ -97,23 +95,19 @@ public class JoystickPanel extends JPanel {
 		angleSpinner.addChangeListener(spinnerListener);
 
         MouseAdapter mouseListener = new MouseAdapter() {
-        	private StickPosition oldStickPos = null;
-
         	@Override
 			public void mousePressed(MouseEvent e){
-        		oldStickPos = stickPosition;
-				updateStickPosition(false, oldStickPos);
+				updateStickPosition(false);
 			}
 
 			@Override
 			public void mouseDragged(MouseEvent e) {
-				updateStickPosition(false, oldStickPos);
+				updateStickPosition(false);
 			}
 
             @Override
             public void mouseReleased(MouseEvent e){
-                updateStickPosition(true, oldStickPos);
-                oldStickPos = null;
+                updateStickPosition(true);
             }
         };
 
@@ -146,7 +140,7 @@ public class JoystickPanel extends JPanel {
 		centerButton = new JButton("center");
 		centerButton.addActionListener(e -> {
 			joystick.centerThumbPad();
-			updateStickPosition(true, stickPosition);
+			updateStickPosition(true);
 		});
 
 		c.gridy = 3;
@@ -193,16 +187,16 @@ public class JoystickPanel extends JPanel {
 	}
 
 
-    private void applyPosition(StickPosition newPos, StickPosition oldPos){
+    private void applyPosition(StickPosition newPos){
 		if(onChange == null) return;
 
-		onChange.stateChanged(new ChangeObject<>(oldPos, newPos, this));
+		onChange.stateChanged(new ChangeObject<>(newPos, this));
 	}
 
 	/**
 	 * Updates the stick position based on the sliders
 	 */
-	private void updateStickPosition(boolean executeAction, StickPosition oldStickPosition) {
+	private void updateStickPosition(boolean executeAction) {
 		StickPosition unCropped = joystick.getStickPosition();
 		double radius = Math.min(unCropped.getRadius(), 1);
 		stickPosition = new StickPosition(unCropped.getTheta(), radius);
@@ -210,7 +204,7 @@ public class JoystickPanel extends JPanel {
         updateAll();
 
         if(executeAction)
-        	applyPosition(stickPosition, oldStickPosition);
+        	applyPosition(stickPosition);
 	}
 
 	public void setStickPosition(StickPosition stickPosition){

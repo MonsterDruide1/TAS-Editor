@@ -4,19 +4,15 @@ import javax.swing.event.ChangeEvent;
 
 public class ChangeObject<E> extends ChangeEvent {
 
-	private final E oldValue, newValue;
+	private final E value;
 
-	public ChangeObject(E oldValue, E newValue, Object source){
+	public ChangeObject(E value, Object source){
 		super(source);
-		this.oldValue = oldValue;
-		this.newValue = newValue;
+		this.value = value;
 	}
 
-	public E getOldValue(){
-		return oldValue;
-	}
-	public E getNewValue(){
-		return newValue;
+	public E getValue(){
+		return value;
 	}
 
 }

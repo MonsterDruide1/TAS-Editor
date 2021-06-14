@@ -57,8 +57,7 @@ public class SideJoystickPanel extends JPanel {
 			pianoRoll.replaceSelectedRows(replacementLines);
 		};
 
-		//TODO remove customChangeListener and replace it with a normal ChangeListener, as oldPos is not required anymore
-		CustomChangeListener joystickPanelListener = e -> parent.executeAction(new StickAction(script, pianoRoll.getSelectedRows(), getStickType(e.getSource()), e.getNewValue()));
+		CustomChangeListener joystickPanelListener = e -> parent.executeAction(new StickAction(script, pianoRoll.getSelectedRows(), getStickType(e.getSource()), e.getValue()));
 
 		lstickPanel = new JoystickPanel(parent.getPreferences(), smoothTransitionListenerL, "Left-stick");
 		rstickPanel = new JoystickPanel(parent.getPreferences(), smoothTransitionListenerR, "Right-Stick");
