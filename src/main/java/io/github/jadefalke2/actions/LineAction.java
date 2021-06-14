@@ -87,7 +87,7 @@ public class LineAction implements Action{
 		InputLine[] tmpLines = new InputLine[rows.length];
 
 		for (int i = 0; i < rows.length; i++){
-			tmpLines[i] = script.getLines()[rows[0] + i].clone(); //FIXME bug?
+			tmpLines[i] = script.getLines()[rows[i]].clone();
 		}
 
 		insertRows(tmpLines, rows[rows.length-1]+1);
@@ -98,8 +98,7 @@ public class LineAction implements Action{
 	}
 	private void deleteRows(int[] rows){
 		for (int i = rows.length - 1; i >= 0; i--){
-			int actualIndex = rows[0] + i; //FIXME bug?
-			script.removeRow(actualIndex);
+			script.removeRow(rows[i]);
 		}
 	}
 
