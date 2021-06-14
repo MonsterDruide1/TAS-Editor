@@ -10,7 +10,7 @@ public class Function extends Script{
 		super(script);
 	}
 
-	public void callFunction (DefaultTableModel table, Script mainScript, int row){
+	/*public void callFunction (DefaultTableModel table, Script mainScript, int row){
 		for (int i = row; i < row + getInputLines().size(); i++){
 			InputLine currentLineToInsert = getInputLines().get(i - row);
 
@@ -35,6 +35,6 @@ public class Function extends Script{
 				}
 			}
 		}
-	}
+	}*/
 
 }

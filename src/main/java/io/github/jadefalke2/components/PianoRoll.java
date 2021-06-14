@@ -124,8 +124,7 @@ public class PianoRoll extends JTable {
 	 */
 	public void addEmptyRow() {
 		InputLine newEmpty = InputLine.getEmpty();
-		script.getInputLines().add(newEmpty);
-		model.addRow(newEmpty.getArray(script.getInputLines().size()-1)); //TODO doesn't make sense on a script with missing frames
+		script.appendRow(newEmpty);
 	}
 
 	public void deleteSelectedRows(){
@@ -162,12 +161,7 @@ public class PianoRoll extends JTable {
 	 */
 	public void setScript (Script script){
 		this.script = script;
-
-		model.setRowCount(0);
-
-		for (int i = 0; i < script.getInputLines().size(); i++){
-			model.addRow(script.getInputLines().get(i).getArray(i));
-		}
+		script.setTable(model);
 	}
 
 	/**

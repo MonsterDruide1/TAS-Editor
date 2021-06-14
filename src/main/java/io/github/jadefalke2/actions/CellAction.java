@@ -27,17 +27,12 @@ public class CellAction implements Action {
 		colName = table.getColumnName(col);
 		Button buttonTriggered = Button.valueOf("KEY_" + colName);
 
+		script.toggleButton(row, buttonTriggered);
+
 		if (table.getValueAt(row, col).equals("")) {
 			remove = false;
-			table.setValueAt(table.getColumnName(col), row, col);
-			script.getInputLines().get(row).buttons.add(buttonTriggered);
-
 		} else if (table.getValueAt(row, col).equals(colName)) {
-
 			remove = true;
-			table.setValueAt("", row, col);
-			script.getInputLines().get(row).buttons.remove(buttonTriggered);
-
 		}
 
 	}
