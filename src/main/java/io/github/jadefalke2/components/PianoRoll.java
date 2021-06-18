@@ -54,6 +54,8 @@ public class PianoRoll extends JTable {
 			model.addColumn(button.toString());
 		}
 
+		model.addColumn("Comment");
+
 		//Center all columns
 		for (int i = 0; i < getColumnCount(); i++){
 			getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
@@ -63,7 +65,7 @@ public class PianoRoll extends JTable {
 		InputDrawMouseListener mouseListener = new InputDrawMouseListener(this, parent);
 		addMouseListener(mouseListener);
 		addMouseMotionListener(mouseListener);
-
+		
 		setScript(script);
 
 		getInputMap().put(KeyStroke.getKeyStroke("ctrl c"), "copy");
@@ -110,7 +112,8 @@ public class PianoRoll extends JTable {
 		int[] columnsWidth = {
 			45,											   		                // frame number
 			85, 85,										  	                	// sticks
-			18, 18, 18, 18, 25, 25, 25, 25, 40, 40, 35, 35, 35, 35, 45, 45	    // buttons
+			18, 18, 18, 18, 25, 25, 25, 25, 40, 40, 35, 35, 35, 35, 45, 45,     // buttons
+			50
 		};
 
 		for (int i = 0; i < columnsWidth.length && i < getColumnCount(); i++) {
@@ -178,7 +181,7 @@ public class PianoRoll extends JTable {
 	 */
 	@Override
 	public boolean isCellEditable(int row, int column) {
-		return false;
+		return column == 19;
 	}
 
 }

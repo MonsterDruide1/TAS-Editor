@@ -9,13 +9,13 @@ import javax.swing.filechooser.FileSystemView;
 import java.io.File;
 import java.io.IOException;
 
-public class TxtFileChooser extends JFileChooser {
+public class CustomFileChooser extends JFileChooser {
 
 	private final File defaultDir;
 	/**
 	 * Constructor
 	 */
-	public TxtFileChooser (File defaultDir){
+	public CustomFileChooser(File defaultDir){
 		super(FileSystemView.getFileSystemView());
 		this.defaultDir = defaultDir;
 	}

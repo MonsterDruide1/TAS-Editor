@@ -50,7 +50,7 @@ public class InputDrawMouseListener extends MouseAdapter {
 		int col = table.columnAtPoint(e.getPoint());
 
 		//TODO maybe find a cleaner/better way to do this?
-		if(row == -1 || col == -1) { //clicked out of bounds -> deselect all
+		if (row == -1 || col == -1 || col == 19) { //clicked out of bounds or comment -> deselect all
 			table.clearSelection();
 			//set it to the last one so if you start dragging from below, it will start selecting
 			table.getSelectionModel().setAnchorSelectionIndex(table.getRowCount()-1);
@@ -59,18 +59,13 @@ public class InputDrawMouseListener extends MouseAdapter {
 
 		rows.add(getCell(e)[0]);
 
-		switch (col){
-			case 0:
-			case 1:
-			case 2:
-				if (e.getButton() == MouseEvent.BUTTON3 && table.isRowSelected(row)) {
-					table.openPopUpMenu(table.getSelectedRows(),e.getPoint());
-				}
-				break;
-
-			default:
-				mode = table.getValueAt(row, col) != "" ? Mode.REMOVING : Mode.ADDING;
-				setCell(row,col);
+		if (col == 0 || col == 1 || col == 2) {
+			if (e.getButton() == MouseEvent.BUTTON3 && table.isRowSelected(row)) {
+				table.openPopUpMenu(table.getSelectedRows(), e.getPoint());
+			}
+		} else {
+			mode = table.getValueAt(row, col) != "" ? Mode.REMOVING : Mode.ADDING;
+			setCell(row, col);
 		}
 	}
 
@@ -93,7 +88,7 @@ public class InputDrawMouseListener extends MouseAdapter {
 	 */
 	private void setCell (int row, int col){
 
-		if (row == -1 || col == -1) return;
+		if (row == -1 || col == -1 || col == 19) return;
 
 		if ((table.getValueAt(row, col).equals("") && (mode == Mode.ADDING)) || (!table.getValueAt(row, col).equals("") && (mode == Mode.REMOVING))){
 			parent.executeAction(new CellAction(table.getModel(), table.getScript(),row,col));

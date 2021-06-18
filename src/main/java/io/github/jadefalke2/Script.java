@@ -1,6 +1,6 @@
 package io.github.jadefalke2;
 
-import io.github.jadefalke2.components.TxtFileChooser;
+import io.github.jadefalke2.components.CustomFileChooser;
 import io.github.jadefalke2.util.CorruptedScriptException;
 import io.github.jadefalke2.util.Logger;
 import io.github.jadefalke2.util.Util;
@@ -84,7 +84,27 @@ public class Script {
 	 * @return the script as a string
 	 */
 	public String getFull (){
-		return IntStream.range(0, inputLines.size()).mapToObj(i -> inputLines.get(i).getFull(i)+"\n").collect(Collectors.joining());
+		StringBuilder fileString = new StringBuilder();
+		fileString.append(IntStream.range(0, inputLines.size()).mapToObj(i -> inputLines.get(i).getFull(i)+"\n").collect(Collectors.joining()));
+
+		fileString.append("FUNC: \n");
+
+		for (InputLine i: inputLines) {
+			if (i.getFunction() != null) {
+				// TODO function to string -> filepath
+				fileString.append(i.getFunction()).append("\n");
+			}
+		}
+
+		fileString.append("COM: \n");
+
+		for (InputLine i: inputLines) {
+			if (!i.getComment().equals("")) {
+				fileString.append(i.getComment()).append("\n");
+			}
+		}
+
+		return fileString.toString();
 	}
 
 	/**
@@ -112,7 +132,7 @@ public class Script {
 	 */
 	public void saveFileAs(File defaultDir){
 		try {
-			File savedFile = new TxtFileChooser(defaultDir).saveFileAs(this);
+			File savedFile = new CustomFileChooser(defaultDir).saveFileAs(this);
 			if(savedFile != null){
 				Logger.log("saved file as " + savedFile.getAbsolutePath());
 				file = savedFile;
