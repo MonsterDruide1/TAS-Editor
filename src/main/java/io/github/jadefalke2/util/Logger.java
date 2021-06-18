@@ -7,11 +7,12 @@ public class Logger {
 
 	public static void log (String s) {
 		// using this to make it easier to later change this behaviour
+		System.out.println(getTimeString() + s);
+	}
 
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+	private static String getTimeString () {
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss.ms");
 		LocalDateTime now = LocalDateTime.now();
-		String fullDateFormatted = "[" + dtf.format(now) + "]: ";
-
-		System.out.println(fullDateFormatted + s);
+		return "[" + dtf.format(now) + "]: ";
 	}
 }
