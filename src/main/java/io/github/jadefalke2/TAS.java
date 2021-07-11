@@ -123,7 +123,7 @@ public class TAS {
 
 
 	public void executeAction(Action action) {
-		//adds a mew action to the stack to make it possible to undo
+		//adds a new action to the stack to make it possible to undo
 		action.execute();
 		undoStack.push(action);
 		redoStack.clear();
@@ -203,26 +203,14 @@ public class TAS {
 		script.saveFileAs(preferences.getDirectory());
 	}
 
-	public void openSettings(){
-		Logger.log("opening settings");
-		new SettingsDialog(mainEditorWindow, preferences).setVisible(true);
-	}
-
 	public void newFile(){
 		Logger.log("opening a new, empty script");
-		openScript(Script.getEmptyScript(10));
+		setScript(Script.getEmptyScript(10));
 	}
 
 	public void openScript(File file) throws IOException {
 		Logger.log("loading script from " + file.getAbsolutePath());
 		setScript(file);
-		undoStack.clear();
-		redoStack.clear();
-	}
-	public void openScript(Script script) {
-		setScript(script);
-		undoStack.clear();
-		redoStack.clear();
 	}
 
 	/**
@@ -243,11 +231,19 @@ public class TAS {
 				return; //did not save properly or was canceled -> don't continue opening the new script
 		this.script = script;
 		mainEditorWindow.setScript(script);
+		undoStack.clear();
+		redoStack.clear();
 	}
 
 	public boolean closeScript(){
 		return script.closeScript(this);
 	}
+
+	public void openSettings(){
+		Logger.log("opening settings");
+		new SettingsDialog(mainEditorWindow, preferences).setVisible(true);
+	}
+
 
 	// getter
 
@@ -256,8 +252,8 @@ public class TAS {
 	}
 
 	public void recreateMainPanelWindowLayout() {
-		if(mainEditorWindow == null) return; //just skip it if the mainEditorWindow has not been created yet, as the setting will be applied on creation as well
-		mainEditorWindow.recreateLayoutPanel();
+		if(mainEditorWindow != null) //just skip it if the mainEditorWindow has not been created yet, as the setting will be applied on creation as well
+			mainEditorWindow.recreateLayoutPanel();
 	}
 
 	public Script getScript(){
