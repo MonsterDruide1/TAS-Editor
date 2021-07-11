@@ -106,20 +106,7 @@ public class Joystick extends JPanel {
 
 				newPos = null;
 
-				setPos(switch (e.getKeyCode()) {
-					case KeyEvent.VK_NUMPAD6 -> 0;
-					case KeyEvent.VK_NUMPAD9 -> 45;
-					case KeyEvent.VK_NUMPAD8 -> 90;
-					case KeyEvent.VK_NUMPAD7 -> 135;
-					case KeyEvent.VK_NUMPAD4 -> 180;
-					case KeyEvent.VK_NUMPAD1 -> 225;
-					case KeyEvent.VK_NUMPAD2 -> 270;
-					case KeyEvent.VK_NUMPAD3 -> 315;
-
-					// middle
-					case KeyEvent.VK_NUMPAD5 -> -2;
-					default -> -1;
-				});
+				setPos(numPadToAngle(e.getKeyCode()));
 
 				if (newPos != null) {
 					setThumbPos(newPos.getPoint());
@@ -135,6 +122,20 @@ public class Joystick extends JPanel {
 		centerThumbPad();
 	}
 
+	private static int numPadToAngle(int keyCode){
+		if(keyCode == KeyEvent.VK_NUMPAD6) return 0;
+		if(keyCode == KeyEvent.VK_NUMPAD9) return 45;
+		if(keyCode == KeyEvent.VK_NUMPAD8) return 90;
+		if(keyCode == KeyEvent.VK_NUMPAD7) return 135;
+		if(keyCode == KeyEvent.VK_NUMPAD4) return 180;
+		if(keyCode == KeyEvent.VK_NUMPAD1) return 225;
+		if(keyCode == KeyEvent.VK_NUMPAD2) return 270;
+		if(keyCode == KeyEvent.VK_NUMPAD3) return 315;
+		//special codes
+		if(keyCode == KeyEvent.VK_NUMPAD5) return -2; //middle
+		//if nothing matched so far -> default
+		return -1;
+	}
 
 
 	public void centerThumbPad() {

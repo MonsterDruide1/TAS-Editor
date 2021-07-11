@@ -99,13 +99,17 @@ public class SmoothTransitionDialog extends JDialog {
 		StickPosition firstPos = startJoystick.getStickPosition();
 		StickPosition endPos = endJoystick.getStickPosition();
 
-		return switch(dropdownMenu.getSelectedIndex()){
-			case 0 -> transitionAngularClosest(firstPos, endPos, frames);
-			case 1 -> transitionLinearClosest(firstPos, endPos, frames);
-			case 2 -> transitionAngularClockwise(firstPos, endPos, frames);
-			case 3 -> transitionAngularCounterClockwise(firstPos, endPos, frames);
-			default -> throw new UnsupportedOperationException("Selected unknown item in interpolation type dropdown: "+dropdownMenu.getSelectedItem()+" ("+dropdownMenu.getSelectedIndex()+")");
-		};
+		int index = dropdownMenu.getSelectedIndex();
+		if(index == 0)
+			return transitionAngularClosest(firstPos, endPos, frames);
+		else if(index == 1)
+			return transitionLinearClosest(firstPos, endPos, frames);
+		else if(index == 2)
+			return transitionAngularClockwise(firstPos, endPos, frames);
+		else if(index == 3)
+			return transitionAngularCounterClockwise(firstPos, endPos, frames);
+		else
+			throw new UnsupportedOperationException("Selected unknown item in interpolation type dropdown: "+dropdownMenu.getSelectedItem()+" ("+dropdownMenu.getSelectedIndex()+")");
 	}
 
 	public static StickPosition[] transitionAngularClosest(StickPosition firstPos, StickPosition endPos, int frames){

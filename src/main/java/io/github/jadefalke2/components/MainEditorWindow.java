@@ -4,6 +4,7 @@ import io.github.jadefalke2.Script;
 import io.github.jadefalke2.TAS;
 import io.github.jadefalke2.util.Logger;
 import io.github.jadefalke2.util.CorruptedScriptException;
+import io.github.jadefalke2.util.Settings;
 
 import javax.swing.*;
 import java.awt.*;
@@ -115,10 +116,11 @@ public class MainEditorWindow extends JFrame {
 		c.weightx = 1;
 		combiningPanel.add(editor, c);
 
-		c.gridx = switch(parent.getPreferences().getJoystickPanelPosition()){
-			case LEFT -> 0;
-			case RIGHT -> 2;
-		};
+		if(parent.getPreferences().getJoystickPanelPosition() == Settings.JoystickPanelPosition.LEFT)
+			c.gridx = 0;
+		else //RIGHT
+			c.gridx = 2;
+
 		c.weightx = 0;
 		combiningPanel.add(sideJoystickPanel, c);
 
