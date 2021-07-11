@@ -134,7 +134,7 @@ public class Script {
 		return Arrays.stream(rows).mapToObj(inputLines::get).toArray(InputLine[]::new);
 	}
 	public InputLine[] getLines(){
-		return inputLines.toArray(InputLine[]::new);
+		return inputLines.toArray(new InputLine[0]);
 	}
 
 	/**
