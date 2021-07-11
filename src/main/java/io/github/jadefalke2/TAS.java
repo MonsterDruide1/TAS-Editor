@@ -239,10 +239,14 @@ public class TAS {
 	}
 	public void setScript(Script script){
 		if(this.script != null)
-			if(!this.script.closeScript(this))
+			if(!closeScript())
 				return; //did not save properly or was canceled -> don't continue opening the new script
 		this.script = script;
 		mainEditorWindow.setScript(script);
+	}
+
+	public boolean closeScript(){
+		return script.closeScript(this);
 	}
 
 	// getter

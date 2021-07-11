@@ -39,28 +39,12 @@ public class MainEditorWindow extends JFrame {
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE); //let the WindowListener handle everything
 
 		addWindowListener(new WindowAdapter() {
-
 			@Override
 			public void windowClosing(WindowEvent e) {
-				//TODO ONLY IF IN EDITOR + CHANGES DONE
-				if(askForFileSave()) {
+				if(parent.closeScript()) {
 					Logger.log("exiting program");
 					dispose();
 				}
-			}
-
-			/**
-			 * Ask and save the file before exiting the program
-			 * @return whether it should actually close
-			 */
-			//TODO move somewhere else
-			private boolean askForFileSave() {
-				int result = JOptionPane.showConfirmDialog(MainEditorWindow.this, "Save Project changes?", "Save before exiting", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-				if (result == 0){
-					//opens a new dialog that asks about saving, then exit
-					parent.saveFile();
-				}
-				return result != JOptionPane.CANCEL_OPTION && result != JOptionPane.CLOSED_OPTION; //cancel option and dispose option
 			}
 		});
 
