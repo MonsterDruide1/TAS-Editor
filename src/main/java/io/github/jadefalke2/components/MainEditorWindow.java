@@ -23,9 +23,6 @@ public class MainEditorWindow extends JFrame {
 	private final PianoRoll pianoRoll;
 	private final SideJoystickPanel sideJoystickPanel;
 
-	//script
-	private Script script;
-
 	//layout
 	private final JPanel editor;
 	private JPanel combiningPanel;
@@ -41,7 +38,6 @@ public class MainEditorWindow extends JFrame {
 
 		this.parent = parent;
 		this.functionEditorWindow = functionEditorWindow;
-		this.script = script;
 		setResizable(true);
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE); //let the WindowListener handle everything
 
@@ -60,11 +56,12 @@ public class MainEditorWindow extends JFrame {
 			 * Ask and save the file before exiting the program
 			 * @return whether it should actually close
 			 */
+			//TODO move somewhere else
 			private boolean askForFileSave() {
 				int result = JOptionPane.showConfirmDialog(MainEditorWindow.this, "Save Project changes?", "Save before exiting", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 				if (result == 0){
 					//opens a new dialog that asks about saving, then exit
-					saveFile();
+					parent.saveFile();
 				}
 				return result != JOptionPane.CANCEL_OPTION && result != JOptionPane.CLOSED_OPTION; //cancel option and dispose option
 			}
@@ -129,38 +126,10 @@ public class MainEditorWindow extends JFrame {
 		revalidate(); //force layout update
 	}
 
-	/**
-	 * Returns the string that is being read from the given file.
-	 * @param file the file to open
-	 */
-	public void setScript(File file) throws IOException {
-
-		// sets the current script file to be the one that the method is called with
-
-		try {
-			setScript(new Script(file));
-		} catch (CorruptedScriptException e) {
-			e.printStackTrace();
-		}
-	}
-
 	public void setScript(Script script){
-		this.script = script;
 		pianoRoll.setScript(script);
 		sideJoystickPanel.setScript(script);
 	}
-
-	/**
-	 * writes the current script into the current file
-	 */
-	public void saveFile() {
-		script.saveFile(parent.getPreferences().getDirectory());
-	}
-
-	public void saveFileAs() {
-		script.saveFileAs(parent.getPreferences().getDirectory());
-	}
-
 
 	// getter
 
@@ -170,7 +139,7 @@ public class MainEditorWindow extends JFrame {
 
 	public void onUndoRedo(boolean enableUndo, boolean enableRedo) {
 		if (!(pianoRoll.getSelectedRows().length == 0))
-			sideJoystickPanel.setEditingRows(pianoRoll.getSelectedRows(), script.getLines());
+			sideJoystickPanel.setEditingRows(pianoRoll.getSelectedRows(), parent.getScript().getLines());
 		mainJMenuBar.updateUndoMenu(enableUndo, enableRedo);
 	}
 }

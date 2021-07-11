@@ -56,11 +56,11 @@ public class MainJMenuBar extends JMenuBar {
 
 		JMenuItem saveJMenuItem = fileJMenu.add("Save");
 		saveJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
-		saveJMenuItem.addActionListener(e -> mainEditorWindow.saveFile());
+		saveJMenuItem.addActionListener(e -> parent.saveFile());
 
 		JMenuItem saveAsJMenuItem = fileJMenu.add("Save As...");
 		saveAsJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
-		saveAsJMenuItem.addActionListener(e -> mainEditorWindow.saveFileAs());
+		saveAsJMenuItem.addActionListener(e -> parent.saveFileAs());
 
 		fileJMenu.addSeparator();
 

@@ -31,6 +31,8 @@ public class TAS {
 	private Stack<Action> undoStack;
 	private Stack<Action> redoStack;
 
+	private Script script;
+
 	public static void main(String[] args) {
 		INITIAL_MAIN_TAS_FOR_DEBUGGING = new TAS();
 	}
@@ -189,6 +191,17 @@ public class TAS {
 		mainEditorWindow.getPianoRoll().replaceSelectedRows(rows);
 	}
 
+	/**
+	 * writes the current script into the current file
+	 */
+	public void saveFile() {
+		script.saveFile(preferences.getDirectory());
+	}
+
+	public void saveFileAs() {
+		script.saveFileAs(preferences.getDirectory());
+	}
+
 	public void openSettings(){
 		Logger.log("opening settings");
 		new SettingsDialog(mainEditorWindow, preferences).setVisible(true);
@@ -202,16 +215,33 @@ public class TAS {
 	public void openScript(File file) throws IOException {
 		Logger.log("loading script from " + file.getAbsolutePath());
 		//TODO ask for closing current project?
-		mainEditorWindow.setScript(file); //do it like this to set the currentScriptFile of MainEditorWindow
+		setScript(file);
 		//TODO move this here, as well as all important file operations
 		undoStack.clear();
 		redoStack.clear();
 	}
 	public void openScript(Script script) {
 		//TODO ask for closing current project?
-		mainEditorWindow.setScript(script);
+		setScript(script);
 		undoStack.clear();
 		redoStack.clear();
+	}
+
+	/**
+	 * Returns the string that is being read from the given file.
+	 * @param file the file to open
+	 */
+	public void setScript(File file) throws IOException {
+		// sets the current script file to be the one that the method is called with
+		try {
+			setScript(new Script(file));
+		} catch (CorruptedScriptException e) {
+			e.printStackTrace();
+		}
+	}
+	public void setScript(Script script){
+		this.script = script;
+		mainEditorWindow.setScript(script); //do it like this to set the currentScriptFile of MainEditorWindow
 	}
 
 	// getter
@@ -223,5 +253,9 @@ public class TAS {
 	public void recreateMainPanelWindowLayout() {
 		if(mainEditorWindow == null) return; //just skip it if the mainEditorWindow has not been created yet, as the setting will be applied on creation as well
 		mainEditorWindow.recreateLayoutPanel();
+	}
+
+	public Script getScript(){
+		return script;
 	}
 }
