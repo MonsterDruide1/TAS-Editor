@@ -70,30 +70,26 @@ public class SideJoystickPanel extends JPanel {
 		pianoRoll.getSelectionModel().addListSelectionListener(e -> {
 			int[] selectedRows = pianoRoll.getSelectedRows();
 
-			switch (selectedRows.length) {
-				case 0 -> {
-					//no frames selected
-					frameAmountLabel.setText("Currently no frames are being edited");
-					lstickPanel.setAllEnabled(false);
-					rstickPanel.setAllEnabled(false);
+			if(selectedRows.length == 0) {
+				//no frames selected
+				frameAmountLabel.setText("Currently no frames are being edited");
+				lstickPanel.setAllEnabled(false);
+				rstickPanel.setAllEnabled(false);
+			} else if(selectedRows.length == 1){
+				//one frame is selected
+				frameAmountLabel.setText("Currently editing frame " + selectedRows[0]);
+				setEditingRows(selectedRows, script.getLines());
+			} else {
+				//more than 1 frame is selected
+				String text = "Currently editing frames ";
+				if((selectedRows.length-1) == (selectedRows[selectedRows.length-1]-selectedRows[0])){
+					text += selectedRows[0] + " - " + selectedRows[selectedRows.length - 1];
+				} else {
+					text += Arrays.toString(selectedRows).substring(1); //add all rows to it, but skipping [
+					text = text.substring(0, text.length()-1); //removing ] from it
 				}
-				case 1 -> {
-					//one frame is selected
-					frameAmountLabel.setText("Currently editing frame " + selectedRows[0]);
-					setEditingRows(selectedRows, script.getLines());
-				}
-				default -> {
-					//more than 1 frame is selected
-					String text = "Currently editing frames ";
-					if((selectedRows.length-1) == (selectedRows[selectedRows.length-1]-selectedRows[0])){
-						text += selectedRows[0] + " - " + selectedRows[selectedRows.length - 1];
-					} else {
-						text += Arrays.toString(selectedRows).substring(1); //add all rows to it, but skipping [
-						text = text.substring(0, text.length()-1); //removing ] from it
-					}
-					frameAmountLabel.setText(text);
-					setEditingRows(selectedRows, script.getLines());
-				}
+				frameAmountLabel.setText(text);
+				setEditingRows(selectedRows, script.getLines());
 			}
 		});
 

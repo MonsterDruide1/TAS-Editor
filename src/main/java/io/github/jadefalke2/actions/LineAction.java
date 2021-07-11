@@ -37,10 +37,10 @@ public class LineAction implements Action{
 	@Override
 	public void execute() {
 		switch (type) {
-			case CLONE -> cloneRows();
-			case DELETE -> deleteRows();
-			case INSERT -> insertRows();
-			case REPLACE -> replaceRows();
+			case CLONE: cloneRows(); break;
+			case DELETE: deleteRows(); break;
+			case INSERT: insertRows(); break;
+			case REPLACE: replaceRows(); break;
 		}
 
 	}
@@ -48,9 +48,10 @@ public class LineAction implements Action{
 	@Override
 	public void revert() {
 		switch (type){
-			case CLONE, INSERT -> deleteRows();
-			case DELETE -> insertRows(previousLines, rows[0]);
-			case REPLACE -> revertReplaceRows();
+			case CLONE:                       //fallthrough to INSERT
+			case INSERT: deleteRows(); break;
+			case DELETE: insertRows(previousLines, rows[0]); break;
+			case REPLACE: revertReplaceRows(); break;
 		}
 	}
 
