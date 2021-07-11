@@ -13,7 +13,7 @@ public class FunctionEditorWindow extends JFrame {
 
 	public FunctionEditorWindow (TAS parent){
 		mainPanel = new JPanel(new GridBagLayout());
-		pianoRoll = new PianoRoll(Script.getEmptyScript(5), parent);
+		pianoRoll = new PianoRoll(parent);
 	}
 
 	public void startUp (){

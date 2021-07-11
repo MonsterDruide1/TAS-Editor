@@ -17,7 +17,6 @@ public class MainEditorWindow extends JFrame {
 
 	private final TAS parent;
 	// frame that can be opened from this one
-	private final FunctionEditorWindow functionEditorWindow;
 	private final MainJMenuBar mainJMenuBar;
 
 	private final PianoRoll pianoRoll;
@@ -30,14 +29,12 @@ public class MainEditorWindow extends JFrame {
 
 	/**
 	 * Constructor
-	 * @param functionEditorWindow the function editor window that can be opened from within this window
 	 */
-	public MainEditorWindow (FunctionEditorWindow functionEditorWindow, Script script, TAS parent){
+	public MainEditorWindow (TAS parent){
 
 		Logger.log("Initialising window");
 
 		this.parent = parent;
-		this.functionEditorWindow = functionEditorWindow;
 		setResizable(true);
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE); //let the WindowListener handle everything
 
@@ -70,8 +67,8 @@ public class MainEditorWindow extends JFrame {
 		mainJMenuBar = new MainJMenuBar(this, parent);
 		setJMenuBar(mainJMenuBar);
 
-		pianoRoll = new PianoRoll(script, parent);
-		sideJoystickPanel = new SideJoystickPanel(parent, pianoRoll, script);
+		pianoRoll = new PianoRoll(parent);
+		sideJoystickPanel = new SideJoystickPanel(parent, pianoRoll);
 
 		editor = new JPanel(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
@@ -84,17 +81,7 @@ public class MainEditorWindow extends JFrame {
 		c.weighty = 1;
 		c.weightx = 1;
 		editor.add(scrollPane, c);
-
-		JButton functionEditorButton = new JButton("Function editor");
-		functionEditorButton.addActionListener(e -> functionEditorWindow.startUp());
-
-		c.gridy = 1;
-		c.weighty = 0;
-		// editor.add(functionEditorButton, c);
-
-
-
-
+;
 		recreateLayoutPanel();
 
 		pack(); //TODO is still too small, the joystick is too little to use

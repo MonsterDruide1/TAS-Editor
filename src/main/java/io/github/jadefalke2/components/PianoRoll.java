@@ -25,10 +25,10 @@ public class PianoRoll extends JTable {
 	private final TAS parent;
 
 
-	public PianoRoll (Script script, TAS parent){
+	public PianoRoll (TAS parent){
 
-		this.script = script;
 		this.parent = parent;
+		this.script = parent.getScript();
 
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment( SwingConstants.CENTER );
@@ -137,14 +137,6 @@ public class PianoRoll extends JTable {
 
 	public InputLine[] getSelectedInputRows(){
 		return script.getLines(getSelectedRows());
-	}
-
-	/**
-	 * returns the current script
-	 * @return current script
-	 */
-	public Script getScript (){
-		return script;
 	}
 
 	/**

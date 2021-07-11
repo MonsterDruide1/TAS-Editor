@@ -1,5 +1,6 @@
 package io.github.jadefalke2;
 
+import io.github.jadefalke2.components.MainEditorWindow;
 import io.github.jadefalke2.components.TxtFileChooser;
 import io.github.jadefalke2.stickRelatedClasses.JoystickPanel;
 import io.github.jadefalke2.stickRelatedClasses.StickPosition;
@@ -8,6 +9,7 @@ import io.github.jadefalke2.util.CorruptedScriptException;
 import io.github.jadefalke2.util.Logger;
 import io.github.jadefalke2.util.Util;
 
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.io.*;
 import java.util.ArrayList;
@@ -28,6 +30,7 @@ public class Script {
 		for (int i = 0; i < amount; i++){
 			tmp.insertLine(i,InputLine.getEmpty());
 		}
+		tmp.dirty = false;
 
 		return tmp;
 	}
@@ -36,10 +39,12 @@ public class Script {
 	private File file;
 	private DefaultTableModel table;
 	private final ArrayList<InputLine> inputLines;
+	private boolean dirty;
 
 	public Script() {
 		inputLines = new ArrayList<>();
 		file = null;
+		dirty = false;
 	}
 	public Script(String script) throws CorruptedScriptException {
 		this();
@@ -48,10 +53,6 @@ public class Script {
 	public Script (File file) throws CorruptedScriptException, IOException {
 		this(Util.fileToString(file));
 		this.file = file;
-	}
-
-	public void insertLine(int row, InputLine inputLine){
-		inputLines.add(row,inputLine);
 	}
 
 	/**
@@ -84,6 +85,20 @@ public class Script {
 		}
 	}
 
+	public boolean closeScript(TAS parent){
+		if(!dirty){
+			return true; //just close without issue if no changes happened
+		}
+
+		int result = JOptionPane.showConfirmDialog(null, "Save Project changes?", "Save before closing", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+		if (result == JOptionPane.YES_OPTION){
+			//opens a new dialog that asks about saving, then close
+			parent.saveFile();
+			return dirty;
+		}
+		return result == JOptionPane.NO_OPTION; //otherwise return false -> cancel
+	}
+
 	/**
 	 * Returns the whole script as a String
 	 * @return the script as a string
@@ -106,6 +121,7 @@ public class Script {
 
 		try {
 			Util.writeFile(getFull(), file);
+			dirty = false;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -117,10 +133,11 @@ public class Script {
 	 */
 	public void saveFileAs(File defaultDir){
 		try {
-			File savedFile = new TxtFileChooser(defaultDir).saveFileAs(this);
+			File savedFile = new TxtFileChooser(defaultDir).saveFileAs(this); //TODO should have the same structure as saveFile();
 			if(savedFile != null){
 				Logger.log("saved file as " + savedFile.getAbsolutePath());
 				file = savedFile;
+				dirty = false;
 			}
 		} catch(IOException err){
 			err.printStackTrace();
@@ -157,24 +174,32 @@ public class Script {
 		}
 	}
 
+	public void insertLine(int row, InputLine inputLine){
+		inputLines.add(row,inputLine);
+		dirty = true;
+	}
+
 	public void replaceRow(int row, InputLine replacement) {
 		inputLines.set(row, replacement);
 		Object[] tableArray = replacement.getArray(row);
 		for(int i=0;i<tableArray.length;i++){
 			table.setValueAt(tableArray[i], row, i);
 		}
+		dirty = true;
 	}
 
 	public void removeRow(int row){
 		inputLines.remove(row);
 		table.removeRow(row);
 		adjustLines(row);
+		dirty = true;
 	}
 
 	public void insertRow(int row, InputLine line) {
 		inputLines.add(row, line);
 		table.insertRow(row, line.getArray(row));
 		adjustLines(row);
+		dirty = true;
 	}
 
 	public void appendRow(InputLine line) {
@@ -197,10 +222,12 @@ public class Script {
 			inputLines.get(row).buttons.remove(button);
 			table.setValueAt("", row, col);
 		}
+		dirty = true;
 	}
 
 	public void setStickPos(int row, JoystickPanel.StickType stickType, StickPosition position) {
 		inputLines.get(row).setStickL(position);
 		table.setValueAt(position.toCartString(), row, stickType == JoystickPanel.StickType.L_STICK ? 1 : 2); //TODO find a better way to differentiate sticks?
+		dirty = true;
 	}
 }

@@ -56,9 +56,10 @@ public class TAS {
 		undoStack = new Stack<>();
 		redoStack = new Stack<>();
 
+		this.script = Script.getEmptyScript(10);
 		//initialising windows -> set to be invisible by default
 		//will be set visible once they are supposed to
-		mainEditorWindow = new MainEditorWindow(new FunctionEditorWindow(this), Script.getEmptyScript(10), this);
+		mainEditorWindow = new MainEditorWindow(this);
 
 		mainEditorWindow.setVisible(true);
 	}
@@ -214,14 +215,11 @@ public class TAS {
 
 	public void openScript(File file) throws IOException {
 		Logger.log("loading script from " + file.getAbsolutePath());
-		//TODO ask for closing current project?
 		setScript(file);
-		//TODO move this here, as well as all important file operations
 		undoStack.clear();
 		redoStack.clear();
 	}
 	public void openScript(Script script) {
-		//TODO ask for closing current project?
 		setScript(script);
 		undoStack.clear();
 		redoStack.clear();
@@ -240,8 +238,11 @@ public class TAS {
 		}
 	}
 	public void setScript(Script script){
+		if(this.script != null)
+			if(!this.script.closeScript(this))
+				return; //did not save properly or was canceled -> don't continue opening the new script
 		this.script = script;
-		mainEditorWindow.setScript(script); //do it like this to set the currentScriptFile of MainEditorWindow
+		mainEditorWindow.setScript(script);
 	}
 
 	// getter

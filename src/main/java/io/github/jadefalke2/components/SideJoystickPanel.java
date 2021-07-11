@@ -22,13 +22,13 @@ public class SideJoystickPanel extends JPanel {
 	private InputLine[] inputLines;
 	private Script script;
 
-	public SideJoystickPanel (TAS parent, PianoRoll pianoRoll, Script startScript) {
+	public SideJoystickPanel (TAS parent, PianoRoll pianoRoll) {
 
 		frameAmountLabel = new JLabel("Currently no frames are being edited");
 		frameAmountLabel.setHorizontalAlignment(JLabel.CENTER);
 		frameAmountLabel.setFont(new Font(frameAmountLabel.getFont().getName(), frameAmountLabel.getFont().getStyle(), 15));
 		settings = parent.getPreferences();
-		this.script = startScript;
+		this.script = parent.getScript();
 
 		//TODO remove the duplicate listener here
 		ActionListener smoothTransitionListenerL = e -> {

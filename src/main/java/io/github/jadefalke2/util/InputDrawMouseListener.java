@@ -96,7 +96,7 @@ public class InputDrawMouseListener extends MouseAdapter {
 		if (row == -1 || col == -1) return;
 
 		if ((table.getValueAt(row, col).equals("") && (mode == Mode.ADDING)) || (!table.getValueAt(row, col).equals("") && (mode == Mode.REMOVING))){
-			parent.executeAction(new CellAction(table.getScript(),row,col));
+			parent.executeAction(new CellAction(parent.getScript(),row,col));
 		}
 
 	}
