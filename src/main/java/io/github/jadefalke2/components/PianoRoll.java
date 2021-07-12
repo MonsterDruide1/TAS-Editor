@@ -25,10 +25,10 @@ public class PianoRoll extends JTable {
 	private final TAS parent;
 
 
-	public PianoRoll (TAS parent){
+	public PianoRoll (TAS parent, Script script){
 
 		this.parent = parent;
-		this.script = parent.getScript();
+		this.script = script;
 
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment( SwingConstants.CENTER );

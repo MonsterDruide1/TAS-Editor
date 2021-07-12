@@ -132,15 +132,11 @@ public class Script {
 	 * @param defaultDir The directory to open the TxtFileChooser in
 	 */
 	public void saveFileAs(File defaultDir){
-		try {
-			File savedFile = new TxtFileChooser(defaultDir).saveFileAs(this); //TODO should have the same structure as saveFile();
-			if(savedFile != null){
-				Logger.log("saved file as " + savedFile.getAbsolutePath());
-				file = savedFile;
-				dirty = false;
-			}
-		} catch(IOException err){
-			err.printStackTrace();
+		File savedFile = new TxtFileChooser(defaultDir).getFile(false);
+		if(savedFile != null){
+			Logger.log("saving file as " + savedFile.getAbsolutePath());
+			file = savedFile;
+			saveFile(defaultDir);
 		}
 	}
 

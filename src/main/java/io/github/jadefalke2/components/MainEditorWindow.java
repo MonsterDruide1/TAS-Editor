@@ -51,7 +51,7 @@ public class MainEditorWindow extends JFrame {
 		mainJMenuBar = new MainJMenuBar(this, parent);
 		setJMenuBar(mainJMenuBar);
 
-		pianoRoll = new PianoRoll(parent);
+		pianoRoll = new PianoRoll(parent, parent.getScript());
 		sideJoystickPanel = new SideJoystickPanel(parent, pianoRoll);
 
 		editor = new JPanel(new GridBagLayout());
