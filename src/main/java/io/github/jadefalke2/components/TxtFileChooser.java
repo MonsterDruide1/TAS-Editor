@@ -40,17 +40,6 @@ public class TxtFileChooser extends JFileChooser {
 		return null;
 	}
 
-	public File saveFileAs (Script scriptToSave) throws IOException {
-
-		File originalFile = getFile(false);
-
-		if (originalFile != null) {
-			Util.writeFile(scriptToSave.getFull(), originalFile);
-		}
-
-		return originalFile;
-	}
-
 	@Override
 	public void approveSelection(){
 		File file = getSelectedFile();

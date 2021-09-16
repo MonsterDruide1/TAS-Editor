@@ -144,7 +144,7 @@ public class MainJMenuBar extends JMenuBar {
 		JMenuItem aboutJMenuItem = helpJMenu.add("About SMO TAS Editor");
 		aboutJMenuItem.addActionListener(e -> {
 			try {
-				Desktop.getDesktop().browse(new URL("https://github.com/Jadefalke2/TAS-editor").toURI());
+				Desktop.getDesktop().browse(new URL("https://github.com/Jadefalke2/TAS-Editor").toURI());
 			} catch (IOException | URISyntaxException ex) {
 				ex.printStackTrace();
 			}
