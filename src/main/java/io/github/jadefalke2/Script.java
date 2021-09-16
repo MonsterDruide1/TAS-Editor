@@ -222,7 +222,10 @@ public class Script {
 	}
 
 	public void setStickPos(int row, JoystickPanel.StickType stickType, StickPosition position) {
-		inputLines.get(row).setStickL(position);
+		if(stickType == JoystickPanel.StickType.L_STICK)
+			inputLines.get(row).setStickL(position);
+		else
+			inputLines.get(row).setStickR(position);
 		table.setValueAt(position.toCartString(), row, stickType == JoystickPanel.StickType.L_STICK ? 1 : 2); //TODO find a better way to differentiate sticks?
 		dirty = true;
 	}
