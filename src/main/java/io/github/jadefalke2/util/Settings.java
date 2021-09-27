@@ -22,7 +22,9 @@ public class Settings {
 		this.backingPrefs = prefs;
 		this.parent = parent;
 
-		setDirectory(new File(prefs.get("directory", System.getProperty("user.home")+"/AppData/Roaming/yuzu/tas")));
+		File yuzuDir = new File(System.getProperty("user.home")+"/AppData/Roaming/yuzu/tas");
+
+		setDirectory(new File(prefs.get("directory", System.getProperty("user.home")+(yuzuDir.exists() ? "/AppData/Roaming/yuzu/tas" : ""))));
 		setDarkTheme(prefs.get("darkTheme", "false").equals("true"));
 		setLastStickPositionCount(Integer.parseInt(prefs.get("lastStickPositionCount", "3")));
 		setJoystickPanelPosition(JoystickPanelPosition.valueOf(prefs.get("joystickPanelPosition", "RIGHT")));

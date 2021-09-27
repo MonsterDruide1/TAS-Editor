@@ -89,7 +89,6 @@ public class Joystick extends JPanel {
 			}
 
 			private void setPos(int angle) {
-
 				if (angle == -1)
 					return;
 
