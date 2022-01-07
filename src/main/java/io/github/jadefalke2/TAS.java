@@ -1,10 +1,10 @@
 package io.github.jadefalke2;
 
 import com.formdev.flatlaf.FlatDarkLaf;
-import com.formdev.flatlaf.FlatLaf;
 import com.formdev.flatlaf.FlatLightLaf;
-import io.github.jadefalke2.components.*;
 import io.github.jadefalke2.actions.Action;
+import io.github.jadefalke2.components.MainEditorWindow;
+import io.github.jadefalke2.components.SettingsDialog;
 import io.github.jadefalke2.util.CorruptedScriptException;
 import io.github.jadefalke2.util.Logger;
 import io.github.jadefalke2.util.Settings;
@@ -16,7 +16,6 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.File;
 import java.io.IOException;
-import java.security.MessageDigest;
 import java.util.Arrays;
 import java.util.Stack;
 import java.util.prefs.BackingStoreException;

@@ -2,8 +2,6 @@ package io.github.jadefalke2;
 
 import io.github.jadefalke2.util.CorruptedScriptException;
 
-import javax.swing.table.DefaultTableModel;
-
 public class Function extends Script{
 
 	public Function(String script) throws CorruptedScriptException {

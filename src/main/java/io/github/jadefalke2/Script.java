@@ -1,6 +1,5 @@
 package io.github.jadefalke2;
 
-import io.github.jadefalke2.components.MainEditorWindow;
 import io.github.jadefalke2.components.TxtFileChooser;
 import io.github.jadefalke2.stickRelatedClasses.JoystickPanel;
 import io.github.jadefalke2.stickRelatedClasses.StickPosition;
@@ -11,7 +10,8 @@ import io.github.jadefalke2.util.Util;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.Collectors;
