@@ -22,6 +22,7 @@ import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 public class TAS {
+
 	public static TAS INITIAL_MAIN_TAS_FOR_DEBUGGING;
 
 	private MainEditorWindow mainEditorWindow;
@@ -46,7 +47,6 @@ public class TAS {
 	 */
 
 	public void startProgram() {
-
 		Logger.log("boot up");
 
 		// initialise preferences
