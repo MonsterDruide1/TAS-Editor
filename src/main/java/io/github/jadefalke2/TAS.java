@@ -16,6 +16,7 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.File;
 import java.io.IOException;
+import java.security.MessageDigest;
 import java.util.Arrays;
 import java.util.Stack;
 import java.util.prefs.BackingStoreException;
@@ -83,26 +84,8 @@ public class TAS {
 	public void setLookAndFeel(boolean darkTheme){
 		Logger.log("Changing theme: " + (darkTheme ? "Dark theme" : "Light theme"));
 
-		if (darkTheme) {
-			setDarculaLookAndFeel();
-		} else {
-			setDefaultLookAndFeel();
-		}
-	}
-
-	public void setDefaultLookAndFeel() {
-		//sets the look and feel to light mode
-		setLookAndFeel(new FlatLightLaf());
-	}
-
-	public void setDarculaLookAndFeel() {
-		//sets the look and feel to dark mode
-		setLookAndFeel(new FlatDarkLaf());
-	}
-
-	public void setLookAndFeel(FlatLaf lookAndFeel){
 		try {
-			UIManager.setLookAndFeel(lookAndFeel);
+			UIManager.setLookAndFeel(darkTheme ? new FlatDarkLaf() : new FlatLightLaf());
 			for(Window window : JFrame.getWindows()) {
 				SwingUtilities.updateComponentTreeUI(window);
 			}
@@ -111,6 +94,7 @@ public class TAS {
 			e.printStackTrace();
 		}
 	}
+
 
 	private void setDefaultsAfterThemeChange () {
 		if (mainEditorWindow != null) {
