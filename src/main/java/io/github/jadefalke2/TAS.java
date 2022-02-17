@@ -62,6 +62,8 @@ public class TAS {
 		mainEditorWindow = new MainEditorWindow(this);
 
 		mainEditorWindow.setVisible(true);
+
+		UIManager.put("FileChooser.useSystemExtensionHiding", false);
 	}
 
 
