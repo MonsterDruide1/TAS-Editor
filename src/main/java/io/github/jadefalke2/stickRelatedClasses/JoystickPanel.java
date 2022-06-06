@@ -45,8 +45,8 @@ public class JoystickPanel extends JPanel {
 
 		// setting global vars
 		stickPosition = new StickPosition(0,0);
-		joystick = new Joystick(32767, settings);
-		joystick.setThumbPos(new Point(stickPosition.getX(),stickPosition.getY()));
+		joystick = new Joystick(settings);
+		joystick.setThumbPos(stickPosition);
 
 		//Labels
 		JLabel stickTypeIndicator = new JLabel(descriptor);
@@ -254,7 +254,7 @@ public class JoystickPanel extends JPanel {
 	 * Updates the visual stickPosition -> is called on changes
 	 */
 	private void updateVisual (){
-		joystick.setThumbPos(new Point(stickPosition.getX(), stickPosition.getY()));
+		joystick.setThumbPos(stickPosition);
 		repaint();
 	}
 

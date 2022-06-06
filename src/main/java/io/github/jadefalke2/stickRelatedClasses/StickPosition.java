@@ -51,10 +51,6 @@ public class StickPosition {
 	}
 
 	// getter
-
-	public Point getPoint () {
-		return new Point(x,y);
-	}
 	/**
 	 * @return the x position of the stick
 	 */
