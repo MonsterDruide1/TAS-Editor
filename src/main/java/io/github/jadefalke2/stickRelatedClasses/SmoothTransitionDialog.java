@@ -109,7 +109,7 @@ public class SmoothTransitionDialog extends JDialog {
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setModal(true);
-		setSize(500,500); //TODO don't do this
+		pack();
 	}
 
 	private StickPosition[] reverse (StickPosition[] old) {
