@@ -185,14 +185,10 @@ public class JoystickPanel extends JPanel {
 	}
 
 	/**
-	 * Updates the stick position based on the sliders
+	 * Updates the stick position based on the joystick
 	 */
 	private void updateStickPosition(boolean executeAction) {
-		StickPosition unCropped = joystick.getStickPosition();
-		double radius = Math.min(unCropped.getRadius(), 1);
-		stickPosition = new StickPosition(unCropped.getTheta(), radius);
-
-        updateAll();
+		setStickPosition(joystick.getThumbPos());
 
         if(executeAction)
         	applyPosition(stickPosition);

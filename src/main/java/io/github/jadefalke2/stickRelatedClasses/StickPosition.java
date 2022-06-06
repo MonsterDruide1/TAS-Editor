@@ -1,6 +1,7 @@
 package io.github.jadefalke2.stickRelatedClasses;
 
 import java.awt.*;
+import java.util.Objects;
 
 public class StickPosition {
 
@@ -11,7 +12,7 @@ public class StickPosition {
 	private final int y;
 
 	// The max x/y range0
-	private final static int MAX_SIZE = 32767;
+	public final static int MAX_SIZE = 32767;
 
 	/**
 	 * Constructor
@@ -19,8 +20,16 @@ public class StickPosition {
 	 * @param y the scaled y coordinate
 	 */
 	public StickPosition(int x, int y) {
-		this.x = x;
-		this.y = y;
+		double radius = calcRadius(x, y);
+		if(radius <= 1) {
+			this.x = x;
+			this.y = y;
+		} else {
+			radius = Math.min(radius, 1);
+			double theta = calcTheta(x, y);
+			this.x = (int) calcX(theta, radius);
+			this.y = (int) calcY(theta, radius);
+		}
 	}
 
 	/**
@@ -29,9 +38,19 @@ public class StickPosition {
 	 * @param radius radius of this position from 0;0
 	 */
 	public StickPosition(double theta, double radius) {
-		x = (int) ((radius * MAX_SIZE) * Math.cos(theta));
-		y = (int) ((radius * MAX_SIZE) * Math.sin(theta));
+		this(
+			(int) calcX(theta, radius),
+			(int) calcY(theta, radius)
+		);
 	}
+
+	private static double calcX(double theta, double radius) {
+		return (radius * MAX_SIZE) * Math.cos(theta);
+	}
+	private static double calcY(double theta, double radius) {
+		return (radius * MAX_SIZE) * Math.sin(theta);
+	}
+
 	/**
 	 * Constructor
 	 * @param angle the angle of this position (0-360)
@@ -69,6 +88,9 @@ public class StickPosition {
 	 * @return the angle of the stick (0-2π)
 	 */
 	public double getTheta() {
+		return calcTheta(x, y);
+	}
+	private static double calcTheta(int x, int y) {
 		return ((Math.atan2(y,x) + (2*Math.PI)) % (2*Math.PI));
 	}
 
@@ -76,6 +98,9 @@ public class StickPosition {
 	 * @return the radius of the stick (distance from middle)
 	 */
 	public double getRadius() {
+		return calcRadius(x, y);
+	}
+	private static double calcRadius(int x, int y) {
 		return Math.sqrt(Math.pow(x / (double) MAX_SIZE, 2) + Math.pow(y / (double) MAX_SIZE, 2));
 	}
 
@@ -104,5 +129,18 @@ public class StickPosition {
 	public String toString (){
 		//return "Cartesian: " + toCartString() + "\n Polar: " + toPolarString();
 		return toCartString();
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		StickPosition that = (StickPosition) o;
+		return x == that.x && y == that.y;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(x, y);
 	}
 }

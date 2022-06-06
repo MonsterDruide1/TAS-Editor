@@ -235,4 +235,19 @@ public class Joystick extends JPanel {
 	public StickPosition getThumbPos(){
 		return currentPos;
 	}
+
+	@Override
+	public Dimension getPreferredSize() {
+		return new Dimension(250,250);
+	}
+
+	@Override
+	public Dimension getMaximumSize() {
+		return new Dimension(1024, 1024);
+	}
+
+	@Override
+	public Dimension getMinimumSize() {
+		return new Dimension(50, 50);
+	}
 }
