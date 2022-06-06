@@ -1,6 +1,7 @@
 package io.github.jadefalke2.util;
 
 import io.github.jadefalke2.TAS;
+import io.github.jadefalke2.stickRelatedClasses.SmoothTransitionDialog;
 
 import java.io.File;
 import java.util.prefs.BackingStoreException;
@@ -12,7 +13,7 @@ public class Settings {
 	private boolean darkTheme;
 	private int lastStickPositionCount;
 	private JoystickPanelPosition joystickPanelPosition;
-	private SmoothTransitionType smoothTransitionType;
+	private SmoothTransitionDialog.SmoothTransitionType smoothTransitionType;
 
 
 	private final Preferences backingPrefs;
@@ -28,7 +29,7 @@ public class Settings {
 		setDarkTheme(prefs.get("darkTheme", "false").equals("true"));
 		setLastStickPositionCount(Integer.parseInt(prefs.get("lastStickPositionCount", "3")));
 		setJoystickPanelPosition(JoystickPanelPosition.valueOf(prefs.get("joystickPanelPosition", "RIGHT")));
-		setSmoothTransitionType(SmoothTransitionType.valueOf(prefs.get("smoothTransitionType", "ANGULAR_CLOSEST")));
+		setSmoothTransitionType(SmoothTransitionDialog.SmoothTransitionType.valueOf(prefs.get("smoothTransitionType", "ANGULAR_CLOSEST")));
 	}
 
 	public void storeSettings() throws BackingStoreException {
@@ -78,18 +79,15 @@ public class Settings {
 		return joystickPanelPosition;
 	}
 
-	public void setSmoothTransitionType(SmoothTransitionType smoothTransitionType){
+	public void setSmoothTransitionType(SmoothTransitionDialog.SmoothTransitionType smoothTransitionType){
 		this.smoothTransitionType = smoothTransitionType;
 	}
 
-	public SmoothTransitionType getSmoothTransitionType(){
+	public SmoothTransitionDialog.SmoothTransitionType getSmoothTransitionType(){
 		return smoothTransitionType;
 	}
 
 	public enum JoystickPanelPosition {
 		LEFT, RIGHT
-	}
-	public enum SmoothTransitionType {
-		ANGULAR_CLOSEST, LINEAR, ANGULAR_CLOCKWISE, ANGULAR_COUNTERCLOCKWISE
 	}
 }

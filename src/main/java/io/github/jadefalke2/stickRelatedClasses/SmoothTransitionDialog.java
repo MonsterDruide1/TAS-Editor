@@ -1,20 +1,44 @@
 package io.github.jadefalke2.stickRelatedClasses;
 
 import io.github.jadefalke2.util.Settings;
+import io.github.jadefalke2.util.TriFunction;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
+import java.util.function.Function;
 import java.util.stream.IntStream;
 
 public class SmoothTransitionDialog extends JDialog {
 
-	public static final String[] dropdownOptions = new String[]{
-		"Angular (Closest)",
-		"Linear",
-		"Angular (Clockwise)",
-		"Angular (Counter-Clockwise)"
-	};
+	public enum SmoothTransitionType {
+		ANGULAR_CLOSEST("Angular (Closest)", SmoothTransitionDialog::transitionAngularClosest),
+		LINEAR("Linear", SmoothTransitionDialog::transitionLinearClosest),
+		ANGULAR_CLOCKWISE("Angular (Clockwise)", SmoothTransitionDialog::transitionAngularClockwise),
+		ANGULAR_COUNTERCLOCKWISE("Angular (Counter-Clockwise)", SmoothTransitionDialog::transitionAngularCounterClockwise);
+
+		private final String name;
+		private final TriFunction<StickPosition, StickPosition, Integer, StickPosition[]> transitionFunction;
+		SmoothTransitionType(String name, TriFunction<StickPosition, StickPosition, Integer, StickPosition[]> transitionFunction) {
+			this.name = name;
+			this.transitionFunction = transitionFunction;
+		}
+
+		public String getName() {
+			return name;
+		}
+		public TriFunction<StickPosition, StickPosition, Integer, StickPosition[]> getTransitionFunction() {
+			return transitionFunction;
+		}
+
+		public static SmoothTransitionType getByName(String name) {
+			for(SmoothTransitionType type : values()) {
+				if(type.getName().equals(name))
+					return type;
+			}
+			return null;
+		}
+	}
 
 	private final int frames;
 	private final JComboBox<String> dropdownMenu;
@@ -26,9 +50,8 @@ public class SmoothTransitionDialog extends JDialog {
 		this.frames = frames;
 		//option
 		dropdownMenu = new JComboBox<>();
-		if(dropdownOptions.length != 4) throw new UnsupportedOperationException("Too many items in options list...");
-		for(String option : dropdownOptions)
-			dropdownMenu.addItem(option);
+		for(SmoothTransitionType option : SmoothTransitionType.values())
+			dropdownMenu.addItem(option.getName());
 
 		dropdownMenu.setSelectedIndex(settings.getSmoothTransitionType().ordinal());
 
@@ -99,17 +122,8 @@ public class SmoothTransitionDialog extends JDialog {
 		StickPosition firstPos = startJoystick.getStickPosition();
 		StickPosition endPos = endJoystick.getStickPosition();
 
-		int index = dropdownMenu.getSelectedIndex();
-		if(index == 0)
-			return transitionAngularClosest(firstPos, endPos, frames);
-		else if(index == 1)
-			return transitionLinearClosest(firstPos, endPos, frames);
-		else if(index == 2)
-			return transitionAngularClockwise(firstPos, endPos, frames);
-		else if(index == 3)
-			return transitionAngularCounterClockwise(firstPos, endPos, frames);
-		else
-			throw new UnsupportedOperationException("Selected unknown item in interpolation type dropdown: "+dropdownMenu.getSelectedItem()+" ("+dropdownMenu.getSelectedIndex()+")");
+		SmoothTransitionType type = SmoothTransitionType.getByName((String)dropdownMenu.getSelectedItem());
+		return type.getTransitionFunction().apply(firstPos, endPos, frames);
 	}
 
 	public static StickPosition[] transitionAngularClosest(StickPosition firstPos, StickPosition endPos, int frames){

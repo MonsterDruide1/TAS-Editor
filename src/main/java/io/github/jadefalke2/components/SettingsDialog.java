@@ -37,7 +37,7 @@ public class SettingsDialog extends JDialog {
 		addSpinnerSetting("Show last stick positions", prefs.getLastStickPositionCount(), prefs::setLastStickPositionCount, mainPanel, c);
 		c.gridy++;
 
-		addDropdownSetting("Default SmoothTransition-Type: ", prefs.getSmoothTransitionType(), prefs::setSmoothTransitionType, Settings.SmoothTransitionType.values(), SmoothTransitionDialog.dropdownOptions, mainPanel, c);
+		addDropdownSetting("Default SmoothTransition-Type: ", prefs.getSmoothTransitionType(), prefs::setSmoothTransitionType, SmoothTransitionDialog.SmoothTransitionType.values(), Arrays.stream(SmoothTransitionDialog.SmoothTransitionType.values()).map(SmoothTransitionDialog.SmoothTransitionType::getName).toArray(String[]::new), mainPanel, c);
 		c.gridy++;
 
 		addRadioButtonSetting("JoystickPanel Position: ", prefs.getJoystickPanelPosition(), prefs::setJoystickPanelPosition, Settings.JoystickPanelPosition.values(), new String[]{"Left", "Right"}, Settings.JoystickPanelPosition::valueOf, mainPanel, c);
