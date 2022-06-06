@@ -31,20 +31,12 @@ public class Joystick extends JPanel {
 		thumbRadius = thumbDiameter / 2;
 
 		MouseAdapter mouseAdapter = new MouseAdapter() {
-
-			private void repaintAndTriggerListeners() {
-				SwingUtilities.getRoot(Joystick.this).repaint();
-				//TODO trigger listener
-			}
-
 			@Override
 			public void mousePressed(final MouseEvent e) {
-
 				requestFocus();
 
 				if (SwingUtilities.isLeftMouseButton(e)) {
 					updateThumbPos(e.getX(), e.getY());
-					repaintAndTriggerListeners();
 				}
 			}
 
@@ -52,7 +44,6 @@ public class Joystick extends JPanel {
 			public void mouseDragged(MouseEvent e) {
 				if (SwingUtilities.isLeftMouseButton(e)) {
 					updateThumbPos(e.getX(), e.getY());
-					repaintAndTriggerListeners();
 				}
 			}
 
@@ -60,44 +51,29 @@ public class Joystick extends JPanel {
 			public void mouseReleased(MouseEvent e) {
 				if (SwingUtilities.isLeftMouseButton(e)) {
 					updateThumbPos(e.getX(), e.getY());
-					repaintAndTriggerListeners();
 				}
 			}
 		};
 
 		KeyListener keyListener = new KeyAdapter() {
-
-			StickPosition newPos = null;
-
-			//TODO repeating anonymous method @see line 48
-			private void repaintAndTriggerListeners() {
-				SwingUtilities.getRoot(Joystick.this).repaint();
-				//TODO trigger listener
-			}
-
-			private void setPos(int angle) {
+			private StickPosition setPos(int angle) {
 				if (angle == -1)
-					return;
+					return null;
 
 				if (angle == -2) {
 					centerThumbPad();
-					repaintAndTriggerListeners();
-					return;
+					return null;
 				}
 
-				newPos = new StickPosition(angle,1f);
+				return new StickPosition(angle,1f);
 			}
 
 			@Override
 			public void keyPressed(KeyEvent e) {
+				StickPosition pos = setPos(numPadToAngle(e.getKeyCode()));
 
-				newPos = null;
-
-				setPos(numPadToAngle(e.getKeyCode()));
-
-				if (newPos != null) {
-					setThumbPos(newPos);
-					repaintAndTriggerListeners();
+				if (pos != null) {
+					setThumbPos(pos);
 				}
 			}
 		};
@@ -126,7 +102,7 @@ public class Joystick extends JPanel {
 
 
 	public void centerThumbPad() {
-		currentPos = new StickPosition(0, 0);
+		setThumbPos(new StickPosition(0, 0));
 	}
 
 	//TODO rework this section, as it does not make sense visually to scaled
@@ -147,7 +123,7 @@ public class Joystick extends JPanel {
 		mouseX -= visualOffset.x;
 		mouseY -= visualOffset.y;
 
-		currentPos = visualToStick(new Point(mouseX, mouseY));
+		setThumbPos(visualToStick(new Point(mouseX, mouseY)));
 	}
 
  	/**
@@ -167,18 +143,6 @@ public class Joystick extends JPanel {
 			(int)((pos.getY()/(double)-OUTPUT_MAX) * ((panelWidth - thumbDiameter) / 2.0) + (panelWidth / 2.0))
 		);
 	}
-
-	public void setThumbPos (StickPosition pos){
-		currentPos = pos;
-	}
-
-	public StickPosition getStickPosition(){
-		return currentPos;
-	}
-
-
-	// Overwrites
-
 
 	@Override
 	protected void paintComponent(final Graphics g) {
@@ -242,16 +206,26 @@ public class Joystick extends JPanel {
 		}
 	}
 
-	public void setStickPositions(StickPosition[] stickPositions) {
-		this.stickPositions = stickPositions;
-		repaint();
-	}
-
 	@Override
 	public void setEnabled(boolean enabled){
 		super.setEnabled(enabled);
 
 		if(!isEnabled())
 			centerThumbPad();
+		repaint();
+	}
+
+	public void setStickPositions(StickPosition[] stickPositions) {
+		this.stickPositions = stickPositions;
+		repaint();
+	}
+
+	public void setThumbPos (StickPosition pos){
+		currentPos = pos;
+		repaint();
+	}
+
+	public StickPosition getThumbPos(){
+		return currentPos;
 	}
 }

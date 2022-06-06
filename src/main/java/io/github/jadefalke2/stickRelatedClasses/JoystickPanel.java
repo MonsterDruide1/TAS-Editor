@@ -255,7 +255,6 @@ public class JoystickPanel extends JPanel {
 	 */
 	private void updateVisual (){
 		joystick.setThumbPos(stickPosition);
-		repaint();
 	}
 
 	/**
