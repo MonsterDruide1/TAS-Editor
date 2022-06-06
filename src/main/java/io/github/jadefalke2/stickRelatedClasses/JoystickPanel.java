@@ -46,7 +46,7 @@ public class JoystickPanel extends JPanel {
 		// setting global vars
 		stickPosition = new StickPosition(0,0);
 		joystick = new Joystick(settings);
-		joystick.setThumbPos(stickPosition);
+		joystick.setThumbPos(stickPosition, false);
 
 		//Labels
 		JLabel stickTypeIndicator = new JLabel(descriptor);
@@ -94,26 +94,17 @@ public class JoystickPanel extends JPanel {
 		radiusSpinner.addChangeListener(spinnerListener);
 		angleSpinner.addChangeListener(spinnerListener);
 
-        MouseAdapter mouseListener = new MouseAdapter() {
-        	@Override
-			public void mousePressed(MouseEvent e){
-				updateStickPosition(false);
-			}
-
+		joystick.setOnChangeListener(new CustomChangeListener<StickPosition>() {
 			@Override
-			public void mouseDragged(MouseEvent e) {
-				updateStickPosition(false);
+			public void stateChanged(ChangeObject<StickPosition> e) {
+				updateStickPosition(true);
 			}
-
-            @Override
-            public void mouseReleased(MouseEvent e){
-                updateStickPosition(true);
-            }
-        };
-
-
-		joystick.addMouseListener(mouseListener);
-		joystick.addMouseMotionListener(mouseListener);
+			@Override
+			public void silentStateChanged(ChangeObject<StickPosition> e) {
+				if(shouldTriggerUpdate)
+					updateStickPosition(false);
+			}
+		});
 
         JPanel cartesianPanel = createSpinnerPanel("Cartesian", "x", xSpinner, "y", ySpinner);
         JPanel polarPanel = createSpinnerPanel("Polar", "radius", radiusSpinner, "angle", angleSpinner);
@@ -139,7 +130,7 @@ public class JoystickPanel extends JPanel {
 
 		centerButton = new JButton("center");
 		centerButton.addActionListener(e -> {
-			joystick.centerThumbPad();
+			joystick.setThumbPos(new StickPosition(0, 0), false);
 			updateStickPosition(true);
 		});
 
@@ -254,7 +245,7 @@ public class JoystickPanel extends JPanel {
 	 * Updates the visual stickPosition -> is called on changes
 	 */
 	private void updateVisual (){
-		joystick.setThumbPos(stickPosition);
+		joystick.setThumbPos(stickPosition, false);
 	}
 
 	/**
