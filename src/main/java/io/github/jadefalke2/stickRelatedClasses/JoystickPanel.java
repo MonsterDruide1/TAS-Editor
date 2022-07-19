@@ -56,7 +56,7 @@ public class JoystickPanel extends JPanel {
 		SpinnerModel xModel = new SpinnerNumberModel(0, -32767, 32767, 100);
 		SpinnerModel yModel = new SpinnerNumberModel(0, -32767, 32767, 100);
 		SpinnerModel radiusModel = new SpinnerNumberModel(0, 0, 1, 0.1);
-		SpinnerModel angleModel = new SpinnerNumberModel(0, -1, 361, 1);
+		SpinnerModel angleModel = new SpinnerNumberModel(0, -1, 361, 1.0); // using double as step size to force double number model
 
 		xSpinner = new JSpinner(xModel);
 		ySpinner = new JSpinner(yModel);
@@ -73,6 +73,7 @@ public class JoystickPanel extends JPanel {
 
 		ChangeListener spinnerListener = e -> {
 			if(shouldTriggerUpdate){
+				System.out.println(angleSpinner.getValue());
 				if(e.getSource().equals(xSpinner))
 					stickPosition = new StickPosition((int) xSpinner.getValue(), stickPosition.getY());
 				else if(e.getSource().equals(ySpinner))
@@ -80,7 +81,7 @@ public class JoystickPanel extends JPanel {
 				else if(e.getSource().equals(radiusSpinner))
 					stickPosition = new StickPosition(stickPosition.getTheta(), (double)radiusSpinner.getValue());
 				else if(e.getSource().equals(angleSpinner))
-					stickPosition = new StickPosition((((double)angleSpinner.getValue() + 360) % 360), stickPosition.getRadius());
+					stickPosition = new StickPosition(Math.toRadians(((double)angleSpinner.getValue() + 360) % 360), stickPosition.getRadius());
 				else
 					throw new IllegalArgumentException("Common ChangeListener called on unknown Spinner: "+e.getSource());
 
