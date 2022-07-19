@@ -28,25 +28,9 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      - name: prepare environment
-        run: mkdir buildout
-
-      # Runs a single command using the runners shell
-      - name: building source to .class files
-        run: javac -d buildout -cp src/main/java/ -cp lib/flatlaf.jar -sourcepath src/main/java ./src/main/java/io/github/jadefalke2/TAS.java
-
-      # Runs a set of commands using the runners shell
-      - name: unpacking library in buildout dir
-        run: |
-          cd buildout
-          jar -xf ../lib/flatlaf.jar
-          cd ..
-          
-      - name: building the final jar
-        run: jar -cfm TAS-Editor.jar src/main/java/META-INF/MANIFEST.MF -C buildout .
-        
-    
-    
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml
+      
       - name: Get the upload URL for a release
         id: get_release
         uses: bruceadams/get-release@v1.2.2
@@ -59,6 +43,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.get_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: ./TAS-Editor.jar
+          asset_path: target/TAS-Editor-1.0.jar
           asset_name: TAS-Editor.jar
           asset_content_type: application/java-archive
