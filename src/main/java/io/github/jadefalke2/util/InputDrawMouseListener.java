@@ -6,7 +6,6 @@ import io.github.jadefalke2.actions.CellAction;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 
 public class InputDrawMouseListener extends MouseAdapter {
 
@@ -18,8 +17,8 @@ public class InputDrawMouseListener extends MouseAdapter {
 		ADDING, IDLE, REMOVING
 	}
 
-	// keeps track of already visited rows
-	private final ArrayList<Integer> rows = new ArrayList<>();
+	// row where the dragging gesture started
+	private int startRow;
 
 	// detect the column
 	private int drawingCol;
@@ -42,12 +41,13 @@ public class InputDrawMouseListener extends MouseAdapter {
 	}
 
 	/**
-	 * is called on mouse click. Switches between the columns and executes the corresponding action
+	 * is called on mouse down. Switches between the columns and executes the corresponding action
 	 * @param e the mouseEvent
 	 */
-	private void reactToMouseClick (MouseEvent e){
-		int row = table.rowAtPoint(e.getPoint());
-		int col = table.columnAtPoint(e.getPoint());
+	private void reactToMousePressed (MouseEvent e){
+		int[] cell = getCell(e);
+		int row = cell[0];
+		int col = cell[1];
 
 		//TODO maybe find a cleaner/better way to do this?
 		if(row == -1 || col == -1) { //clicked out of bounds -> deselect all
@@ -57,7 +57,8 @@ public class InputDrawMouseListener extends MouseAdapter {
 			return;
 		}
 
-		rows.add(getCell(e)[0]);
+		startRow = row;
+		drawingCol = col;
 
 		switch (col){
 			case 0:
@@ -92,10 +93,13 @@ public class InputDrawMouseListener extends MouseAdapter {
 	 * @param row the row
 	 */
 	private void setCell (int row, int col){
+		setCell(row, col, false);
+	}
+	private void applyPreview (){
 
 		if (row == -1 || col == -1) return;
 
-		if ((table.getValueAt(row, col).equals("") && (mode == Mode.ADDING)) || (!table.getValueAt(row, col).equals("") && (mode == Mode.REMOVING))){
+		if (((table.getValueAt(row, col).equals("") && (mode == Mode.ADDING)) || (!table.getValueAt(row, col).equals("") && (mode == Mode.REMOVING))) != inverse){
 			parent.executeAction(new CellAction(parent.getScript(),row,col));
 		}
 
@@ -106,22 +110,29 @@ public class InputDrawMouseListener extends MouseAdapter {
 
 	@Override
 	public void mouseDragged(java.awt.event.MouseEvent e) {
-		if (!rows.contains(getCell(e)[0])){
-			rows.add(getCell(e)[0]);
-			setCell(getCell(e)[0],drawingCol);
+		int row = getCell(e)[0];
+		if(row == -1) return;
+
+		if(currentEndRow != row) {
+			if(Math.abs(currentEndRow-startRow) < Math.abs(row-startRow)) { // additional row selected
+				setCell(row, drawingCol);
+			} else { // row deselected
+				setCell(currentEndRow, drawingCol, true);
+			}
+			currentEndRow = row;
 		}
 	}
 
 	@Override
 	public void mousePressed(java.awt.event.MouseEvent e) {
-		drawingCol = getCell(e)[1];
-		reactToMouseClick(e);
+		reactToMousePressed(e);
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e){
-		rows.clear();
 		mode = Mode.IDLE;
+		startRow = -1;
+		drawingCol = -1;
 	}
 
 }

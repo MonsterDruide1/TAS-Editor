@@ -5,6 +5,7 @@ import com.formdev.flatlaf.FlatLightLaf;
 import io.github.jadefalke2.actions.Action;
 import io.github.jadefalke2.components.MainEditorWindow;
 import io.github.jadefalke2.components.SettingsDialog;
+import io.github.jadefalke2.connectivity.practice.ServerConnector;
 import io.github.jadefalke2.util.CorruptedScriptException;
 import io.github.jadefalke2.util.Logger;
 import io.github.jadefalke2.util.Settings;
@@ -16,6 +17,7 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.File;
 import java.io.IOException;
+import java.net.SocketException;
 import java.util.Arrays;
 import java.util.Stack;
 import java.util.prefs.BackingStoreException;
@@ -32,7 +34,11 @@ public class TAS {
 	private Stack<Action> undoStack;
 	private Stack<Action> redoStack;
 
+	private Action previewAction;
+
 	private Script script;
+
+	private ServerConnector practiceServer;
 
 	public static void main(String[] args) {
 		INITIAL_MAIN_TAS_FOR_DEBUGGING = new TAS();
@@ -55,6 +61,8 @@ public class TAS {
 		//initialising stacks
 		undoStack = new Stack<>();
 		redoStack = new Stack<>();
+
+		practiceServer = new ServerConnector();
 
 		this.script = Script.getEmptyScript(10);
 		//initialising windows -> set to be invisible by default
@@ -105,9 +113,11 @@ public class TAS {
 
 
 	// Actions
-
-
 	public void executeAction(Action action) {
+		if(previewAction != null) {
+			previewAction.revert();
+			previewAction = null;
+		}
 		//adds a new action to the stack to make it possible to undo
 		action.execute();
 		undoStack.push(action);
@@ -121,6 +131,11 @@ public class TAS {
 		//undoes the last action
 		if (undoStack.isEmpty())
 			return;
+
+		if(previewAction != null) {
+			previewAction.revert();
+			previewAction = null;
+		}
 		Action action = undoStack.pop();
 		action.revert();
 		redoStack.push(action);
@@ -133,12 +148,30 @@ public class TAS {
 		//redoes the last action
 		if (redoStack.isEmpty())
 			return;
+
+		if(previewAction != null) {
+			previewAction.revert();
+			previewAction = null;
+		}
 		Action action = redoStack.pop();
 		action.execute();
 		undoStack.push(action);
 		mainEditorWindow.onUndoRedo(!undoStack.isEmpty(), !redoStack.isEmpty());
 
 		Logger.log("redoing action: " + action);
+	}
+
+	public void previewAction(Action action) {
+		if(previewAction != null) {
+			previewAction.revert();
+			previewAction = null;
+		}
+		//adds a new action to the stack to make it possible to undo
+		action.execute();
+		previewAction = action;
+		redoStack.clear();
+
+		Logger.log("previewing action: " + action);
 	}
 
 	public void cut(){
@@ -175,6 +208,18 @@ public class TAS {
 			}
 		}).toArray(InputLine[]::new);
 		mainEditorWindow.getPianoRoll().replaceSelectedRows(rows);
+	}
+
+	public void exit() {
+		practiceServer.setRunning(false);
+	}
+
+	public void runScriptPracticeMod() {
+		try {
+			practiceServer.runScript(script, new ServerConnector.GoConfig("CityWorldHomeStage", 5, "Go"));
+		} catch (IOException | InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -243,5 +288,9 @@ public class TAS {
 
 	public Script getScript(){
 		return script;
+	}
+
+	public ServerConnector getPracticeServer() {
+		return practiceServer;
 	}
 }

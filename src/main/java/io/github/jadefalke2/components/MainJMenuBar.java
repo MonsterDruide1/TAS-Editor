@@ -1,6 +1,7 @@
 package io.github.jadefalke2.components;
 
 import io.github.jadefalke2.TAS;
+import io.github.jadefalke2.connectivity.practice.ServerConnector;
 import io.github.jadefalke2.util.Settings;
 
 import javax.swing.*;
@@ -26,6 +27,9 @@ public class MainJMenuBar extends JMenuBar {
 
 		JMenu viewMenu = createViewMenu(parent.getPreferences());
 		add(viewMenu);
+
+		JMenu runMenu = createRunMenu(parent, parent.getPracticeServer());
+		add(runMenu);
 
 		JMenu helpMenu = createHelpMenu();
 		add(helpMenu);
@@ -125,6 +129,22 @@ public class MainJMenuBar extends JMenuBar {
 		darkThemeJMenuItem.addItemListener(e -> preferences.setDarkTheme(darkThemeJMenuItem.getState()));
 
 		return viewJMenu;
+	}
+
+	private JMenu createRunMenu(TAS parent, ServerConnector server) {
+		JMenu runJMenu = new JMenu("Run");
+
+		JCheckBoxMenuItem enablePracticeMod = new JCheckBoxMenuItem("Enable Practice-Mod Server", server.isRunning());
+		runJMenu.add(enablePracticeMod);
+		enablePracticeMod.addItemListener(e -> server.setRunning(enablePracticeMod.getState()));
+
+		runJMenu.addSeparator();
+
+		JMenuItem runPracticeMod = runJMenu.add("Run on Practice-Mod");
+		runPracticeMod.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
+		runPracticeMod.addActionListener(e -> parent.runScriptPracticeMod());
+
+		return runJMenu;
 	}
 
 	private JMenu createHelpMenu(){

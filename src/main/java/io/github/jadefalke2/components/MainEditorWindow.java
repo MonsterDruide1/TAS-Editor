@@ -7,6 +7,7 @@ import io.github.jadefalke2.util.CorruptedScriptException;
 import io.github.jadefalke2.util.Settings;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -44,6 +45,7 @@ public class MainEditorWindow extends JFrame {
 				if(parent.closeScript()) {
 					Logger.log("exiting program");
 					dispose();
+					parent.exit();
 				}
 			}
 		});
@@ -61,10 +63,30 @@ public class MainEditorWindow extends JFrame {
 		JScrollPane scrollPane = new JScrollPane(pianoRoll);
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
+		JLabel overlayLabel = new JLabel("Testing the overlay");
+
+		JPanel overlayLeftRightAlignment = new JPanel(new BorderLayout());
+		overlayLeftRightAlignment.add(overlayLabel, BorderLayout.LINE_END);
+		overlayLeftRightAlignment.setOpaque(false);
+
+		JPanel overlayTopDownAlignment = new JPanel(new BorderLayout());
+		overlayTopDownAlignment.add(overlayLeftRightAlignment, BorderLayout.PAGE_END);
+		overlayTopDownAlignment.setOpaque(false);
+
+		JPanel overlayWrapperPane = new JPanel() {
+			@Override
+			public boolean isOptimizedDrawingEnabled() {
+				return false;
+			}
+		};
+		overlayWrapperPane.setLayout(new OverlayLayout(overlayWrapperPane));
+		overlayWrapperPane.add(overlayTopDownAlignment);
+		overlayWrapperPane.add(scrollPane);
+
 		c.fill = GridBagConstraints.BOTH;
 		c.weighty = 1;
 		c.weightx = 1;
-		editor.add(scrollPane, c);
+		editor.add(overlayWrapperPane, c);
 ;
 		recreateLayoutPanel();
 
