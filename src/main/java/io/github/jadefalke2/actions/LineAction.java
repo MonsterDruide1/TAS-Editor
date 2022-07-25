@@ -20,7 +20,7 @@ public class LineAction implements Action{
 	private final Script script;
 	private final int[] rows;
 	private final InputLine[] replacementLines;
-	private final InputLine[] previousLines;
+	private InputLine[] previousLines;
 
 	public LineAction(Script script, int[] rows, Type type) {
 		this(script, rows, null, type);
@@ -31,11 +31,12 @@ public class LineAction implements Action{
 		this.type = type;
 		this.replacementLines = replacementLines;
 
-		previousLines = script.getLines(rows);
 	}
 
 	@Override
 	public void execute() {
+		previousLines = script.getLines(rows);
+
 		switch (type) {
 			case CLONE: cloneRows(); break;
 			case DELETE: deleteRows(); break;
