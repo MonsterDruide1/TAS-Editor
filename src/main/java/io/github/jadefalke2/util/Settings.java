@@ -14,6 +14,7 @@ public class Settings {
 	private int lastStickPositionCount;
 	private JoystickPanelPosition joystickPanelPosition;
 	private SmoothTransitionDialog.SmoothTransitionType smoothTransitionType;
+	private RedoKeybind redoKeybind;
 
 
 	private final Preferences backingPrefs;
@@ -30,6 +31,7 @@ public class Settings {
 		setLastStickPositionCount(Integer.parseInt(prefs.get("lastStickPositionCount", "3")));
 		setJoystickPanelPosition(JoystickPanelPosition.valueOf(prefs.get("joystickPanelPosition", "RIGHT")));
 		setSmoothTransitionType(SmoothTransitionDialog.SmoothTransitionType.valueOf(prefs.get("smoothTransitionType", "ANGULAR_CLOSEST")));
+		setRedoKeybind(RedoKeybind.valueOf(prefs.get("redoKeybind", "CTRL_SHIFT_Z")));
 	}
 
 	public void storeSettings() throws BackingStoreException {
@@ -40,6 +42,7 @@ public class Settings {
 		backingPrefs.put("lastStickPositionCount", lastStickPositionCount + "");
 		backingPrefs.put("joystickPanelPosition", joystickPanelPosition + "");
 		backingPrefs.put("smoothTransitionType", smoothTransitionType + "");
+		backingPrefs.put("redoKeybind", redoKeybind + "");
 
 		backingPrefs.flush();
 	}
@@ -87,7 +90,22 @@ public class Settings {
 		return smoothTransitionType;
 	}
 
+	public void setRedoKeybind(RedoKeybind redoKeybind) {
+		this.redoKeybind = redoKeybind;
+		if(parent.getMainEditorWindow() != null && parent.getMainEditorWindow().getMainJMenuBar() != null)
+			parent.getMainEditorWindow().getMainJMenuBar().updateRedoAccelerator(redoKeybind);
+	}
+	public RedoKeybind getRedoKeybind() {
+		return redoKeybind;
+	}
+
+
 	public enum JoystickPanelPosition {
 		LEFT, RIGHT
 	}
+
+	public enum RedoKeybind {
+		CTRL_SHIFT_Z, CTRL_Y
+	}
+
 }

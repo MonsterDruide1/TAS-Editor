@@ -43,6 +43,9 @@ public class SettingsDialog extends JDialog {
 		addRadioButtonSetting("JoystickPanel Position: ", prefs.getJoystickPanelPosition(), prefs::setJoystickPanelPosition, Settings.JoystickPanelPosition.values(), new String[]{"Left", "Right"}, Settings.JoystickPanelPosition::valueOf, mainPanel, c);
 		c.gridy++;
 
+		addRadioButtonSetting("Redo-Keybind: ", prefs.getRedoKeybind(), prefs::setRedoKeybind, Settings.RedoKeybind.values(), new String[]{"CTRL+SHIFT+Z", "CTRL+Y"}, Settings.RedoKeybind::valueOf, mainPanel, c);
+		c.gridy++;
+
 		add(mainPanel);
 		setLocationRelativeTo(null);
 		pack();

@@ -78,7 +78,7 @@ public class MainJMenuBar extends JMenuBar {
 		undo.addActionListener(e -> parent.undo());
 
 		redo = editJMenu.add("Redo");
-		redo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
+		updateRedoAccelerator(parent.getPreferences().getRedoKeybind());
 		redo.addActionListener(e -> parent.redo());
 
 		editJMenu.addSeparator();
@@ -156,5 +156,13 @@ public class MainJMenuBar extends JMenuBar {
 	public void updateUndoMenu(boolean enableUndo, boolean enableRedo) {
 		undo.setEnabled(enableUndo);
 		redo.setEnabled(enableRedo);
+	}
+
+	public void updateRedoAccelerator(Settings.RedoKeybind keybind) {
+		switch(keybind) {
+			case CTRL_SHIFT_Z: redo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK)); break;
+			case CTRL_Y: redo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, InputEvent.CTRL_DOWN_MASK)); break;
+			default: System.err.println("setting undefined redokeybind! "+keybind);
+		}
 	}
 }

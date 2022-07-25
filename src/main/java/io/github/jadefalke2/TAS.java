@@ -269,6 +269,10 @@ public class TAS {
 			mainEditorWindow.recreateLayoutPanel();
 	}
 
+	public MainEditorWindow getMainEditorWindow() {
+		return mainEditorWindow;
+	}
+
 	public Script getScript(){
 		return script;
 	}
