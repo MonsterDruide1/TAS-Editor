@@ -199,7 +199,7 @@ public class Script {
 	}
 
 	public void appendRow(InputLine line) {
-		insertRow(inputLines.size()-1, line);
+		insertRow(inputLines.size(), line);
 	}
 
 	private void adjustLines(int start) {
