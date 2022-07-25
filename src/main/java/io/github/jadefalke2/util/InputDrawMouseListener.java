@@ -101,7 +101,7 @@ public class InputDrawMouseListener extends MouseAdapter {
 		if(action != null) parent.previewAction(action);
 	}
 	private LineAction getAction() {
-		if(drawingCol == -1 || startRow == -1 || endRow == -1) return null;
+		if(drawingCol == -1 || startRow == -1 || endRow == -1 || drawingCol < 3) return null;
 		return LineAction.setButtons(parent.getScript(), Math.min(startRow, endRow), Math.max(startRow, endRow), Button.values()[drawingCol-3], mode == Mode.ADDING);
 	}
 
