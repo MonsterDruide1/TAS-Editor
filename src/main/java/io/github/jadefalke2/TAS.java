@@ -31,6 +31,7 @@ public class TAS {
 
 	private Stack<Action> undoStack;
 	private Stack<Action> redoStack;
+	private Action previewAction;
 
 	private Script script;
 
@@ -105,40 +106,67 @@ public class TAS {
 
 
 	// Actions
-
-
 	public void executeAction(Action action) {
+		if(previewAction != null) {
+			previewAction.revert();
+			previewAction = null;
+		}
+		Logger.log("executing action: " + action);
+
 		//adds a new action to the stack to make it possible to undo
 		action.execute();
 		undoStack.push(action);
 		redoStack.clear();
 		mainEditorWindow.onUndoRedo(!undoStack.isEmpty(), false);
-
-		Logger.log("executing action: " + action);
 	}
 
 	public void undo() {
 		//undoes the last action
 		if (undoStack.isEmpty())
 			return;
+
+		if(previewAction != null) {
+			Logger.log("reverting preview: "+previewAction);
+			previewAction.revert();
+			previewAction = null;
+		}
 		Action action = undoStack.pop();
+		Logger.log("undoing action: " + action);
+
 		action.revert();
 		redoStack.push(action);
 		mainEditorWindow.onUndoRedo(!undoStack.isEmpty(), !redoStack.isEmpty());
-
-		Logger.log("undoing action: " + action);
 	}
 
 	public void redo() {
 		//redoes the last action
 		if (redoStack.isEmpty())
 			return;
+
+		if(previewAction != null) {
+			Logger.log("reverting preview: "+previewAction);
+			previewAction.revert();
+			previewAction = null;
+		}
 		Action action = redoStack.pop();
+		Logger.log("redoing action: " + action);
+
 		action.execute();
 		undoStack.push(action);
 		mainEditorWindow.onUndoRedo(!undoStack.isEmpty(), !redoStack.isEmpty());
+	}
 
-		Logger.log("redoing action: " + action);
+	public void previewAction(Action action) {
+		if(previewAction != null) {
+			Logger.log("reverting preview: "+previewAction);
+			previewAction.revert();
+			previewAction = null;
+		}
+		Logger.log("previewing action: " + action);
+
+		action.execute();
+		previewAction = action;
+		redoStack.clear();
 	}
 
 	public void cut(){
