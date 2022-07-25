@@ -2,6 +2,7 @@ package io.github.jadefalke2.actions;
 
 import io.github.jadefalke2.InputLine;
 import io.github.jadefalke2.Script;
+import io.github.jadefalke2.util.Button;
 
 import javax.swing.table.DefaultTableModel;
 import java.util.Arrays;
@@ -30,7 +31,19 @@ public class LineAction implements Action{
 		this.rows = rows;
 		this.type = type;
 		this.replacementLines = replacementLines;
+	}
 
+	public static LineAction setButtons(Script script, int startRow, int endRow, Button button, boolean enabled) {
+		InputLine[] lines = new InputLine[endRow-startRow+1];
+		int[] rows = new int[endRow-startRow+1];
+		for(int i=startRow; i<=endRow; i++) {
+			InputLine newLine = script.getLine(i).clone();
+			if(enabled) newLine.buttons.add(button);
+			else newLine.buttons.remove(button);
+			lines[i-startRow] = newLine;
+			rows[i-startRow] = i;
+		}
+		return new LineAction(script, rows, lines, Type.REPLACE);
 	}
 
 	@Override
