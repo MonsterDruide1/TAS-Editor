@@ -88,6 +88,11 @@ public class SideJoystickPanel extends JPanel {
 					text += Arrays.toString(selectedRows).substring(1); //add all rows to it, but skipping [
 					text = text.substring(0, text.length()-1); //removing ] from it
 				}
+
+				if(text.length() > 50) {
+					text = text.substring(0, 49)+"…";
+				}
+
 				frameAmountLabel.setText(text);
 				setEditingRows(selectedRows, script.getLines());
 			}
