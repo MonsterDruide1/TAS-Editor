@@ -90,7 +90,7 @@ public class SideJoystickPanel extends JPanel {
 				}
 
 				if(text.length() > 50) {
-					text = text.substring(0, 49)+"…";
+					text = text.substring(0, 47)+"...";
 				}
 
 				frameAmountLabel.setText(text);
