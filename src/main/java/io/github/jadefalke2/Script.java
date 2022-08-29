@@ -93,7 +93,12 @@ public class Script {
 		int result = JOptionPane.showConfirmDialog(null, "Save Project changes?", "Save before closing", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 		if (result == JOptionPane.YES_OPTION){
 			//opens a new dialog that asks about saving, then close
-			parent.saveFile();
+			try {
+				parent.saveFile();
+			} catch(IOException ioe) {
+				JOptionPane.showMessageDialog(null, "Failed to save file!\nError: "+ioe.getMessage(), "Saving failed", JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
 			return dirty;
 		}
 		return result == JOptionPane.NO_OPTION; //otherwise return false -> cancel
@@ -111,7 +116,7 @@ public class Script {
 	 * Saves the script (itself) to that last saved/opened file
 	 * @param defaultDir The directory to open the TxtFileChooser in if no file is stored
 	 */
-	public void saveFile(File defaultDir){ //TODO don't have that as a parameter, as it is only passed down to the next layer...
+	public void saveFile(File defaultDir) throws IOException { //TODO don't have that as a parameter, as it is only passed down to the next layer...
 		if(file == null){
 			saveFileAs(defaultDir);
 			return;
@@ -119,19 +124,15 @@ public class Script {
 
 		Logger.log("saving script to " + file.getAbsolutePath());
 
-		try {
-			Util.writeFile(getFull(), file);
-			dirty = false;
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		Util.writeFile(getFull(), file);
+		dirty = false;
 	}
 
 	/**
 	 * Opens a file selector popup and then saves the script (itself) to that file
 	 * @param defaultDir The directory to open the TxtFileChooser in
 	 */
-	public void saveFileAs(File defaultDir){
+	public void saveFileAs(File defaultDir) throws IOException {
 		File savedFile = new TxtFileChooser(defaultDir).getFile(false);
 		if(savedFile != null){
 			Logger.log("saving file as " + savedFile.getAbsolutePath());

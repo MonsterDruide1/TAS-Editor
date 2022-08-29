@@ -208,11 +208,11 @@ public class TAS {
 	/**
 	 * writes the current script into the current file
 	 */
-	public void saveFile() {
+	public void saveFile() throws IOException {
 		script.saveFile(preferences.getDirectory());
 	}
 
-	public void saveFileAs() {
+	public void saveFileAs() throws IOException {
 		script.saveFileAs(preferences.getDirectory());
 	}
 
