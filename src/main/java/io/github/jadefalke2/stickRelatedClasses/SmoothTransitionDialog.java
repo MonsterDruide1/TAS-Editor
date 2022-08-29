@@ -40,7 +40,7 @@ public class SmoothTransitionDialog extends JDialog {
 		}
 	}
 
-	private boolean accepted;
+	private boolean accepted = false;
 	private final int frames;
 	private final JComboBox<String> dropdownMenu;
 	private final JoystickPanel startJoystick,  endJoystick;
