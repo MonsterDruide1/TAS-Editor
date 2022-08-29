@@ -47,6 +47,8 @@ public class SideJoystickPanel extends JPanel {
 		ActionListener smoothTransitionListenerR = e -> {
 			SmoothTransitionDialog dialog = new SmoothTransitionDialog(settings, inputLines[0].getStickR(), inputLines[inputLines.length-1].getStickR(), inputLines.length);
 			dialog.setVisible(true);
+			if(!dialog.isAccepted())
+				return;
 			StickPosition[] replacementStickPos = dialog.getSmoothTransitionData();
 			InputLine[] originalLines = pianoRoll.getSelectedInputRows();
 			InputLine[] replacementLines = Arrays.stream(originalLines).map(InputLine::clone).toArray(InputLine[]::new);
