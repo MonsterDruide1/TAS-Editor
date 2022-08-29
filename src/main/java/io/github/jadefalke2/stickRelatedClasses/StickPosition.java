@@ -8,8 +8,8 @@ public class StickPosition {
 	// the cartesian coordinates
 	// Range of x: -32767;32767
 	// Range of y: -32767;32767
-	private final int x;
-	private final int y;
+	private final float x;
+	private final float y;
 
 	// The max x/y range0
 	public final static int MAX_SIZE = 32767;
@@ -19,7 +19,7 @@ public class StickPosition {
 	 * @param x the scaled x coordinate
 	 * @param y the scaled y coordinate
 	 */
-	public StickPosition(int x, int y) {
+	public StickPosition(float x, float y) {
 		double radius = calcRadius(x, y);
 		if(radius <= 1) {
 			this.x = x;
@@ -27,8 +27,8 @@ public class StickPosition {
 		} else {
 			radius = Math.min(radius, 1);
 			double theta = calcTheta(x, y);
-			this.x = (int) calcX(theta, radius);
-			this.y = (int) calcY(theta, radius);
+			this.x = (float) calcX(theta, radius);
+			this.y = (float) calcY(theta, radius);
 		}
 	}
 
@@ -39,8 +39,8 @@ public class StickPosition {
 	 */
 	public StickPosition(double theta, double radius) {
 		this(
-			(int) calcX(theta, radius),
-			(int) calcY(theta, radius)
+			(float) calcX(theta, radius),
+			(float) calcY(theta, radius)
 		);
 	}
 
@@ -61,7 +61,7 @@ public class StickPosition {
 	}
 
 	public StickPosition(String component) {
-		this(Integer.parseInt(component.split(";")[0]), Integer.parseInt(component.split(";")[1]));
+		this(Double.parseDouble(component.split(";")[0]), Double.parseDouble(component.split(";")[1]));
 	}
 
 	@Override
@@ -73,14 +73,14 @@ public class StickPosition {
 	/**
 	 * @return the x position of the stick
 	 */
-	public int getX() {
+	public float getX() {
 		return x;
 	}
 
 	/**
 	 * @return the y position of the stick
 	 */
-	public int getY() {
+	public float getY() {
 		return y;
 	}
 
@@ -90,7 +90,7 @@ public class StickPosition {
 	public double getTheta() {
 		return calcTheta(x, y);
 	}
-	private static double calcTheta(int x, int y) {
+	private static double calcTheta(double x, double y) {
 		return ((Math.atan2(y,x) + (2*Math.PI)) % (2*Math.PI));
 	}
 
@@ -100,7 +100,7 @@ public class StickPosition {
 	public double getRadius() {
 		return calcRadius(x, y);
 	}
-	private static double calcRadius(int x, int y) {
+	private static double calcRadius(double x, double y) {
 		return Math.sqrt(Math.pow(x / (double) MAX_SIZE, 2) + Math.pow(y / (double) MAX_SIZE, 2));
 	}
 

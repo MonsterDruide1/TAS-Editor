@@ -173,13 +173,13 @@ public class SmoothTransitionDialog extends JDialog {
 
 	public static StickPosition[] transitionLinearClosest(StickPosition firstPos, StickPosition endPos, int frames){
 		StickPosition[] result = new StickPosition[frames];
-		int firstX = firstPos.getX();
-		int firstY = firstPos.getY();
-		int diffX = endPos.getX() - firstX;
-		int diffY = endPos.getY() - firstY;
+		float firstX = firstPos.getX();
+		float firstY = firstPos.getY();
+		float diffX = endPos.getX() - firstX;
+		float diffY = endPos.getY() - firstY;
 
 		for(int i=0;i<frames-1;i++){
-			result[i] = new StickPosition((int)(firstX+((i/((double)frames-1))*diffX)), (int)(firstY+((i/((double)frames-1))*diffY)));
+			result[i] = new StickPosition((float)(firstX+((i/((double)frames-1))*diffX)), (firstY+((i/((double)frames-1))*diffY)));
 		}
 		result[frames-1] = endPos;
 

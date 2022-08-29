@@ -63,11 +63,11 @@ public class Joystick extends JPanel {
 					return null;
 
 				if (angle == -2) {
-					setThumbPos(new StickPosition(0, 0), true);
+					setThumbPos(new StickPosition(0f, 0), true);
 					return null;
 				}
 
-				return new StickPosition(angle,1f);
+				return new StickPosition(angle,1d);
 			}
 
 			@Override
@@ -84,7 +84,7 @@ public class Joystick extends JPanel {
 		addMouseListener(mouseAdapter);
 		addKeyListener(keyListener);
 
-		setThumbPos(new StickPosition(0, 0), false);
+		setThumbPos(new StickPosition(0f, 0), false);
 	}
 
 	private static int numPadToAngle(int keyCode){
@@ -128,8 +128,8 @@ public class Joystick extends JPanel {
 	 */
 	public StickPosition visualToStick(Point thumbPos) {
 		return new StickPosition(
-			OUTPUT_MAX * (thumbPos.x - panelWidth / 2) / (panelWidth / 2 - thumbDiameter / 2),
-			-OUTPUT_MAX * (thumbPos.y - panelWidth / 2) / (panelWidth / 2 - thumbDiameter / 2)
+			OUTPUT_MAX * (thumbPos.x - panelWidth / 2f) / (panelWidth / 2f - thumbDiameter / 2f),
+			-OUTPUT_MAX * (thumbPos.y - panelWidth / 2f) / (panelWidth / 2f - thumbDiameter / 2f)
 		);
 	}
 
@@ -207,7 +207,7 @@ public class Joystick extends JPanel {
 		super.setEnabled(enabled);
 
 		if(!isEnabled())
-			setThumbPos(new StickPosition(0, 0), false);
+			setThumbPos(new StickPosition(0f, 0), false);
 		repaint();
 	}
 

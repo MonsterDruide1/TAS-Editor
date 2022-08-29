@@ -18,8 +18,8 @@ public class InputLine {
 	// Contructors
 
 	public InputLine() {
-		stickL = new StickPosition(0,0);
-		stickR = new StickPosition(0,0);
+		stickL = new StickPosition(0f,0);
+		stickR = new StickPosition(0f,0);
 	}
 
 	public InputLine(String full) throws CorruptedScriptException {
