@@ -40,6 +40,7 @@ public class SmoothTransitionDialog extends JDialog {
 		}
 	}
 
+	private boolean accepted = false;
 	private final int frames;
 	private final JComboBox<String> dropdownMenu;
 	private final JoystickPanel startJoystick,  endJoystick;
@@ -56,7 +57,10 @@ public class SmoothTransitionDialog extends JDialog {
 		dropdownMenu.setSelectedIndex(settings.getSmoothTransitionType().ordinal());
 
 		JButton okButton = new JButton("OK");
-		okButton.addActionListener(e -> dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING)));
+		okButton.addActionListener(e -> {
+			accepted = true;
+			dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+		});
 
 		startJoystick = new JoystickPanel(settings, "Start");
 		startJoystick.setStickPosition(startPos);
@@ -124,6 +128,10 @@ public class SmoothTransitionDialog extends JDialog {
 
 		SmoothTransitionType type = SmoothTransitionType.getByName((String)dropdownMenu.getSelectedItem());
 		return type.getTransitionFunction().apply(firstPos, endPos, frames);
+	}
+
+	public boolean isAccepted() {
+		return accepted;
 	}
 
 	public static StickPosition[] transitionAngularClosest(StickPosition firstPos, StickPosition endPos, int frames){

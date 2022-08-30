@@ -34,6 +34,8 @@ public class SideJoystickPanel extends JPanel {
 		ActionListener smoothTransitionListenerL = e -> {
 			SmoothTransitionDialog dialog = new SmoothTransitionDialog(settings, inputLines[0].getStickL(), inputLines[inputLines.length-1].getStickL(), inputLines.length);
 			dialog.setVisible(true);
+			if(!dialog.isAccepted())
+				return;
 			StickPosition[] replacementStickPos = dialog.getSmoothTransitionData();
 			InputLine[] originalLines = pianoRoll.getSelectedInputRows();
 			InputLine[] replacementLines = Arrays.stream(originalLines).map(InputLine::clone).toArray(InputLine[]::new);
@@ -47,6 +49,8 @@ public class SideJoystickPanel extends JPanel {
 		ActionListener smoothTransitionListenerR = e -> {
 			SmoothTransitionDialog dialog = new SmoothTransitionDialog(settings, inputLines[0].getStickR(), inputLines[inputLines.length-1].getStickR(), inputLines.length);
 			dialog.setVisible(true);
+			if(!dialog.isAccepted())
+				return;
 			StickPosition[] replacementStickPos = dialog.getSmoothTransitionData();
 			InputLine[] originalLines = pianoRoll.getSelectedInputRows();
 			InputLine[] replacementLines = Arrays.stream(originalLines).map(InputLine::clone).toArray(InputLine[]::new);
@@ -88,6 +92,11 @@ public class SideJoystickPanel extends JPanel {
 					text += Arrays.toString(selectedRows).substring(1); //add all rows to it, but skipping [
 					text = text.substring(0, text.length()-1); //removing ] from it
 				}
+
+				if(text.length() > 50) {
+					text = text.substring(0, 47)+"...";
+				}
+
 				frameAmountLabel.setText(text);
 				setEditingRows(selectedRows, script.getLines());
 			}

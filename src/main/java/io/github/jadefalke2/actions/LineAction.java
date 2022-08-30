@@ -52,7 +52,7 @@ public class LineAction implements Action{
 
 		switch (type) {
 			case CLONE: cloneRows(); break;
-			case DELETE: deleteRows(); break;
+			case DELETE: deleteRows(false); break;
 			case INSERT: insertRows(); break;
 			case REPLACE: replaceRows(); break;
 		}
@@ -63,7 +63,7 @@ public class LineAction implements Action{
 	public void revert() {
 		switch (type){
 			case CLONE:                       //fallthrough to INSERT
-			case INSERT: deleteRows(); break;
+			case INSERT: deleteRows(true); break;
 			case DELETE: insertRows(previousLines, rows[0]); break;
 			case REPLACE: revertReplaceRows(); break;
 		}
@@ -86,7 +86,7 @@ public class LineAction implements Action{
 		if(rows.length < replacement.length) //missing frames -> add emptys that there are enough to replace
 			insertRows(replacement.length - rows.length);
 		if(rows.length > replacement.length) //too many frames -> remove redundant lines
-			deleteRows(Arrays.copyOfRange(rows, replacement.length, rows.length));
+			deleteRows(false, Arrays.copyOfRange(rows, replacement.length, rows.length));
 
 		for(int i=0;i<replacement.length;i++){
 			int row = i < rows.length ? rows[i] : rows[rows.length-1] + (i - rows.length) + 1;
@@ -108,12 +108,13 @@ public class LineAction implements Action{
 		insertRows(tmpLines, rows[rows.length-1]+1);
 	}
 
-	private void deleteRows(){
-		deleteRows(rows);
+	private void deleteRows(boolean undo){
+		deleteRows(undo, rows);
 	}
-	private void deleteRows(int[] rows){
+	private void deleteRows(boolean undo, int[] rows){
 		for (int i = rows.length - 1; i >= 0; i--){
-			script.removeRow(rows[i]);
+			int row = undo ? rows[i]+rows.length : rows[i];
+			script.removeRow(row);
 		}
 	}
 

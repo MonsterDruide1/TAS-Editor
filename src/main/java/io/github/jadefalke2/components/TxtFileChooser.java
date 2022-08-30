@@ -1,13 +1,12 @@
 package io.github.jadefalke2.components;
 
-import io.github.jadefalke2.Script;
 import io.github.jadefalke2.util.Util;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
+import java.awt.Dimension;
 import java.io.File;
-import java.io.IOException;
 
 public class TxtFileChooser extends JFileChooser {
 
@@ -18,6 +17,7 @@ public class TxtFileChooser extends JFileChooser {
 	public TxtFileChooser (File defaultDir){
 		super(FileSystemView.getFileSystemView());
 		this.defaultDir = defaultDir;
+		setPreferredSize(new Dimension(1000,600));
 	}
 
 	/**

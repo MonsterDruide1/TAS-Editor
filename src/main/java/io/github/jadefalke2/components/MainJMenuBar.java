@@ -56,11 +56,23 @@ public class MainJMenuBar extends JMenuBar {
 
 		JMenuItem saveJMenuItem = fileJMenu.add("Save");
 		saveJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
-		saveJMenuItem.addActionListener(e -> parent.saveFile());
+		saveJMenuItem.addActionListener(e -> {
+			try {
+				parent.saveFile();
+			} catch(IOException ioe) {
+				JOptionPane.showMessageDialog(null, "Failed to save file!\nError: "+ioe.getMessage(), "Saving failed", JOptionPane.ERROR_MESSAGE);
+			}
+		});
 
 		JMenuItem saveAsJMenuItem = fileJMenu.add("Save As...");
 		saveAsJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
-		saveAsJMenuItem.addActionListener(e -> parent.saveFileAs());
+		saveAsJMenuItem.addActionListener(e -> {
+			try {
+				parent.saveFileAs();
+			} catch(IOException ioe) {
+				JOptionPane.showMessageDialog(null, "Failed to save file!\nError: "+ioe.getMessage(), "Saving failed", JOptionPane.ERROR_MESSAGE);
+			}
+		});
 
 		fileJMenu.addSeparator();
 
