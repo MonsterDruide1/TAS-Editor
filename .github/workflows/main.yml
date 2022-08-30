@@ -5,10 +5,8 @@ name: CI
 # Controls when the action will run. 
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
-  #release:
-  #  types: [ published ]
-  push:
-    branches: [ main ]
+  release:
+    types: [ published ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -39,18 +37,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         
-      #- name: Upload Release Asset
-      #  uses: actions/upload-release-asset@v1.0.2
-      #  env:
-      #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #  with:
-      #    upload_url: ${{ steps.get_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-      #    asset_path: target/TAS-Editor-1.0.jar
-      #    asset_name: TAS-Editor.jar
-      #    asset_content_type: application/java-archive
-
-      - name: Upload a Build Artifact
-        uses: actions/upload-artifact@v3.1.0
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: TAS-Editor.jar
-          path: target/TAS-Editor-1.0.jar
+          upload_url: ${{ steps.get_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: target/TAS-Editor-1.0.jar
+          asset_name: TAS-Editor.jar
+          asset_content_type: application/java-archive
