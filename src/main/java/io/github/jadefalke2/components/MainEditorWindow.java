@@ -55,7 +55,9 @@ public class MainEditorWindow extends JFrame {
 	}
 
 	public void recreateLayoutPanel(){
-		if(scriptTab != null) remove(scriptTab);
+		remove(scriptTab);
+
+		scriptTab.refreshLayout();
 
 		add(scriptTab);
 		revalidate(); //force layout update
