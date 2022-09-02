@@ -205,6 +205,11 @@ public class TAS {
 		mainEditorWindow.getPianoRoll().replaceSelectedRows(rows);
 	}
 
+	public void exit() {
+		Logger.log("exiting program");
+		mainEditorWindow.dispose();
+	}
+
 	/**
 	 * writes the current script into the current file
 	 */

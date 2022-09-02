@@ -38,8 +38,7 @@ public class MainEditorWindow extends JFrame {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				if(parent.closeScript()) {
-					Logger.log("exiting program");
-					dispose();
+					parent.exit();
 				}
 			}
 		});
