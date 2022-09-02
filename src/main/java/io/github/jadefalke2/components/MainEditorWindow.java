@@ -19,12 +19,8 @@ public class MainEditorWindow extends JFrame {
 	// frame that can be opened from this one
 	private final MainJMenuBar mainJMenuBar;
 
-	private final PianoRoll pianoRoll;
-	private final SideJoystickPanel sideJoystickPanel;
-
 	//layout
-	private final JPanel editor;
-	private JPanel combiningPanel;
+	private ScriptTab scriptTab;
 
 
 	/**
@@ -51,21 +47,8 @@ public class MainEditorWindow extends JFrame {
 		mainJMenuBar = new MainJMenuBar(this, parent);
 		setJMenuBar(mainJMenuBar);
 
-		pianoRoll = new PianoRoll(parent, parent.getScript());
-		sideJoystickPanel = new SideJoystickPanel(parent, pianoRoll);
+		scriptTab = new ScriptTab(parent);
 
-		editor = new JPanel(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
-
-		//Components
-		JScrollPane scrollPane = new JScrollPane(pianoRoll);
-		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-
-		c.fill = GridBagConstraints.BOTH;
-		c.weighty = 1;
-		c.weightx = 1;
-		editor.add(scrollPane, c);
-;
 		recreateLayoutPanel();
 
 		pack(); //TODO is still too small, the joystick is too little to use
@@ -73,39 +56,20 @@ public class MainEditorWindow extends JFrame {
 	}
 
 	public void recreateLayoutPanel(){
-		if(combiningPanel != null) remove(combiningPanel);
-		combiningPanel = new JPanel(new GridBagLayout());
+		if(scriptTab != null) remove(scriptTab);
 
-		GridBagConstraints c = new GridBagConstraints();
-		c.fill = GridBagConstraints.BOTH;
-		c.weighty = 1;
-
-		c.gridx = 1; //leave 0 and 2 open for the JoystickPanel
-		c.weightx = 1;
-		combiningPanel.add(editor, c);
-
-		if(parent.getPreferences().getJoystickPanelPosition() == Settings.JoystickPanelPosition.LEFT)
-			c.gridx = 0;
-		else //RIGHT
-			c.gridx = 2;
-
-		c.weightx = 0;
-		combiningPanel.add(sideJoystickPanel, c);
-
-		add(combiningPanel);
-
+		add(scriptTab);
 		revalidate(); //force layout update
 	}
 
 	public void setScript(Script script){
-		pianoRoll.setScript(script);
-		sideJoystickPanel.setScript(script);
+		scriptTab.setScript(script);
 	}
 
 	// getter
 
 	public PianoRoll getPianoRoll (){
-		return pianoRoll;
+		return scriptTab.getPianoRoll();
 	}
 
 	public MainJMenuBar getMainJMenuBar() {
@@ -113,8 +77,7 @@ public class MainEditorWindow extends JFrame {
 	}
 
 	public void onUndoRedo(boolean enableUndo, boolean enableRedo) {
-		if (!(pianoRoll.getSelectedRows().length == 0))
-			sideJoystickPanel.setEditingRows(pianoRoll.getSelectedRows(), parent.getScript().getLines());
+		scriptTab.updateSelectedRows();
 		mainJMenuBar.updateUndoMenu(enableUndo, enableRedo);
 	}
 }
