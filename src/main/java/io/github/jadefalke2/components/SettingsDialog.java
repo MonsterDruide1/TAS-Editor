@@ -2,6 +2,7 @@ package io.github.jadefalke2.components;
 
 import io.github.jadefalke2.stickRelatedClasses.SmoothTransitionDialog;
 import io.github.jadefalke2.util.Settings;
+import io.github.jadefalke2.util.SimpleDocumentListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -140,6 +141,20 @@ public class SettingsDialog extends JDialog {
 		comboBox.setSelectedIndex(Arrays.asList(values).indexOf(defaultState));
 		comboBox.addActionListener(e -> setter.accept(values[comboBox.getSelectedIndex()]));
 		mainPanel.add(comboBox, c);
+		c.gridx = 0;
+	}
+
+	private void addTitle(String title, JPanel mainPanel, GridBagConstraints c) {
+		mainPanel.add(new JLabel(title), c);
+	}
+
+	private void addTextFieldSetting(String name, String defaultState, Consumer<String> setter, JPanel mainPanel, GridBagConstraints c){
+		mainPanel.add(new JLabel(name), c);
+		c.gridx = 1;
+		JTextField field = new JTextField();
+		field.setText(defaultState);
+		field.getDocument().addDocumentListener((SimpleDocumentListener) e -> setter.accept(field.getText()));
+		mainPanel.add(field, c);
 		c.gridx = 0;
 	}
 
