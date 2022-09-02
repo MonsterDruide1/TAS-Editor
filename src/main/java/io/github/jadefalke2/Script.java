@@ -230,4 +230,8 @@ public class Script {
 		table.setValueAt(position.toCartString(), row, stickType == JoystickPanel.StickType.L_STICK ? 1 : 2); //TODO find a better way to differentiate sticks?
 		dirty = true;
 	}
+
+	public String getName() {
+		return file == null ? "unnamed script" : file.getName();
+	}
 }
