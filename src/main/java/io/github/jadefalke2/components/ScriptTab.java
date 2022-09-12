@@ -14,7 +14,7 @@ import java.util.Stack;
 public class ScriptTab extends JPanel {
 
 	private final TAS parent;
-	private Script script;
+	private final Script script;
 	private final PianoRoll pianoRoll;
 	private final SideJoystickPanel sideJoystickPanel;
 
@@ -48,6 +48,7 @@ public class ScriptTab extends JPanel {
 		editor.add(scrollPane, c);
 
 		refreshLayout();
+		parent.getMainEditorWindow().enableUndoRedo(false, false);
 	}
 
 	public void refreshLayout() {
@@ -73,16 +74,10 @@ public class ScriptTab extends JPanel {
 		revalidate(); //force layout update
 	}
 
-	public void setScript(Script script){
+	public boolean tryCloseScript() {
 		if(this.script != null)
-			if(!closeScript())
-				return; //did not save properly or was canceled -> don't continue opening the new script
-		this.script = script;
-		pianoRoll.setScript(script);
-		sideJoystickPanel.setScript(script);
-		undoStack.clear();
-		redoStack.clear();
-		parent.getMainEditorWindow().onUndoRedo(false, false);
+			return closeScript(); //did not save properly or was canceled
+		return true;
 	}
 
 	public PianoRoll getPianoRoll (){

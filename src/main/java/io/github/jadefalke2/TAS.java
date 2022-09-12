@@ -49,6 +49,7 @@ public class TAS {
 		//initialising windows -> set to be invisible by default
 		//will be set visible once they are supposed to
 		mainEditorWindow = new MainEditorWindow(this);
+		mainEditorWindow.setScript(Script.getEmptyScript(10));
 
 		mainEditorWindow.setVisible(true);
 

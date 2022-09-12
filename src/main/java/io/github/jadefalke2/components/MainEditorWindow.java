@@ -13,6 +13,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
 public class MainEditorWindow extends JFrame {
 
@@ -47,8 +48,6 @@ public class MainEditorWindow extends JFrame {
 		mainJMenuBar = new MainJMenuBar(this, parent);
 		setJMenuBar(mainJMenuBar);
 
-		scriptTab = new ScriptTab(parent, Script.getEmptyScript(10));
-
 		recreateLayoutPanel();
 
 		pack(); //TODO is still too small, the joystick is too little to use
@@ -56,16 +55,22 @@ public class MainEditorWindow extends JFrame {
 	}
 
 	public void recreateLayoutPanel(){
-		remove(scriptTab);
 
-		scriptTab.refreshLayout();
-
-		add(scriptTab);
+		if(scriptTab != null) {
+			scriptTab.refreshLayout();
+		}
 		revalidate(); //force layout update
 	}
 
 	public void setScript(Script script){
-		scriptTab.setScript(script);
+		if(scriptTab != null) {
+			if(!scriptTab.tryCloseScript())
+				return;
+			remove(scriptTab);
+		}
+		scriptTab = new ScriptTab(parent, script);
+		add(scriptTab);
+		recreateLayoutPanel();
 	}
 	public boolean closeScript() {
 		return scriptTab.closeScript();
@@ -83,6 +88,9 @@ public class MainEditorWindow extends JFrame {
 
 	public void onUndoRedo(boolean enableUndo, boolean enableRedo) {
 		scriptTab.updateSelectedRows();
+		enableUndoRedo(enableUndo, enableRedo);
+	}
+	public void enableUndoRedo(boolean enableUndo, boolean enableRedo) {
 		mainJMenuBar.updateUndoMenu(enableUndo, enableRedo);
 	}
 
