@@ -8,7 +8,7 @@ import io.github.jadefalke2.util.CorruptedScriptException;
 import io.github.jadefalke2.util.Settings;
 
 import javax.swing.*;
-import java.awt.*;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -78,10 +78,6 @@ public class MainEditorWindow extends JFrame {
 
 	// getter
 
-	public PianoRoll getPianoRoll (){
-		return scriptTab.getPianoRoll();
-	}
-
 	public MainJMenuBar getMainJMenuBar() {
 		return mainJMenuBar;
 	}
@@ -111,5 +107,17 @@ public class MainEditorWindow extends JFrame {
 	}
 	public void saveFileAs() throws IOException {
 		scriptTab.saveFileAs();
+	}
+	public void copy() {
+		scriptTab.getPianoRoll().copy();
+	}
+	public void paste() throws IOException, UnsupportedFlavorException {
+		scriptTab.getPianoRoll().paste();
+	}
+	public void delete() {
+		scriptTab.getPianoRoll().deleteSelectedRows();
+	}
+	public void addEmptyRow() {
+		scriptTab.getPianoRoll().addEmptyRow();
 	}
 }

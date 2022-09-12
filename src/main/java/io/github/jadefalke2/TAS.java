@@ -89,7 +89,7 @@ public class TAS {
 
 	private void setDefaultsAfterThemeChange () {
 		if (mainEditorWindow != null) {
-			mainEditorWindow.getPianoRoll().setShowGrid(true);
+			mainEditorWindow.recreateLayoutPanel(); // only requires `setShowGrid` within updates
 		}
 	}
 
@@ -114,34 +114,15 @@ public class TAS {
 	}
 
 	public void copy(){
-		InputLine[] rows = mainEditorWindow.getPianoRoll().getSelectedInputRows();
-		int[] rowsIndex = mainEditorWindow.getPianoRoll().getSelectedRows();
-
-		String[] rowStrings = new String[rows.length];
-		for(int i=0;i<rows.length;i++){
-			rowStrings[i] = rows[i].getFull(rowsIndex[i]);
-		}
-		String fullString = String.join("\n", rowStrings);
-
-		StringSelection selection = new StringSelection(fullString);
-		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, selection);
+		mainEditorWindow.copy();
 	}
 
 	public void delete(){
-		mainEditorWindow.getPianoRoll().deleteSelectedRows();
+		mainEditorWindow.delete();
 	}
 
 	public void paste() throws IOException, UnsupportedFlavorException {
-		String clipContent = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getContents(this).getTransferData(DataFlavor.stringFlavor);
-		InputLine[] rows = Arrays.stream(clipContent.split("[\r\n]+")).map(line -> {
-			try {
-				return new InputLine(line);
-			} catch(CorruptedScriptException e){
-				System.out.println("invalid clipboard content: " + line); //TODO proper error handling here
-				return null;
-			}
-		}).toArray(InputLine[]::new);
-		mainEditorWindow.getPianoRoll().replaceSelectedRows(rows);
+		mainEditorWindow.paste();
 	}
 
 	public void exit() {

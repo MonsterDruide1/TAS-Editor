@@ -71,6 +71,8 @@ public class ScriptTab extends JPanel {
 		c.weightx = 0;
 		add(sideJoystickPanel, c);
 
+		pianoRoll.setShowGrid(true); // necessary after theme change
+
 		revalidate(); //force layout update
 	}
 

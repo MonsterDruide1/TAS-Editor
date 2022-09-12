@@ -119,7 +119,7 @@ public class MainJMenuBar extends JMenuBar {
 
 		JMenuItem addNewLineItem = editJMenu.add("Add line");
 		addNewLineItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
-		addNewLineItem.addActionListener(e -> mainEditorWindow.getPianoRoll().addEmptyRow());
+		addNewLineItem.addActionListener(e -> mainEditorWindow.addEmptyRow());
 
 		editJMenu.addSeparator();
 
