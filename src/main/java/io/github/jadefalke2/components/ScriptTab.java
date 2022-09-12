@@ -2,10 +2,13 @@ package io.github.jadefalke2.components;
 
 import io.github.jadefalke2.Script;
 import io.github.jadefalke2.TAS;
+import io.github.jadefalke2.actions.Action;
+import io.github.jadefalke2.util.Logger;
 import io.github.jadefalke2.util.Settings;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Stack;
 
 public class ScriptTab extends JPanel {
 
@@ -15,8 +18,17 @@ public class ScriptTab extends JPanel {
 
 	private final JPanel editor;
 
+	private Stack<Action> undoStack;
+	private Stack<Action> redoStack;
+	private Action previewAction;
+
 	public ScriptTab(TAS parent) {
 		this.parent = parent;
+
+		//initialising stacks
+		undoStack = new Stack<>();
+		redoStack = new Stack<>();
+
 		pianoRoll = new PianoRoll(parent, parent.getScript());
 		sideJoystickPanel = new SideJoystickPanel(parent, pianoRoll);
 
@@ -61,6 +73,9 @@ public class ScriptTab extends JPanel {
 	public void setScript(Script script){
 		pianoRoll.setScript(script);
 		sideJoystickPanel.setScript(script);
+		undoStack.clear();
+		redoStack.clear();
+		parent.getMainEditorWindow().onUndoRedo(false, false);
 	}
 
 	public PianoRoll getPianoRoll (){
@@ -70,5 +85,68 @@ public class ScriptTab extends JPanel {
 	public void updateSelectedRows() {
 		if (!(pianoRoll.getSelectedRows().length == 0))
 			sideJoystickPanel.setEditingRows(pianoRoll.getSelectedRows(), parent.getScript().getLines());
+	}
+
+	public void executeAction(Action action) {
+		if(previewAction != null) {
+			previewAction.revert();
+			previewAction = null;
+		}
+		Logger.log("executing action: " + action);
+
+		//adds a new action to the stack to make it possible to undo
+		action.execute();
+		undoStack.push(action);
+		redoStack.clear();
+		parent.getMainEditorWindow().onUndoRedo(!undoStack.isEmpty(), false);
+	}
+
+	public void undo() {
+		//undoes the last action
+		if (undoStack.isEmpty())
+			return;
+
+		if(previewAction != null) {
+			Logger.log("reverting preview: "+previewAction);
+			previewAction.revert();
+			previewAction = null;
+		}
+		Action action = undoStack.pop();
+		Logger.log("undoing action: " + action);
+
+		action.revert();
+		redoStack.push(action);
+		parent.getMainEditorWindow().onUndoRedo(!undoStack.isEmpty(), !redoStack.isEmpty());
+	}
+
+	public void redo() {
+		//redoes the last action
+		if (redoStack.isEmpty())
+			return;
+
+		if(previewAction != null) {
+			Logger.log("reverting preview: "+previewAction);
+			previewAction.revert();
+			previewAction = null;
+		}
+		Action action = redoStack.pop();
+		Logger.log("redoing action: " + action);
+
+		action.execute();
+		undoStack.push(action);
+		parent.getMainEditorWindow().onUndoRedo(!undoStack.isEmpty(), !redoStack.isEmpty());
+	}
+
+	public void previewAction(Action action) {
+		if(previewAction != null) {
+			Logger.log("reverting preview: "+previewAction);
+			previewAction.revert();
+			previewAction = null;
+		}
+		Logger.log("previewing action: " + action);
+
+		action.execute();
+		previewAction = action;
+		redoStack.clear();
 	}
 }
