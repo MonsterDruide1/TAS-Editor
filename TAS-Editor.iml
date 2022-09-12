@@ -12,6 +12,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="flatlaf" level="project" />
-    <orderEntry type="library" name="Maven: com.formdev:flatlaf:1.5" level="project" />
+    <orderEntry type="library" name="Maven: com.formdev:flatlaf:2.4" level="project" />
   </component>
 </module>
