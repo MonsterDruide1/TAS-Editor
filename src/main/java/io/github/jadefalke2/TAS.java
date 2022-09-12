@@ -98,31 +98,8 @@ public class TAS {
 	public void executeAction(Action action) {
 		mainEditorWindow.executeAction(action);
 	}
-	public void undo() {
-		mainEditorWindow.undo();
-	}
-	public void redo() {
-		mainEditorWindow.redo();
-	}
 	public void previewAction(Action action) {
 		mainEditorWindow.previewAction(action);
-	}
-
-	public void cut(){
-		copy();
-		delete();
-	}
-
-	public void copy(){
-		mainEditorWindow.copy();
-	}
-
-	public void delete(){
-		mainEditorWindow.delete();
-	}
-
-	public void paste() throws IOException, UnsupportedFlavorException {
-		mainEditorWindow.paste();
 	}
 
 	public void exit() {

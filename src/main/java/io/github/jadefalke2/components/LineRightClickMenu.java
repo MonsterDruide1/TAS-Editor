@@ -22,12 +22,14 @@ public class LineRightClickMenu extends JPopupMenu {
 
 	private final TAS parent;
 	private final Script script;
+	private final ScriptTab scriptTab;
 	private final DefaultTableModel model;
 
-	public LineRightClickMenu(TAS parent, Script script, DefaultTableModel model){
+	public LineRightClickMenu(TAS parent, Script script, DefaultTableModel model, ScriptTab scriptTab){
 		this.parent = parent;
 		this.script = script;
 		this.model = model;
+		this.scriptTab = scriptTab;
 
 		copyOption = add("copy");
 		pasteOption = add("paste");
@@ -53,15 +55,15 @@ public class LineRightClickMenu extends JPopupMenu {
 		setListener(insertOption, rows, LineAction.Type.INSERT);
 		setListener(cloneOption, rows, LineAction.Type.CLONE);
 
-		setListener(copyOption, parent::copy);
+		setListener(copyOption, () -> scriptTab.getPianoRoll().copy());
 		setListener(pasteOption, () -> {
 			try {
-				parent.paste();
+				scriptTab.getPianoRoll().paste();
 			} catch (IOException | UnsupportedFlavorException e) {
 				e.printStackTrace(); //TODO error handling
 			}
 		});
-		setListener(cutOption, parent::cut);
+		setListener(cutOption, () -> scriptTab.getPianoRoll().cut());
 		show(invoker,(int)point.getX(),(int)point.getY());
 	}
 

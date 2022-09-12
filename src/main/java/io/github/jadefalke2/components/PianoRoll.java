@@ -23,16 +23,18 @@ public class PianoRoll extends JTable {
 
 	//script
 	private Script script;
+	private ScriptTab scriptTab;
 
 	// table model
 	private final DefaultTableModel model = new DefaultTableModel();
 	private final TAS parent;
 
 
-	public PianoRoll (TAS parent, Script script){
+	public PianoRoll (TAS parent, Script script, ScriptTab scriptTab){
 
 		this.parent = parent;
 		this.script = script;
+		this.scriptTab = scriptTab;
 
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment( SwingConstants.CENTER );
@@ -76,14 +78,14 @@ public class PianoRoll extends JTable {
 		getActionMap().put("copy", new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				parent.copy();
+				copy();
 			}
 		});
 		getActionMap().put("paste", new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					parent.paste();
+					paste();
 				} catch (IOException | UnsupportedFlavorException ex) {
 					ex.printStackTrace();
 				}
@@ -92,7 +94,7 @@ public class PianoRoll extends JTable {
 		getActionMap().put("cut", new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				parent.cut();
+				cut();
 			}
 		});
 
@@ -105,7 +107,7 @@ public class PianoRoll extends JTable {
 	 * @param point the point at which the menu "spawns"
 	 */
 	public void openPopUpMenu(int[] rows, Point point){
-		new LineRightClickMenu(parent, script, model).openPopUpMenu(rows, point,this);
+		new LineRightClickMenu(parent, script, model, scriptTab).openPopUpMenu(rows, point,this);
 	}
 
 	public void adjustColumnWidth(){
@@ -200,6 +202,11 @@ public class PianoRoll extends JTable {
 			}
 		}).toArray(InputLine[]::new);
 		replaceSelectedRows(rows);
+	}
+
+	public void cut(){
+		copy();
+		deleteSelectedRows();
 	}
 
 }

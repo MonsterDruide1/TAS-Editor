@@ -32,7 +32,7 @@ public class ScriptTab extends JPanel {
 		undoStack = new Stack<>();
 		redoStack = new Stack<>();
 
-		pianoRoll = new PianoRoll(parent, script);
+		pianoRoll = new PianoRoll(parent, script, this);
 		sideJoystickPanel = new SideJoystickPanel(parent, pianoRoll, script);
 
 		editor = new JPanel(new GridBagLayout());

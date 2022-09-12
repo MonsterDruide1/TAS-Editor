@@ -16,8 +16,10 @@ import java.net.URL;
 public class MainJMenuBar extends JMenuBar {
 
 	private JMenuItem undo, redo;
+	private final MainEditorWindow mainEditorWindow;
 
 	public MainJMenuBar(MainEditorWindow mainEditorWindow, TAS parent){
+		this.mainEditorWindow = mainEditorWindow;
 		JMenu fileMenu = createFileMenu(parent, mainEditorWindow);
 		add(fileMenu);
 
@@ -87,27 +89,27 @@ public class MainJMenuBar extends JMenuBar {
 
 		undo = editJMenu.add("Undo");
 		undo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK));
-		undo.addActionListener(e -> parent.undo());
+		undo.addActionListener(e -> getActiveScriptTab().undo());
 
 		redo = editJMenu.add("Redo");
 		updateRedoAccelerator(parent.getPreferences().getRedoKeybind());
-		redo.addActionListener(e -> parent.redo());
+		redo.addActionListener(e -> getActiveScriptTab().redo());
 
 		editJMenu.addSeparator();
 
 		JMenuItem cutJMenuItem = editJMenu.add("Cut");
 		cutJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_DOWN_MASK));
-		cutJMenuItem.addActionListener(e -> parent.cut());
+		cutJMenuItem.addActionListener(e -> getActiveScriptTab().getPianoRoll().cut());
 
 		JMenuItem copyJMenuItem = editJMenu.add("Copy");
 		copyJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK));
-		copyJMenuItem.addActionListener(e -> parent.copy());
+		copyJMenuItem.addActionListener(e -> getActiveScriptTab().getPianoRoll().copy());
 
 		JMenuItem pasteJMenuItem = editJMenu.add("Paste");
 		pasteJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, InputEvent.CTRL_DOWN_MASK));
 		pasteJMenuItem.addActionListener(e -> {
 			try {
-				parent.paste();
+				getActiveScriptTab().getPianoRoll().paste();
 			} catch (IOException | UnsupportedFlavorException ioException) {
 				ioException.printStackTrace();
 			}
@@ -115,7 +117,7 @@ public class MainJMenuBar extends JMenuBar {
 
 		JMenuItem deleteJMenuItem = editJMenu.add("Delete");
 		deleteJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0));
-		deleteJMenuItem.addActionListener(e -> parent.delete());
+		deleteJMenuItem.addActionListener(e -> getActiveScriptTab().getPianoRoll().deleteSelectedRows());
 
 		JMenuItem addNewLineItem = editJMenu.add("Add line");
 		addNewLineItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
@@ -163,6 +165,10 @@ public class MainJMenuBar extends JMenuBar {
 		});
 
 		return helpJMenu;
+	}
+
+	private ScriptTab getActiveScriptTab() {
+		return mainEditorWindow.getActiveScriptTab();
 	}
 
 	public void updateUndoMenu(boolean enableUndo, boolean enableRedo) {

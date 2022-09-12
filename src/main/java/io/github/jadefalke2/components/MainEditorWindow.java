@@ -93,12 +93,6 @@ public class MainEditorWindow extends JFrame {
 	public void executeAction(Action action) {
 		scriptTab.executeAction(action);
 	}
-	public void undo() {
-		scriptTab.undo();
-	}
-	public void redo() {
-		scriptTab.redo();
-	}
 	public void previewAction(Action action) {
 		scriptTab.previewAction(action);
 	}
@@ -119,5 +113,9 @@ public class MainEditorWindow extends JFrame {
 	}
 	public void addEmptyRow() {
 		scriptTab.getPianoRoll().addEmptyRow();
+	}
+
+	public ScriptTab getActiveScriptTab() {
+		return scriptTab;
 	}
 }
