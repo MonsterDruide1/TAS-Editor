@@ -6,6 +6,7 @@ import io.github.jadefalke2.TAS;
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.IntConsumer;
 
 public class TabbedScriptsPane extends JTabbedPane {
 
@@ -15,7 +16,11 @@ public class TabbedScriptsPane extends JTabbedPane {
 	public TabbedScriptsPane(TAS parent) {
 		this.parent = parent;
 		scriptTabs = new ArrayList<>();
+
 		addChangeListener((e) -> afterTabChange());
+		putClientProperty("JTabbedPane.tabClosable", true);
+		putClientProperty("JTabbedPane.tabCloseCallback", (IntConsumer) this::closeTab);
+		putClientProperty("JTabbedPane.hideTabAreaWithOneTab", true);
 	}
 
 	public void refreshLayouts() {
@@ -25,7 +30,11 @@ public class TabbedScriptsPane extends JTabbedPane {
 	}
 
 	public void afterTabChange() {
-		getActiveScriptTab().updateUndoRedoEnabled();
+		ScriptTab activeTab = getActiveScriptTab();
+		if(activeTab != null)
+			activeTab.updateUndoRedoEnabled();
+		else
+			parent.getMainEditorWindow().enableUndoRedo(false, false);
 	}
 
 	public void openScript(Script script) {
@@ -35,17 +44,29 @@ public class TabbedScriptsPane extends JTabbedPane {
 		setSelectedIndex(scriptTabs.size()-1);
 	}
 
+	// TODO lots of issues with no script active (null return)
 	public ScriptTab getActiveScriptTab() {
-		return scriptTabs.get(getSelectedIndex());
+		int selectedIndex = getSelectedIndex();
+		if(selectedIndex == -1 || scriptTabs.size() <= selectedIndex) return null;
+		return scriptTabs.get(selectedIndex);
 	}
 
 	public boolean closeAllScripts() {
-		for(ScriptTab tab : scriptTabs) {
-			if(!tab.closeScript()) {
+		while(getTabCount() > 0) {
+			if(!closeTab(0))
 				return false;
-			}
 		}
 		return true;
+	}
+
+	public boolean closeTab(int index) {
+		ScriptTab tab = scriptTabs.get(index);
+		if(tab.closeScript()) {
+			scriptTabs.remove(index);
+			removeTabAt(index);
+			return true;
+		}
+		return false;
 	}
 
 }
