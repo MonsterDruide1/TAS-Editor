@@ -17,7 +17,7 @@ public class MainEditorWindow extends JFrame {
 	private final MainJMenuBar mainJMenuBar;
 
 	//layout
-	private ScriptTab scriptTab;
+	private final TabbedScriptsPane tabbedPane;
 
 
 	/**
@@ -34,7 +34,7 @@ public class MainEditorWindow extends JFrame {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				if(parent.closeScript()) {
+				if(parent.closeAllScripts()) {
 					parent.exit();
 				}
 			}
@@ -43,6 +43,9 @@ public class MainEditorWindow extends JFrame {
 		mainJMenuBar = new MainJMenuBar(this, parent);
 		setJMenuBar(mainJMenuBar);
 
+		tabbedPane = new TabbedScriptsPane(parent);
+		add(tabbedPane);
+
 		recreateLayoutPanel();
 
 		pack(); //TODO is still too small, the joystick is too little to use
@@ -50,25 +53,15 @@ public class MainEditorWindow extends JFrame {
 	}
 
 	public void recreateLayoutPanel(){
-
-		if(scriptTab != null) {
-			scriptTab.refreshLayout();
-		}
+		tabbedPane.refreshLayouts();
 		revalidate(); //force layout update
 	}
 
-	public void setScript(Script script){
-		if(scriptTab != null) {
-			if(!scriptTab.tryCloseScript())
-				return;
-			remove(scriptTab);
-		}
-		scriptTab = new ScriptTab(parent, script);
-		add(scriptTab);
-		recreateLayoutPanel();
+	public void openScript(Script script){
+		tabbedPane.openScript(script);
 	}
-	public boolean closeScript() {
-		return scriptTab.closeScript();
+	public boolean closeAllScripts() {
+		return tabbedPane.closeAllScripts();
 	}
 
 	// getter
@@ -78,7 +71,7 @@ public class MainEditorWindow extends JFrame {
 	}
 
 	public void onUndoRedo(boolean enableUndo, boolean enableRedo) {
-		scriptTab.updateSelectedRows();
+		getActiveScriptTab().updateSelectedRows();
 		enableUndoRedo(enableUndo, enableRedo);
 	}
 	public void enableUndoRedo(boolean enableUndo, boolean enableRedo) {
@@ -86,22 +79,22 @@ public class MainEditorWindow extends JFrame {
 	}
 
 	public void executeAction(Action action) {
-		scriptTab.executeAction(action);
+		getActiveScriptTab().executeAction(action);
 	}
 	public void previewAction(Action action) {
-		scriptTab.previewAction(action);
+		getActiveScriptTab().previewAction(action);
 	}
 	public void saveFile() throws IOException {
-		scriptTab.saveFile();
+		getActiveScriptTab().saveFile();
 	}
 	public void saveFileAs() throws IOException {
-		scriptTab.saveFileAs();
+		getActiveScriptTab().saveFileAs();
 	}
 	public void addEmptyRow() {
-		scriptTab.getPianoRoll().addEmptyRow();
+		getActiveScriptTab().getPianoRoll().addEmptyRow();
 	}
 
 	public ScriptTab getActiveScriptTab() {
-		return scriptTab;
+		return tabbedPane.getActiveScriptTab();
 	}
 }

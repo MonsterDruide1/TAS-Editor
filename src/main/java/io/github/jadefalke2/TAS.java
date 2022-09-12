@@ -45,7 +45,7 @@ public class TAS {
 		//initialising windows -> set to be invisible by default
 		//will be set visible once they are supposed to
 		mainEditorWindow = new MainEditorWindow(this);
-		mainEditorWindow.setScript(Script.getEmptyScript(10));
+		mainEditorWindow.openScript(Script.getEmptyScript(10));
 
 		mainEditorWindow.setVisible(true);
 
@@ -116,32 +116,28 @@ public class TAS {
 
 	public void newFile(){
 		Logger.log("opening a new, empty script");
-		setScript(Script.getEmptyScript(10));
-	}
-
-	public void openScript(File file) throws IOException {
-		Logger.log("loading script from " + file.getAbsolutePath());
-		setScript(file);
+		openScript(Script.getEmptyScript(10));
 	}
 
 	/**
 	 * Returns the string that is being read from the given file.
 	 * @param file the file to open
 	 */
-	public void setScript(File file) throws IOException {
+	public void openScript(File file) throws IOException {
+		Logger.log("loading script from " + file.getAbsolutePath());
 		// sets the current script file to be the one that the method is called with
 		try {
-			setScript(new Script(file));
+			openScript(new Script(file));
 		} catch (CorruptedScriptException e) {
 			e.printStackTrace();
 		}
 	}
-	public void setScript(Script script){
-		mainEditorWindow.setScript(script);
+	public void openScript(Script script){
+		mainEditorWindow.openScript(script);
 	}
 
-	public boolean closeScript(){
-		return mainEditorWindow.closeScript();
+	public boolean closeAllScripts(){
+		return mainEditorWindow.closeAllScripts();
 	}
 
 	public void openSettings(){

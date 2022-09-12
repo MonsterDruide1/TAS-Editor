@@ -112,7 +112,7 @@ public class ScriptTab extends JPanel {
 		action.execute();
 		undoStack.push(action);
 		redoStack.clear();
-		parent.getMainEditorWindow().onUndoRedo(!undoStack.isEmpty(), false);
+		updateUndoRedoEnabled();
 	}
 
 	public void undo() {
@@ -130,7 +130,7 @@ public class ScriptTab extends JPanel {
 
 		action.revert();
 		redoStack.push(action);
-		parent.getMainEditorWindow().onUndoRedo(!undoStack.isEmpty(), !redoStack.isEmpty());
+		updateUndoRedoEnabled();
 	}
 
 	public void redo() {
@@ -148,6 +148,10 @@ public class ScriptTab extends JPanel {
 
 		action.execute();
 		undoStack.push(action);
+		updateUndoRedoEnabled();
+	}
+
+	public void updateUndoRedoEnabled() {
 		parent.getMainEditorWindow().onUndoRedo(!undoStack.isEmpty(), !redoStack.isEmpty());
 	}
 
@@ -162,5 +166,6 @@ public class ScriptTab extends JPanel {
 		action.execute();
 		previewAction = action;
 		redoStack.clear();
+		updateUndoRedoEnabled();
 	}
 }
