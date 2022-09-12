@@ -54,6 +54,9 @@ public class SmoothTransitionDialog extends JDialog {
 			dropdownMenu.addItem(option.getName());
 
 		dropdownMenu.setSelectedIndex(settings.getSmoothTransitionType().ordinal());
+		dropdownMenu.addActionListener(e -> {
+			updatePositions();
+		});
 
 		JButton okButton = new JButton("OK");
 		okButton.addActionListener(e -> {
@@ -67,11 +70,7 @@ public class SmoothTransitionDialog extends JDialog {
 		endJoystick.setStickPosition(endPos);
 
 		CustomChangeListener<StickPosition> joystickPanelListener = e -> {
-			if(frames > 1){
-				StickPosition[] stickPositionsPreview = getSmoothTransitionData();
-				startJoystick.setStickPositions(reverse(stickPositionsPreview));
-				endJoystick.setStickPositions(stickPositionsPreview);
-			}
+			updatePositions();
 		};
 		startJoystick.setOnChangeListener(joystickPanelListener);
 		endJoystick.setOnChangeListener(joystickPanelListener);
@@ -107,12 +106,21 @@ public class SmoothTransitionDialog extends JDialog {
 		c.gridy = 2;
 		panel.add(okButton, c);
 
+		updatePositions();
 
 		add(panel);
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setModal(true);
 		pack();
+	}
+
+	private void updatePositions() {
+		if(frames > 1){
+			StickPosition[] stickPositionsPreview = getSmoothTransitionData();
+			startJoystick.setStickPositions(reverse(stickPositionsPreview));
+			endJoystick.setStickPositions(stickPositionsPreview);
+		}
 	}
 
 	private StickPosition[] reverse (StickPosition[] old) {
