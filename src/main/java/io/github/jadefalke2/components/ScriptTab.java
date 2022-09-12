@@ -8,29 +8,32 @@ import io.github.jadefalke2.util.Settings;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 import java.util.Stack;
 
 public class ScriptTab extends JPanel {
 
 	private final TAS parent;
+	private Script script;
 	private final PianoRoll pianoRoll;
 	private final SideJoystickPanel sideJoystickPanel;
 
 	private final JPanel editor;
 
-	private Stack<Action> undoStack;
-	private Stack<Action> redoStack;
+	private final Stack<Action> undoStack;
+	private final Stack<Action> redoStack;
 	private Action previewAction;
 
-	public ScriptTab(TAS parent) {
+	public ScriptTab(TAS parent, Script script) {
 		this.parent = parent;
+		this.script = script;
 
 		//initialising stacks
 		undoStack = new Stack<>();
 		redoStack = new Stack<>();
 
-		pianoRoll = new PianoRoll(parent, parent.getScript());
-		sideJoystickPanel = new SideJoystickPanel(parent, pianoRoll);
+		pianoRoll = new PianoRoll(parent, script);
+		sideJoystickPanel = new SideJoystickPanel(parent, pianoRoll, script);
 
 		editor = new JPanel(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
@@ -71,6 +74,10 @@ public class ScriptTab extends JPanel {
 	}
 
 	public void setScript(Script script){
+		if(this.script != null)
+			if(!closeScript())
+				return; //did not save properly or was canceled -> don't continue opening the new script
+		this.script = script;
 		pianoRoll.setScript(script);
 		sideJoystickPanel.setScript(script);
 		undoStack.clear();
@@ -84,7 +91,17 @@ public class ScriptTab extends JPanel {
 
 	public void updateSelectedRows() {
 		if (!(pianoRoll.getSelectedRows().length == 0))
-			sideJoystickPanel.setEditingRows(pianoRoll.getSelectedRows(), parent.getScript().getLines());
+			sideJoystickPanel.setEditingRows(pianoRoll.getSelectedRows(), script.getLines());
+	}
+
+	public void saveFile() throws IOException {
+		script.saveFile(parent.getPreferences().getDirectory());
+	}
+	public void saveFileAs() throws IOException {
+		script.saveFileAs(parent.getPreferences().getDirectory());
+	}
+	public boolean closeScript() {
+		return script.closeScript(parent);
 	}
 
 	public void executeAction(Action action) {

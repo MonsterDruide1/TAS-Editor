@@ -102,7 +102,7 @@ public class InputDrawMouseListener extends MouseAdapter {
 	}
 	private LineAction getAction() {
 		if(drawingCol == -1 || startRow == -1 || endRow == -1 || drawingCol < 3) return null;
-		return LineAction.setButtons(parent.getScript(), Math.min(startRow, endRow), Math.max(startRow, endRow), Button.values()[drawingCol-3], mode == Mode.ADDING);
+		return LineAction.setButtons(table.getScript(), Math.min(startRow, endRow), Math.max(startRow, endRow), Button.values()[drawingCol-3], mode == Mode.ADDING);
 	}
 
 

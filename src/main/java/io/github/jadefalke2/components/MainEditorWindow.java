@@ -47,7 +47,7 @@ public class MainEditorWindow extends JFrame {
 		mainJMenuBar = new MainJMenuBar(this, parent);
 		setJMenuBar(mainJMenuBar);
 
-		scriptTab = new ScriptTab(parent);
+		scriptTab = new ScriptTab(parent, Script.getEmptyScript(10));
 
 		recreateLayoutPanel();
 
@@ -66,6 +66,9 @@ public class MainEditorWindow extends JFrame {
 
 	public void setScript(Script script){
 		scriptTab.setScript(script);
+	}
+	public boolean closeScript() {
+		return scriptTab.closeScript();
 	}
 
 	// getter
@@ -94,5 +97,11 @@ public class MainEditorWindow extends JFrame {
 	}
 	public void previewAction(Action action) {
 		scriptTab.previewAction(action);
+	}
+	public void saveFile() throws IOException {
+		scriptTab.saveFile();
+	}
+	public void saveFileAs() throws IOException {
+		scriptTab.saveFileAs();
 	}
 }

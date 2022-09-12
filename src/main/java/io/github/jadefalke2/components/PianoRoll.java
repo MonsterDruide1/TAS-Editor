@@ -156,6 +156,10 @@ public class PianoRoll extends JTable {
 		script.setTable(model);
 	}
 
+	public Script getScript() {
+		return script;
+	}
+
 	/**
 	 * Overwriting the table to make all cells uneditable -> might change in the future due to functions
 	 * @param row the row

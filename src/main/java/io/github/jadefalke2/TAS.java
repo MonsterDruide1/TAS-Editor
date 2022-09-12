@@ -28,8 +28,6 @@ public class TAS {
 
 	private Settings preferences;
 
-	private Script script;
-
 	public static void main(String[] args) {
 		INITIAL_MAIN_TAS_FOR_DEBUGGING = new TAS();
 	}
@@ -48,7 +46,6 @@ public class TAS {
 		// initialise preferences
 		initPreferences();
 
-		this.script = Script.getEmptyScript(10);
 		//initialising windows -> set to be invisible by default
 		//will be set visible once they are supposed to
 		mainEditorWindow = new MainEditorWindow(this);
@@ -155,11 +152,11 @@ public class TAS {
 	 * writes the current script into the current file
 	 */
 	public void saveFile() throws IOException {
-		script.saveFile(preferences.getDirectory());
+		mainEditorWindow.saveFile();
 	}
 
 	public void saveFileAs() throws IOException {
-		script.saveFileAs(preferences.getDirectory());
+		mainEditorWindow.saveFileAs();
 	}
 
 	public void newFile(){
@@ -185,15 +182,11 @@ public class TAS {
 		}
 	}
 	public void setScript(Script script){
-		if(this.script != null)
-			if(!closeScript())
-				return; //did not save properly or was canceled -> don't continue opening the new script
-		this.script = script;
 		mainEditorWindow.setScript(script);
 	}
 
 	public boolean closeScript(){
-		return script.closeScript(this);
+		return mainEditorWindow.closeScript();
 	}
 
 	public void openSettings(){
@@ -215,9 +208,5 @@ public class TAS {
 
 	public MainEditorWindow getMainEditorWindow() {
 		return mainEditorWindow;
-	}
-
-	public Script getScript(){
-		return script;
 	}
 }
