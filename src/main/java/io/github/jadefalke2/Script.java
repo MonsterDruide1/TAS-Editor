@@ -231,4 +231,11 @@ public class Script {
 	public String getName() {
 		return file == null ? "unnamed script" : file.getName();
 	}
+
+	public void attachDirtyListener(ObservableProperty.PropertyChangeListener<Boolean> listener) {
+		dirty.attachListener(listener);
+	}
+	public void detachDirtyListener(ObservableProperty.PropertyChangeListener<Boolean> listener) {
+		dirty.detachListener(listener);
+	}
 }

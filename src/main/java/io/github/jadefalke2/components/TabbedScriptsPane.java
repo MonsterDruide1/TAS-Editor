@@ -38,10 +38,12 @@ public class TabbedScriptsPane extends JTabbedPane {
 	}
 
 	public void openScript(Script script) {
+		int index = scriptTabs.size();
 		ScriptTab scriptTab = new ScriptTab(parent, script);
 		scriptTabs.add(scriptTab);
 		addTab(script.getName(), scriptTab);
-		setSelectedIndex(scriptTabs.size()-1);
+		setSelectedIndex(index);
+		script.attachDirtyListener(dirty -> setTitleAt(index, (dirty ? "*" : "")+script.getName()));
 	}
 
 	// TODO lots of issues with no script active (null return)
