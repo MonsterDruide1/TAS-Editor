@@ -4,16 +4,11 @@ import io.github.jadefalke2.Script;
 import io.github.jadefalke2.TAS;
 import io.github.jadefalke2.actions.Action;
 import io.github.jadefalke2.util.Logger;
-import io.github.jadefalke2.util.CorruptedScriptException;
-import io.github.jadefalke2.util.Settings;
 
 import javax.swing.*;
-import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 
 public class MainEditorWindow extends JFrame {
 
@@ -101,15 +96,6 @@ public class MainEditorWindow extends JFrame {
 	}
 	public void saveFileAs() throws IOException {
 		scriptTab.saveFileAs();
-	}
-	public void copy() {
-		scriptTab.getPianoRoll().copy();
-	}
-	public void paste() throws IOException, UnsupportedFlavorException {
-		scriptTab.getPianoRoll().paste();
-	}
-	public void delete() {
-		scriptTab.getPianoRoll().deleteSelectedRows();
 	}
 	public void addEmptyRow() {
 		scriptTab.getPianoRoll().addEmptyRow();

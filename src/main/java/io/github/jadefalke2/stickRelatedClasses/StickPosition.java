@@ -1,6 +1,5 @@
 package io.github.jadefalke2.stickRelatedClasses;
 
-import java.awt.*;
 import java.util.Objects;
 
 public class StickPosition {

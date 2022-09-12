@@ -5,7 +5,6 @@ import io.github.jadefalke2.TAS;
 import io.github.jadefalke2.actions.LineAction;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
@@ -23,12 +22,10 @@ public class LineRightClickMenu extends JPopupMenu {
 	private final TAS parent;
 	private final Script script;
 	private final ScriptTab scriptTab;
-	private final DefaultTableModel model;
 
-	public LineRightClickMenu(TAS parent, Script script, DefaultTableModel model, ScriptTab scriptTab){
+	public LineRightClickMenu(TAS parent, Script script, ScriptTab scriptTab){
 		this.parent = parent;
 		this.script = script;
-		this.model = model;
 		this.scriptTab = scriptTab;
 
 		copyOption = add("copy");

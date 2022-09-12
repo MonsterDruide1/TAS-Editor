@@ -4,7 +4,6 @@ import io.github.jadefalke2.InputLine;
 import io.github.jadefalke2.Script;
 import io.github.jadefalke2.util.Button;
 
-import javax.swing.table.DefaultTableModel;
 import java.util.Arrays;
 
 

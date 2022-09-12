@@ -23,7 +23,7 @@ public class PianoRoll extends JTable {
 
 	//script
 	private Script script;
-	private ScriptTab scriptTab;
+	private final ScriptTab scriptTab;
 
 	// table model
 	private final DefaultTableModel model = new DefaultTableModel();
@@ -107,7 +107,7 @@ public class PianoRoll extends JTable {
 	 * @param point the point at which the menu "spawns"
 	 */
 	public void openPopUpMenu(int[] rows, Point point){
-		new LineRightClickMenu(parent, script, model, scriptTab).openPopUpMenu(rows, point,this);
+		new LineRightClickMenu(parent, script, scriptTab).openPopUpMenu(rows, point,this);
 	}
 
 	public void adjustColumnWidth(){

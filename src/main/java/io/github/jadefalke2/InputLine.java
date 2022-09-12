@@ -151,7 +151,7 @@ public class InputLine {
 	// Overwriting methods
 
 	/**
-	 * returns a new Iputline with excatly the same data as the current one
+	 * returns a new Inputline with excatly the same data as the current one
 	 * @return the new Input line
 	 */
 	@Override

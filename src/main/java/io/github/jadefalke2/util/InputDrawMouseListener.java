@@ -3,9 +3,7 @@ package io.github.jadefalke2.util;
 import io.github.jadefalke2.actions.LineAction;
 import io.github.jadefalke2.components.PianoRoll;
 import io.github.jadefalke2.TAS;
-import io.github.jadefalke2.actions.CellAction;
 
-import javax.sound.sampled.Line;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 

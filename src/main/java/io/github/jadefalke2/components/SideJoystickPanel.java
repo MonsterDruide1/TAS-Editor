@@ -20,7 +20,7 @@ public class SideJoystickPanel extends JPanel {
 	private final Settings settings;
 
 	private InputLine[] inputLines;
-	private Script script;
+	private final Script script;
 
 	public SideJoystickPanel (TAS parent, PianoRoll pianoRoll, Script script) {
 
@@ -156,10 +156,6 @@ public class SideJoystickPanel extends JPanel {
 		}
 		joystickPanel.setStickPositions(stickPositions);
 		joystickPanel.setStickPosition(stickType == JoystickPanel.StickType.L_STICK ? firstLine.getStickL() : firstLine.getStickR());
-	}
-
-	public void setScript(Script script){
-		this.script = script;
 	}
 
 }

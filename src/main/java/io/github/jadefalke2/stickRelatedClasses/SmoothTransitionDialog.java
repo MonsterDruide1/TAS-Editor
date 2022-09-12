@@ -6,7 +6,6 @@ import io.github.jadefalke2.util.TriFunction;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
-import java.util.function.Function;
 import java.util.stream.IntStream;
 
 public class SmoothTransitionDialog extends JDialog {

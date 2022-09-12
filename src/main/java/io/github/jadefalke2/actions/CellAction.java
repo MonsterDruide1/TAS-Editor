@@ -3,8 +3,6 @@ package io.github.jadefalke2.actions;
 import io.github.jadefalke2.Script;
 import io.github.jadefalke2.util.Button;
 
-import javax.swing.table.TableModel;
-
 public class CellAction implements Action {
 
 	private final Script script;
