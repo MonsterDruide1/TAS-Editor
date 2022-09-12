@@ -51,6 +51,21 @@ public class SettingsDialog extends JDialog {
 		addRadioButtonSetting("Redo-Keybind: ", prefs.redoKeybind.get(), prefs.redoKeybind::set, Settings.RedoKeybind.values(), new String[]{"CTRL+SHIFT+Z", "CTRL+Y"}, Settings.RedoKeybind::valueOf, mainPanel, c);
 		c.gridy++;
 
+		addSeperator(mainPanel, c);
+		c.gridy++;
+
+		addTitle("Practice Mod - Mario Odyssey", mainPanel, c);
+		c.gridy++;
+
+		addTextFieldSetting("Stage", prefs.getPracticeStageName(), prefs::setPracticeStageName, mainPanel, c);
+		c.gridy++;
+
+		addSpinnerSetting("Scenario", prefs.getPracticeScenarioNo(), prefs::setPracticeScenarioNo, mainPanel, c);
+		c.gridy++;
+
+		addTextFieldSetting("Entrance", prefs.getPracticeEntranceName(), prefs::setPracticeEntranceName, mainPanel, c);
+		c.gridy++;
+
 		add(mainPanel);
 		pack();
 		setLocationRelativeTo(owner);

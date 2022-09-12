@@ -63,14 +63,34 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>16</source>
+                    <target>16</target>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
+
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
 
     <dependencies>
         <dependency>
             <groupId>com.formdev</groupId>
             <artifactId>flatlaf</artifactId>
             <version>2.4</version>
+        </dependency>
+            <dependency>
+            <groupId>com.github.MonsterDruide1</groupId>
+            <artifactId>smo-practice-server</artifactId>
+            <version>d0e2949</version>
         </dependency>
     </dependencies>
 </project>

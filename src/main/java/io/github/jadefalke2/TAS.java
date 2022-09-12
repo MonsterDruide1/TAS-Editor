@@ -3,18 +3,30 @@ package io.github.jadefalke2;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import io.github.jadefalke2.components.MainEditorWindow;
+import io.github.jadefalke2.components.SettingsDialog;
+import io.github.jadefalke2.connectivity.practice.ServerConnector;
+import io.github.jadefalke2.util.CorruptedScriptException;
 import io.github.jadefalke2.util.Logger;
 import io.github.jadefalke2.util.Settings;
 
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-import java.awt.Window;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.File;
+import java.io.IOException;
+import java.net.SocketException;
+import java.util.Arrays;
+import java.util.Stack;
+import java.util.prefs.BackingStoreException;
+import java.util.prefs.Preferences;
 
 public class TAS {
 
 	private MainEditorWindow mainEditorWindow;
+
+	private ServerConnector practiceServer;
 
 	public static void main(String[] args) {
 		new TAS();
@@ -34,6 +46,8 @@ public class TAS {
 		// initialise preferences
 		setLookAndFeel(Settings.INSTANCE.darkTheme.get());
 		Settings.INSTANCE.darkTheme.attachListener(this::setLookAndFeel);
+
+		practiceServer = new ServerConnector();
 
 		mainEditorWindow = new MainEditorWindow(this);
 		mainEditorWindow.openScript(Script.getEmptyScript(10));
@@ -59,6 +73,7 @@ public class TAS {
 
 	public void exit() {
 		Logger.log("exiting program");
+		practiceServer.setRunning(false);
 		mainEditorWindow.dispose();
 	}
 
@@ -66,9 +81,23 @@ public class TAS {
 		Logger.log("opening new window");
 		new TAS(); // TODO not the right way, as for example settings won't sync properly
 	}
+	public void runScriptPracticeMod() {
+		try {
+			practiceServer.runScript(script, new ServerConnector.GoConfig(
+				preferences.getPracticeStageName(),
+				preferences.getPracticeScenarioNo(),
+				preferences.getPracticeEntranceName()
+			));
+		} catch (IOException | InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public boolean closeAllScripts(){
 		return mainEditorWindow.closeAllScripts();
 	}
 
+	public ServerConnector getPracticeServer() {
+		return practiceServer;
+	}
 }

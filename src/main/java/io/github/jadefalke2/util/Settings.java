@@ -27,6 +27,10 @@ public class Settings {
 	public final ObservableProperty<SmoothTransitionDialog.SmoothTransitionType> smoothTransitionType;
 	public final ObservableProperty<RedoKeybind> redoKeybind;
 
+	public final ObservableProperty<String> practiceStageName;
+	public final ObservableProperty<Integer> practiceScenarioNo;
+	public final ObservableProperty<String> practiceEntranceName;
+
 
 	private final Preferences backingPrefs;
 
@@ -41,6 +45,10 @@ public class Settings {
 		joystickPanelPosition = new ObservableProperty<>(JoystickPanelPosition.valueOf(prefs.get("joystickPanelPosition", "RIGHT")));
 		smoothTransitionType = new ObservableProperty<>(SmoothTransitionDialog.SmoothTransitionType.valueOf(prefs.get("smoothTransitionType", "ANGULAR_CLOSEST")));
 		redoKeybind = new ObservableProperty<>(RedoKeybind.valueOf(prefs.get("redoKeybind", "CTRL_SHIFT_Z")));
+		
+		practiceStageName = new ObservableProperty<>(prefs.get("practiceStage", "CityWorldHomeStage"));
+		practiceScenarioNo = new ObservableProperty<>(Integer.parseInt(prefs.get("practiceScenario", "1")));
+		practiceEntranceName = new ObservableProperty<>(prefs.get("practiceEntrance", "start"));
 	}
 
 	public void storeSettings() throws BackingStoreException {
@@ -52,6 +60,9 @@ public class Settings {
 		backingPrefs.put("joystickPanelPosition", joystickPanelPosition.get() + "");
 		backingPrefs.put("smoothTransitionType", smoothTransitionType.get() + "");
 		backingPrefs.put("redoKeybind", redoKeybind.get() + "");
+		backingPrefs.put("practiceStage", practiceStageName.get() + "");
+		backingPrefs.put("practiceScenario", practiceScenarioNo.get() + "");
+		backingPrefs.put("practiceEntrance", practiceEntranceName.get() + "");
 
 		backingPrefs.flush();
 	}
