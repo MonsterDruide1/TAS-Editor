@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -25,7 +26,7 @@ public class Script {
 		Script tmp = new Script();
 
 		for (int i = 0; i < amount; i++){
-			tmp.insertLine(i,InputLine.getEmpty());
+			tmp.insertRow(i,InputLine.getEmpty());
 		}
 		tmp.dirty.set(false);
 
@@ -37,11 +38,13 @@ public class Script {
 	private DefaultTableModel table;
 	private final ArrayList<InputLine> inputLines;
 	private final ObservableProperty<Boolean> dirty;
+	private final List<ObservableProperty.PropertyChangeListener<Integer>> lengthListeners;
 
 	public Script() {
 		inputLines = new ArrayList<>();
 		file = null;
 		dirty = new ObservableProperty<>(false);
+		lengthListeners = new ArrayList<>();
 	}
 	public Script(String script) throws CorruptedScriptException {
 		this();
@@ -80,6 +83,7 @@ public class Script {
 
 			currentFrame++;
 		}
+		updateLength(0);
 	}
 
 	public boolean closeScript(TAS parent){
@@ -168,11 +172,6 @@ public class Script {
 		}
 	}
 
-	public void insertLine(int row, InputLine inputLine){
-		inputLines.add(row,inputLine);
-		dirty.set(true);
-	}
-
 	public void replaceRow(int row, InputLine replacement) {
 		inputLines.set(row, replacement);
 		Object[] tableArray = replacement.getArray(row);
@@ -187,13 +186,15 @@ public class Script {
 		table.removeRow(row);
 		adjustLines(row);
 		dirty.set(true);
+		updateLength(inputLines.size()+1);
 	}
 
 	public void insertRow(int row, InputLine line) {
 		inputLines.add(row, line);
-		table.insertRow(row, line.getArray(row));
+		if(table != null) table.insertRow(row, line.getArray(row));
 		adjustLines(row);
 		dirty.set(true);
+		updateLength(inputLines.size()-1);
 	}
 
 	public void appendRow(InputLine line) {
@@ -201,6 +202,7 @@ public class Script {
 	}
 
 	private void adjustLines(int start) {
+		if(table == null) return;
 		for (int i = start; i < table.getRowCount(); i++){
 			table.setValueAt(i,i,0);
 		}
@@ -237,5 +239,17 @@ public class Script {
 	}
 	public void detachDirtyListener(ObservableProperty.PropertyChangeListener<Boolean> listener) {
 		dirty.detachListener(listener);
+	}
+	public void attachLengthListener(ObservableProperty.PropertyChangeListener<Integer> listener) {
+		lengthListeners.add(listener);
+	}
+	public void detachLengthListener(ObservableProperty.PropertyChangeListener<Integer> listener) {
+		lengthListeners.remove(listener);
+	}
+	public void updateLength(int before) {
+		int after = inputLines.size();
+		for(ObservableProperty.PropertyChangeListener<Integer> listener : lengthListeners) {
+			listener.onChange(after, before);
+		}
 	}
 }

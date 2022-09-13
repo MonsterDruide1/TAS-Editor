@@ -2,6 +2,7 @@ package io.github.jadefalke2.components;
 
 import io.github.jadefalke2.Script;
 import io.github.jadefalke2.TAS;
+import io.github.jadefalke2.util.ObservableProperty;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,9 +16,11 @@ public class TabbedScriptsPane extends JTabbedPane {
 
 	private final TAS parent;
 	private final List<ScriptTab> scriptTabs;
+	private ObservableProperty.PropertyChangeListener<Integer> lengthChangeListener;
 
-	public TabbedScriptsPane(TAS parent) {
+	public TabbedScriptsPane(TAS parent, ObservableProperty.PropertyChangeListener<Integer> listener) {
 		this.parent = parent;
+		this.lengthChangeListener = listener;
 		scriptTabs = new ArrayList<>();
 
 		setTabLayoutPolicy(SCROLL_TAB_LAYOUT);
@@ -59,7 +62,7 @@ public class TabbedScriptsPane extends JTabbedPane {
 
 	public void openScript(Script script) {
 		int index = scriptTabs.size();
-		ScriptTab scriptTab = new ScriptTab(parent, script);
+		ScriptTab scriptTab = new ScriptTab(parent, script, lengthChangeListener);
 		scriptTabs.add(scriptTab);
 		addTab(script.getName(), scriptTab);
 		setSelectedIndex(index);

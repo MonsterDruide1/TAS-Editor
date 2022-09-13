@@ -6,6 +6,7 @@ import io.github.jadefalke2.actions.Action;
 import io.github.jadefalke2.util.Logger;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
@@ -18,6 +19,9 @@ public class MainEditorWindow extends JFrame {
 
 	//layout
 	private final TabbedScriptsPane tabbedPane;
+	private final JToolBar toolBar;
+
+	private final JLabel scriptLengthLabel;
 
 
 	/**
@@ -43,8 +47,16 @@ public class MainEditorWindow extends JFrame {
 		mainJMenuBar = new MainJMenuBar(this, parent);
 		setJMenuBar(mainJMenuBar);
 
-		tabbedPane = new TabbedScriptsPane(parent);
-		add(tabbedPane);
+		toolBar = new JToolBar();
+		scriptLengthLabel = new JLabel();
+		setCurrentScriptLength(-1);
+		toolBar.add(scriptLengthLabel);
+		toolBar.setFloatable(false);
+		toolBar.setMargin(new Insets(0, 5, 0, 0));
+		add(toolBar, BorderLayout.PAGE_END);
+
+		tabbedPane = new TabbedScriptsPane(parent, this::setCurrentScriptLength);
+		add(tabbedPane, BorderLayout.CENTER);
 
 		recreateLayoutPanel();
 
@@ -100,5 +112,9 @@ public class MainEditorWindow extends JFrame {
 
 	public void setAllTabsClosed(boolean closed) {
 		mainJMenuBar.enableScriptRelatedInputs(!closed);
+	}
+
+	public void setCurrentScriptLength(int newLength) {
+		scriptLengthLabel.setText("Length: "+newLength);
 	}
 }

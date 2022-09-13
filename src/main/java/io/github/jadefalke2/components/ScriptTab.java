@@ -26,8 +26,9 @@ public class ScriptTab extends JPanel {
 	private Action previewAction;
 
 	private ObservableProperty.PropertyChangeListener<Boolean> dirtyChangeListener;
+	private ObservableProperty.PropertyChangeListener<Integer> lengthChangeListener;
 
-	public ScriptTab(TAS parent, Script script) {
+	public ScriptTab(TAS parent, Script script, ObservableProperty.PropertyChangeListener<Integer> listener) {
 		this.parent = parent;
 		this.script = script;
 
@@ -52,6 +53,10 @@ public class ScriptTab extends JPanel {
 
 		refreshLayout();
 		parent.getMainEditorWindow().enableUndoRedo(false, false);
+
+		this.lengthChangeListener = listener;
+		script.attachLengthListener(listener);
+		listener.onChange(script.getLines().length, -1);
 	}
 
 	public void refreshLayout() {
@@ -176,5 +181,7 @@ public class ScriptTab extends JPanel {
 	public void cleanup() {
 		script.detachDirtyListener(dirtyChangeListener);
 		dirtyChangeListener = null;
+		script.detachLengthListener(lengthChangeListener);
+		lengthChangeListener = null;
 	}
 }
