@@ -4,6 +4,7 @@ import io.github.jadefalke2.Script;
 import io.github.jadefalke2.TAS;
 import io.github.jadefalke2.actions.Action;
 import io.github.jadefalke2.util.Logger;
+import io.github.jadefalke2.util.ObservableProperty;
 import io.github.jadefalke2.util.Settings;
 
 import javax.swing.*;
@@ -23,6 +24,8 @@ public class ScriptTab extends JPanel {
 	private final Stack<Action> undoStack;
 	private final Stack<Action> redoStack;
 	private Action previewAction;
+
+	private ObservableProperty.PropertyChangeListener<Boolean> dirtyChangeListener;
 
 	public ScriptTab(TAS parent, Script script) {
 		this.parent = parent;
@@ -167,5 +170,17 @@ public class ScriptTab extends JPanel {
 		previewAction = action;
 		redoStack.clear();
 		updateUndoRedoEnabled();
+	}
+
+	public void setDirtyListener(ObservableProperty.PropertyChangeListener<Boolean> listener) {
+		if(dirtyChangeListener != null)
+			script.detachDirtyListener(dirtyChangeListener);
+
+		this.dirtyChangeListener = listener;
+		script.attachDirtyListener(listener);
+	}
+	public void cleanup() {
+		script.detachDirtyListener(dirtyChangeListener);
+		dirtyChangeListener = null;
 	}
 }

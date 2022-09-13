@@ -43,7 +43,7 @@ public class TabbedScriptsPane extends JTabbedPane {
 		scriptTabs.add(scriptTab);
 		addTab(script.getName(), scriptTab);
 		setSelectedIndex(index);
-		script.attachDirtyListener(dirty -> setTitleAt(index, (dirty ? "*" : "")+script.getName()));
+		scriptTab.setDirtyListener(dirty -> setTitleAt(index, (dirty ? "*" : "")+script.getName()));
 	}
 
 	// TODO lots of issues with no script active (null return)
@@ -64,6 +64,7 @@ public class TabbedScriptsPane extends JTabbedPane {
 	public boolean closeTab(int index) {
 		ScriptTab tab = scriptTabs.get(index);
 		if(tab.closeScript()) {
+			tab.cleanup();
 			scriptTabs.remove(index);
 			removeTabAt(index);
 			return true;
