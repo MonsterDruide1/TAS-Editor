@@ -4,6 +4,7 @@ import io.github.jadefalke2.Script;
 import io.github.jadefalke2.TAS;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -22,7 +23,14 @@ public class TabbedScriptsPane extends JTabbedPane {
 		setTabLayoutPolicy(SCROLL_TAB_LAYOUT);
 		addChangeListener((e) -> afterTabChange());
 		putClientProperty("JTabbedPane.tabClosable", true);
-		putClientProperty("JTabbedPane.tabCloseCallback", (IntConsumer) this::closeTab);
+		putClientProperty("JTabbedPane.tabCloseCallback", (IntConsumer) tabIndex -> {
+			AWTEvent e = EventQueue.getCurrentEvent();
+			boolean alt = e instanceof MouseEvent && ((MouseEvent) e).isAltDown();
+			if(alt)
+				closeAllExcept(tabIndex);
+			else
+				closeTab(tabIndex);
+		});
 		JComponent label = new JLabel();
 		label.addMouseListener(new MouseAdapter() {
 			@Override
@@ -71,6 +79,21 @@ public class TabbedScriptsPane extends JTabbedPane {
 				return false;
 		}
 		return true;
+	}
+
+	public void closeAllExcept(int index) {
+		int indexToClose = 0;
+		while(getTabCount() > 1) {
+			if(index == 0){
+				indexToClose++;
+				index = -1;
+				continue;
+			}
+
+			if(!closeTab(indexToClose))
+				return;
+			index--;
+		}
 	}
 
 	public boolean closeTab(int index) {
