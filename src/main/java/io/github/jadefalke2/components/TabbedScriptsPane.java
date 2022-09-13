@@ -17,6 +17,7 @@ public class TabbedScriptsPane extends JTabbedPane {
 		this.parent = parent;
 		scriptTabs = new ArrayList<>();
 
+		setTabLayoutPolicy(SCROLL_TAB_LAYOUT);
 		addChangeListener((e) -> afterTabChange());
 		putClientProperty("JTabbedPane.tabClosable", true);
 		putClientProperty("JTabbedPane.tabCloseCallback", (IntConsumer) this::closeTab);
