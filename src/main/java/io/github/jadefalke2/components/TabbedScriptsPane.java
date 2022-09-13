@@ -20,7 +20,6 @@ public class TabbedScriptsPane extends JTabbedPane {
 		addChangeListener((e) -> afterTabChange());
 		putClientProperty("JTabbedPane.tabClosable", true);
 		putClientProperty("JTabbedPane.tabCloseCallback", (IntConsumer) this::closeTab);
-		putClientProperty("JTabbedPane.hideTabAreaWithOneTab", true);
 	}
 
 	public void refreshLayouts() {
@@ -44,9 +43,9 @@ public class TabbedScriptsPane extends JTabbedPane {
 		addTab(script.getName(), scriptTab);
 		setSelectedIndex(index);
 		scriptTab.setDirtyListener(dirty -> setTitleAt(index, (dirty ? "*" : "")+script.getName()));
+		parent.getMainEditorWindow().setAllTabsClosed(false);
 	}
 
-	// TODO lots of issues with no script active (null return)
 	public ScriptTab getActiveScriptTab() {
 		int selectedIndex = getSelectedIndex();
 		if(selectedIndex == -1 || scriptTabs.size() <= selectedIndex) return null;
@@ -67,6 +66,8 @@ public class TabbedScriptsPane extends JTabbedPane {
 			tab.cleanup();
 			scriptTabs.remove(index);
 			removeTabAt(index);
+			if(scriptTabs.size() == 0)
+				parent.getMainEditorWindow().setAllTabsClosed(true);
 			return true;
 		}
 		return false;

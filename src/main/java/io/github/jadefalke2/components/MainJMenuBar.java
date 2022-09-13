@@ -15,7 +15,10 @@ import java.net.URL;
 
 public class MainJMenuBar extends JMenuBar {
 
-	private JMenuItem undo, redo;
+	private JMenuItem newScript, newWindow, openScript, save, saveAs, exit;
+	private JMenuItem undo, redo, cut, copy, paste, deleteLines, addLine, settings;
+	private JCheckBoxMenuItem darkTheme;
+	private JMenuItem discord, about;
 	private final MainEditorWindow mainEditorWindow;
 
 	public MainJMenuBar(MainEditorWindow mainEditorWindow, TAS parent){
@@ -38,17 +41,17 @@ public class MainJMenuBar extends JMenuBar {
 	private JMenu createFileMenu(TAS parent, MainEditorWindow mainEditorWindow){
 		JMenu fileJMenu = new JMenu("File");
 
-		JMenuItem newJMenuItem = fileJMenu.add("New");
-		newJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK));
-		newJMenuItem.addActionListener(e -> parent.newFile());
+		newScript = fileJMenu.add("New");
+		newScript.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK));
+		newScript.addActionListener(e -> parent.newFile());
 
-		JMenuItem newWindowJMenuItem = fileJMenu.add("New Window");
-		newWindowJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
-		newWindowJMenuItem.addActionListener(e -> new TAS());
+		newWindow = fileJMenu.add("New Window");
+		newWindow.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
+		newWindow.addActionListener(e -> new TAS());
 
-		JMenuItem openJMenuItem = fileJMenu.add("Open...");
-		openJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
-		openJMenuItem.addActionListener(e -> {
+		openScript = fileJMenu.add("Open...");
+		openScript.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
+		openScript.addActionListener(e -> {
 			try {
 				parent.openScript(new TxtFileChooser(parent.getPreferences().getDirectory()).getFile(true));
 			} catch (IOException ex) {
@@ -56,9 +59,9 @@ public class MainJMenuBar extends JMenuBar {
 			}
 		});
 
-		JMenuItem saveJMenuItem = fileJMenu.add("Save");
-		saveJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
-		saveJMenuItem.addActionListener(e -> {
+		save = fileJMenu.add("Save");
+		save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
+		save.addActionListener(e -> {
 			try {
 				parent.saveFile();
 			} catch(IOException ioe) {
@@ -66,9 +69,9 @@ public class MainJMenuBar extends JMenuBar {
 			}
 		});
 
-		JMenuItem saveAsJMenuItem = fileJMenu.add("Save As...");
-		saveAsJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
-		saveAsJMenuItem.addActionListener(e -> {
+		saveAs = fileJMenu.add("Save As...");
+		saveAs.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
+		saveAs.addActionListener(e -> {
 			try {
 				parent.saveFileAs();
 			} catch(IOException ioe) {
@@ -78,8 +81,8 @@ public class MainJMenuBar extends JMenuBar {
 
 		fileJMenu.addSeparator();
 
-		JMenuItem exitJMenuItem = fileJMenu.add("Exit");
-		exitJMenuItem.addActionListener(e -> mainEditorWindow.dispatchEvent(new WindowEvent(mainEditorWindow, WindowEvent.WINDOW_CLOSING)));
+		exit = fileJMenu.add("Exit");
+		exit.addActionListener(e -> mainEditorWindow.dispatchEvent(new WindowEvent(mainEditorWindow, WindowEvent.WINDOW_CLOSING)));
 
 		return fileJMenu;
 	}
@@ -97,17 +100,17 @@ public class MainJMenuBar extends JMenuBar {
 
 		editJMenu.addSeparator();
 
-		JMenuItem cutJMenuItem = editJMenu.add("Cut");
-		cutJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_DOWN_MASK));
-		cutJMenuItem.addActionListener(e -> getActiveScriptTab().getPianoRoll().cut());
+		cut = editJMenu.add("Cut");
+		cut.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_DOWN_MASK));
+		cut.addActionListener(e -> getActiveScriptTab().getPianoRoll().cut());
 
-		JMenuItem copyJMenuItem = editJMenu.add("Copy");
-		copyJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK));
-		copyJMenuItem.addActionListener(e -> getActiveScriptTab().getPianoRoll().copy());
+		copy = editJMenu.add("Copy");
+		copy.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK));
+		copy.addActionListener(e -> getActiveScriptTab().getPianoRoll().copy());
 
-		JMenuItem pasteJMenuItem = editJMenu.add("Paste");
-		pasteJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, InputEvent.CTRL_DOWN_MASK));
-		pasteJMenuItem.addActionListener(e -> {
+		paste = editJMenu.add("Paste");
+		paste.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, InputEvent.CTRL_DOWN_MASK));
+		paste.addActionListener(e -> {
 			try {
 				getActiveScriptTab().getPianoRoll().paste();
 			} catch (IOException | UnsupportedFlavorException ioException) {
@@ -115,18 +118,18 @@ public class MainJMenuBar extends JMenuBar {
 			}
 		});
 
-		JMenuItem deleteJMenuItem = editJMenu.add("Delete");
-		deleteJMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0));
-		deleteJMenuItem.addActionListener(e -> getActiveScriptTab().getPianoRoll().deleteSelectedRows());
+		deleteLines = editJMenu.add("Delete");
+		deleteLines.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0));
+		deleteLines.addActionListener(e -> getActiveScriptTab().getPianoRoll().deleteSelectedRows());
 
-		JMenuItem addNewLineItem = editJMenu.add("Add line");
-		addNewLineItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
-		addNewLineItem.addActionListener(e -> mainEditorWindow.addEmptyRow());
+		addLine = editJMenu.add("Add line");
+		addLine.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
+		addLine.addActionListener(e -> mainEditorWindow.addEmptyRow());
 
 		editJMenu.addSeparator();
 
-		JMenuItem settingsItem = editJMenu.add("Settings");
-		settingsItem.addActionListener(e -> parent.openSettings());
+		settings = editJMenu.add("Settings");
+		settings.addActionListener(e -> parent.openSettings());
 
 		return editJMenu;
 	}
@@ -134,9 +137,9 @@ public class MainJMenuBar extends JMenuBar {
 	private JMenu createViewMenu(Settings preferences){
 		JMenu viewJMenu = new JMenu("View");
 
-		JCheckBoxMenuItem darkThemeJMenuItem = new JCheckBoxMenuItem("Toggle Dark Theme", preferences.isDarkTheme());
-		viewJMenu.add(darkThemeJMenuItem);
-		darkThemeJMenuItem.addItemListener(e -> preferences.setDarkTheme(darkThemeJMenuItem.getState()));
+		darkTheme = new JCheckBoxMenuItem("Toggle Dark Theme", preferences.isDarkTheme());
+		viewJMenu.add(darkTheme);
+		darkTheme.addItemListener(e -> preferences.setDarkTheme(darkTheme.getState()));
 
 		return viewJMenu;
 	}
@@ -144,8 +147,8 @@ public class MainJMenuBar extends JMenuBar {
 	private JMenu createHelpMenu(){
 		JMenu helpJMenu = new JMenu("Help");
 
-		JMenuItem discordJMenuItem = helpJMenu.add("Join the SMO TASing Discord");
-		discordJMenuItem.addActionListener(e -> {
+		discord = helpJMenu.add("Join the SMO TASing Discord");
+		discord.addActionListener(e -> {
 			try {
 				Desktop.getDesktop().browse(new URL("https://discord.gg/atKSg9fygq").toURI());
 			} catch (IOException | URISyntaxException ex) {
@@ -155,8 +158,8 @@ public class MainJMenuBar extends JMenuBar {
 
 		helpJMenu.addSeparator();
 
-		JMenuItem aboutJMenuItem = helpJMenu.add("About SMO TAS Editor");
-		aboutJMenuItem.addActionListener(e -> {
+		about = helpJMenu.add("About SMO TAS Editor");
+		about.addActionListener(e -> {
 			try {
 				Desktop.getDesktop().browse(new URL("https://github.com/MonsterDruide1/TAS-Editor").toURI());
 			} catch (IOException | URISyntaxException ex) {
@@ -182,5 +185,17 @@ public class MainJMenuBar extends JMenuBar {
 			case CTRL_Y: redo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, InputEvent.CTRL_DOWN_MASK)); break;
 			default: System.err.println("setting undefined redokeybind! "+keybind);
 		}
+	}
+
+	public void enableScriptRelatedInputs(boolean closed) {
+		save.setEnabled(closed);
+		saveAs.setEnabled(closed);
+		undo.setEnabled(closed);
+		redo.setEnabled(closed);
+		cut.setEnabled(closed);
+		copy.setEnabled(closed);
+		paste.setEnabled(closed);
+		deleteLines.setEnabled(closed);
+		addLine.setEnabled(closed);
 	}
 }

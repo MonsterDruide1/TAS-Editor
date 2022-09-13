@@ -97,4 +97,8 @@ public class MainEditorWindow extends JFrame {
 	public ScriptTab getActiveScriptTab() {
 		return tabbedPane.getActiveScriptTab();
 	}
+
+	public void setAllTabsClosed(boolean closed) {
+		mainJMenuBar.enableScriptRelatedInputs(!closed);
+	}
 }
