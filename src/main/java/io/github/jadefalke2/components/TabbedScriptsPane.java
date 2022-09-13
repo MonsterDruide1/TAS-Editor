@@ -4,6 +4,8 @@ import io.github.jadefalke2.Script;
 import io.github.jadefalke2.TAS;
 
 import javax.swing.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.IntConsumer;
@@ -21,6 +23,16 @@ public class TabbedScriptsPane extends JTabbedPane {
 		addChangeListener((e) -> afterTabChange());
 		putClientProperty("JTabbedPane.tabClosable", true);
 		putClientProperty("JTabbedPane.tabCloseCallback", (IntConsumer) this::closeTab);
+		JComponent label = new JLabel();
+		label.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(e.getClickCount() == 2) {
+					openScript(Script.getEmptyScript(10));
+				}
+			}
+		});
+		putClientProperty("JTabbedPane.trailingComponent", label);
 	}
 
 	public void refreshLayouts() {
