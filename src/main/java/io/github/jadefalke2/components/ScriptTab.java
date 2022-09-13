@@ -79,12 +79,6 @@ public class ScriptTab extends JPanel {
 		revalidate(); //force layout update
 	}
 
-	public boolean tryCloseScript() {
-		if(this.script != null)
-			return closeScript(); //did not save properly or was canceled
-		return true;
-	}
-
 	public PianoRoll getPianoRoll (){
 		return pianoRoll;
 	}

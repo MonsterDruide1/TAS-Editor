@@ -54,9 +54,7 @@ public class SmoothTransitionDialog extends JDialog {
 			dropdownMenu.addItem(option.getName());
 
 		dropdownMenu.setSelectedIndex(settings.getSmoothTransitionType().ordinal());
-		dropdownMenu.addActionListener(e -> {
-			updatePositions();
-		});
+		dropdownMenu.addActionListener(e -> updatePositions());
 
 		JButton okButton = new JButton("OK");
 		okButton.addActionListener(e -> {
@@ -69,9 +67,7 @@ public class SmoothTransitionDialog extends JDialog {
 		endJoystick = new JoystickPanel(settings, "End");
 		endJoystick.setStickPosition(endPos);
 
-		CustomChangeListener<StickPosition> joystickPanelListener = e -> {
-			updatePositions();
-		};
+		CustomChangeListener<StickPosition> joystickPanelListener = e -> updatePositions();
 		startJoystick.setOnChangeListener(joystickPanelListener);
 		endJoystick.setOnChangeListener(joystickPanelListener);
 
