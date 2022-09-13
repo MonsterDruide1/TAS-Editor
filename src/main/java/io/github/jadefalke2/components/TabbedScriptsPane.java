@@ -97,6 +97,7 @@ public class TabbedScriptsPane extends JTabbedPane {
 	}
 
 	public boolean closeTab(int index) {
+		setSelectedIndex(index);
 		ScriptTab tab = scriptTabs.get(index);
 		if(tab.closeScript()) {
 			tab.cleanup();
