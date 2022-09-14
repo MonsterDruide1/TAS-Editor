@@ -2,7 +2,6 @@ package io.github.jadefalke2.components;
 
 import io.github.jadefalke2.InputLine;
 import io.github.jadefalke2.Script;
-import io.github.jadefalke2.TAS;
 import io.github.jadefalke2.actions.StickAction;
 import io.github.jadefalke2.stickRelatedClasses.*;
 import io.github.jadefalke2.util.Settings;
@@ -21,7 +20,7 @@ public class SideJoystickPanel extends JPanel {
 	private InputLine[] inputLines;
 	private final Script script;
 
-	public SideJoystickPanel (TAS parent, PianoRoll pianoRoll, Script script) {
+	public SideJoystickPanel (ScriptTab scriptTab, PianoRoll pianoRoll, Script script) {
 
 		frameAmountLabel = new JLabel("Currently no frames are being edited");
 		frameAmountLabel.setHorizontalAlignment(JLabel.CENTER);
@@ -59,7 +58,7 @@ public class SideJoystickPanel extends JPanel {
 			pianoRoll.replaceSelectedRows(replacementLines);
 		};
 
-		CustomChangeListener<StickPosition> joystickPanelListener = e -> parent.executeAction(new StickAction(script, pianoRoll.getSelectedRows(), getStickType(e.getSource()), e.getValue()));
+		CustomChangeListener<StickPosition> joystickPanelListener = e -> scriptTab.executeAction(new StickAction(script, pianoRoll.getSelectedRows(), getStickType(e.getSource()), e.getValue()));
 
 		lstickPanel = new JoystickPanel(smoothTransitionListenerL, "Left-stick");
 		rstickPanel = new JoystickPanel(smoothTransitionListenerR, "Right-Stick");

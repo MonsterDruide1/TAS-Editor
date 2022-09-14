@@ -86,7 +86,7 @@ public class Script {
 		updateLength(0);
 	}
 
-	public boolean closeScript(TAS parent){
+	public boolean closeScript(){
 		if(!dirty.get()){
 			return true; //just close without issue if no changes happened
 		}
@@ -95,7 +95,7 @@ public class Script {
 		if (result == JOptionPane.YES_OPTION){
 			//opens a new dialog that asks about saving, then close
 			try {
-				parent.saveFile();
+				saveFile();
 			} catch(IOException ioe) {
 				JOptionPane.showMessageDialog(null, "Failed to save file!\nError: "+ioe.getMessage(), "Saving failed", JOptionPane.ERROR_MESSAGE);
 				return false;
@@ -111,6 +111,10 @@ public class Script {
 	 */
 	public String getFull (){
 		return IntStream.range(0, inputLines.size()).mapToObj(i -> inputLines.get(i).getFull(i)+"\n").collect(Collectors.joining());
+	}
+
+	public void saveFile() throws IOException {
+		saveFile(Settings.INSTANCE.directory.get());
 	}
 
 	/**

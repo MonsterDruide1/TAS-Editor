@@ -1,7 +1,6 @@
 package io.github.jadefalke2.components;
 
 import io.github.jadefalke2.Script;
-import io.github.jadefalke2.TAS;
 import io.github.jadefalke2.util.ObservableProperty;
 
 import javax.swing.*;
@@ -14,12 +13,12 @@ import java.util.function.IntConsumer;
 
 public class TabbedScriptsPane extends JTabbedPane {
 
-	private final TAS parent;
+	private final MainEditorWindow mainEditorWindow;
 	private final List<ScriptTab> scriptTabs;
-	private ObservableProperty.PropertyChangeListener<Integer> lengthChangeListener;
+	private final ObservableProperty.PropertyChangeListener<Integer> lengthChangeListener;
 
-	public TabbedScriptsPane(TAS parent, ObservableProperty.PropertyChangeListener<Integer> listener) {
-		this.parent = parent;
+	public TabbedScriptsPane(MainEditorWindow mainEditorWindow, ObservableProperty.PropertyChangeListener<Integer> listener) {
+		this.mainEditorWindow = mainEditorWindow;
 		this.lengthChangeListener = listener;
 		scriptTabs = new ArrayList<>();
 
@@ -57,17 +56,17 @@ public class TabbedScriptsPane extends JTabbedPane {
 		if(activeTab != null)
 			activeTab.updateUndoRedoEnabled();
 		else
-			parent.getMainEditorWindow().enableUndoRedo(false, false);
+			mainEditorWindow.enableUndoRedo(false, false);
 	}
 
 	public void openScript(Script script) {
 		int index = scriptTabs.size();
-		ScriptTab scriptTab = new ScriptTab(parent, script, lengthChangeListener);
+		ScriptTab scriptTab = new ScriptTab(mainEditorWindow, script, lengthChangeListener);
 		scriptTabs.add(scriptTab);
 		addTab(script.getName(), scriptTab);
 		setSelectedIndex(index);
 		scriptTab.setDirtyListener(dirty -> setTitleAt(index, (dirty ? "*" : "")+script.getName()));
-		parent.getMainEditorWindow().setAllTabsClosed(false);
+		mainEditorWindow.setAllTabsClosed(false);
 	}
 
 	public ScriptTab getActiveScriptTab() {
@@ -107,7 +106,7 @@ public class TabbedScriptsPane extends JTabbedPane {
 			scriptTabs.remove(index);
 			removeTabAt(index);
 			if(scriptTabs.size() == 0)
-				parent.getMainEditorWindow().setAllTabsClosed(true);
+				mainEditorWindow.setAllTabsClosed(true);
 			return true;
 		}
 		return false;

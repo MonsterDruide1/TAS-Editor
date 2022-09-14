@@ -2,7 +2,7 @@ package io.github.jadefalke2.util;
 
 import io.github.jadefalke2.actions.LineAction;
 import io.github.jadefalke2.components.PianoRoll;
-import io.github.jadefalke2.TAS;
+import io.github.jadefalke2.components.ScriptTab;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -29,15 +29,15 @@ public class InputDrawMouseListener extends MouseAdapter {
 	// mode
 	private Mode mode = Mode.IDLE;
 
-	private final TAS parent;
+	private final ScriptTab scriptTab;
 
 	/**
 	 * Constructor
 	 * @param table the table the data is being read into
 	 */
-	public InputDrawMouseListener (PianoRoll table, TAS parent){
+	public InputDrawMouseListener (PianoRoll table, ScriptTab scriptTab){
 		this.table = table;
-		this.parent = parent;
+		this.scriptTab = scriptTab;
 	}
 
 	/**
@@ -96,7 +96,7 @@ public class InputDrawMouseListener extends MouseAdapter {
 
 	private void applyPreview (){
 		LineAction action = getAction();
-		if(action != null) parent.previewAction(action);
+		if(action != null) scriptTab.previewAction(action);
 	}
 	private LineAction getAction() {
 		if(drawingCol == -1 || startRow == -1 || endRow == -1 || drawingCol < 3) return null;
@@ -122,7 +122,7 @@ public class InputDrawMouseListener extends MouseAdapter {
 	@Override
 	public void mouseReleased(MouseEvent e){
 		LineAction action = getAction();
-		if(action != null) parent.executeAction(action);
+		if(action != null) scriptTab.executeAction(action);
 		mode = Mode.IDLE;
 		startRow = -1;
 		drawingCol = -1;

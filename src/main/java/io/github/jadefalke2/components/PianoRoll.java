@@ -2,7 +2,6 @@ package io.github.jadefalke2.components;
 
 import io.github.jadefalke2.InputLine;
 import io.github.jadefalke2.Script;
-import io.github.jadefalke2.TAS;
 import io.github.jadefalke2.actions.LineAction;
 import io.github.jadefalke2.util.Button;
 import io.github.jadefalke2.util.CorruptedScriptException;
@@ -27,12 +26,9 @@ public class PianoRoll extends JTable {
 
 	// table model
 	private final DefaultTableModel model = new DefaultTableModel();
-	private final TAS parent;
 
 
-	public PianoRoll (TAS parent, Script script, ScriptTab scriptTab){
-
-		this.parent = parent;
+	public PianoRoll (Script script, ScriptTab scriptTab) {
 		this.script = script;
 		this.scriptTab = scriptTab;
 
@@ -66,7 +62,7 @@ public class PianoRoll extends JTable {
 		}
 
 		// Mouse listener
-		InputDrawMouseListener mouseListener = new InputDrawMouseListener(this, parent);
+		InputDrawMouseListener mouseListener = new InputDrawMouseListener(this, scriptTab);
 		addMouseListener(mouseListener);
 		addMouseMotionListener(mouseListener);
 
@@ -107,7 +103,7 @@ public class PianoRoll extends JTable {
 	 * @param point the point at which the menu "spawns"
 	 */
 	public void openPopUpMenu(int[] rows, Point point){
-		new LineRightClickMenu(parent, script, scriptTab).openPopUpMenu(rows, point,this);
+		new LineRightClickMenu(script, scriptTab).openPopUpMenu(rows, point,this);
 	}
 
 	public void adjustColumnWidth(){
@@ -134,11 +130,11 @@ public class PianoRoll extends JTable {
 	}
 
 	public void deleteSelectedRows(){
-		parent.executeAction(new LineAction(script, getSelectedRows(), LineAction.Type.DELETE));
+		scriptTab.executeAction(new LineAction(script, getSelectedRows(), LineAction.Type.DELETE));
 	}
 
 	public void replaceSelectedRows(InputLine[] rows){
-		parent.executeAction(new LineAction(script, getSelectedRows(), rows, LineAction.Type.REPLACE));
+		scriptTab.executeAction(new LineAction(script, getSelectedRows(), rows, LineAction.Type.REPLACE));
 	}
 
 	public InputLine[] getSelectedInputRows(){

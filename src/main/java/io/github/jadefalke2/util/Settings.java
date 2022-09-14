@@ -9,7 +9,7 @@ import java.util.prefs.Preferences;
 
 public class Settings {
 
-	public static Settings INSTANCE = new Settings(Preferences.userRoot().node(TAS.class.getName()));
+	public static final Settings INSTANCE = new Settings(Preferences.userRoot().node(TAS.class.getName()));
 	static {
 		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
 			try {

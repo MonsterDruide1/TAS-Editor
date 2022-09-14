@@ -1,7 +1,6 @@
 package io.github.jadefalke2.components;
 
 import io.github.jadefalke2.Script;
-import io.github.jadefalke2.TAS;
 import io.github.jadefalke2.actions.LineAction;
 
 import javax.swing.*;
@@ -19,12 +18,10 @@ public class LineRightClickMenu extends JPopupMenu {
 	private final JMenuItem pasteOption;
 	private final JMenuItem cutOption;
 
-	private final TAS parent;
 	private final Script script;
 	private final ScriptTab scriptTab;
 
-	public LineRightClickMenu(TAS parent, Script script, ScriptTab scriptTab){
-		this.parent = parent;
+	public LineRightClickMenu(Script script, ScriptTab scriptTab){
 		this.script = script;
 		this.scriptTab = scriptTab;
 
@@ -73,6 +70,6 @@ public class LineRightClickMenu extends JPopupMenu {
 	}
 
 	public void setListener(JMenuItem item, int[] rows, LineAction.Type type){
-		setListener(item, () -> parent.executeAction(new LineAction(script, rows, type)));
+		setListener(item, () -> scriptTab.executeAction(new LineAction(script, rows, type)));
 	}
 }

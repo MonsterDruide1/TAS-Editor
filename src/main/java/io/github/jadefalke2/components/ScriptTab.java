@@ -1,7 +1,6 @@
 package io.github.jadefalke2.components;
 
 import io.github.jadefalke2.Script;
-import io.github.jadefalke2.TAS;
 import io.github.jadefalke2.actions.Action;
 import io.github.jadefalke2.util.Logger;
 import io.github.jadefalke2.util.ObservableProperty;
@@ -14,7 +13,7 @@ import java.util.Stack;
 
 public class ScriptTab extends JPanel {
 
-	private final TAS parent;
+	private final MainEditorWindow mainEditorWindow;
 	private final Script script;
 	private final PianoRoll pianoRoll;
 	private final SideJoystickPanel sideJoystickPanel;
@@ -28,16 +27,16 @@ public class ScriptTab extends JPanel {
 	private ObservableProperty.PropertyChangeListener<Boolean> dirtyChangeListener;
 	private ObservableProperty.PropertyChangeListener<Integer> lengthChangeListener;
 
-	public ScriptTab(TAS parent, Script script, ObservableProperty.PropertyChangeListener<Integer> listener) {
-		this.parent = parent;
+	public ScriptTab(MainEditorWindow mainEditorWindow, Script script, ObservableProperty.PropertyChangeListener<Integer> listener) {
+		this.mainEditorWindow = mainEditorWindow;
 		this.script = script;
 
 		//initialising stacks
 		undoStack = new Stack<>();
 		redoStack = new Stack<>();
 
-		pianoRoll = new PianoRoll(parent, script, this);
-		sideJoystickPanel = new SideJoystickPanel(parent, pianoRoll, script);
+		pianoRoll = new PianoRoll(script, this);
+		sideJoystickPanel = new SideJoystickPanel(this, pianoRoll, script);
 
 		editor = new JPanel(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
@@ -52,7 +51,7 @@ public class ScriptTab extends JPanel {
 		editor.add(scrollPane, c);
 
 		refreshLayout();
-		parent.getMainEditorWindow().enableUndoRedo(false, false);
+		mainEditorWindow.enableUndoRedo(false, false);
 
 		this.lengthChangeListener = listener;
 		script.attachLengthListener(listener);
@@ -102,7 +101,7 @@ public class ScriptTab extends JPanel {
 		script.saveFileAs(Settings.INSTANCE.directory.get());
 	}
 	public boolean closeScript() {
-		return script.closeScript(parent);
+		return script.closeScript();
 	}
 
 	public void executeAction(Action action) {
@@ -156,7 +155,7 @@ public class ScriptTab extends JPanel {
 	}
 
 	public void updateUndoRedoEnabled() {
-		parent.getMainEditorWindow().onUndoRedo(!undoStack.isEmpty(), !redoStack.isEmpty());
+		mainEditorWindow.onUndoRedo(!undoStack.isEmpty(), !redoStack.isEmpty());
 	}
 
 	public void previewAction(Action action) {

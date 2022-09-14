@@ -13,7 +13,6 @@ import java.io.IOException;
 
 public class MainEditorWindow extends JFrame {
 
-	private final TAS parent;
 	// frame that can be opened from this one
 	private final MainJMenuBar mainJMenuBar;
 
@@ -31,7 +30,6 @@ public class MainEditorWindow extends JFrame {
 
 		Logger.log("Initialising window");
 
-		this.parent = parent;
 		setResizable(true);
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE); //let the WindowListener handle everything
 
@@ -55,7 +53,7 @@ public class MainEditorWindow extends JFrame {
 		toolBar.setMargin(new Insets(0, 5, 0, 0));
 		add(toolBar, BorderLayout.PAGE_END);
 
-		tabbedPane = new TabbedScriptsPane(parent, this::setCurrentScriptLength);
+		tabbedPane = new TabbedScriptsPane(this, this::setCurrentScriptLength);
 		add(tabbedPane, BorderLayout.CENTER);
 
 		recreateLayoutPanel();
@@ -74,12 +72,6 @@ public class MainEditorWindow extends JFrame {
 	}
 	public boolean closeAllScripts() {
 		return tabbedPane.closeAllScripts();
-	}
-
-	// getter
-
-	public MainJMenuBar getMainJMenuBar() {
-		return mainJMenuBar;
 	}
 
 	public void onUndoRedo(boolean enableUndo, boolean enableRedo) {

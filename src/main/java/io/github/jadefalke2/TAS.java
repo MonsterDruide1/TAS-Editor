@@ -2,7 +2,6 @@ package io.github.jadefalke2;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
-import io.github.jadefalke2.actions.Action;
 import io.github.jadefalke2.components.MainEditorWindow;
 import io.github.jadefalke2.components.SettingsDialog;
 import io.github.jadefalke2.util.CorruptedScriptException;
@@ -39,11 +38,8 @@ public class TAS {
 		setLookAndFeel(Settings.INSTANCE.darkTheme.get());
 		Settings.INSTANCE.darkTheme.attachListener(this::setLookAndFeel);
 
-		//initialising windows -> set to be invisible by default
-		//will be set visible once they are supposed to
 		mainEditorWindow = new MainEditorWindow(this);
 		mainEditorWindow.openScript(Script.getEmptyScript(10));
-
 		mainEditorWindow.setVisible(true);
 
 		UIManager.put("FileChooser.useSystemExtensionHiding", false);
@@ -72,14 +68,6 @@ public class TAS {
 		}
 	}
 
-
-	// Actions
-	public void executeAction(Action action) {
-		mainEditorWindow.executeAction(action);
-	}
-	public void previewAction(Action action) {
-		mainEditorWindow.previewAction(action);
-	}
 
 	public void exit() {
 		Logger.log("exiting program");
@@ -133,10 +121,4 @@ public class TAS {
 		new SettingsDialog(mainEditorWindow).setVisible(true);
 	}
 
-
-	// getter
-
-	public MainEditorWindow getMainEditorWindow() {
-		return mainEditorWindow;
-	}
 }

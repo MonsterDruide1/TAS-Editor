@@ -1,7 +1,5 @@
 package io.github.jadefalke2.stickRelatedClasses;
 
-import io.github.jadefalke2.util.Settings;
-
 import javax.swing.*;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
