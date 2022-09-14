@@ -18,7 +18,7 @@ public class Settings {
 
 	private final Preferences backingPrefs;
 
-	public Settings(Preferences prefs, TAS parent) {
+	public Settings(Preferences prefs) {
 		this.backingPrefs = prefs;
 
 		File yuzuDir = new File(System.getProperty("user.home")+"/AppData/Roaming/yuzu/tas");
@@ -29,13 +29,6 @@ public class Settings {
 		joystickPanelPosition = new ObservableProperty<>(JoystickPanelPosition.valueOf(prefs.get("joystickPanelPosition", "RIGHT")));
 		smoothTransitionType = new ObservableProperty<>(SmoothTransitionDialog.SmoothTransitionType.valueOf(prefs.get("smoothTransitionType", "ANGULAR_CLOSEST")));
 		redoKeybind = new ObservableProperty<>(RedoKeybind.valueOf(prefs.get("redoKeybind", "CTRL_SHIFT_Z")));
-
-		darkTheme.attachListener(parent::setLookAndFeel);
-		joystickPanelPosition.attachListener(val -> parent.recreateMainPanelWindowLayout());
-		redoKeybind.attachListener(newKeybind -> {
-			if(parent.getMainEditorWindow() != null && parent.getMainEditorWindow().getMainJMenuBar() != null)
-				parent.getMainEditorWindow().getMainJMenuBar().updateRedoAccelerator(newKeybind);
-		});
 	}
 
 	public void storeSettings() throws BackingStoreException {

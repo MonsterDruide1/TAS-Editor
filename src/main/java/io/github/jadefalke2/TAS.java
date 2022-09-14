@@ -43,6 +43,12 @@ public class TAS {
 		initPreferences();
 
 		setLookAndFeel(preferences.darkTheme.get());
+		preferences.darkTheme.attachListener(this::setLookAndFeel);
+		preferences.joystickPanelPosition.attachListener(ignored -> recreateMainPanelWindowLayout());
+		preferences.redoKeybind.attachListener(newKeybind -> {
+			if(getMainEditorWindow() != null && getMainEditorWindow().getMainJMenuBar() != null)
+				getMainEditorWindow().getMainJMenuBar().updateRedoAccelerator(newKeybind);
+		});
 
 		//initialising windows -> set to be invisible by default
 		//will be set visible once they are supposed to
@@ -58,7 +64,7 @@ public class TAS {
 	private void initPreferences(){
 
 		Logger.log("initialising settings");
-		preferences = new Settings(Preferences.userRoot().node(getClass().getName()), this);
+		preferences = new Settings(Preferences.userRoot().node(getClass().getName()));
 		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
 			try {
 				preferences.storeSettings();
