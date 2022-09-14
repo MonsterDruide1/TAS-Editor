@@ -42,6 +42,8 @@ public class TAS {
 		// initialise preferences
 		initPreferences();
 
+		setLookAndFeel(preferences.isDarkTheme());
+
 		//initialising windows -> set to be invisible by default
 		//will be set visible once they are supposed to
 		mainEditorWindow = new MainEditorWindow(this);

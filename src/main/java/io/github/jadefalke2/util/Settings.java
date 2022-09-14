@@ -8,95 +8,95 @@ import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 public class Settings {
-
-	private File directory;
-	private boolean darkTheme;
-	private int lastStickPositionCount;
-	private JoystickPanelPosition joystickPanelPosition;
-	private SmoothTransitionDialog.SmoothTransitionType smoothTransitionType;
-	private RedoKeybind redoKeybind;
+	private final ObservableProperty<File> directory;
+	private final ObservableProperty<Boolean> darkTheme;
+	private final ObservableProperty<Integer> lastStickPositionCount;
+	private final ObservableProperty<JoystickPanelPosition> joystickPanelPosition;
+	private final ObservableProperty<SmoothTransitionDialog.SmoothTransitionType> smoothTransitionType;
+	private final ObservableProperty<RedoKeybind> redoKeybind;
 
 
 	private final Preferences backingPrefs;
-	private final TAS parent;
 
 	public Settings(Preferences prefs, TAS parent) {
 		this.backingPrefs = prefs;
-		this.parent = parent;
 
 		File yuzuDir = new File(System.getProperty("user.home")+"/AppData/Roaming/yuzu/tas");
 
-		setDirectory(new File(prefs.get("directory", System.getProperty("user.home")+(yuzuDir.exists() ? "/AppData/Roaming/yuzu/tas" : ""))));
-		setDarkTheme(prefs.get("darkTheme", "false").equals("true"));
-		setLastStickPositionCount(Integer.parseInt(prefs.get("lastStickPositionCount", "3")));
-		setJoystickPanelPosition(JoystickPanelPosition.valueOf(prefs.get("joystickPanelPosition", "RIGHT")));
-		setSmoothTransitionType(SmoothTransitionDialog.SmoothTransitionType.valueOf(prefs.get("smoothTransitionType", "ANGULAR_CLOSEST")));
-		setRedoKeybind(RedoKeybind.valueOf(prefs.get("redoKeybind", "CTRL_SHIFT_Z")));
+		directory = new ObservableProperty<>(new File(prefs.get("directory", System.getProperty("user.home")+(yuzuDir.exists() ? "/AppData/Roaming/yuzu/tas" : ""))));
+		darkTheme = new ObservableProperty<>(prefs.get("darkTheme", "false").equals("true"));
+		lastStickPositionCount = new ObservableProperty<>(Integer.parseInt(prefs.get("lastStickPositionCount", "3")));
+		joystickPanelPosition = new ObservableProperty<>(JoystickPanelPosition.valueOf(prefs.get("joystickPanelPosition", "RIGHT")));
+		smoothTransitionType = new ObservableProperty<>(SmoothTransitionDialog.SmoothTransitionType.valueOf(prefs.get("smoothTransitionType", "ANGULAR_CLOSEST")));
+		redoKeybind = new ObservableProperty<>(RedoKeybind.valueOf(prefs.get("redoKeybind", "CTRL_SHIFT_Z")));
+
+		darkTheme.attachListener(parent::setLookAndFeel);
+		joystickPanelPosition.attachListener(val -> parent.recreateMainPanelWindowLayout());
+		redoKeybind.attachListener(newKeybind -> {
+			if(parent.getMainEditorWindow() != null && parent.getMainEditorWindow().getMainJMenuBar() != null)
+				parent.getMainEditorWindow().getMainJMenuBar().updateRedoAccelerator(newKeybind);
+		});
 	}
 
 	public void storeSettings() throws BackingStoreException {
 		backingPrefs.clear();
 
-		backingPrefs.put("directory", directory + "");
-		backingPrefs.put("darkTheme", darkTheme + "");
-		backingPrefs.put("lastStickPositionCount", lastStickPositionCount + "");
-		backingPrefs.put("joystickPanelPosition", joystickPanelPosition + "");
-		backingPrefs.put("smoothTransitionType", smoothTransitionType + "");
-		backingPrefs.put("redoKeybind", redoKeybind + "");
+		backingPrefs.put("directory", directory.get() + "");
+		backingPrefs.put("darkTheme", darkTheme.get() + "");
+		backingPrefs.put("lastStickPositionCount", lastStickPositionCount.get() + "");
+		backingPrefs.put("joystickPanelPosition", joystickPanelPosition.get() + "");
+		backingPrefs.put("smoothTransitionType", smoothTransitionType.get() + "");
+		backingPrefs.put("redoKeybind", redoKeybind.get() + "");
 
 		backingPrefs.flush();
 	}
 
 
 	public File getDirectory () {
-		return directory;
+		return directory.get();
 	}
 
 	public void setDirectory (File directory) {
-		this.directory = directory;
+		this.directory.set(directory);
 	}
 
 	public boolean isDarkTheme() {
-		return darkTheme;
+		return darkTheme.get();
 	}
 
 	public void setDarkTheme(boolean darkTheme) {
-		this.darkTheme = darkTheme;
-		parent.setLookAndFeel(darkTheme);
+		this.darkTheme.set(darkTheme);
 	}
 
 	public int getLastStickPositionCount() {
-		return lastStickPositionCount;
+		return lastStickPositionCount.get();
 	}
 
 	public void setLastStickPositionCount(int lastStickPositionCount) {
-		this.lastStickPositionCount = lastStickPositionCount;
+		this.lastStickPositionCount.set(lastStickPositionCount);
 	}
 
 	public void setJoystickPanelPosition(JoystickPanelPosition joystickPanelPosition){
-		this.joystickPanelPosition = joystickPanelPosition;
-		parent.recreateMainPanelWindowLayout();
+		this.joystickPanelPosition.set(joystickPanelPosition);
 	}
 
 	public JoystickPanelPosition getJoystickPanelPosition(){
-		return joystickPanelPosition;
+		return joystickPanelPosition.get();
 	}
 
 	public void setSmoothTransitionType(SmoothTransitionDialog.SmoothTransitionType smoothTransitionType){
-		this.smoothTransitionType = smoothTransitionType;
+		this.smoothTransitionType.set(smoothTransitionType);
 	}
 
 	public SmoothTransitionDialog.SmoothTransitionType getSmoothTransitionType(){
-		return smoothTransitionType;
+		return smoothTransitionType.get();
 	}
 
 	public void setRedoKeybind(RedoKeybind redoKeybind) {
-		this.redoKeybind = redoKeybind;
-		if(parent.getMainEditorWindow() != null && parent.getMainEditorWindow().getMainJMenuBar() != null)
-			parent.getMainEditorWindow().getMainJMenuBar().updateRedoAccelerator(redoKeybind);
+		this.redoKeybind.set(redoKeybind);
 	}
 	public RedoKeybind getRedoKeybind() {
-		return redoKeybind;
+		return redoKeybind.get();
 	}
 
 

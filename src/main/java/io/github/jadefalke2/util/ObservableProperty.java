@@ -22,10 +22,10 @@ public class ObservableProperty<T> {
 	public void set(T value) {
 		if(value.equals(this.value)) return;
 
+		this.value = value;
 		for(PropertyChangeListener<T> listener : listeners) {
 			listener.onChange(value, this.value);
 		}
-		this.value = value;
 	}
 	public T get() {
 		return value;
