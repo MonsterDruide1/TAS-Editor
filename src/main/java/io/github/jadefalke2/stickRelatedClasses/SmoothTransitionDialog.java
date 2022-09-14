@@ -44,7 +44,7 @@ public class SmoothTransitionDialog extends JDialog {
 	private final JComboBox<String> dropdownMenu;
 	private final JoystickPanel startJoystick,  endJoystick;
 
-	public SmoothTransitionDialog(Settings settings, StickPosition startPos, StickPosition endPos, int frames){
+	public SmoothTransitionDialog(StickPosition startPos, StickPosition endPos, int frames){
 		super();
 
 		this.frames = frames;
@@ -53,7 +53,7 @@ public class SmoothTransitionDialog extends JDialog {
 		for(SmoothTransitionType option : SmoothTransitionType.values())
 			dropdownMenu.addItem(option.getName());
 
-		dropdownMenu.setSelectedIndex(settings.smoothTransitionType.get().ordinal());
+		dropdownMenu.setSelectedIndex(Settings.INSTANCE.smoothTransitionType.get().ordinal());
 		dropdownMenu.addActionListener(e -> updatePositions());
 
 		JButton okButton = new JButton("OK");
@@ -62,9 +62,9 @@ public class SmoothTransitionDialog extends JDialog {
 			dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 		});
 
-		startJoystick = new JoystickPanel(settings, "Start");
+		startJoystick = new JoystickPanel("Start");
 		startJoystick.setStickPosition(startPos);
-		endJoystick = new JoystickPanel(settings, "End");
+		endJoystick = new JoystickPanel("End");
 		endJoystick.setStickPosition(endPos);
 
 		CustomChangeListener<StickPosition> joystickPanelListener = e -> updatePositions();

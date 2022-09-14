@@ -57,6 +57,8 @@ public class ScriptTab extends JPanel {
 		this.lengthChangeListener = listener;
 		script.attachLengthListener(listener);
 		listener.onChange(script.getLines().length, -1);
+
+		Settings.INSTANCE.joystickPanelPosition.attachListener(ignored -> refreshLayout());
 	}
 
 	public void refreshLayout() {
@@ -71,7 +73,7 @@ public class ScriptTab extends JPanel {
 		c.weightx = 1;
 		add(editor, c);
 
-		if(parent.getPreferences().joystickPanelPosition.get() == Settings.JoystickPanelPosition.LEFT)
+		if(Settings.INSTANCE.joystickPanelPosition.get() == Settings.JoystickPanelPosition.LEFT)
 			c.gridx = 0;
 		else //RIGHT
 			c.gridx = 2;
@@ -94,10 +96,10 @@ public class ScriptTab extends JPanel {
 	}
 
 	public void saveFile() throws IOException {
-		script.saveFile(parent.getPreferences().directory.get());
+		script.saveFile(Settings.INSTANCE.directory.get());
 	}
 	public void saveFileAs() throws IOException {
-		script.saveFileAs(parent.getPreferences().directory.get());
+		script.saveFileAs(Settings.INSTANCE.directory.get());
 	}
 	public boolean closeScript() {
 		return script.closeScript(parent);

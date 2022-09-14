@@ -1,6 +1,7 @@
 package io.github.jadefalke2.components;
 
 import io.github.jadefalke2.TAS;
+import io.github.jadefalke2.util.ObservableProperty;
 import io.github.jadefalke2.util.Settings;
 
 import javax.swing.*;
@@ -29,7 +30,7 @@ public class MainJMenuBar extends JMenuBar {
 		JMenu editMenu = createEditMenu(parent, mainEditorWindow);
 		add(editMenu);
 
-		JMenu viewMenu = createViewMenu(parent.getPreferences());
+		JMenu viewMenu = createViewMenu();
 		add(viewMenu);
 
 		JMenu helpMenu = createHelpMenu();
@@ -53,7 +54,7 @@ public class MainJMenuBar extends JMenuBar {
 		openScript.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
 		openScript.addActionListener(e -> {
 			try {
-				parent.openScript(new TxtFileChooser(parent.getPreferences().directory.get()).getFile(true));
+				parent.openScript(new TxtFileChooser(Settings.INSTANCE.directory.get()).getFile(true));
 			} catch (IOException ex) {
 				ex.printStackTrace();
 			}
@@ -95,8 +96,9 @@ public class MainJMenuBar extends JMenuBar {
 		undo.addActionListener(e -> getActiveScriptTab().undo());
 
 		redo = editJMenu.add("Redo");
-		updateRedoAccelerator(parent.getPreferences().redoKeybind.get());
+		updateRedoAccelerator(Settings.INSTANCE.redoKeybind.get());
 		redo.addActionListener(e -> getActiveScriptTab().redo());
+		Settings.INSTANCE.redoKeybind.attachListener(this::updateRedoAccelerator);
 
 		editJMenu.addSeparator();
 
@@ -134,12 +136,14 @@ public class MainJMenuBar extends JMenuBar {
 		return editJMenu;
 	}
 
-	private JMenu createViewMenu(Settings preferences){
+	private JMenu createViewMenu(){
 		JMenu viewJMenu = new JMenu("View");
 
-		darkTheme = new JCheckBoxMenuItem("Toggle Dark Theme", preferences.darkTheme.get());
+		ObservableProperty<Boolean> darkThemeSetting = Settings.INSTANCE.darkTheme;
+		darkTheme = new JCheckBoxMenuItem("Toggle Dark Theme", darkThemeSetting.get());
 		viewJMenu.add(darkTheme);
-		darkTheme.addItemListener(e -> preferences.darkTheme.set(darkTheme.getState()));
+		darkTheme.addItemListener(e -> darkThemeSetting.set(darkTheme.getState()));
+		darkThemeSetting.attachListener(darkTheme::setState);
 
 		return viewJMenu;
 	}

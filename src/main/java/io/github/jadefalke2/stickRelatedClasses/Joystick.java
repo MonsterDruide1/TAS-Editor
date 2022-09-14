@@ -16,8 +16,6 @@ public class Joystick extends JPanel {
 	private int thumbRadius;
 	private int panelWidth;
 
-	private final Settings settings;
-
 	// stick positions
 	private StickPosition[] stickPositions = new StickPosition[0];
 
@@ -26,8 +24,7 @@ public class Joystick extends JPanel {
 
 	private CustomChangeListener<StickPosition> onChange = null;
 
-	public Joystick(Settings settings) {
-		this.settings = settings;
+	public Joystick() {
 		panelWidth = Math.min(getWidth(), getHeight());
 		thumbDiameter = panelWidth / 15;
 		thumbRadius = thumbDiameter / 2;
@@ -194,7 +191,7 @@ public class Joystick extends JPanel {
 		g.drawLine(thumbRadius + BORDER_THICKNESS, panelWidth / 2, panelWidth - thumbRadius - BORDER_THICKNESS, panelWidth / 2);
 
 		if(!isEnabled()){
-			if(settings.darkTheme.get())
+			if(Settings.INSTANCE.darkTheme.get())
 				g.setColor(new Color(0, 0, 0, 150));
 			else
 				g.setColor(new Color(255, 255, 255, 150));

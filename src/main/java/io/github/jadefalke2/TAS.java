@@ -13,16 +13,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.prefs.BackingStoreException;
-import java.util.prefs.Preferences;
 
 public class TAS {
 
 	public static TAS INITIAL_MAIN_TAS_FOR_DEBUGGING;
 
 	private MainEditorWindow mainEditorWindow;
-
-	private Settings preferences;
 
 	public static void main(String[] args) {
 		INITIAL_MAIN_TAS_FOR_DEBUGGING = new TAS();
@@ -40,15 +36,8 @@ public class TAS {
 		Logger.log("boot up");
 
 		// initialise preferences
-		preferences = Settings.INSTANCE;
-
-		setLookAndFeel(preferences.darkTheme.get());
-		preferences.darkTheme.attachListener(this::setLookAndFeel);
-		preferences.joystickPanelPosition.attachListener(ignored -> recreateMainPanelWindowLayout());
-		preferences.redoKeybind.attachListener(newKeybind -> {
-			if(getMainEditorWindow() != null && getMainEditorWindow().getMainJMenuBar() != null)
-				getMainEditorWindow().getMainJMenuBar().updateRedoAccelerator(newKeybind);
-		});
+		setLookAndFeel(Settings.INSTANCE.darkTheme.get());
+		Settings.INSTANCE.darkTheme.attachListener(this::setLookAndFeel);
 
 		//initialising windows -> set to be invisible by default
 		//will be set visible once they are supposed to
@@ -141,20 +130,11 @@ public class TAS {
 
 	public void openSettings(){
 		Logger.log("opening settings");
-		new SettingsDialog(mainEditorWindow, preferences).setVisible(true);
+		new SettingsDialog(mainEditorWindow).setVisible(true);
 	}
 
 
 	// getter
-
-	public Settings getPreferences() {
-		return preferences;
-	}
-
-	public void recreateMainPanelWindowLayout() {
-		if(mainEditorWindow != null) //just skip it if the mainEditorWindow has not been created yet, as the setting will be applied on creation as well
-			mainEditorWindow.recreateLayoutPanel();
-	}
 
 	public MainEditorWindow getMainEditorWindow() {
 		return mainEditorWindow;

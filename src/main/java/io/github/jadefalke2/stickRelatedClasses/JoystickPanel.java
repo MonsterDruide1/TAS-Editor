@@ -37,15 +37,15 @@ public class JoystickPanel extends JPanel {
         L_STICK,R_STICK
     }
 
-	public JoystickPanel(Settings settings, String descriptor) {
-		this(settings, null, descriptor);
+	public JoystickPanel(String descriptor) {
+		this(null, descriptor);
 	}
 
-	public JoystickPanel(Settings settings, ActionListener smoothTransitionListener, String descriptor) {
+	public JoystickPanel(ActionListener smoothTransitionListener, String descriptor) {
 
 		// setting global vars
 		stickPosition = new StickPosition(0,0);
-		joystick = new Joystick(settings);
+		joystick = new Joystick();
 		joystick.setThumbPos(stickPosition, false);
 
 		//Labels

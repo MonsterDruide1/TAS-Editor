@@ -17,7 +17,6 @@ public class SideJoystickPanel extends JPanel {
 	private final JLabel frameAmountLabel;
 	private final JoystickPanel lstickPanel;
 	private final JoystickPanel rstickPanel;
-	private final Settings settings;
 
 	private InputLine[] inputLines;
 	private final Script script;
@@ -27,12 +26,11 @@ public class SideJoystickPanel extends JPanel {
 		frameAmountLabel = new JLabel("Currently no frames are being edited");
 		frameAmountLabel.setHorizontalAlignment(JLabel.CENTER);
 		frameAmountLabel.setFont(new Font(frameAmountLabel.getFont().getName(), frameAmountLabel.getFont().getStyle(), 15));
-		settings = parent.getPreferences();
 		this.script = script;
 
 		//TODO remove the duplicate listener here
 		ActionListener smoothTransitionListenerL = e -> {
-			SmoothTransitionDialog dialog = new SmoothTransitionDialog(settings, inputLines[0].getStickL(), inputLines[inputLines.length-1].getStickL(), inputLines.length);
+			SmoothTransitionDialog dialog = new SmoothTransitionDialog(inputLines[0].getStickL(), inputLines[inputLines.length-1].getStickL(), inputLines.length);
 			dialog.setVisible(true);
 			if(!dialog.isAccepted())
 				return;
@@ -47,7 +45,7 @@ public class SideJoystickPanel extends JPanel {
 		};
 
 		ActionListener smoothTransitionListenerR = e -> {
-			SmoothTransitionDialog dialog = new SmoothTransitionDialog(settings, inputLines[0].getStickR(), inputLines[inputLines.length-1].getStickR(), inputLines.length);
+			SmoothTransitionDialog dialog = new SmoothTransitionDialog(inputLines[0].getStickR(), inputLines[inputLines.length-1].getStickR(), inputLines.length);
 			dialog.setVisible(true);
 			if(!dialog.isAccepted())
 				return;
@@ -63,8 +61,8 @@ public class SideJoystickPanel extends JPanel {
 
 		CustomChangeListener<StickPosition> joystickPanelListener = e -> parent.executeAction(new StickAction(script, pianoRoll.getSelectedRows(), getStickType(e.getSource()), e.getValue()));
 
-		lstickPanel = new JoystickPanel(parent.getPreferences(), smoothTransitionListenerL, "Left-stick");
-		rstickPanel = new JoystickPanel(parent.getPreferences(), smoothTransitionListenerR, "Right-Stick");
+		lstickPanel = new JoystickPanel(smoothTransitionListenerL, "Left-stick");
+		rstickPanel = new JoystickPanel(smoothTransitionListenerR, "Right-Stick");
 		lstickPanel.setOnChangeListener(joystickPanelListener);
 		rstickPanel.setOnChangeListener(joystickPanelListener);
 
@@ -148,7 +146,7 @@ public class SideJoystickPanel extends JPanel {
 
 	//TODO clean up this mess
 	public void setEditingRows(int firstIndex, InputLine firstLine, InputLine[] inputLines, JoystickPanel joystickPanel, JoystickPanel.StickType stickType){
-		StickPosition[] stickPositions = new StickPosition[Math.min(firstIndex, settings.lastStickPositionCount.get())];
+		StickPosition[] stickPositions = new StickPosition[Math.min(firstIndex, Settings.INSTANCE.lastStickPositionCount.get())]; // TODO listener
 		// sets the contents of the stickpositions array to be the previous stick positions of the same stick
 		for (int i = 0; i < stickPositions.length; i++){
 			InputLine currentLine = inputLines[firstIndex - stickPositions.length + i];
