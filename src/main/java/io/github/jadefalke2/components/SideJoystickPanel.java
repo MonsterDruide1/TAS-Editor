@@ -3,11 +3,17 @@ package io.github.jadefalke2.components;
 import io.github.jadefalke2.InputLine;
 import io.github.jadefalke2.Script;
 import io.github.jadefalke2.actions.StickAction;
-import io.github.jadefalke2.stickRelatedClasses.*;
+import io.github.jadefalke2.stickRelatedClasses.CustomChangeListener;
+import io.github.jadefalke2.stickRelatedClasses.JoystickPanel;
+import io.github.jadefalke2.stickRelatedClasses.SmoothTransitionDialog;
+import io.github.jadefalke2.stickRelatedClasses.StickPosition;
 import io.github.jadefalke2.util.Settings;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
 

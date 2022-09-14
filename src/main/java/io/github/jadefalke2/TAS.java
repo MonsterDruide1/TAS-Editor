@@ -8,8 +8,11 @@ import io.github.jadefalke2.util.CorruptedScriptException;
 import io.github.jadefalke2.util.Logger;
 import io.github.jadefalke2.util.Settings;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import java.awt.Window;
 import java.io.File;
 import java.io.IOException;
 

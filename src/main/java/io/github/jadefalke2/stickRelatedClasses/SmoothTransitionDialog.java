@@ -4,7 +4,8 @@ import io.github.jadefalke2.util.Settings;
 import io.github.jadefalke2.util.TriFunction;
 
 import javax.swing.*;
-import java.awt.*;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.WindowEvent;
 import java.util.stream.IntStream;
 

@@ -3,8 +3,10 @@ package io.github.jadefalke2.components;
 import io.github.jadefalke2.Script;
 import io.github.jadefalke2.actions.LineAction;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+import java.awt.Component;
+import java.awt.Point;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 

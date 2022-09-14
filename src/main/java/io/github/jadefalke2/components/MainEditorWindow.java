@@ -5,8 +5,11 @@ import io.github.jadefalke2.TAS;
 import io.github.jadefalke2.actions.Action;
 import io.github.jadefalke2.util.Logger;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JToolBar;
+import java.awt.BorderLayout;
+import java.awt.Insets;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;

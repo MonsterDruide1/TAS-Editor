@@ -6,11 +6,16 @@ import io.github.jadefalke2.actions.LineAction;
 import io.github.jadefalke2.util.Button;
 import io.github.jadefalke2.util.CorruptedScriptException;
 import io.github.jadefalke2.util.InputDrawMouseListener;
-import javax.swing.*;
+
+import javax.swing.AbstractAction;
+import javax.swing.JTable;
+import javax.swing.KeyStroke;
+import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-
-import java.awt.*;
+import java.awt.Font;
+import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.UnsupportedFlavorException;

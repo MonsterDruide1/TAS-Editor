@@ -2,7 +2,8 @@ package io.github.jadefalke2.components;
 
 import io.github.jadefalke2.util.Util;
 
-import javax.swing.*;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 import java.awt.Dimension;

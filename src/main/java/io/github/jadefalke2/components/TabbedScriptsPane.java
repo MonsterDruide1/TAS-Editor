@@ -3,8 +3,11 @@ package io.github.jadefalke2.components;
 import io.github.jadefalke2.Script;
 import io.github.jadefalke2.util.ObservableProperty;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JTabbedPane;
+import java.awt.AWTEvent;
+import java.awt.EventQueue;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;

@@ -6,8 +6,11 @@ import io.github.jadefalke2.util.Logger;
 import io.github.jadefalke2.util.ObservableProperty;
 import io.github.jadefalke2.util.Settings;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.io.IOException;
 import java.util.Stack;
 

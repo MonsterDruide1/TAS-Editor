@@ -2,9 +2,11 @@ package io.github.jadefalke2.stickRelatedClasses;
 
 import javax.swing.*;
 import javax.swing.event.ChangeListener;
-import java.awt.*;
-
-import java.awt.event.*;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
+import java.awt.event.ActionListener;
 
 public class JoystickPanel extends JPanel {
 

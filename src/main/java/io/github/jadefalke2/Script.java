@@ -5,7 +5,7 @@ import io.github.jadefalke2.stickRelatedClasses.JoystickPanel;
 import io.github.jadefalke2.stickRelatedClasses.StickPosition;
 import io.github.jadefalke2.util.*;
 
-import javax.swing.*;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import java.io.File;
 import java.io.IOException;
@@ -97,7 +97,7 @@ public class Script {
 			try {
 				saveFile();
 			} catch(IOException ioe) {
-				JOptionPane.showMessageDialog(null, "Failed to save file!\nError: "+ioe.getMessage(), "Saving failed", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Failed to save file!\nError: " + ioe.getMessage(), "Saving failed", JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
 			return dirty.get();

@@ -2,8 +2,12 @@ package io.github.jadefalke2.stickRelatedClasses;
 
 import io.github.jadefalke2.util.Settings;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.event.*;
 
 public class Joystick extends JPanel {

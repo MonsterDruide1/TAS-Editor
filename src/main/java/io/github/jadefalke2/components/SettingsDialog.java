@@ -5,7 +5,10 @@ import io.github.jadefalke2.util.Settings;
 import io.github.jadefalke2.util.SimpleDocumentListener;
 
 import javax.swing.*;
-import java.awt.*;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.Window;
 import java.awt.event.ItemEvent;
 import java.io.File;
 import java.util.Arrays;

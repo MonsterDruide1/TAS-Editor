@@ -1,6 +1,6 @@
 package io.github.jadefalke2.util;
 
-import javax.swing.*;
+import javax.swing.JOptionPane;
 
 public class CorruptedScriptException extends Exception {
 
