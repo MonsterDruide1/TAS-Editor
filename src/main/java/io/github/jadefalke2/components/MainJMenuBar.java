@@ -53,7 +53,7 @@ public class MainJMenuBar extends JMenuBar {
 		openScript.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
 		openScript.addActionListener(e -> {
 			try {
-				parent.openScript(new TxtFileChooser(parent.getPreferences().getDirectory()).getFile(true));
+				parent.openScript(new TxtFileChooser(parent.getPreferences().directory.get()).getFile(true));
 			} catch (IOException ex) {
 				ex.printStackTrace();
 			}
@@ -95,7 +95,7 @@ public class MainJMenuBar extends JMenuBar {
 		undo.addActionListener(e -> getActiveScriptTab().undo());
 
 		redo = editJMenu.add("Redo");
-		updateRedoAccelerator(parent.getPreferences().getRedoKeybind());
+		updateRedoAccelerator(parent.getPreferences().redoKeybind.get());
 		redo.addActionListener(e -> getActiveScriptTab().redo());
 
 		editJMenu.addSeparator();
@@ -137,9 +137,9 @@ public class MainJMenuBar extends JMenuBar {
 	private JMenu createViewMenu(Settings preferences){
 		JMenu viewJMenu = new JMenu("View");
 
-		darkTheme = new JCheckBoxMenuItem("Toggle Dark Theme", preferences.isDarkTheme());
+		darkTheme = new JCheckBoxMenuItem("Toggle Dark Theme", preferences.darkTheme.get());
 		viewJMenu.add(darkTheme);
-		darkTheme.addItemListener(e -> preferences.setDarkTheme(darkTheme.getState()));
+		darkTheme.addItemListener(e -> preferences.darkTheme.set(darkTheme.getState()));
 
 		return viewJMenu;
 	}

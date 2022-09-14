@@ -8,12 +8,12 @@ import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 public class Settings {
-	private final ObservableProperty<File> directory;
-	private final ObservableProperty<Boolean> darkTheme;
-	private final ObservableProperty<Integer> lastStickPositionCount;
-	private final ObservableProperty<JoystickPanelPosition> joystickPanelPosition;
-	private final ObservableProperty<SmoothTransitionDialog.SmoothTransitionType> smoothTransitionType;
-	private final ObservableProperty<RedoKeybind> redoKeybind;
+	public final ObservableProperty<File> directory;
+	public final ObservableProperty<Boolean> darkTheme;
+	public final ObservableProperty<Integer> lastStickPositionCount;
+	public final ObservableProperty<JoystickPanelPosition> joystickPanelPosition;
+	public final ObservableProperty<SmoothTransitionDialog.SmoothTransitionType> smoothTransitionType;
+	public final ObservableProperty<RedoKeybind> redoKeybind;
 
 
 	private final Preferences backingPrefs;
@@ -50,55 +50,6 @@ public class Settings {
 
 		backingPrefs.flush();
 	}
-
-
-	public File getDirectory () {
-		return directory.get();
-	}
-
-	public void setDirectory (File directory) {
-		this.directory.set(directory);
-	}
-
-	public boolean isDarkTheme() {
-		return darkTheme.get();
-	}
-
-	public void setDarkTheme(boolean darkTheme) {
-		this.darkTheme.set(darkTheme);
-	}
-
-	public int getLastStickPositionCount() {
-		return lastStickPositionCount.get();
-	}
-
-	public void setLastStickPositionCount(int lastStickPositionCount) {
-		this.lastStickPositionCount.set(lastStickPositionCount);
-	}
-
-	public void setJoystickPanelPosition(JoystickPanelPosition joystickPanelPosition){
-		this.joystickPanelPosition.set(joystickPanelPosition);
-	}
-
-	public JoystickPanelPosition getJoystickPanelPosition(){
-		return joystickPanelPosition.get();
-	}
-
-	public void setSmoothTransitionType(SmoothTransitionDialog.SmoothTransitionType smoothTransitionType){
-		this.smoothTransitionType.set(smoothTransitionType);
-	}
-
-	public SmoothTransitionDialog.SmoothTransitionType getSmoothTransitionType(){
-		return smoothTransitionType.get();
-	}
-
-	public void setRedoKeybind(RedoKeybind redoKeybind) {
-		this.redoKeybind.set(redoKeybind);
-	}
-	public RedoKeybind getRedoKeybind() {
-		return redoKeybind.get();
-	}
-
 
 	public enum JoystickPanelPosition {
 		LEFT, RIGHT

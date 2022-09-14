@@ -194,7 +194,7 @@ public class Joystick extends JPanel {
 		g.drawLine(thumbRadius + BORDER_THICKNESS, panelWidth / 2, panelWidth - thumbRadius - BORDER_THICKNESS, panelWidth / 2);
 
 		if(!isEnabled()){
-			if(settings.isDarkTheme())
+			if(settings.darkTheme.get())
 				g.setColor(new Color(0, 0, 0, 150));
 			else
 				g.setColor(new Color(255, 255, 255, 150));

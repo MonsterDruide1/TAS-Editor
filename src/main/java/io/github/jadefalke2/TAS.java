@@ -42,7 +42,7 @@ public class TAS {
 		// initialise preferences
 		initPreferences();
 
-		setLookAndFeel(preferences.isDarkTheme());
+		setLookAndFeel(preferences.darkTheme.get());
 
 		//initialising windows -> set to be invisible by default
 		//will be set visible once they are supposed to

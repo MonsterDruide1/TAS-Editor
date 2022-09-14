@@ -71,7 +71,7 @@ public class ScriptTab extends JPanel {
 		c.weightx = 1;
 		add(editor, c);
 
-		if(parent.getPreferences().getJoystickPanelPosition() == Settings.JoystickPanelPosition.LEFT)
+		if(parent.getPreferences().joystickPanelPosition.get() == Settings.JoystickPanelPosition.LEFT)
 			c.gridx = 0;
 		else //RIGHT
 			c.gridx = 2;
@@ -94,10 +94,10 @@ public class ScriptTab extends JPanel {
 	}
 
 	public void saveFile() throws IOException {
-		script.saveFile(parent.getPreferences().getDirectory());
+		script.saveFile(parent.getPreferences().directory.get());
 	}
 	public void saveFileAs() throws IOException {
-		script.saveFileAs(parent.getPreferences().getDirectory());
+		script.saveFileAs(parent.getPreferences().directory.get());
 	}
 	public boolean closeScript() {
 		return script.closeScript(parent);

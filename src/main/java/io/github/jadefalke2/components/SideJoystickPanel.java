@@ -148,7 +148,7 @@ public class SideJoystickPanel extends JPanel {
 
 	//TODO clean up this mess
 	public void setEditingRows(int firstIndex, InputLine firstLine, InputLine[] inputLines, JoystickPanel joystickPanel, JoystickPanel.StickType stickType){
-		StickPosition[] stickPositions = new StickPosition[Math.min(firstIndex, settings.getLastStickPositionCount())];
+		StickPosition[] stickPositions = new StickPosition[Math.min(firstIndex, settings.lastStickPositionCount.get())];
 		// sets the contents of the stickpositions array to be the previous stick positions of the same stick
 		for (int i = 0; i < stickPositions.length; i++){
 			InputLine currentLine = inputLines[firstIndex - stickPositions.length + i];

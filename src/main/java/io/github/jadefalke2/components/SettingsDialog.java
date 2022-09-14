@@ -29,22 +29,22 @@ public class SettingsDialog extends JDialog {
 		c.gridx = 0;
 		c.gridy = 0;
 
-		addCheckboxSetting("Dark Theme", prefs.isDarkTheme(), prefs::setDarkTheme, mainPanel, c);
+		addCheckboxSetting("Dark Theme", prefs.darkTheme.get(), prefs.darkTheme::set, mainPanel, c);
 		c.gridy++;
 
-		addFileSelectionSetting("Directory", prefs.getDirectory(), prefs::setDirectory, mainPanel, c);
+		addFileSelectionSetting("Directory", prefs.directory.get(), prefs.directory::set, mainPanel, c);
 		c.gridy++;
 
-		addSpinnerSetting("Show last stick positions", prefs.getLastStickPositionCount(), prefs::setLastStickPositionCount, mainPanel, c);
+		addSpinnerSetting("Show last stick positions", prefs.lastStickPositionCount.get(), prefs.lastStickPositionCount::set, mainPanel, c);
 		c.gridy++;
 
-		addDropdownSetting("Default SmoothTransition-Type: ", prefs.getSmoothTransitionType(), prefs::setSmoothTransitionType, SmoothTransitionDialog.SmoothTransitionType.values(), Arrays.stream(SmoothTransitionDialog.SmoothTransitionType.values()).map(SmoothTransitionDialog.SmoothTransitionType::getName).toArray(String[]::new), mainPanel, c);
+		addDropdownSetting("Default SmoothTransition-Type: ", prefs.smoothTransitionType.get(), prefs.smoothTransitionType::set, SmoothTransitionDialog.SmoothTransitionType.values(), Arrays.stream(SmoothTransitionDialog.SmoothTransitionType.values()).map(SmoothTransitionDialog.SmoothTransitionType::getName).toArray(String[]::new), mainPanel, c);
 		c.gridy++;
 
-		addRadioButtonSetting("JoystickPanel Position: ", prefs.getJoystickPanelPosition(), prefs::setJoystickPanelPosition, Settings.JoystickPanelPosition.values(), new String[]{"Left", "Right"}, Settings.JoystickPanelPosition::valueOf, mainPanel, c);
+		addRadioButtonSetting("JoystickPanel Position: ", prefs.joystickPanelPosition.get(), prefs.joystickPanelPosition::set, Settings.JoystickPanelPosition.values(), new String[]{"Left", "Right"}, Settings.JoystickPanelPosition::valueOf, mainPanel, c);
 		c.gridy++;
 
-		addRadioButtonSetting("Redo-Keybind: ", prefs.getRedoKeybind(), prefs::setRedoKeybind, Settings.RedoKeybind.values(), new String[]{"CTRL+SHIFT+Z", "CTRL+Y"}, Settings.RedoKeybind::valueOf, mainPanel, c);
+		addRadioButtonSetting("Redo-Keybind: ", prefs.redoKeybind.get(), prefs.redoKeybind::set, Settings.RedoKeybind.values(), new String[]{"CTRL+SHIFT+Z", "CTRL+Y"}, Settings.RedoKeybind::valueOf, mainPanel, c);
 		c.gridy++;
 
 		add(mainPanel);
