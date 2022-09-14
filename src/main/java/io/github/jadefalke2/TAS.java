@@ -121,6 +121,11 @@ public class TAS {
 		openScript(Script.getEmptyScript(10));
 	}
 
+	public void newWindow() {
+		Logger.log("opening new window");
+		new TAS(); // TODO not the right way, as for example settings won't sync properly
+	}
+
 	/**
 	 * Returns the string that is being read from the given file.
 	 * @param file the file to open

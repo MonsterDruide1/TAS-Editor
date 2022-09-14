@@ -47,7 +47,7 @@ public class MainJMenuBar extends JMenuBar {
 
 		newWindow = fileJMenu.add("New Window");
 		newWindow.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
-		newWindow.addActionListener(e -> new TAS());
+		newWindow.addActionListener(e -> parent.newWindow());
 
 		openScript = fileJMenu.add("Open...");
 		openScript.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
