@@ -40,7 +40,7 @@ public class TAS {
 		Logger.log("boot up");
 
 		// initialise preferences
-		initPreferences();
+		preferences = Settings.INSTANCE;
 
 		setLookAndFeel(preferences.darkTheme.get());
 		preferences.darkTheme.attachListener(this::setLookAndFeel);
@@ -58,20 +58,6 @@ public class TAS {
 		mainEditorWindow.setVisible(true);
 
 		UIManager.put("FileChooser.useSystemExtensionHiding", false);
-	}
-
-
-	private void initPreferences(){
-
-		Logger.log("initialising settings");
-		preferences = new Settings(Preferences.userRoot().node(getClass().getName()));
-		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-			try {
-				preferences.storeSettings();
-			} catch (BackingStoreException e) {
-				e.printStackTrace();
-			}
-		}));
 	}
 
 	// set look and feels

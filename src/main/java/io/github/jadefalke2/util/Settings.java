@@ -8,6 +8,18 @@ import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 public class Settings {
+
+	public static Settings INSTANCE = new Settings(Preferences.userRoot().node(TAS.class.getName()));
+	static {
+		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+			try {
+				INSTANCE.storeSettings();
+			} catch (BackingStoreException e) {
+				e.printStackTrace();
+			}
+		}));
+	}
+
 	public final ObservableProperty<File> directory;
 	public final ObservableProperty<Boolean> darkTheme;
 	public final ObservableProperty<Integer> lastStickPositionCount;
@@ -18,7 +30,7 @@ public class Settings {
 
 	private final Preferences backingPrefs;
 
-	public Settings(Preferences prefs) {
+	private Settings(Preferences prefs) {
 		this.backingPrefs = prefs;
 
 		File yuzuDir = new File(System.getProperty("user.home")+"/AppData/Roaming/yuzu/tas");
