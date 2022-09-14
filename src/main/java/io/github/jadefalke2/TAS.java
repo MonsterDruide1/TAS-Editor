@@ -55,19 +55,10 @@ public class TAS {
 			for(Window window : JFrame.getWindows()) {
 				SwingUtilities.updateComponentTreeUI(window);
 			}
-			setDefaultsAfterThemeChange();
 		} catch (UnsupportedLookAndFeelException e) {
 			e.printStackTrace();
 		}
 	}
-
-
-	private void setDefaultsAfterThemeChange () {
-		if (mainEditorWindow != null) {
-			mainEditorWindow.recreateLayoutPanel(); // only requires `setShowGrid` within updates
-		}
-	}
-
 
 	public void exit() {
 		Logger.log("exiting program");

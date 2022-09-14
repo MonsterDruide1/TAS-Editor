@@ -45,12 +45,6 @@ public class TabbedScriptsPane extends JTabbedPane {
 		putClientProperty("JTabbedPane.trailingComponent", label);
 	}
 
-	public void refreshLayouts() {
-		for(ScriptTab scriptTab : scriptTabs) {
-			scriptTab.refreshLayout();
-		}
-	}
-
 	public void afterTabChange() {
 		ScriptTab activeTab = getActiveScriptTab();
 		if(activeTab != null)

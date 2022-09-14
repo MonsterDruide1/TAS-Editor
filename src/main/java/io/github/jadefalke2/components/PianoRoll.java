@@ -97,6 +97,12 @@ public class PianoRoll extends JTable {
 		adjustColumnWidth();
 	}
 
+	@Override
+	public void updateUI() {
+		super.updateUI();
+		setShowGrid(true);
+	}
+
 	/**
 	 * opens the popup menu with the line actions
 	 * @param rows all rows affected by this method

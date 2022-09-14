@@ -56,15 +56,8 @@ public class MainEditorWindow extends JFrame {
 		tabbedPane = new TabbedScriptsPane(this, this::setCurrentScriptLength);
 		add(tabbedPane, BorderLayout.CENTER);
 
-		recreateLayoutPanel();
-
 		pack(); //TODO is still too small, the joystick is too little to use
 		setExtendedState(MAXIMIZED_BOTH);
-	}
-
-	public void recreateLayoutPanel(){
-		tabbedPane.refreshLayouts();
-		revalidate(); //force layout update
 	}
 
 	public void openScript(Script script){
