@@ -34,7 +34,7 @@ public class Script {
 	}
 
 
-	private File file;
+	private ObservableProperty<File> file;
 	private DefaultTableModel table;
 	private final ArrayList<InputLine> inputLines;
 	private final ObservableProperty<Boolean> dirty;
@@ -42,7 +42,7 @@ public class Script {
 
 	public Script() {
 		inputLines = new ArrayList<>();
-		file = null;
+		file = new ObservableProperty<>(null);
 		dirty = new ObservableProperty<>(false);
 		lengthListeners = new ArrayList<>();
 	}
@@ -52,7 +52,7 @@ public class Script {
 	}
 	public Script (File file) throws CorruptedScriptException, IOException {
 		this(Util.fileToString(file));
-		this.file = file;
+		this.file.set(file);
 	}
 
 	/**
@@ -122,14 +122,14 @@ public class Script {
 	 * @param defaultDir The directory to open the TxtFileChooser in if no file is stored
 	 */
 	public void saveFile(File defaultDir) throws IOException { //TODO don't have that as a parameter, as it is only passed down to the next layer...
-		if(file == null){
+		if(file.get() == null){
 			saveFileAs(defaultDir);
 			return;
 		}
 
-		Logger.log("saving script to " + file.getAbsolutePath());
+		Logger.log("saving script to " + file.get().getAbsolutePath());
 
-		Util.writeFile(getFull(), file);
+		Util.writeFile(getFull(), file.get());
 		dirty.set(false);
 	}
 
@@ -141,7 +141,7 @@ public class Script {
 		File savedFile = new TxtFileChooser(defaultDir).getFile(false);
 		if(savedFile != null){
 			Logger.log("saving file as " + savedFile.getAbsolutePath());
-			file = savedFile;
+			file.set(savedFile);
 			saveFile(defaultDir);
 		}
 	}
@@ -235,7 +235,11 @@ public class Script {
 	}
 
 	public String getName() {
-		return file == null ? "unnamed script" : file.getName();
+		return file.get() == null ? "unnamed script" : file.get().getName();
+	}
+
+	public boolean isDirty() {
+		return dirty.get();
 	}
 
 	public void attachDirtyListener(ObservableProperty.PropertyChangeListener<Boolean> listener) {
@@ -249,6 +253,12 @@ public class Script {
 	}
 	public void detachLengthListener(ObservableProperty.PropertyChangeListener<Integer> listener) {
 		lengthListeners.remove(listener);
+	}
+	public void attachFileListener(ObservableProperty.PropertyChangeListener<File> listener) {
+		file.attachListener(listener);
+	}
+	public void detachFileListener(ObservableProperty.PropertyChangeListener<File> listener) {
+		file.detachListener(listener);
 	}
 	public void updateLength(int before) {
 		int after = inputLines.size();
