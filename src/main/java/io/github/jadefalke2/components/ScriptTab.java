@@ -11,6 +11,7 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.io.File;
 import java.io.IOException;
 import java.util.Stack;
 
@@ -29,6 +30,7 @@ public class ScriptTab extends JPanel {
 
 	private ObservableProperty.PropertyChangeListener<Boolean> dirtyChangeListener;
 	private ObservableProperty.PropertyChangeListener<Integer> lengthChangeListener;
+	private ObservableProperty.PropertyChangeListener<File> fileChangeListener;
 
 	public ScriptTab(MainEditorWindow mainEditorWindow, Script script, ObservableProperty.PropertyChangeListener<Integer> listener) {
 		this.mainEditorWindow = mainEditorWindow;
@@ -182,11 +184,20 @@ public class ScriptTab extends JPanel {
 		this.dirtyChangeListener = listener;
 		script.attachDirtyListener(listener);
 	}
+	public void setFileListener(ObservableProperty.PropertyChangeListener<File> listener) {
+		if(fileChangeListener != null)
+			script.detachFileListener(fileChangeListener);
+
+		this.fileChangeListener = listener;
+		script.attachFileListener(listener);
+	}
 	public void cleanup() {
 		script.detachDirtyListener(dirtyChangeListener);
 		dirtyChangeListener = null;
 		script.detachLengthListener(lengthChangeListener);
 		lengthChangeListener = null;
+		script.detachFileListener(fileChangeListener);
+		fileChangeListener = null;
 	}
 
 	public Script getScript() {

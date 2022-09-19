@@ -64,7 +64,9 @@ public class TabbedScriptsPane extends JTabbedPane {
 		scriptTabs.add(scriptTab);
 		addTab(script.getName(), scriptTab);
 		setSelectedIndex(index);
-		scriptTab.setDirtyListener(dirty -> setTitleAt(indexOfComponent(scriptTab), (dirty ? "*" : "")+script.getName()));
+		Runnable onNameChange = () -> setTitleAt(indexOfComponent(scriptTab), (script.isDirty() ? "*" : "") + script.getName());
+		scriptTab.setDirtyListener(ignored -> onNameChange.run());
+		scriptTab.setFileListener(ignored -> onNameChange.run());
 		mainEditorWindow.setAllTabsClosed(false);
 	}
 
