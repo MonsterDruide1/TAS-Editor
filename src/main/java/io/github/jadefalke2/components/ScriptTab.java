@@ -188,4 +188,8 @@ public class ScriptTab extends JPanel {
 		script.detachLengthListener(lengthChangeListener);
 		lengthChangeListener = null;
 	}
+
+	public Script getScript() {
+		return script;
+	}
 }
