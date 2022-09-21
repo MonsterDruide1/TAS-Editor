@@ -19,6 +19,7 @@ public class ScriptTab extends JPanel {
 
 	private final MainEditorWindow mainEditorWindow;
 	private final Script script;
+	private final JScrollPane scrollPane;
 	private final PianoRoll pianoRoll;
 	private final SideJoystickPanel sideJoystickPanel;
 
@@ -47,7 +48,7 @@ public class ScriptTab extends JPanel {
 		GridBagConstraints c = new GridBagConstraints();
 
 		//Components
-		JScrollPane scrollPane = new JScrollPane(pianoRoll);
+		scrollPane = new JScrollPane(pianoRoll);
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
 		c.fill = GridBagConstraints.BOTH;
@@ -202,5 +203,9 @@ public class ScriptTab extends JPanel {
 
 	public Script getScript() {
 		return script;
+	}
+
+	public void setSelectedLines(int[] selectedLines) {
+		pianoRoll.setSelectedRows(selectedLines);
 	}
 }

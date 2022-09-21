@@ -216,4 +216,13 @@ public class PianoRoll extends JTable {
 		deleteSelectedRows();
 	}
 
+    public void setSelectedRows(int[] selectedLines) {
+		clearSelection();
+		for (int selectedLine : selectedLines) {
+			addRowSelectionInterval(selectedLine, selectedLine);
+		}
+
+		if(selectedLines.length != 0)
+			scrollRectToVisible(getCellRect(selectedLines[0], 0, false));
+    }
 }

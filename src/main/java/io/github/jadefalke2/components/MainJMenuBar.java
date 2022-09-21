@@ -17,7 +17,7 @@ import java.net.URL;
 public class MainJMenuBar extends JMenuBar {
 
 	private JMenuItem newScript, newWindow, openScript, save, saveAs, exit;
-	private JMenuItem undo, redo, cut, copy, paste, deleteLines, addLine, settings;
+	private JMenuItem undo, redo, cut, copy, paste, deleteLines, selectLines, addLine, settings;
 	private JCheckBoxMenuItem darkTheme;
 	private JMenuItem discord, about;
 	private final MainEditorWindow mainEditorWindow;
@@ -123,6 +123,10 @@ public class MainJMenuBar extends JMenuBar {
 		deleteLines = editJMenu.add("Delete");
 		deleteLines.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0));
 		deleteLines.addActionListener(e -> getActiveScriptTab().getPianoRoll().deleteSelectedRows());
+
+		selectLines = editJMenu.add("Select lines");
+		selectLines.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, InputEvent.CTRL_DOWN_MASK));
+		selectLines.addActionListener(e -> mainEditorWindow.selectLines());
 
 		addLine = editJMenu.add("Add line");
 		addLine.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));

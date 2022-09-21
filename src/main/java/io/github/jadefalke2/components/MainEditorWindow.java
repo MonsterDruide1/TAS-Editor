@@ -105,4 +105,14 @@ public class MainEditorWindow extends JFrame {
 	public void setCurrentScriptLength(int newLength) {
 		scriptLengthLabel.setText("Length: "+newLength);
 	}
+
+	public void selectLines() {
+		ScriptTab tab = getActiveScriptTab();
+		SelectLinesDialog dialog = new SelectLinesDialog(this, tab.getScript().getLines().length);
+		dialog.setVisible(true);
+		if(dialog.isAccepted()) {
+			int[] selectedLines = dialog.getSelectedLines();
+			tab.setSelectedLines(selectedLines);
+		}
+	}
 }
