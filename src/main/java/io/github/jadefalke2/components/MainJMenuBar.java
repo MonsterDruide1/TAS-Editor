@@ -10,6 +10,7 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -53,8 +54,11 @@ public class MainJMenuBar extends JMenuBar {
 		openScript = fileJMenu.add("Open...");
 		openScript.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
 		openScript.addActionListener(e -> {
+			File selectedFile = new TxtFileChooser(Settings.INSTANCE.directory.get()).getFile(true);
+			if(selectedFile == null) return;
+
 			try {
-				mainEditorWindow.openScript(new TxtFileChooser(Settings.INSTANCE.directory.get()).getFile(true));
+				mainEditorWindow.openScript(selectedFile);
 			} catch (IOException ex) {
 				ex.printStackTrace();
 			}
