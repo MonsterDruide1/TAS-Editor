@@ -3,6 +3,7 @@ package io.github.jadefalke2.components;
 import io.github.jadefalke2.Script;
 import io.github.jadefalke2.TAS;
 import io.github.jadefalke2.actions.Action;
+import io.github.jadefalke2.util.CorruptedScriptException;
 import io.github.jadefalke2.util.Logger;
 
 import javax.swing.JFrame;
@@ -12,6 +13,7 @@ import java.awt.BorderLayout;
 import java.awt.Insets;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.io.IOException;
 
 public class MainEditorWindow extends JFrame {
@@ -63,8 +65,22 @@ public class MainEditorWindow extends JFrame {
 		setExtendedState(MAXIMIZED_BOTH);
 	}
 
+
+	public void openScript(File file) throws IOException {
+		Logger.log("loading script from " + file.getAbsolutePath());
+		// sets the current script file to be the one that the method is called with
+		try {
+			openScript(new Script(file));
+		} catch (CorruptedScriptException e) {
+			e.printStackTrace();
+		}
+	}
 	public void openScript(Script script){
 		tabbedPane.openScript(script);
+	}
+	public void newFile(){
+		Logger.log("opening a new, empty script");
+		openScript(Script.getEmptyScript(10));
 	}
 	public boolean closeAllScripts() {
 		return tabbedPane.closeAllScripts();

@@ -4,7 +4,6 @@ import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import io.github.jadefalke2.components.MainEditorWindow;
 import io.github.jadefalke2.components.SettingsDialog;
-import io.github.jadefalke2.util.CorruptedScriptException;
 import io.github.jadefalke2.util.Logger;
 import io.github.jadefalke2.util.Settings;
 
@@ -13,8 +12,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import java.awt.Window;
-import java.io.File;
-import java.io.IOException;
 
 public class TAS {
 
@@ -68,42 +65,9 @@ public class TAS {
 		mainEditorWindow.dispose();
 	}
 
-	/**
-	 * writes the current script into the current file
-	 */
-	public void saveFile() throws IOException {
-		mainEditorWindow.saveFile();
-	}
-
-	public void saveFileAs() throws IOException {
-		mainEditorWindow.saveFileAs();
-	}
-
-	public void newFile(){
-		Logger.log("opening a new, empty script");
-		openScript(Script.getEmptyScript(10));
-	}
-
 	public void newWindow() {
 		Logger.log("opening new window");
 		new TAS(); // TODO not the right way, as for example settings won't sync properly
-	}
-
-	/**
-	 * Returns the string that is being read from the given file.
-	 * @param file the file to open
-	 */
-	public void openScript(File file) throws IOException {
-		Logger.log("loading script from " + file.getAbsolutePath());
-		// sets the current script file to be the one that the method is called with
-		try {
-			openScript(new Script(file));
-		} catch (CorruptedScriptException e) {
-			e.printStackTrace();
-		}
-	}
-	public void openScript(Script script){
-		mainEditorWindow.openScript(script);
 	}
 
 	public boolean closeAllScripts(){

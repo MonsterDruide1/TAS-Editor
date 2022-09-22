@@ -44,7 +44,7 @@ public class MainJMenuBar extends JMenuBar {
 
 		newScript = fileJMenu.add("New");
 		newScript.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK));
-		newScript.addActionListener(e -> parent.newFile());
+		newScript.addActionListener(e -> mainEditorWindow.newFile());
 
 		newWindow = fileJMenu.add("New Window");
 		newWindow.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
@@ -54,7 +54,7 @@ public class MainJMenuBar extends JMenuBar {
 		openScript.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
 		openScript.addActionListener(e -> {
 			try {
-				parent.openScript(new TxtFileChooser(Settings.INSTANCE.directory.get()).getFile(true));
+				mainEditorWindow.openScript(new TxtFileChooser(Settings.INSTANCE.directory.get()).getFile(true));
 			} catch (IOException ex) {
 				ex.printStackTrace();
 			}
@@ -64,7 +64,7 @@ public class MainJMenuBar extends JMenuBar {
 		save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
 		save.addActionListener(e -> {
 			try {
-				parent.saveFile();
+				mainEditorWindow.saveFile();
 			} catch(IOException ioe) {
 				JOptionPane.showMessageDialog(null, "Failed to save file!\nError: "+ioe.getMessage(), "Saving failed", JOptionPane.ERROR_MESSAGE);
 			}
@@ -74,7 +74,7 @@ public class MainJMenuBar extends JMenuBar {
 		saveAs.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
 		saveAs.addActionListener(e -> {
 			try {
-				parent.saveFileAs();
+				mainEditorWindow.saveFileAs();
 			} catch(IOException ioe) {
 				JOptionPane.showMessageDialog(null, "Failed to save file!\nError: "+ioe.getMessage(), "Saving failed", JOptionPane.ERROR_MESSAGE);
 			}
