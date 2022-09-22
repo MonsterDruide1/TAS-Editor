@@ -6,6 +6,7 @@ import io.github.jadefalke2.util.TriFunction;
 import javax.swing.*;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Window;
 import java.awt.event.WindowEvent;
 import java.util.stream.IntStream;
 
@@ -45,7 +46,7 @@ public class SmoothTransitionDialog extends JDialog {
 	private final JComboBox<String> dropdownMenu;
 	private final JoystickPanel startJoystick,  endJoystick;
 
-	public SmoothTransitionDialog(StickPosition startPos, StickPosition endPos, int frames){
+	public SmoothTransitionDialog(Window owner, StickPosition startPos, StickPosition endPos, int frames){
 		super();
 
 		this.frames = frames;
@@ -107,9 +108,9 @@ public class SmoothTransitionDialog extends JDialog {
 
 		add(panel);
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		setLocationRelativeTo(null);
 		setModal(true);
 		pack();
+		setLocationRelativeTo(owner);
 	}
 
 	private void updatePositions() {

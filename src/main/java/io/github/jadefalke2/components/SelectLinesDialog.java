@@ -62,8 +62,8 @@ public class SelectLinesDialog extends JDialog {
 		mainPanel.add(okButton, c);
 
 		add(mainPanel);
-		setLocationRelativeTo(null);
 		pack();
+		setLocationRelativeTo(owner);
 	}
 
 	public boolean isAccepted() {

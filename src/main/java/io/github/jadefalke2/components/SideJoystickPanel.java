@@ -35,7 +35,7 @@ public class SideJoystickPanel extends JPanel {
 
 		//TODO remove the duplicate listener here
 		ActionListener smoothTransitionListenerL = e -> {
-			SmoothTransitionDialog dialog = new SmoothTransitionDialog(inputLines[0].getStickL(), inputLines[inputLines.length-1].getStickL(), inputLines.length);
+			SmoothTransitionDialog dialog = new SmoothTransitionDialog(scriptTab.getWindow(), inputLines[0].getStickL(), inputLines[inputLines.length-1].getStickL(), inputLines.length);
 			dialog.setVisible(true);
 			if(!dialog.isAccepted())
 				return;
@@ -50,7 +50,7 @@ public class SideJoystickPanel extends JPanel {
 		};
 
 		ActionListener smoothTransitionListenerR = e -> {
-			SmoothTransitionDialog dialog = new SmoothTransitionDialog(inputLines[0].getStickR(), inputLines[inputLines.length-1].getStickR(), inputLines.length);
+			SmoothTransitionDialog dialog = new SmoothTransitionDialog(scriptTab.getWindow(), inputLines[0].getStickR(), inputLines[inputLines.length-1].getStickR(), inputLines.length);
 			dialog.setVisible(true);
 			if(!dialog.isAccepted())
 				return;

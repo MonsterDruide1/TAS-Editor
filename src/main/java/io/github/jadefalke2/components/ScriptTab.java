@@ -208,4 +208,8 @@ public class ScriptTab extends JPanel {
 	public void setSelectedLines(int[] selectedLines) {
 		pianoRoll.setSelectedRows(selectedLines);
 	}
+
+	public MainEditorWindow getWindow() {
+		return mainEditorWindow;
+	}
 }

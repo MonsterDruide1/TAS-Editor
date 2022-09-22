@@ -52,8 +52,8 @@ public class SettingsDialog extends JDialog {
 		c.gridy++;
 
 		add(mainPanel);
-		setLocationRelativeTo(null);
 		pack();
+		setLocationRelativeTo(owner);
 	}
 
 	private void addSeperator (JPanel mainPanel, GridBagConstraints c) {
