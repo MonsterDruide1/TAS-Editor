@@ -3,7 +3,6 @@ package io.github.jadefalke2;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import io.github.jadefalke2.components.MainEditorWindow;
-import io.github.jadefalke2.components.SettingsDialog;
 import io.github.jadefalke2.util.Logger;
 import io.github.jadefalke2.util.Settings;
 

@@ -1,6 +1,5 @@
 package io.github.jadefalke2.components;
 
-import io.github.jadefalke2.TAS;
 import io.github.jadefalke2.util.ObservableProperty;
 import io.github.jadefalke2.util.Settings;
 

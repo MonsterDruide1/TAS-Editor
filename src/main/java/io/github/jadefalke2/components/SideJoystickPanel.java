@@ -2,7 +2,6 @@ package io.github.jadefalke2.components;
 
 import io.github.jadefalke2.InputLine;
 import io.github.jadefalke2.Script;
-import io.github.jadefalke2.actions.LineAction;
 import io.github.jadefalke2.actions.StickAction;
 import io.github.jadefalke2.stickRelatedClasses.CustomChangeListener;
 import io.github.jadefalke2.stickRelatedClasses.JoystickPanel;
