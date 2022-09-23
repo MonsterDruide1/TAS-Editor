@@ -34,7 +34,7 @@ public class Script {
 	}
 
 
-	private ObservableProperty<File> file;
+	private final ObservableProperty<File> file;
 	private DefaultTableModel table;
 	private final ArrayList<InputLine> inputLines;
 	private final ObservableProperty<Boolean> dirty;

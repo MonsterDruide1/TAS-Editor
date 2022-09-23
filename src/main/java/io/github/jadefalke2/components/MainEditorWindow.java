@@ -2,7 +2,6 @@ package io.github.jadefalke2.components;
 
 import io.github.jadefalke2.Script;
 import io.github.jadefalke2.TAS;
-import io.github.jadefalke2.actions.Action;
 import io.github.jadefalke2.util.CorruptedScriptException;
 import io.github.jadefalke2.util.Logger;
 
@@ -94,12 +93,6 @@ public class MainEditorWindow extends JFrame {
 		mainJMenuBar.updateUndoMenu(enableUndo, enableRedo);
 	}
 
-	public void executeAction(Action action) {
-		getActiveScriptTab().executeAction(action);
-	}
-	public void previewAction(Action action) {
-		getActiveScriptTab().previewAction(action);
-	}
 	public void saveFile() throws IOException {
 		getActiveScriptTab().saveFile();
 	}

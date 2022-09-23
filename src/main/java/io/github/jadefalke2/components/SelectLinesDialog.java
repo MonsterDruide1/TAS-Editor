@@ -50,9 +50,7 @@ public class SelectLinesDialog extends JDialog {
 		c.gridy = 0;
 
 		input = new JTextField();
-		input.getDocument().addDocumentListener((SimpleDocumentListener) e -> {
-			okButton.setEnabled(isValidInput());
-		});
+		input.getDocument().addDocumentListener((SimpleDocumentListener) e -> okButton.setEnabled(isValidInput()));
 		input.addActionListener(accept);
 		input.setToolTipText("Examples: \"34\", \"120, 35\", \"5-20\" or \"120-150, 155\"");
 		mainPanel.add(input, c);
