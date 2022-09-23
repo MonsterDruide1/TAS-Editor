@@ -2,6 +2,7 @@ package io.github.jadefalke2.components;
 
 import io.github.jadefalke2.InputLine;
 import io.github.jadefalke2.Script;
+import io.github.jadefalke2.actions.LineAction;
 import io.github.jadefalke2.actions.StickAction;
 import io.github.jadefalke2.stickRelatedClasses.CustomChangeListener;
 import io.github.jadefalke2.stickRelatedClasses.JoystickPanel;
@@ -40,13 +41,7 @@ public class SideJoystickPanel extends JPanel {
 			if(!dialog.isAccepted())
 				return;
 			StickPosition[] replacementStickPos = dialog.getSmoothTransitionData();
-			InputLine[] originalLines = pianoRoll.getSelectedInputRows();
-			InputLine[] replacementLines = Arrays.stream(originalLines).map(InputLine::clone).toArray(InputLine[]::new);
-
-			for(int i = 0;i<originalLines.length;i++){
-				replacementLines[i].setStickL(replacementStickPos[i]);
-			}
-			pianoRoll.replaceSelectedRows(replacementLines);
+			pianoRoll.executeAction(new StickAction(script, pianoRoll.getSelectedRows(), JoystickPanel.StickType.L_STICK, replacementStickPos));
 		};
 
 		ActionListener smoothTransitionListenerR = e -> {
@@ -55,13 +50,7 @@ public class SideJoystickPanel extends JPanel {
 			if(!dialog.isAccepted())
 				return;
 			StickPosition[] replacementStickPos = dialog.getSmoothTransitionData();
-			InputLine[] originalLines = pianoRoll.getSelectedInputRows();
-			InputLine[] replacementLines = Arrays.stream(originalLines).map(InputLine::clone).toArray(InputLine[]::new);
-
-			for(int i = 0;i<originalLines.length;i++){
-				replacementLines[i].setStickR(replacementStickPos[i]);
-			}
-			pianoRoll.replaceSelectedRows(replacementLines);
+			pianoRoll.executeAction(new StickAction(script, pianoRoll.getSelectedRows(), JoystickPanel.StickType.R_STICK, replacementStickPos));
 		};
 
 		CustomChangeListener<StickPosition> joystickPanelListener = e -> scriptTab.executeAction(new StickAction(script, pianoRoll.getSelectedRows(), getStickType(e.getSource()), e.getValue()));

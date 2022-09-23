@@ -2,6 +2,7 @@ package io.github.jadefalke2.components;
 
 import io.github.jadefalke2.InputLine;
 import io.github.jadefalke2.Script;
+import io.github.jadefalke2.actions.Action;
 import io.github.jadefalke2.actions.LineAction;
 import io.github.jadefalke2.util.Button;
 import io.github.jadefalke2.util.CorruptedScriptException;
@@ -141,11 +142,15 @@ public class PianoRoll extends JTable {
 	}
 
 	public void deleteSelectedRows(){
-		scriptTab.executeAction(new LineAction(script, getSelectedRows(), LineAction.Type.DELETE));
+		executeAction(new LineAction(script, getSelectedRows(), LineAction.Type.DELETE));
 	}
 
 	public void replaceSelectedRows(InputLine[] rows){
-		scriptTab.executeAction(new LineAction(script, getSelectedRows(), rows, LineAction.Type.REPLACE));
+		executeAction(new LineAction(script, getSelectedRows(), rows, LineAction.Type.REPLACE));
+	}
+
+	public void executeAction(Action action) {
+		scriptTab.executeAction(action);
 	}
 
 	public InputLine[] getSelectedInputRows(){
