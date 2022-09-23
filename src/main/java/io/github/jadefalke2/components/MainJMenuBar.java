@@ -207,6 +207,7 @@ public class MainJMenuBar extends JMenuBar {
 		copy.setEnabled(closed);
 		paste.setEnabled(closed);
 		deleteLines.setEnabled(closed);
+		selectLines.setEnabled(closed);
 		addLine.setEnabled(closed);
 	}
 }
