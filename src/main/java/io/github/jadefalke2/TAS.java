@@ -74,9 +74,4 @@ public class TAS {
 		return mainEditorWindow.closeAllScripts();
 	}
 
-	public void openSettings(){
-		Logger.log("opening settings");
-		new SettingsDialog(mainEditorWindow).setVisible(true);
-	}
-
 }

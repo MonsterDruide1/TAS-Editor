@@ -23,12 +23,12 @@ public class MainJMenuBar extends JMenuBar {
 	private JMenuItem discord, about;
 	private final MainEditorWindow mainEditorWindow;
 
-	public MainJMenuBar(MainEditorWindow mainEditorWindow, TAS parent){
+	public MainJMenuBar(MainEditorWindow mainEditorWindow){
 		this.mainEditorWindow = mainEditorWindow;
-		JMenu fileMenu = createFileMenu(parent, mainEditorWindow);
+		JMenu fileMenu = createFileMenu(mainEditorWindow);
 		add(fileMenu);
 
-		JMenu editMenu = createEditMenu(parent, mainEditorWindow);
+		JMenu editMenu = createEditMenu(mainEditorWindow);
 		add(editMenu);
 
 		JMenu viewMenu = createViewMenu();
@@ -40,7 +40,7 @@ public class MainJMenuBar extends JMenuBar {
 		updateUndoMenu(false, false);
 	}
 
-	private JMenu createFileMenu(TAS parent, MainEditorWindow mainEditorWindow){
+	private JMenu createFileMenu(MainEditorWindow mainEditorWindow){
 		JMenu fileJMenu = new JMenu("File");
 
 		newScript = fileJMenu.add("New");
@@ -49,7 +49,7 @@ public class MainJMenuBar extends JMenuBar {
 
 		newWindow = fileJMenu.add("New Window");
 		newWindow.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
-		newWindow.addActionListener(e -> parent.newWindow());
+		newWindow.addActionListener(e -> mainEditorWindow.newWindow());
 
 		openScript = fileJMenu.add("Open...");
 		openScript.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
@@ -92,7 +92,7 @@ public class MainJMenuBar extends JMenuBar {
 		return fileJMenu;
 	}
 
-	private JMenu createEditMenu(TAS parent, MainEditorWindow mainEditorWindow){
+	private JMenu createEditMenu(MainEditorWindow mainEditorWindow){
 		JMenu editJMenu = new JMenu("Edit");
 
 		undo = editJMenu.add("Undo");
@@ -139,7 +139,7 @@ public class MainJMenuBar extends JMenuBar {
 		editJMenu.addSeparator();
 
 		settings = editJMenu.add("Settings");
-		settings.addActionListener(e -> parent.openSettings());
+		settings.addActionListener(e -> mainEditorWindow.openSettings());
 
 		return editJMenu;
 	}

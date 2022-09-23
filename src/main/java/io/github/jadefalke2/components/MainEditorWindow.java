@@ -17,7 +17,7 @@ import java.io.IOException;
 
 public class MainEditorWindow extends JFrame {
 
-	// frame that can be opened from this one
+	private final TAS parent;
 	private final MainJMenuBar mainJMenuBar;
 
 	//layout
@@ -31,6 +31,7 @@ public class MainEditorWindow extends JFrame {
 	 * Constructor
 	 */
 	public MainEditorWindow (TAS parent){
+		this.parent = parent;
 
 		Logger.log("Initialising window");
 
@@ -46,7 +47,7 @@ public class MainEditorWindow extends JFrame {
 			}
 		});
 
-		mainJMenuBar = new MainJMenuBar(this, parent);
+		mainJMenuBar = new MainJMenuBar(this);
 		setJMenuBar(mainJMenuBar);
 
 		toolBar = new JToolBar();
@@ -123,5 +124,12 @@ public class MainEditorWindow extends JFrame {
 			int[] selectedLines = dialog.getSelectedLines();
 			tab.setSelectedLines(selectedLines);
 		}
+	}
+	public void openSettings() {
+		Logger.log("opening settings");
+		new SettingsDialog(this).setVisible(true);
+	}
+	public void newWindow() {
+		parent.newWindow();
 	}
 }
