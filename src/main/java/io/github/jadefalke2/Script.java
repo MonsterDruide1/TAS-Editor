@@ -212,10 +212,13 @@ public class Script {
 		}
 	}
 
-	public void toggleButton(int row, Button button) {
+	public void setButton(int row, Button button, boolean enabled) {
+		boolean currentState = inputLines.get(row).buttons.contains(button);
+		if(currentState == enabled) return;
+
 		int col = button.ordinal()+3; //+3 for FRAME, LStick, RStick ; TODO find a better way to do this
 
-		if(!inputLines.get(row).buttons.contains(button)){
+		if(enabled) {
 			inputLines.get(row).buttons.add(button);
 			table.setValueAt(table.getColumnName(col), row, col);
 		} else {

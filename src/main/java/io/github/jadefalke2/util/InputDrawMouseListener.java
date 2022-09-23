@@ -1,5 +1,7 @@
 package io.github.jadefalke2.util;
 
+import io.github.jadefalke2.actions.Action;
+import io.github.jadefalke2.actions.ButtonAction;
 import io.github.jadefalke2.actions.LineAction;
 import io.github.jadefalke2.components.PianoRoll;
 import io.github.jadefalke2.components.ScriptTab;
@@ -95,12 +97,12 @@ public class InputDrawMouseListener extends MouseAdapter {
 	}
 
 	private void applyPreview (){
-		LineAction action = getAction();
+		Action action = getAction();
 		if(action != null) scriptTab.previewAction(action);
 	}
-	private LineAction getAction() {
+	private Action getAction() {
 		if(drawingCol == -1 || startRow == -1 || endRow == -1 || drawingCol < 3) return null;
-		return LineAction.setButtons(table.getScript(), Math.min(startRow, endRow), Math.max(startRow, endRow), Button.values()[drawingCol-3], mode == Mode.ADDING);
+		return new ButtonAction(table.getScript(), Button.values()[drawingCol-3], mode == Mode.ADDING, Math.min(startRow, endRow), Math.max(startRow, endRow));
 	}
 
 
@@ -121,7 +123,7 @@ public class InputDrawMouseListener extends MouseAdapter {
 
 	@Override
 	public void mouseReleased(MouseEvent e){
-		LineAction action = getAction();
+		Action action = getAction();
 		if(action != null) scriptTab.executeAction(action);
 		mode = Mode.IDLE;
 		startRow = -1;
