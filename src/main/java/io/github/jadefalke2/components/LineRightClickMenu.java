@@ -48,7 +48,7 @@ public class LineRightClickMenu extends JPopupMenu {
 	public void openPopUpMenu(int[] rows, Point point, Component invoker){
 
 		setListener(deleteOption, rows, LineAction.Type.DELETE);
-		setListener(insertOption, rows, LineAction.Type.INSERT);
+		setListener(insertOption, rows, LineAction.Type.INSERT_EMPTY);
 		setListener(cloneOption, rows, LineAction.Type.CLONE);
 
 		setListener(copyOption, () -> scriptTab.getPianoRoll().copy());

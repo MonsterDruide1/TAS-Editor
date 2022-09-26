@@ -10,6 +10,7 @@ public class LineAction implements Action{
 	public enum Type {
 		DELETE,
 		INSERT,
+		INSERT_EMPTY,
 		CLONE,
 		REPLACE
 	}
@@ -38,6 +39,7 @@ public class LineAction implements Action{
 			case CLONE: cloneRows(); break;
 			case DELETE: deleteRows(false); break;
 			case INSERT: insertRows(); break;
+			case INSERT_EMPTY: insertEmptyRows(rows.length); break;
 			case REPLACE: replaceRows(); break;
 		}
 
@@ -47,6 +49,7 @@ public class LineAction implements Action{
 	public void revert() {
 		switch (type){
 			case CLONE:                       //fallthrough to INSERT
+			case INSERT_EMPTY:                //fallthrough to INSERT
 			case INSERT: deleteRows(true); break;
 			case DELETE: insertRows(previousLines, rows[0]); break;
 			case REPLACE: revertReplaceRows(); break;
@@ -68,7 +71,7 @@ public class LineAction implements Action{
 
 	private void replaceRows(int[] rows, InputLine[] replacement){
 		if(rows.length < replacement.length) //missing frames -> add emptys that there are enough to replace
-			insertRows(replacement.length - rows.length);
+			insertEmptyRows(replacement.length - rows.length);
 		if(rows.length > replacement.length) //too many frames -> remove redundant lines
 			deleteRows(false, Arrays.copyOfRange(rows, replacement.length, rows.length));
 
@@ -103,15 +106,13 @@ public class LineAction implements Action{
 	}
 
 	private void insertRows(){
-		insertRows(rows.length);
+		insertRows(replacementLines, rows[rows.length-1]+1);
 	}
-	private void insertRows(int amount){
+	private void insertEmptyRows(int amount) {
 		InputLine[] tmpLines = new InputLine[amount];
-
 		for (int i = 0; i < amount; i++){
 			tmpLines[i] = InputLine.getEmpty();
 		}
-
 		insertRows(tmpLines, rows[rows.length-1]+1);
 	}
 
