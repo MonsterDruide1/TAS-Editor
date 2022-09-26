@@ -17,7 +17,7 @@ import java.net.URL;
 public class MainJMenuBar extends JMenuBar {
 
 	private JMenuItem newScript, newWindow, openScript, save, saveAs, exit;
-	private JMenuItem undo, redo, cut, copy, paste, deleteLines, selectLines, addLine, settings;
+	private JMenuItem undo, redo, cut, copy, paste, replace, deleteLines, selectLines, addLine, settings;
 	private JCheckBoxMenuItem darkTheme;
 	private JMenuItem discord, about;
 	private final MainEditorWindow mainEditorWindow;
@@ -123,6 +123,16 @@ public class MainJMenuBar extends JMenuBar {
 			}
 		});
 
+		replace = editJMenu.add("Replace");
+		replace.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_DOWN_MASK));
+		replace.addActionListener(e -> {
+			try {
+				getActiveScriptTab().getPianoRoll().replace();
+			} catch (IOException | UnsupportedFlavorException ioException) {
+				ioException.printStackTrace();
+			}
+		});
+
 		deleteLines = editJMenu.add("Delete");
 		deleteLines.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0));
 		deleteLines.addActionListener(e -> getActiveScriptTab().getPianoRoll().deleteSelectedRows());
@@ -206,6 +216,7 @@ public class MainJMenuBar extends JMenuBar {
 		cut.setEnabled(closed);
 		copy.setEnabled(closed);
 		paste.setEnabled(closed);
+		replace.setEnabled(closed);
 		deleteLines.setEnabled(closed);
 		selectLines.setEnabled(closed);
 		addLine.setEnabled(closed);

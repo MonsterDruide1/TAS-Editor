@@ -126,6 +126,10 @@ public class PianoRoll extends JTable {
 		executeAction(new LineAction(script, getSelectedRows(), rows, LineAction.Type.REPLACE));
 	}
 
+	public void insertAfterSelectedRows(InputLine[] rows){
+		executeAction(new LineAction(script, getSelectedRows(), rows, LineAction.Type.INSERT));
+	}
+
 	public void executeAction(Action action) {
 		scriptTab.executeAction(action);
 	}
@@ -181,8 +185,18 @@ public class PianoRoll extends JTable {
 	}
 
 	public void paste() throws IOException, UnsupportedFlavorException {
+		InputLine[] rows = readClipboard();
+		insertAfterSelectedRows(rows);
+	}
+
+	public void replace() throws IOException, UnsupportedFlavorException {
+		InputLine[] rows = readClipboard();
+		replaceSelectedRows(rows);
+	}
+
+	public InputLine[] readClipboard() throws IOException, UnsupportedFlavorException {
 		String clipContent = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getContents(this).getTransferData(DataFlavor.stringFlavor);
-		InputLine[] rows = Arrays.stream(clipContent.split("[\r\n]+")).map(line -> {
+		return Arrays.stream(clipContent.split("[\r\n]+")).map(line -> {
 			try {
 				return new InputLine(line);
 			} catch(CorruptedScriptException e){
@@ -190,7 +204,6 @@ public class PianoRoll extends JTable {
 				return null;
 			}
 		}).toArray(InputLine[]::new);
-		replaceSelectedRows(rows);
 	}
 
 	public void cut(){

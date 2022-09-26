@@ -18,6 +18,7 @@ public class LineRightClickMenu extends JPopupMenu {
 
 	private final JMenuItem copyOption;
 	private final JMenuItem pasteOption;
+	private final JMenuItem replaceOption;
 	private final JMenuItem cutOption;
 
 	private final Script script;
@@ -29,6 +30,7 @@ public class LineRightClickMenu extends JPopupMenu {
 
 		copyOption = add("copy");
 		pasteOption = add("paste");
+		replaceOption = add("replace");
 		cutOption = add("cut");
 
 		addSeparator();
@@ -55,6 +57,13 @@ public class LineRightClickMenu extends JPopupMenu {
 		setListener(pasteOption, () -> {
 			try {
 				scriptTab.getPianoRoll().paste();
+			} catch (IOException | UnsupportedFlavorException e) {
+				e.printStackTrace(); //TODO error handling
+			}
+		});
+		setListener(replaceOption, () -> {
+			try {
+				scriptTab.getPianoRoll().replace();
 			} catch (IOException | UnsupportedFlavorException e) {
 				e.printStackTrace(); //TODO error handling
 			}
