@@ -74,31 +74,8 @@ public class PianoRoll extends JTable {
 
 		setScript(script);
 
-		getInputMap().put(KeyStroke.getKeyStroke("ctrl c"), "copy");
-		getInputMap().put(KeyStroke.getKeyStroke("ctrl v"), "paste");
-		getInputMap().put(KeyStroke.getKeyStroke("ctrl x"), "cut");
-		getActionMap().put("copy", new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				copy();
-			}
-		});
-		getActionMap().put("paste", new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				try {
-					paste();
-				} catch (IOException | UnsupportedFlavorException ex) {
-					ex.printStackTrace();
-				}
-			}
-		});
-		getActionMap().put("cut", new AbstractAction() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				cut();
-			}
-		});
+		// disable custom copy/paste bindings, just making them pass through to the window (menu) handler
+		setTransferHandler(null);
 
 		adjustColumnWidth();
 	}
