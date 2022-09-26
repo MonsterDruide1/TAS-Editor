@@ -16,10 +16,10 @@ public class LineRightClickMenu extends JPopupMenu {
 	private final JMenuItem insertOption;
 	private final JMenuItem cloneOption;
 
+	private final JMenuItem cutOption;
 	private final JMenuItem copyOption;
 	private final JMenuItem pasteOption;
 	private final JMenuItem replaceOption;
-	private final JMenuItem cutOption;
 
 	private final Script script;
 	private final ScriptTab scriptTab;
@@ -28,10 +28,10 @@ public class LineRightClickMenu extends JPopupMenu {
 		this.script = script;
 		this.scriptTab = scriptTab;
 
+		cutOption = add("cut");
 		copyOption = add("copy");
 		pasteOption = add("paste");
 		replaceOption = add("replace");
-		cutOption = add("cut");
 
 		addSeparator();
 
@@ -53,6 +53,7 @@ public class LineRightClickMenu extends JPopupMenu {
 		setListener(insertOption, rows, LineAction.Type.INSERT_EMPTY);
 		setListener(cloneOption, rows, LineAction.Type.CLONE);
 
+		setListener(cutOption, () -> scriptTab.getPianoRoll().cut());
 		setListener(copyOption, () -> scriptTab.getPianoRoll().copy());
 		setListener(pasteOption, () -> {
 			try {
@@ -68,7 +69,6 @@ public class LineRightClickMenu extends JPopupMenu {
 				e.printStackTrace(); //TODO error handling
 			}
 		});
-		setListener(cutOption, () -> scriptTab.getPianoRoll().cut());
 		show(invoker,(int)point.getX(),(int)point.getY());
 	}
 
