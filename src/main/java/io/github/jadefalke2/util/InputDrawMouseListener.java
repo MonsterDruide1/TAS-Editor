@@ -2,7 +2,6 @@ package io.github.jadefalke2.util;
 
 import io.github.jadefalke2.actions.Action;
 import io.github.jadefalke2.actions.ButtonAction;
-import io.github.jadefalke2.actions.LineAction;
 import io.github.jadefalke2.components.PianoRoll;
 import io.github.jadefalke2.components.ScriptTab;
 
@@ -56,25 +55,35 @@ public class InputDrawMouseListener extends MouseAdapter {
 			table.clearSelection();
 			//set it to the last one so if you start dragging from below, it will start selecting
 			table.getSelectionModel().setAnchorSelectionIndex(table.getRowCount()-1);
+
+			drawingCol = -1;
+			startRow = -1;
+
 			return;
 		}
 
-		startRow = row;
-		drawingCol = col;
+		// keep current values
+		if(e.isShiftDown()) {
+			updateEnd(row);
+		} else {
+			startRow = row;
+			drawingCol = col;
 
-		switch (col){
-			case 0:
-			case 1:
-			case 2:
-				if (e.getButton() == MouseEvent.BUTTON3 && table.isRowSelected(row)) {
-					table.openPopUpMenu(table.getSelectedRows(),e.getPoint());
-				}
-				break;
+			switch (col){
+				case 0:
+				case 1:
+				case 2:
+					if (e.getButton() == MouseEvent.BUTTON3 && table.isRowSelected(row)) {
+						table.openPopUpMenu(table.getSelectedRows(),e.getPoint());
+					}
+					break;
 
-			default:
-				mode = table.getValueAt(row, col) != "" ? Mode.REMOVING : Mode.ADDING;
-				updateEnd(row);
+				default:
+					mode = table.getValueAt(row, col) != "" ? Mode.REMOVING : Mode.ADDING;
+					updateEnd(row);
+			}
 		}
+
 	}
 
 	/**
@@ -125,9 +134,7 @@ public class InputDrawMouseListener extends MouseAdapter {
 	public void mouseReleased(MouseEvent e){
 		Action action = getAction();
 		if(action != null) scriptTab.executeAction(action);
-		mode = Mode.IDLE;
-		startRow = -1;
-		drawingCol = -1;
+		startRow = getCell(e)[0]; // for SHIFT-click (also do not reset drawingCol, mode)
 	}
 
 }
