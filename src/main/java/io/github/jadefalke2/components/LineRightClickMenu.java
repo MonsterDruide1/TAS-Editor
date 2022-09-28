@@ -1,6 +1,8 @@
 package io.github.jadefalke2.components;
 
 import io.github.jadefalke2.Script;
+import io.github.jadefalke2.actions.Action;
+import io.github.jadefalke2.actions.InsertEmptyLineAction;
 import io.github.jadefalke2.actions.LineAction;
 
 import javax.swing.JMenuItem;
@@ -50,7 +52,7 @@ public class LineRightClickMenu extends JPopupMenu {
 	public void openPopUpMenu(int[] rows, Point point, Component invoker){
 
 		setListener(deleteOption, rows, LineAction.Type.DELETE);
-		setListener(insertOption, rows, LineAction.Type.INSERT_EMPTY);
+		setListener(insertOption, new InsertEmptyLineAction(script, rows[rows.length-1]+1, rows.length));
 		setListener(cloneOption, rows, LineAction.Type.CLONE);
 
 		setListener(cutOption, () -> scriptTab.getPianoRoll().cut());
@@ -81,6 +83,9 @@ public class LineRightClickMenu extends JPopupMenu {
 	}
 
 	public void setListener(JMenuItem item, int[] rows, LineAction.Type type){
-		setListener(item, () -> scriptTab.executeAction(new LineAction(script, rows, type)));
+		setListener(item, new LineAction(script, rows, type));
+	}
+	public void setListener(JMenuItem item, Action action){
+		setListener(item, () -> scriptTab.executeAction(action));
 	}
 }

@@ -3,6 +3,7 @@ package io.github.jadefalke2.components;
 import io.github.jadefalke2.InputLine;
 import io.github.jadefalke2.Script;
 import io.github.jadefalke2.actions.Action;
+import io.github.jadefalke2.actions.InsertEmptyLineAction;
 import io.github.jadefalke2.actions.LineAction;
 import io.github.jadefalke2.util.Button;
 import io.github.jadefalke2.util.CorruptedScriptException;
@@ -112,10 +113,8 @@ public class PianoRoll extends JTable {
 	public void addEmptyRows(int amount) {
 		if(amount == 0) return;
 
-		int[] rows = new int[amount];
-		int selectedIndex = getSelectedRowCount() != 0 ? getSelectedRows()[getSelectedRowCount()-1] : getRowCount()-1;
-		rows[rows.length-1] = selectedIndex;
-		executeAction(new LineAction(script, rows, LineAction.Type.INSERT_EMPTY));
+		int selectedIndex = getSelectedRowCount() != 0 ? getSelectedRows()[getSelectedRowCount()-1]+1 : getRowCount();
+		executeAction(new InsertEmptyLineAction(script, selectedIndex, amount));
 	}
 
 	public void deleteSelectedRows(){

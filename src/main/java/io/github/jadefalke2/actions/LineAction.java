@@ -10,7 +10,6 @@ public class LineAction implements Action{
 	public enum Type {
 		DELETE,
 		INSERT,
-		INSERT_EMPTY,
 		CLONE,
 		REPLACE
 	}
@@ -39,7 +38,6 @@ public class LineAction implements Action{
 			case CLONE: cloneRows(); break;
 			case DELETE: deleteRows(false); break;
 			case INSERT: insertRows(); break;
-			case INSERT_EMPTY: insertEmptyRows(rows.length); break;
 			case REPLACE: replaceRows(); break;
 		}
 
@@ -49,7 +47,6 @@ public class LineAction implements Action{
 	public void revert() {
 		switch (type){
 			case CLONE:                       //fallthrough to INSERT
-			case INSERT_EMPTY:                //fallthrough to INSERT
 			case INSERT: deleteRows(true); break;
 			case DELETE: insertRows(previousLines, rows[0]); break;
 			case REPLACE: revertReplaceRows(); break;
