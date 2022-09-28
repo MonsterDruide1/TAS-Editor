@@ -25,9 +25,8 @@ public class InsertEmptyLineAction implements Action {
 
 	@Override
 	public void revert() {
-		for (int i = amount - 1; i >= 0; i--){
-			int row = position+amount;
-			script.removeRow(row);
+		for (int i = 0; i < amount; i++){
+			script.removeRow(position);
 		}
 	}
 
