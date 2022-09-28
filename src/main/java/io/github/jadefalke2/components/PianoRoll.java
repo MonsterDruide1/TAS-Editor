@@ -109,13 +109,13 @@ public class PianoRoll extends JTable {
 		}
 	}
 
+	public void addEmptyRows(int amount) {
+		if(amount == 0) return;
 
-	/**
-	 * adds an empty line to the end of the current script
-	 */
-	public void addEmptyRow() {
-		InputLine newEmpty = InputLine.getEmpty();
-		script.appendRow(newEmpty);
+		int[] rows = new int[amount];
+		int selectedIndex = getSelectedRowCount() != 0 ? getSelectedRows()[getSelectedRowCount()-1] : getRowCount()-1;
+		rows[rows.length-1] = selectedIndex;
+		executeAction(new LineAction(script, rows, LineAction.Type.INSERT_EMPTY));
 	}
 
 	public void deleteSelectedRows(){

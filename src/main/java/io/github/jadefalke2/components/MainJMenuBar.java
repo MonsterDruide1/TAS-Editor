@@ -17,7 +17,7 @@ import java.net.URL;
 public class MainJMenuBar extends JMenuBar {
 
 	private JMenuItem newScript, newWindow, openScript, save, saveAs, exit;
-	private JMenuItem undo, redo, cut, copy, paste, replace, deleteLines, selectLines, addLine, settings;
+	private JMenuItem undo, redo, cut, copy, paste, replace, deleteLines, selectLines, addLine, addLines, settings;
 	private JCheckBoxMenuItem darkTheme;
 	private JMenuItem discord, about;
 	private final MainEditorWindow mainEditorWindow;
@@ -142,8 +142,12 @@ public class MainJMenuBar extends JMenuBar {
 		selectLines.addActionListener(e -> mainEditorWindow.selectLines());
 
 		addLine = editJMenu.add("Add line");
-		addLine.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
-		addLine.addActionListener(e -> mainEditorWindow.addEmptyRow());
+		addLine.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK | InputEvent.ALT_DOWN_MASK));
+		addLine.addActionListener(e -> mainEditorWindow.addSingleEmptyRow());
+
+		addLines = editJMenu.add("Add multiple lines");
+		addLines.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
+		addLines.addActionListener(e -> mainEditorWindow.addMultipleEmptyRows());
 
 		editJMenu.addSeparator();
 

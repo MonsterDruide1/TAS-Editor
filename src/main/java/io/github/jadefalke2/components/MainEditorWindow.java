@@ -100,8 +100,17 @@ public class MainEditorWindow extends JFrame {
 	public void saveFileAs() throws IOException {
 		getActiveScriptTab().saveFileAs();
 	}
-	public void addEmptyRow() {
-		getActiveScriptTab().getPianoRoll().addEmptyRow();
+	public void addSingleEmptyRow() {
+		getActiveScriptTab().getPianoRoll().addEmptyRows(1);
+	}
+	public void addMultipleEmptyRows() {
+		ScriptTab tab = getActiveScriptTab();
+		AddLinesDialog dialog = new AddLinesDialog(this, getActiveScriptTab().getPianoRoll().getSelectedRowCount());
+		dialog.setVisible(true);
+		if(dialog.isAccepted()) {
+			int amount = dialog.getNumLines();
+			tab.getPianoRoll().addEmptyRows(amount);
+		}
 	}
 
 	public ScriptTab getActiveScriptTab() {
