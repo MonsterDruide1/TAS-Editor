@@ -100,6 +100,9 @@ public class MainEditorWindow extends JFrame {
 	public void saveFileAs() throws IOException {
 		getActiveScriptTab().saveFileAs();
 	}
+	public void saveFileCopy() throws IOException {
+		getActiveScriptTab().saveFileCopy();
+	}
 	public void addSingleEmptyRow() {
 		getActiveScriptTab().getPianoRoll().addEmptyRows(1);
 	}

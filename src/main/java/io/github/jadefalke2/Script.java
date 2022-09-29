@@ -113,36 +113,42 @@ public class Script {
 		return IntStream.range(0, inputLines.size()).mapToObj(i -> inputLines.get(i).getFull(i)+"\n").collect(Collectors.joining());
 	}
 
-	public void saveFile() throws IOException {
-		saveFile(Settings.INSTANCE.directory.get());
-	}
-
 	/**
 	 * Saves the script (itself) to that last saved/opened file
-	 * @param defaultDir The directory to open the TxtFileChooser in if no file is stored
 	 */
-	public void saveFile(File defaultDir) throws IOException { //TODO don't have that as a parameter, as it is only passed down to the next layer...
+	public void saveFile() throws IOException {
 		if(file.get() == null){
-			saveFileAs(defaultDir);
+			saveFileAs();
 			return;
 		}
 
-		Logger.log("saving script to " + file.get().getAbsolutePath());
-
-		Util.writeFile(getFull(), file.get());
+		writeToFile(file.get());
 		dirty.set(false);
+	}
+
+	private void writeToFile(File dest) throws IOException {
+		Logger.log("saving script to " + dest.getAbsolutePath());
+
+		Util.writeFile(getFull(), dest);
 	}
 
 	/**
 	 * Opens a file selector popup and then saves the script (itself) to that file
-	 * @param defaultDir The directory to open the TxtFileChooser in
 	 */
-	public void saveFileAs(File defaultDir) throws IOException {
-		File savedFile = new TxtFileChooser(defaultDir).getFile(false);
+	public void saveFileAs() throws IOException {
+		File savedFile = new TxtFileChooser(Settings.INSTANCE.directory.get()).getFile(false);
 		if(savedFile != null){
 			Logger.log("saving file as " + savedFile.getAbsolutePath());
 			file.set(savedFile);
-			saveFile(defaultDir);
+			saveFile();
+		}
+	}
+
+	public void saveFileCopy() throws IOException {
+		File savedFile = new TxtFileChooser(Settings.INSTANCE.directory.get()).getFile(false);
+		if(savedFile != null){
+			Logger.log("saving copy of file as " + savedFile.getAbsolutePath());
+			writeToFile(savedFile);
 		}
 	}
 

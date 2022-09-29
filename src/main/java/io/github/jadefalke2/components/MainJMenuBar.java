@@ -16,7 +16,7 @@ import java.net.URL;
 
 public class MainJMenuBar extends JMenuBar {
 
-	private JMenuItem newScript, newWindow, openScript, save, saveAs, exit;
+	private JMenuItem newScript, newWindow, openScript, save, saveAs, saveCopy, exit;
 	private JMenuItem undo, redo, cut, copy, paste, replace, deleteLines, selectLines, addLine, addLines, settings;
 	private JCheckBoxMenuItem darkTheme;
 	private JMenuItem discord, about;
@@ -82,6 +82,17 @@ public class MainJMenuBar extends JMenuBar {
 				JOptionPane.showMessageDialog(null, "Failed to save file!\nError: "+ioe.getMessage(), "Saving failed", JOptionPane.ERROR_MESSAGE);
 			}
 		});
+
+		saveCopy = fileJMenu.add("Save Copy to...");
+		saveCopy.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK | InputEvent.ALT_DOWN_MASK));
+		saveCopy.addActionListener(e -> {
+			try {
+				mainEditorWindow.saveFileCopy();
+			} catch(IOException ioe) {
+				JOptionPane.showMessageDialog(null, "Failed to save file!\nError: "+ioe.getMessage(), "Saving failed", JOptionPane.ERROR_MESSAGE);
+			}
+		});
+		saveCopy.setToolTipText("Save current state into other file, but keep the current file opened so future saves will still go into the first location");
 
 		fileJMenu.addSeparator();
 
@@ -215,6 +226,7 @@ public class MainJMenuBar extends JMenuBar {
 	public void enableScriptRelatedInputs(boolean closed) {
 		save.setEnabled(closed);
 		saveAs.setEnabled(closed);
+		saveCopy.setEnabled(closed);
 		undo.setEnabled(closed);
 		redo.setEnabled(closed);
 		cut.setEnabled(closed);

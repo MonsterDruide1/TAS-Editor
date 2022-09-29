@@ -101,10 +101,13 @@ public class ScriptTab extends JPanel {
 	}
 
 	public void saveFile() throws IOException {
-		script.saveFile(Settings.INSTANCE.directory.get());
+		script.saveFile();
 	}
 	public void saveFileAs() throws IOException {
-		script.saveFileAs(Settings.INSTANCE.directory.get());
+		script.saveFileAs();
+	}
+	public void saveFileCopy() throws IOException {
+		script.saveFileCopy();
 	}
 	public boolean closeScript() {
 		return script.closeScript();
