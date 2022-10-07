@@ -5,6 +5,7 @@ import io.github.jadefalke2.util.Button;
 import io.github.jadefalke2.util.CorruptedScriptException;
 
 import java.util.EnumSet;
+import java.util.stream.Collectors;
 
 public class InputLine {
 
@@ -64,33 +65,10 @@ public class InputLine {
 	 * @return the created string
 	 */
 	public String getFull(int frame) {
-		StringBuilder tmpString = new StringBuilder();
-
-		tmpString.append(frame).append(" ");
-
-		if (buttons.isEmpty()) {
-			tmpString.append("NONE");
-		} else {
-			boolean first = true;
-
-			for (Button button : buttons) {
-
-				if (!first) {
-					tmpString.append(";");
-				} else {
-					first = false;
-				}
-
-				tmpString.append(button.name());
-			}
-		}
-
-		tmpString
-			.append(" ").append(getStickL().toCartString())
-			.append(" ").append(getStickR().toCartString());
-
-
-		return tmpString.toString();
+		return frame + " "
+			+ (buttons.isEmpty() ? "NONE" : buttons.stream().map(Enum::name).collect(Collectors.joining(";"))) + " "
+			+ getStickL().toCartString() + " "
+			+ getStickR().toCartString();
 	}
 
 	/**
