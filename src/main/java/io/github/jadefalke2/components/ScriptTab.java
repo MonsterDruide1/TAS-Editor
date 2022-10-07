@@ -4,6 +4,7 @@ import io.github.jadefalke2.Script;
 import io.github.jadefalke2.actions.Action;
 import io.github.jadefalke2.util.Logger;
 import io.github.jadefalke2.util.ObservableProperty;
+import io.github.jadefalke2.util.ScriptObserver;
 import io.github.jadefalke2.util.Settings;
 
 import javax.swing.JPanel;
@@ -15,7 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Stack;
 
-public class ScriptTab extends JPanel {
+public class ScriptTab extends JPanel implements ScriptObserver {
 
 	private final MainEditorWindow mainEditorWindow;
 	private final Script script;
@@ -60,10 +61,11 @@ public class ScriptTab extends JPanel {
 		mainEditorWindow.enableUndoRedo(false, false);
 
 		this.lengthChangeListener = listener;
-		script.attachLengthListener(listener);
 		listener.onChange(script.getLines().length, -1);
 
 		Settings.INSTANCE.joystickPanelPosition.attachListener(ignored -> refreshLayout());
+
+		script.attachObserver(this);
 	}
 
 	public void refreshLayout() {
@@ -182,26 +184,26 @@ public class ScriptTab extends JPanel {
 	}
 
 	public void setDirtyListener(ObservableProperty.PropertyChangeListener<Boolean> listener) {
-		if(dirtyChangeListener != null)
-			script.detachDirtyListener(dirtyChangeListener);
-
 		this.dirtyChangeListener = listener;
-		script.attachDirtyListener(listener);
 	}
 	public void setFileListener(ObservableProperty.PropertyChangeListener<File> listener) {
-		if(fileChangeListener != null)
-			script.detachFileListener(fileChangeListener);
-
 		this.fileChangeListener = listener;
-		script.attachFileListener(listener);
 	}
 	public void cleanup() {
-		script.detachDirtyListener(dirtyChangeListener);
-		dirtyChangeListener = null;
-		script.detachLengthListener(lengthChangeListener);
-		lengthChangeListener = null;
-		script.detachFileListener(fileChangeListener);
-		fileChangeListener = null;
+		script.detachObserver(this);
+	}
+
+	@Override
+	public void onFileChange(File file) {
+		fileChangeListener.onChange(file);
+	}
+	@Override
+	public void onLengthChange(int length) {
+		lengthChangeListener.onChange(length);
+	}
+	@Override
+	public void onDirtyChange(boolean dirty) {
+		dirtyChangeListener.onChange(dirty);
 	}
 
 	public Script getScript() {

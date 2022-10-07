@@ -11,7 +11,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -23,36 +22,40 @@ public class Script {
 	 * @return the created script
 	 */
 	public static Script getEmptyScript (int amount){
-		Script tmp = new Script();
+		Script tmp;
+		try {
+			tmp = new Script();
+		} catch (IOException | CorruptedScriptException e) {
+			throw new RuntimeException(e);
+		}
 
 		for (int i = 0; i < amount; i++){
 			tmp.insertRow(i,InputLine.getEmpty());
 		}
-		tmp.dirty.set(false);
+		tmp.dirty = false;
 
 		return tmp;
 	}
 
 
-	private final ObservableProperty<File> file;
+	private File file;
 	private DefaultTableModel table;
 	private final ArrayList<InputLine> inputLines;
-	private final ObservableProperty<Boolean> dirty;
-	private final List<ObservableProperty.PropertyChangeListener<Integer>> lengthListeners;
+	private boolean dirty;
 
-	public Script() {
-		inputLines = new ArrayList<>();
-		file = new ObservableProperty<>(null);
-		dirty = new ObservableProperty<>(false);
-		lengthListeners = new ArrayList<>();
-	}
-	public Script(String script) throws CorruptedScriptException {
-		this();
-		prepareScript(script);
+	private final ArrayList<ScriptObserver> observers;
+
+	public Script() throws IOException, CorruptedScriptException {
+		this(null);
 	}
 	public Script (File file) throws CorruptedScriptException, IOException {
-		this(Util.fileToString(file));
-		this.file.set(file);
+		this.file = file;
+		inputLines = new ArrayList<>();
+		dirty = false;
+		observers = new ArrayList<>();
+
+		if(file != null)
+			prepareScript(Util.fileToString(file));
 	}
 
 	/**
@@ -66,7 +69,6 @@ public class Script {
 		int currentFrame = 0;
 
 		for (String line : lines) {
-
 			InputLine currentInputLine = new InputLine(line);
 			int frame = Integer.parseInt(line.split(" ")[0]);
 
@@ -80,14 +82,13 @@ public class Script {
 			}
 
 			inputLines.add(currentInputLine);
-
 			currentFrame++;
 		}
-		updateLength(0);
+		updateLength();
 	}
 
 	public boolean closeScript(){
-		if(!dirty.get()){
+		if(!dirty){
 			return true; //just close without issue if no changes happened
 		}
 
@@ -100,7 +101,7 @@ public class Script {
 				JOptionPane.showMessageDialog(null, "Failed to save file!\nError: " + ioe.getMessage(), "Saving failed", JOptionPane.ERROR_MESSAGE);
 				return false;
 			}
-			return dirty.get();
+			return dirty;
 		}
 		return result == JOptionPane.NO_OPTION; //otherwise return false -> cancel
 	}
@@ -117,13 +118,13 @@ public class Script {
 	 * Saves the script (itself) to that last saved/opened file
 	 */
 	public void saveFile() throws IOException {
-		if(file.get() == null){
+		if(file == null){
 			saveFileAs();
 			return;
 		}
 
-		writeToFile(file.get());
-		dirty.set(false);
+		writeToFile(file);
+		setDirty(false);
 	}
 
 	private void writeToFile(File dest) throws IOException {
@@ -139,7 +140,7 @@ public class Script {
 		File savedFile = new TxtFileChooser(Settings.INSTANCE.directory.get()).getFile(false);
 		if(savedFile != null){
 			Logger.log("saving file as " + savedFile.getAbsolutePath());
-			file.set(savedFile);
+			setFile(savedFile);
 			saveFile();
 		}
 	}
@@ -188,23 +189,23 @@ public class Script {
 		for(int i=0;i<tableArray.length;i++){
 			table.setValueAt(tableArray[i], row, i);
 		}
-		dirty.set(true);
+		setDirty(true);
 	}
 
 	public void removeRow(int row){
 		inputLines.remove(row);
 		table.removeRow(row);
 		adjustLines(row);
-		dirty.set(true);
-		updateLength(inputLines.size()+1);
+		setDirty(true);
+		updateLength();
 	}
 
 	public void insertRow(int row, InputLine line) {
 		inputLines.add(row, line);
 		if(table != null) table.insertRow(row, line.getArray(row));
 		adjustLines(row);
-		dirty.set(true);
-		updateLength(inputLines.size()-1);
+		setDirty(true);
+		updateLength();
 	}
 
 	public void appendRow(InputLine line) {
@@ -231,7 +232,7 @@ public class Script {
 			inputLines.get(row).buttons.remove(button);
 			table.setValueAt("", row, col);
 		}
-		dirty.set(true);
+		setDirty(true);
 	}
 
 	public void setStickPos(int row, JoystickPanel.StickType stickType, StickPosition position) {
@@ -240,39 +241,35 @@ public class Script {
 		else
 			inputLines.get(row).setStickR(position);
 		table.setValueAt(position.toCartString(), row, stickType == JoystickPanel.StickType.L_STICK ? 1 : 2); //TODO find a better way to differentiate sticks?
-		dirty.set(true);
+		setDirty(true);
 	}
 
 	public String getName() {
-		return file.get() == null ? "unnamed script" : file.get().getName();
+		return file == null ? "unnamed script" : file.getName();
 	}
 
 	public boolean isDirty() {
-		return dirty.get();
+		return dirty;
 	}
 
-	public void attachDirtyListener(ObservableProperty.PropertyChangeListener<Boolean> listener) {
-		dirty.attachListener(listener);
+	private void setDirty(boolean dirty) {
+		this.dirty = dirty;
+		observers.forEach(c -> c.onDirtyChange(dirty));
 	}
-	public void detachDirtyListener(ObservableProperty.PropertyChangeListener<Boolean> listener) {
-		dirty.detachListener(listener);
+	private void setFile(File file) {
+		this.file = file;
+		observers.forEach(c -> c.onFileChange(file));
 	}
-	public void attachLengthListener(ObservableProperty.PropertyChangeListener<Integer> listener) {
-		lengthListeners.add(listener);
-	}
-	public void detachLengthListener(ObservableProperty.PropertyChangeListener<Integer> listener) {
-		lengthListeners.remove(listener);
-	}
-	public void attachFileListener(ObservableProperty.PropertyChangeListener<File> listener) {
-		file.attachListener(listener);
-	}
-	public void detachFileListener(ObservableProperty.PropertyChangeListener<File> listener) {
-		file.detachListener(listener);
-	}
-	public void updateLength(int before) {
+
+	public void updateLength() {
 		int after = inputLines.size();
-		for(ObservableProperty.PropertyChangeListener<Integer> listener : lengthListeners) {
-			listener.onChange(after, before);
-		}
+		observers.forEach(c -> c.onLengthChange(after));
+	}
+
+	public void attachObserver(ScriptObserver observer) {
+		observers.add(observer);
+	}
+	public void detachObserver(ScriptObserver observer) {
+		observers.remove(observer);
 	}
 }
