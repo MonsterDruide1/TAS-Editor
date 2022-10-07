@@ -111,7 +111,7 @@ public class Script {
 	 * @return the script as a string
 	 */
 	public String getFull (){
-		return IntStream.range(0, inputLines.size()).mapToObj(i -> inputLines.get(i).getFull(i)+"\n").collect(Collectors.joining());
+		return IntStream.range(0, inputLines.size()).filter(i -> !inputLines.get(i).isEmpty()).mapToObj(i -> inputLines.get(i).getFull(i)+"\n").collect(Collectors.joining());
 	}
 
 	/**
