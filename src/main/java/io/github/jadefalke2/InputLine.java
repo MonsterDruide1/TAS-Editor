@@ -23,18 +23,8 @@ public class InputLine {
 	}
 
 	public InputLine(String full) throws CorruptedScriptException {
-		splitIntoComponents(full);
-	}
-
-	/**
-	 * Splits the full string of a line into its components. Namely: Frame number, L-stick, R-stick, buttons
-	 * @param full the full string of the line
-	 * @throws CorruptedScriptException if an unknown button is entered
-	 */
-	private void splitIntoComponents(String full) throws CorruptedScriptException {
-
-		if (full.equals("")){
-			throw new CorruptedScriptException("empty script", -1);
+		if (full.isEmpty()){
+			throw new CorruptedScriptException("Empty InputLine", -1);
 		}
 
 		int frame = 0;
@@ -53,10 +43,8 @@ public class InputLine {
 
 			stickL = new StickPosition(components[2]);
 			stickR = new StickPosition(components[3]);
-
 		} catch (Exception e) {
-			e.printStackTrace();
-			throw new CorruptedScriptException("Script corrupted", frame);
+			throw new CorruptedScriptException("Script corrupted", frame, e);
 		}
 	}
 
