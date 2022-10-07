@@ -14,12 +14,10 @@ import java.awt.Window;
 
 public class TAS {
 
-	public static TAS INITIAL_MAIN_TAS_FOR_DEBUGGING;
-
 	private MainEditorWindow mainEditorWindow;
 
 	public static void main(String[] args) {
-		INITIAL_MAIN_TAS_FOR_DEBUGGING = new TAS();
+		new TAS();
 	}
 
 	public TAS() {
