@@ -3,24 +3,13 @@ package io.github.jadefalke2;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import io.github.jadefalke2.components.MainEditorWindow;
-import io.github.jadefalke2.components.SettingsDialog;
 import io.github.jadefalke2.connectivity.practice.ServerConnector;
-import io.github.jadefalke2.util.CorruptedScriptException;
 import io.github.jadefalke2.util.Logger;
 import io.github.jadefalke2.util.Settings;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.StringSelection;
-import java.awt.datatransfer.UnsupportedFlavorException;
-import java.io.File;
 import java.io.IOException;
-import java.net.SocketException;
-import java.util.Arrays;
-import java.util.Stack;
-import java.util.prefs.BackingStoreException;
-import java.util.prefs.Preferences;
 
 public class TAS {
 
@@ -83,10 +72,10 @@ public class TAS {
 	}
 	public void runScriptPracticeMod() {
 		try {
-			practiceServer.runScript(script, new ServerConnector.GoConfig(
-				preferences.getPracticeStageName(),
-				preferences.getPracticeScenarioNo(),
-				preferences.getPracticeEntranceName()
+			practiceServer.runScript(mainEditorWindow.getActiveScriptTab().getScript(), new ServerConnector.GoConfig(
+				Settings.INSTANCE.practiceStageName.get(),
+				Settings.INSTANCE.practiceScenarioNo.get(),
+				Settings.INSTANCE.practiceEntranceName.get()
 			));
 		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();

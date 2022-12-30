@@ -144,4 +144,8 @@ public class MainEditorWindow extends JFrame {
 	public void newWindow() {
 		parent.newWindow();
 	}
+
+	public TAS getParentTAS() {
+		return parent;
+	}
 }

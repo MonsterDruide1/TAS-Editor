@@ -35,7 +35,7 @@ public class MainJMenuBar extends JMenuBar {
 		JMenu viewMenu = createViewMenu();
 		add(viewMenu);
 
-		JMenu runMenu = createRunMenu(parent, parent.getPracticeServer());
+		JMenu runMenu = createRunMenu(mainEditorWindow.getParentTAS(), mainEditorWindow.getParentTAS().getPracticeServer());
 		add(runMenu);
 
 		JMenu helpMenu = createHelpMenu();

@@ -57,13 +57,13 @@ public class SettingsDialog extends JDialog {
 		addTitle("Practice Mod - Mario Odyssey", mainPanel, c);
 		c.gridy++;
 
-		addTextFieldSetting("Stage", prefs.getPracticeStageName(), prefs::setPracticeStageName, mainPanel, c);
+		addTextFieldSetting("Stage", prefs.practiceStageName.get(), prefs.practiceStageName::set, mainPanel, c);
 		c.gridy++;
 
-		addSpinnerSetting("Scenario", prefs.getPracticeScenarioNo(), prefs::setPracticeScenarioNo, mainPanel, c);
+		addSpinnerSetting("Scenario", prefs.practiceScenarioNo.get(), prefs.practiceScenarioNo::set, mainPanel, c);
 		c.gridy++;
 
-		addTextFieldSetting("Entrance", prefs.getPracticeEntranceName(), prefs::setPracticeEntranceName, mainPanel, c);
+		addTextFieldSetting("Entrance", prefs.practiceEntranceName.get(), prefs.practiceEntranceName::set, mainPanel, c);
 		c.gridy++;
 
 		add(mainPanel);
