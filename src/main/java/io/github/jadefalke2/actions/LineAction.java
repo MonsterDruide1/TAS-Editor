@@ -49,7 +49,7 @@ public class LineAction implements Action{
 		switch (type){
 			case CLONE:                       //fallthrough to INSERT
 			case INSERT: deleteRows(true); break;
-			case DELETE: insertRows(previousLines, rows[0]); break;
+			case DELETE: insertRows(previousLines, rows); break;
 			case REPLACE: revertReplaceRows(); break;
 		}
 	}
@@ -115,10 +115,12 @@ public class LineAction implements Action{
 		insertRows(tmpLines, rows[rows.length-1]+1);
 	}
 
-	private void insertRows (InputLine[] inputLines, int index){
+	private void insertRows (InputLine[] inputLines, int index) {
+		insertRows(inputLines, IntStream.range(index, index+inputLines.length).toArray());
+	}
+	private void insertRows (InputLine[] inputLines, int[] indices){
 		for (int i = 0; i < inputLines.length; i++){
-			int actualIndex = index + i;
-			script.insertRow(actualIndex, inputLines[i]);
+			script.insertRow(indices[i], inputLines[i]);
 		}
 	}
 
