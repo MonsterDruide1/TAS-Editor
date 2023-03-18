@@ -1,5 +1,6 @@
 package io.github.jadefalke2.components;
 
+import io.github.jadefalke2.InputLine;
 import io.github.jadefalke2.Script;
 import io.github.jadefalke2.actions.Action;
 import io.github.jadefalke2.actions.InsertEmptyLineAction;
@@ -53,7 +54,8 @@ public class LineRightClickMenu extends JPopupMenu {
 
 		setListener(deleteOption, rows, LineAction.Type.DELETE);
 		setListener(insertOption, new InsertEmptyLineAction(script, rows[rows.length-1]+1, rows.length));
-		setListener(cloneOption, rows, LineAction.Type.CLONE);
+		// insert dummy InputLines - unused, but the size is required for undo
+		setListener(cloneOption, new LineAction(script, rows, new InputLine[rows.length], LineAction.Type.CLONE));
 
 		setListener(cutOption, () -> scriptTab.getPianoRoll().cut());
 		setListener(copyOption, () -> scriptTab.getPianoRoll().copy());
