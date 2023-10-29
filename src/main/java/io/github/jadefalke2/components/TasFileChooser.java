@@ -1,5 +1,7 @@
 package io.github.jadefalke2.components;
 
+import io.github.jadefalke2.script.Format;
+import io.github.jadefalke2.util.Settings;
 import io.github.jadefalke2.util.Util;
 
 import javax.swing.JFileChooser;
@@ -9,13 +11,16 @@ import javax.swing.filechooser.FileSystemView;
 import java.awt.Dimension;
 import java.io.File;
 
-public class TxtFileChooser extends JFileChooser {
+public class TasFileChooser extends JFileChooser {
+
+	private static final FileNameExtensionFilter sTAS = new FileNameExtensionFilter("SwitchTAS files (.stas)", "stas");
+	private static final FileNameExtensionFilter nxTAS = new FileNameExtensionFilter("nxTAS files (.txt)", "txt");
 
 	private final File defaultDir;
 	/**
 	 * Constructor
 	 */
-	public TxtFileChooser (File defaultDir){
+	public TasFileChooser(File defaultDir){
 		super(FileSystemView.getFileSystemView());
 		this.defaultDir = defaultDir;
 		setPreferredSize(new Dimension(1000,600));
@@ -27,11 +32,11 @@ public class TxtFileChooser extends JFileChooser {
 	 * @return the chosen file
 	 */
 	public File getFile (boolean openFile){
-
 		setDialogTitle(openFile ? "Choose existing TAS file" : "Choose place to save");
 		setCurrentDirectory(defaultDir);
-		FileNameExtensionFilter filter = new FileNameExtensionFilter(Util.fileExtension + " files", Util.fileExtension, "text");
-		setFileFilter(filter);
+		addChoosableFileFilter(sTAS);
+		addChoosableFileFilter(nxTAS);
+		setFileFilter(Settings.INSTANCE.defaultScriptFormat.get() == Format.STAS ? sTAS : nxTAS);
 		int option = openFile ? showOpenDialog(null) : showSaveDialog(null);
 
 		if (option == JFileChooser.APPROVE_OPTION) {
@@ -41,13 +46,26 @@ public class TxtFileChooser extends JFileChooser {
 		return null;
 	}
 
+	public Format getFormat() {
+		if(getFileFilter() == sTAS) return Format.STAS;
+		else if(getFileFilter() == nxTAS) return Format.nxTAS;
+		else throw new IllegalStateException("Unexpected value: " + getFileFilter());
+	}
+
 	@Override
 	public void approveSelection(){
 		File file = getSelectedFile();
 
-		if(!file.getAbsolutePath().endsWith( "." + Util.fileExtension)){
-			file = new File(file.getAbsolutePath() + "." + Util.fileExtension);
-			setSelectedFile(file);
+		if (getFileFilter() == sTAS) {
+			if(!file.getAbsolutePath().endsWith(".stas")) {
+				file = new File(file.getAbsolutePath() + ".stas");
+				setSelectedFile(file);
+			}
+		} else if(getFileFilter() == nxTAS) {
+			if(!file.getAbsolutePath().endsWith(".txt")) {
+				file = new File(file.getAbsolutePath() + ".txt");
+				setSelectedFile(file);
+			}
 		}
 
 		if(file.exists() && getDialogType() == SAVE_DIALOG){

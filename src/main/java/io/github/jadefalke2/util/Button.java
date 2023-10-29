@@ -15,9 +15,6 @@ public enum Button {
 	KEY_R,
 	KEY_L,
 
-	KEY_SL,
-	KEY_SR,
-
 	KEY_PLUS,
 	KEY_MINUS,
 

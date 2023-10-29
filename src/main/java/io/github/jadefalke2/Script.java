@@ -1,6 +1,7 @@
 package io.github.jadefalke2;
 
-import io.github.jadefalke2.components.TxtFileChooser;
+import io.github.jadefalke2.components.TasFileChooser;
+import io.github.jadefalke2.script.Format;
 import io.github.jadefalke2.stickRelatedClasses.JoystickPanel;
 import io.github.jadefalke2.stickRelatedClasses.StickPosition;
 import io.github.jadefalke2.util.*;
@@ -11,8 +12,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class Script {
 
@@ -39,52 +38,39 @@ public class Script {
 
 
 	private File file;
+	private Format format;
 	private DefaultTableModel table;
 	private final ArrayList<InputLine> inputLines;
 	private boolean dirty;
 
 	private final ArrayList<ScriptObserver> observers;
 
+	private long editingMillis;
+	private long lastEdit;
+
 	public Script() throws IOException, CorruptedScriptException {
-		this(null);
+		this(new InputLine[0], 0);
 	}
-	public Script (File file) throws CorruptedScriptException, IOException {
-		this.file = file;
-		inputLines = new ArrayList<>();
-		dirty = false;
-		observers = new ArrayList<>();
+	public Script(InputLine[] lines, int editingSeconds) {
+		this.inputLines = new ArrayList<>(Arrays.asList(lines));
+		this.dirty = false;
+		this.observers = new ArrayList<>();
+		this.editingMillis = editingSeconds * 1000L;
 
-		if(file != null)
-			prepareScript(Util.fileToString(file));
+		attachObserver(new ScriptObserver() {
+			@Override
+			public void onDirtyChange(boolean dirty) {
+				updateEditingSeconds();
+			}
+		});
+		lastEdit = System.currentTimeMillis();
 	}
 
-	/**
-	 * prepares the script
-	 * @throws CorruptedScriptException if lines are in the wrong order
-	 */
-	private void prepareScript (String script) throws CorruptedScriptException {
-		inputLines.clear();
-		String[] lines = script.split("\n");
-
-		int currentFrame = 0;
-
-		for (String line : lines) {
-			InputLine currentInputLine = new InputLine(line);
-			int frame = Integer.parseInt(line.split(" ")[0]);
-
-			if (frame < currentFrame){
-				throw new CorruptedScriptException("Line numbers misordered", currentFrame);
-			}
-
-			while(currentFrame < frame){
-				inputLines.add(InputLine.getEmpty());
-				currentFrame++;
-			}
-
-			inputLines.add(currentInputLine);
-			currentFrame++;
-		}
-		updateLength();
+	public void updateEditingSeconds() {
+		// if last change was less than 5 minutes ago, add the time since then to editingSeconds
+		long timeDiff = System.currentTimeMillis() - lastEdit;
+		editingMillis += Math.min(timeDiff, 5*60*1000);
+		lastEdit = System.currentTimeMillis();
 	}
 
 	public boolean closeScript(){
@@ -107,49 +93,43 @@ public class Script {
 	}
 
 	/**
-	 * Returns the whole script as a String
-	 * @return the script as a string
-	 */
-	public String getFull (){
-		return IntStream.range(0, inputLines.size()).filter(i -> !inputLines.get(i).isEmpty()).mapToObj(i -> inputLines.get(i).getFull(i)+"\n").collect(Collectors.joining());
-	}
-
-	/**
 	 * Saves the script (itself) to that last saved/opened file
 	 */
 	public void saveFile() throws IOException {
-		if(file == null){
+		if(file == null || format == null){
 			saveFileAs();
 			return;
 		}
 
-		writeToFile(file);
+		writeToFile(file, format);
 		setDirty(false);
 	}
 
-	private void writeToFile(File dest) throws IOException {
-		Logger.log("saving script to " + dest.getAbsolutePath());
-
-		Util.writeFile(getFull(), dest);
+	private void writeToFile(File dest, Format format) throws IOException {
+		Format.write(this, dest, format);
 	}
 
 	/**
 	 * Opens a file selector popup and then saves the script (itself) to that file
 	 */
 	public void saveFileAs() throws IOException {
-		File savedFile = new TxtFileChooser(Settings.INSTANCE.directory.get()).getFile(false);
+		TasFileChooser chooser = new TasFileChooser(Settings.INSTANCE.directory.get());
+		File savedFile = chooser.getFile(false);
+		Format format = chooser.getFormat();
 		if(savedFile != null){
 			Logger.log("saving file as " + savedFile.getAbsolutePath());
-			setFile(savedFile);
+			setFile(savedFile, format);
 			saveFile();
 		}
 	}
 
 	public void saveFileCopy() throws IOException {
-		File savedFile = new TxtFileChooser(Settings.INSTANCE.directory.get()).getFile(false);
+		TasFileChooser chooser = new TasFileChooser(Settings.INSTANCE.directory.get());
+		File savedFile = chooser.getFile(false);
+		Format format = chooser.getFormat();
 		if(savedFile != null){
 			Logger.log("saving copy of file as " + savedFile.getAbsolutePath());
-			writeToFile(savedFile);
+			writeToFile(savedFile, format);
 		}
 	}
 
@@ -254,16 +234,22 @@ public class Script {
 
 	private void setDirty(boolean dirty) {
 		this.dirty = dirty;
+		// timer expects this to be called on every change, not only if changes dirty state
 		observers.forEach(c -> c.onDirtyChange(dirty));
 	}
-	private void setFile(File file) {
+	public void setFile(File file, Format format) {
 		this.file = file;
+		this.format = format;
 		observers.forEach(c -> c.onFileChange(file));
 	}
 
 	public void updateLength() {
 		int after = inputLines.size();
 		observers.forEach(c -> c.onLengthChange(after));
+	}
+
+	public int getEditingSeconds() {
+		return (int) (editingMillis / 1000);
 	}
 
 	public void attachObserver(ScriptObserver observer) {

@@ -1,5 +1,6 @@
 package io.github.jadefalke2.components;
 
+import io.github.jadefalke2.script.Format;
 import io.github.jadefalke2.util.ObservableProperty;
 import io.github.jadefalke2.util.Settings;
 
@@ -53,11 +54,13 @@ public class MainJMenuBar extends JMenuBar {
 		openScript = fileJMenu.add("Open...");
 		openScript.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
 		openScript.addActionListener(e -> {
-			File selectedFile = new TxtFileChooser(Settings.INSTANCE.directory.get()).getFile(true);
+			TasFileChooser chooser = new TasFileChooser(Settings.INSTANCE.directory.get());
+			File selectedFile = chooser.getFile(true);
+			Format format = chooser.getFormat();
 			if(selectedFile == null) return;
 
 			try {
-				mainEditorWindow.openScript(selectedFile);
+				mainEditorWindow.openScript(selectedFile, format);
 			} catch (IOException ex) {
 				ex.printStackTrace();
 			}

@@ -1,6 +1,7 @@
 package io.github.jadefalke2.util;
 
 import io.github.jadefalke2.TAS;
+import io.github.jadefalke2.script.Format;
 import io.github.jadefalke2.stickRelatedClasses.SmoothTransitionDialog;
 
 import java.io.File;
@@ -26,6 +27,8 @@ public class Settings {
 	public final ObservableProperty<JoystickPanelPosition> joystickPanelPosition;
 	public final ObservableProperty<SmoothTransitionDialog.SmoothTransitionType> smoothTransitionType;
 	public final ObservableProperty<RedoKeybind> redoKeybind;
+	public final ObservableProperty<Format> defaultScriptFormat;
+	public final ObservableProperty<String> authorName;
 
 
 	private final Preferences backingPrefs;
@@ -41,6 +44,8 @@ public class Settings {
 		joystickPanelPosition = new ObservableProperty<>(JoystickPanelPosition.valueOf(prefs.get("joystickPanelPosition", "RIGHT")));
 		smoothTransitionType = new ObservableProperty<>(SmoothTransitionDialog.SmoothTransitionType.valueOf(prefs.get("smoothTransitionType", "ANGULAR_CLOSEST")));
 		redoKeybind = new ObservableProperty<>(RedoKeybind.valueOf(prefs.get("redoKeybind", "CTRL_SHIFT_Z")));
+		defaultScriptFormat = new ObservableProperty<>(Format.valueOf(prefs.get("defaultScriptFormat", "nxTAS")));
+		authorName = new ObservableProperty<>(prefs.get("authorName", ""));
 	}
 
 	public void storeSettings() throws BackingStoreException {
@@ -52,6 +57,8 @@ public class Settings {
 		backingPrefs.put("joystickPanelPosition", joystickPanelPosition.get() + "");
 		backingPrefs.put("smoothTransitionType", smoothTransitionType.get() + "");
 		backingPrefs.put("redoKeybind", redoKeybind.get() + "");
+		backingPrefs.put("defaultScriptFormat", defaultScriptFormat.get() + "");
+		backingPrefs.put("authorName", authorName.get());
 
 		backingPrefs.flush();
 	}

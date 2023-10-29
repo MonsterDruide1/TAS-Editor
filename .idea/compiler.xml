@@ -9,8 +9,5 @@
         <module name="TAS-Editor" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="TAS-Editor" target="1.8" />
-    </bytecodeTargetLevel>
   </component>
 </project>

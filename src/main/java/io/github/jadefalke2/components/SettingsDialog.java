@@ -1,5 +1,6 @@
 package io.github.jadefalke2.components;
 
+import io.github.jadefalke2.script.Format;
 import io.github.jadefalke2.stickRelatedClasses.SmoothTransitionDialog;
 import io.github.jadefalke2.util.Settings;
 import io.github.jadefalke2.util.SimpleDocumentListener;
@@ -49,6 +50,12 @@ public class SettingsDialog extends JDialog {
 		c.gridy++;
 
 		addRadioButtonSetting("Redo-Keybind: ", prefs.redoKeybind.get(), prefs.redoKeybind::set, Settings.RedoKeybind.values(), new String[]{"CTRL+SHIFT+Z", "CTRL+Y"}, Settings.RedoKeybind::valueOf, mainPanel, c);
+		c.gridy++;
+
+		addRadioButtonSetting("Default script format: ", prefs.defaultScriptFormat.get(), prefs.defaultScriptFormat::set, Format.values(), new String[]{"STAS (.stas)", "nxTAS (.txt)"}, Format::valueOf, mainPanel, c);
+		c.gridy++;
+
+		addTextFieldSetting("Author name: ", prefs.authorName.get(), prefs.authorName::set, mainPanel, c);
 		c.gridy++;
 
 		add(mainPanel);

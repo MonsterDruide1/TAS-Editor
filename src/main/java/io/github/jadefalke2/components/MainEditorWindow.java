@@ -2,6 +2,7 @@ package io.github.jadefalke2.components;
 
 import io.github.jadefalke2.Script;
 import io.github.jadefalke2.TAS;
+import io.github.jadefalke2.script.Format;
 import io.github.jadefalke2.util.CorruptedScriptException;
 import io.github.jadefalke2.util.Logger;
 
@@ -66,11 +67,11 @@ public class MainEditorWindow extends JFrame {
 	}
 
 
-	public void openScript(File file) throws IOException {
+	public void openScript(File file, Format format) throws IOException {
 		Logger.log("loading script from " + file.getAbsolutePath());
 		// sets the current script file to be the one that the method is called with
 		try {
-			openScript(new Script(file));
+			openScript(Format.read(file, format));
 		} catch (CorruptedScriptException e) {
 			e.printStackTrace();
 		}

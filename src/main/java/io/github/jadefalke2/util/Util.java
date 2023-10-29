@@ -1,14 +1,11 @@
 package io.github.jadefalke2.util;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 public class Util {
-
-	/**
-	 * the file extension that is currently used. Might be changed to a custom file extension in the future
-	 */
-	public final static String fileExtension = "txt";
 
 	/**
 	 * Takes in a file and converts it to a readable string
@@ -19,6 +16,9 @@ public class Util {
 		try(BufferedReader br = new BufferedReader(new FileReader(file))){
 			return br.lines().collect(Collectors.joining("\n"));
 		}
+	}
+	public static byte[] fileToBytes(File file) throws IOException {
+		return Files.readAllBytes(file.toPath());
 	}
 
 	/**
@@ -32,4 +32,34 @@ public class Util {
 		writer.close();
 	}
 
+	public static void writeFile(byte[] data, File file) throws IOException {
+		Files.write(file.toPath(), data);
+	}
+
+	public static byte[] merge(ArrayList<byte[]> data) {
+		int totalLength = 0;
+		for (byte[] bytes : data) {
+			totalLength += bytes.length;
+		}
+		byte[] result = new byte[totalLength];
+		int currentPos = 0;
+		for (byte[] bytes : data) {
+			System.arraycopy(bytes, 0, result, currentPos, bytes.length);
+			currentPos += bytes.length;
+		}
+		return result;
+	}
+	public static byte[] merge(byte[]... data) {
+		int totalLength = 0;
+		for (byte[] bytes : data) {
+			totalLength += bytes.length;
+		}
+		byte[] result = new byte[totalLength];
+		int currentPos = 0;
+		for (byte[] bytes : data) {
+			System.arraycopy(bytes, 0, result, currentPos, bytes.length);
+			currentPos += bytes.length;
+		}
+		return result;
+	}
 }
