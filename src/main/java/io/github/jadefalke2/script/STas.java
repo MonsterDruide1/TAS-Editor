@@ -169,6 +169,14 @@ public class STas {
 			data.add(c.getBytes());
 		}
 
+		byte[] full = Util.merge(data);
+		try {
+			read(full);
+		} catch(Exception e) {
+			// not thrown, as just creating it is enough for the box to show up
+			new CorruptedScriptException("Verification of the saved script failed! You won't be able to open the saved .stas file again. Please make a backup in .txt form instead, and report this issue to MonsterDruide1!", -1, e);
+		}
+
 		return Util.merge(data);
 	}
 
@@ -265,7 +273,7 @@ public class STas {
 
 			c = new ControllerCommand(playerId, buttons, stickL, stickR);
 		} else {
-			throw new RuntimeException("Unknown command: " + commandId);
+			throw new RuntimeException("Unknown command: " + commandId+" at offset "+Integer.toHexString(data.position()));
 		}
 		data.assertPosition(position+payloadLength);
 		return c;
