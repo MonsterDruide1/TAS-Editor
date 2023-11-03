@@ -150,37 +150,37 @@ public class ByteDataStream {
 	public void expectByte(int value, String message) {
 		byte val = getByte();
 		if(val != value) {
-			throw new UnsupportedOperationException("Unexpected "+message+". expected: "+value+", actual: "+val);
+			throw new UnsupportedOperationException("Unexpected "+message+" at "+Integer.toHexString(position()-1)+". expected: "+value+", actual: "+val);
 		}
 	}
 	public void expectShort(int value, String message) {
 		short val = getShort();
 		if(val != value) {
-			throw new UnsupportedOperationException("Unexpected "+message+". expected: "+value+", actual: "+val);
+			throw new UnsupportedOperationException("Unexpected "+message+" at "+Integer.toHexString(position()-1)+". expected: "+value+", actual: "+val);
 		}
 	}
 	public void expectInt(int value, String message) {
 		int val = getInt();
 		if(val != value) {
-			throw new UnsupportedOperationException("Unexpected "+message+". expected: "+value+", actual: "+val);
+			throw new UnsupportedOperationException("Unexpected "+message+" at "+Integer.toHexString(position()-1)+". expected: "+value+", actual: "+val);
 		}
 	}
 	public void expectLong(long value, String message) {
 		long val = getLong();
 		if(val != value) {
-			throw new UnsupportedOperationException("Unexpected "+message+". expected: "+value+", actual: "+val);
+			throw new UnsupportedOperationException("Unexpected "+message+" at "+Integer.toHexString(position()-1)+". expected: "+value+", actual: "+val);
 		}
 	}
 	public void expectFloat(float value, String message) {
 		float val = getFloat();
 		if(val != value) {
-			throw new UnsupportedOperationException("Unexpected "+message+". expected: "+value+", actual: "+val);
+			throw new UnsupportedOperationException("Unexpected "+message+" at "+Integer.toHexString(position()-1)+". expected: "+value+", actual: "+val);
 		}
 	}
 	public void expectBytes(byte[] data, String message) {
 		byte[] val = getBytes(data.length);
 		if(!Arrays.equals(val, data)) {
-			throw new UnsupportedOperationException("Unexpected "+message+". expected: "+Arrays.toString(data)+", actual: "+Arrays.toString(val));
+			throw new UnsupportedOperationException("Unexpected "+message+" at "+Integer.toHexString(position()-1)+". expected: "+Arrays.toString(data)+", actual: "+Arrays.toString(val));
 		}
 	}
 

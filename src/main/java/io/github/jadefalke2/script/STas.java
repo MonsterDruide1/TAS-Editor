@@ -138,8 +138,10 @@ public class STas {
 			commands.add(new FrameCommand(i));
 			commands.add(new ControllerCommand((byte) 0, inputLines[i]));
 		}
-		commands.add(new FrameCommand(lastNonEmptyLine+1));
-		commands.add(new ControllerCommand((byte) 0, InputLine.getEmpty()));
+		if(!inputLines[inputLines.length-1].isEmpty()) {
+			commands.add(new FrameCommand(lastNonEmptyLine+1));
+			commands.add(new ControllerCommand((byte) 0, InputLine.getEmpty()));
+		}
 
 		ArrayList<byte[]> data = new ArrayList<>();
 
@@ -188,9 +190,12 @@ public class STas {
 
 		int commandCount = data.getInt();
 		int editingSeconds = data.getInt();
-		data.expectBytes(new byte[] {1}, "player count"); // currently ignored
+		data.storePos();
+		System.out.println(Arrays.toString(data.getBytes(0x20)));
+		data.loadPos();
+		data.expectByte(1, "player count"); // currently ignored
 		data.align(4);
-		data.expectBytes(new byte[] {0}, "controller type of player 0"); // procon
+		data.expectByte(0, "controller type of player 0"); // procon
 		data.align(4);
 
 		short authorLength = data.getShort();
@@ -205,7 +210,7 @@ public class STas {
 			if(c instanceof FrameCommand) {
 				FrameCommand fc = (FrameCommand) c;
 				if(fc.frameId < inputLines.size())
-					throw new CorruptedScriptException("Line numbers misordered, got "+fc.frameId+" after "+inputLines.size(), inputLines.size());
+					throw new CorruptedScriptException("Line numbers misordered, got "+fc.frameId+" after "+inputLines.size()+", offset "+Integer.toHexString(data.position()), inputLines.size());
 				while(inputLines.size() <= fc.frameId) {
 					if(inputLines.isEmpty())
 						inputLines.add(InputLine.getEmpty());
