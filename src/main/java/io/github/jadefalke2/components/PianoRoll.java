@@ -54,7 +54,7 @@ public class PianoRoll extends JTable {
 		setFont(new Font("Arial", Font.PLAIN, 15));
 
 		getTableHeader().setResizingAllowed(false);
-		getTableHeader().setReorderingAllowed(false);
+		getTableHeader().setReorderingAllowed(true);
 		getTableHeader().setDefaultRenderer(centerRenderer);
 
 		//Center all columns

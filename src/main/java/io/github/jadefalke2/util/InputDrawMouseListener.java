@@ -93,7 +93,7 @@ public class InputDrawMouseListener extends MouseAdapter {
 	 */
 	private int[] getCell (MouseEvent e){
 		int row = table.rowAtPoint(e.getPoint());
-		int col = table.columnAtPoint(e.getPoint());
+		int col = table.getColumnModel().getColumn(table.columnAtPoint(e.getPoint())).getModelIndex();
 
 		return new int[]{row,col};
 	}
