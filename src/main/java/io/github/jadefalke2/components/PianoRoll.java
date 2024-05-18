@@ -24,6 +24,8 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.Arrays;
 
@@ -56,6 +58,24 @@ public class PianoRoll extends JTable {
 		getTableHeader().setResizingAllowed(false);
 		getTableHeader().setReorderingAllowed(true);
 		getTableHeader().setDefaultRenderer(centerRenderer);
+
+		getTableHeader().addMouseListener(new MouseListener() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (e.getButton() == MouseEvent.BUTTON3) {
+					new ColumnRightClickMenu(PianoRoll.this).openPopUpMenu(e.getPoint(), PianoRoll.this);
+				}
+			}
+			@Override
+			public void mousePressed(MouseEvent e) {}
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+			@Override
+			public void mouseExited(MouseEvent e) {}
+		});
+
 
 		//Center all columns
 		for (int i = 0; i < getColumnCount(); i++){
