@@ -39,7 +39,6 @@ public class Script {
 
 	private File file;
 	private Format format;
-	private DefaultTableModel table;
 	private final ArrayList<InputLine> inputLines;
 	private boolean dirty;
 
@@ -142,48 +141,21 @@ public class Script {
 	public InputLine[] getLines(){
 		return inputLines.toArray(new InputLine[0]);
 	}
-
-	/**
-	 * Used to set the table used to display the content of this script.
-	 * @param table Displaying table
-	 */
-	public void setTable(DefaultTableModel table){
-		this.table = table;
-		fullTableUpdate();
-	}
-
-	/**
-	 * Force a refresh of all data displayed in the table, removing everything first and then re-adding it.
-	 */
-	public void fullTableUpdate(){
-		table.setRowCount(0);
-
-		for (int i = 0; i < inputLines.size(); i++){
-			table.addRow(inputLines.get(i).getArray(i));
-		}
-	}
+	public int getNumLines() { return inputLines.size(); }
 
 	public void replaceRow(int row, InputLine replacement) {
 		inputLines.set(row, replacement);
-		Object[] tableArray = replacement.getArray(row);
-		for(int i=0;i<tableArray.length;i++){
-			table.setValueAt(tableArray[i], row, i);
-		}
 		setDirty(true);
 	}
 
 	public void removeRow(int row){
 		inputLines.remove(row);
-		table.removeRow(row);
-		adjustLines(row);
 		setDirty(true);
 		updateLength();
 	}
 
 	public void insertRow(int row, InputLine line) {
 		inputLines.add(row, line);
-		if(table != null) table.insertRow(row, line.getArray(row));
-		adjustLines(row);
 		setDirty(true);
 		updateLength();
 	}
@@ -192,25 +164,14 @@ public class Script {
 		insertRow(inputLines.size(), line);
 	}
 
-	private void adjustLines(int start) {
-		if(table == null) return;
-		for (int i = start; i < table.getRowCount(); i++){
-			table.setValueAt(i,i,0);
-		}
-	}
-
 	public void setButton(int row, Button button, boolean enabled) {
 		boolean currentState = inputLines.get(row).buttons.contains(button);
 		if(currentState == enabled) return;
 
-		int col = button.ordinal()+3; //+3 for FRAME, LStick, RStick ; TODO find a better way to do this
-
 		if(enabled) {
 			inputLines.get(row).buttons.add(button);
-			table.setValueAt(table.getColumnName(col), row, col);
 		} else {
 			inputLines.get(row).buttons.remove(button);
-			table.setValueAt("", row, col);
 		}
 		setDirty(true);
 	}
@@ -220,7 +181,6 @@ public class Script {
 			inputLines.get(row).setStickL(position);
 		else
 			inputLines.get(row).setStickR(position);
-		table.setValueAt(position.toCartString(), row, stickType == JoystickPanel.StickType.L_STICK ? 1 : 2); //TODO find a better way to differentiate sticks?
 		setDirty(true);
 	}
 

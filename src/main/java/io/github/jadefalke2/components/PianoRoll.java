@@ -8,11 +8,13 @@ import io.github.jadefalke2.actions.LineAction;
 import io.github.jadefalke2.util.Button;
 import io.github.jadefalke2.util.CorruptedScriptException;
 import io.github.jadefalke2.util.InputDrawMouseListener;
+import io.github.jadefalke2.util.ScriptTableModel;
 
 import javax.swing.AbstractAction;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.Font;
@@ -32,12 +34,13 @@ public class PianoRoll extends JTable {
 	private final ScriptTab scriptTab;
 
 	// table model
-	private final DefaultTableModel model = new DefaultTableModel();
+	private ScriptTableModel model;
 
 
 	public PianoRoll (Script script, ScriptTab scriptTab) {
 		this.script = script;
 		this.scriptTab = scriptTab;
+		this.model = new ScriptTableModel(script);
 
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment( SwingConstants.CENTER );
@@ -53,15 +56,6 @@ public class PianoRoll extends JTable {
 		getTableHeader().setResizingAllowed(false);
 		getTableHeader().setReorderingAllowed(false);
 		getTableHeader().setDefaultRenderer(centerRenderer);
-
-		// add all the column's corresponding with their names
-		model.addColumn("Frame");
-		model.addColumn("L-Stick");
-		model.addColumn("R-Stick");
-
-		for (Button button : Button.values()) {
-			model.addColumn(button.toString());
-		}
 
 		//Center all columns
 		for (int i = 0; i < getColumnCount(); i++){
@@ -141,7 +135,7 @@ public class PianoRoll extends JTable {
 	 * returns the table model
 	 * @return table model
 	 */
-	public DefaultTableModel getModel (){
+	public AbstractTableModel getModel (){
 		return model;
 	}
 
@@ -151,7 +145,7 @@ public class PianoRoll extends JTable {
 	 */
 	public void setScript (Script script){
 		this.script = script;
-		script.setTable(model);
+		model = new ScriptTableModel(script);
 	}
 
 	public Script getScript() {
