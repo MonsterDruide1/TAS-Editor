@@ -79,7 +79,7 @@ public class InputDrawMouseListener extends MouseAdapter {
 					break;
 
 				default:
-					mode = table.getValueAt(row, col) != "" ? Mode.REMOVING : Mode.ADDING;
+					mode = table.getModel().getValueAt(row, col) != "" ? Mode.REMOVING : Mode.ADDING;
 					updateEnd(row);
 			}
 		}
