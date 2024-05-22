@@ -32,8 +32,7 @@ public class ColumnRightClickMenu extends JPopupMenu {
 		}
 
 		for(int i=0; i<model.getColumnCount(); i++) {
-			items[i].setSelected(model.getColumn(i).getMaxWidth() != 0);
-			System.out.println("Column " + i + " is " + (model.getColumn(i).getMaxWidth()));
+			items[i].setSelected(model.getColumn(pianoRoll.convertColumnIndexToView(i)).getMaxWidth() != 0);
 			items[i].addActionListener(e -> {
 				JCheckBoxMenuItem item = (JCheckBoxMenuItem) e.getSource();
 				int index = -1;
@@ -46,12 +45,13 @@ public class ColumnRightClickMenu extends JPopupMenu {
 				if(index == -1) {
 					return;
 				}
+				int modelIndex = pianoRoll.convertColumnIndexToView(index);
 				if(items[index].isSelected()){
-					model.getColumn(index).setMinWidth(15);
-					model.getColumn(index).setMaxWidth(Integer.MAX_VALUE);
+					model.getColumn(modelIndex).setMinWidth(15);
+					model.getColumn(modelIndex).setMaxWidth(Integer.MAX_VALUE);
 				} else {
-					model.getColumn(index).setMinWidth(0);
-					model.getColumn(index).setMaxWidth(0);
+					model.getColumn(modelIndex).setMinWidth(0);
+					model.getColumn(modelIndex).setMaxWidth(0);
 				}
 				pianoRoll.adjustColumnWidth();
 			});
