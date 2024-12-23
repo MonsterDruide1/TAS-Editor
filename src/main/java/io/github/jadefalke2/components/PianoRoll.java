@@ -5,6 +5,7 @@ import io.github.jadefalke2.Script;
 import io.github.jadefalke2.actions.Action;
 import io.github.jadefalke2.actions.InsertEmptyLineAction;
 import io.github.jadefalke2.actions.LineAction;
+import io.github.jadefalke2.script.NXTas;
 import io.github.jadefalke2.util.Button;
 import io.github.jadefalke2.util.CorruptedScriptException;
 import io.github.jadefalke2.util.InputDrawMouseListener;
@@ -211,7 +212,7 @@ public class PianoRoll extends JTable {
 		String clipContent = (String) Toolkit.getDefaultToolkit().getSystemClipboard().getContents(this).getTransferData(DataFlavor.stringFlavor);
 		return Arrays.stream(clipContent.split("[\r\n]+")).map(line -> {
 			try {
-				return new InputLine(line);
+				return NXTas.readLine(line);
 			} catch(CorruptedScriptException e){
 				System.out.println("invalid clipboard content: " + line); //TODO proper error handling here
 				return null;

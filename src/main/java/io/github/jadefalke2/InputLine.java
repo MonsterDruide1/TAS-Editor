@@ -24,32 +24,6 @@ public class InputLine {
 		stickR = new StickPosition(0,0);
 	}
 
-	public InputLine(String full) throws CorruptedScriptException {
-		if (full.isEmpty()){
-			throw new CorruptedScriptException("Empty InputLine", -1);
-		}
-
-		int frame = 0;
-		try {
-			String[] components = full.split(" ");
-
-			frame = Integer.parseInt(components[0]);
-			String buttons = components[1];
-			String[] buttonsPressed = buttons.split(";");
-
-			for (String s : buttonsPressed) {
-				if(!s.equals("NONE")) {
-					this.buttons.add(Button.valueOf(s));
-				}
-			}
-
-			stickL = new StickPosition(components[2]);
-			stickR = new StickPosition(components[3]);
-		} catch (Exception e) {
-			throw new CorruptedScriptException("Script corrupted", frame, e);
-		}
-	}
-
 	public InputLine(EnumSet<Button> buttons, StickPosition stickL, StickPosition stickR) {
 		this.buttons = buttons;
 		this.stickL = stickL;
