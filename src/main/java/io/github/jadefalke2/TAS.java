@@ -40,6 +40,7 @@ public class TAS {
 		mainEditorWindow.setVisible(true);
 
 		UIManager.put("FileChooser.useSystemExtensionHiding", false);
+		UIManager.put("FileChooser.readOnly", true);
 	}
 
 	// set look and feels
