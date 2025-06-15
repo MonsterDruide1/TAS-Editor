@@ -64,7 +64,7 @@ public class Settings {
 	}
 
 	public enum JoystickPanelPosition {
-		LEFT, RIGHT
+		LEFT, RIGHT, HIDDEN
 	}
 
 	public enum RedoKeybind {

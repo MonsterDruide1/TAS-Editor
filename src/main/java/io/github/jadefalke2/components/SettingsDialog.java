@@ -46,7 +46,7 @@ public class SettingsDialog extends JDialog {
 		addDropdownSetting("Default SmoothTransition-Type: ", prefs.smoothTransitionType.get(), prefs.smoothTransitionType::set, SmoothTransitionDialog.SmoothTransitionType.values(), Arrays.stream(SmoothTransitionDialog.SmoothTransitionType.values()).map(SmoothTransitionDialog.SmoothTransitionType::getName).toArray(String[]::new), mainPanel, c);
 		c.gridy++;
 
-		addRadioButtonSetting("JoystickPanel Position: ", prefs.joystickPanelPosition.get(), prefs.joystickPanelPosition::set, Settings.JoystickPanelPosition.values(), new String[]{"Left", "Right"}, Settings.JoystickPanelPosition::valueOf, mainPanel, c);
+		addRadioButtonSetting("JoystickPanel Position: ", prefs.joystickPanelPosition.get(), prefs.joystickPanelPosition::set, Settings.JoystickPanelPosition.values(), new String[]{"Left", "Right", "Hidden"}, Settings.JoystickPanelPosition::valueOf, mainPanel, c);
 		c.gridy++;
 
 		addRadioButtonSetting("Redo-Keybind: ", prefs.redoKeybind.get(), prefs.redoKeybind::set, Settings.RedoKeybind.values(), new String[]{"CTRL+SHIFT+Z", "CTRL+Y"}, Settings.RedoKeybind::valueOf, mainPanel, c);

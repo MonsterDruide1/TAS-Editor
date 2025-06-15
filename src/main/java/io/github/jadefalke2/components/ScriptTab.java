@@ -80,13 +80,14 @@ public class ScriptTab extends JPanel implements ScriptObserver {
 		c.weightx = 1;
 		add(editor, c);
 
-		if(Settings.INSTANCE.joystickPanelPosition.get() == Settings.JoystickPanelPosition.LEFT)
-			c.gridx = 0;
-		else //RIGHT
-			c.gridx = 2;
-
-		c.weightx = 0;
-		add(sideJoystickPanel, c);
+		if(Settings.INSTANCE.joystickPanelPosition.get() != Settings.JoystickPanelPosition.HIDDEN) {
+			if(Settings.INSTANCE.joystickPanelPosition.get() == Settings.JoystickPanelPosition.LEFT)
+				c.gridx = 0;
+			else if(Settings.INSTANCE.joystickPanelPosition.get() == Settings.JoystickPanelPosition.RIGHT)
+				c.gridx = 2;
+			c.weightx = 0;
+			add(sideJoystickPanel, c);
+		}
 
 		pianoRoll.setShowGrid(true); // necessary after theme change
 
