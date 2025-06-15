@@ -136,6 +136,14 @@ public class PianoRoll extends JTable {
 		executeAction(new LineAction(script, getSelectedRows(), LineAction.Type.DELETE));
 	}
 
+	public void clearSelectedRows(){
+		InputLine[] newLines = new InputLine[getSelectedRowCount()];
+		for (int i = 0; i < newLines.length; i++) {
+			newLines[i] = InputLine.getEmpty();
+		}
+		executeAction(new LineAction(script, getSelectedRows(), newLines, LineAction.Type.REPLACE));
+	}
+
 	public void replaceSelectedRows(InputLine[] rows){
 		executeAction(new LineAction(script, getSelectedRows(), rows, LineAction.Type.REPLACE));
 	}

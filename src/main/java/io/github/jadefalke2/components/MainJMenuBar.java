@@ -151,6 +151,10 @@ public class MainJMenuBar extends JMenuBar {
 		deleteLines.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0));
 		deleteLines.addActionListener(e -> getActiveScriptTab().getPianoRoll().deleteSelectedRows());
 
+		deleteLines = editJMenu.add("Clear lines");
+		deleteLines.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0));
+		deleteLines.addActionListener(e -> getActiveScriptTab().getPianoRoll().clearSelectedRows());
+
 		selectLines = editJMenu.add("Select lines");
 		selectLines.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, InputEvent.CTRL_DOWN_MASK));
 		selectLines.addActionListener(e -> mainEditorWindow.selectLines());
