@@ -17,6 +17,8 @@ import java.net.URL;
 
 public class MainJMenuBar extends JMenuBar {
 
+	private static final int shortcut = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+
 	private JMenuItem newScript, newWindow, openScript, save, saveAs, saveCopy, exit;
 	private JMenuItem undo, redo, cut, copy, paste, replace, deleteLines, selectLines, addLine, addLines, settings;
 	private JCheckBoxMenuItem darkTheme;
@@ -44,15 +46,15 @@ public class MainJMenuBar extends JMenuBar {
 		JMenu fileJMenu = new JMenu("File");
 
 		newScript = fileJMenu.add("New");
-		newScript.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK));
+		newScript.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, shortcut));
 		newScript.addActionListener(e -> mainEditorWindow.newFile());
 
 		newWindow = fileJMenu.add("New Window");
-		newWindow.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
+		newWindow.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, shortcut | InputEvent.SHIFT_DOWN_MASK));
 		newWindow.addActionListener(e -> mainEditorWindow.newWindow());
 
 		openScript = fileJMenu.add("Open...");
-		openScript.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
+		openScript.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, shortcut));
 		openScript.addActionListener(e -> {
 			TasFileChooser chooser = new TasFileChooser(Settings.INSTANCE.directory.get());
 			File selectedFile = chooser.getFile(true);
@@ -67,7 +69,7 @@ public class MainJMenuBar extends JMenuBar {
 		});
 
 		save = fileJMenu.add("Save");
-		save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
+		save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, shortcut));
 		save.addActionListener(e -> {
 			try {
 				mainEditorWindow.saveFile();
@@ -77,7 +79,7 @@ public class MainJMenuBar extends JMenuBar {
 		});
 
 		saveAs = fileJMenu.add("Save As...");
-		saveAs.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
+		saveAs.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, shortcut | InputEvent.SHIFT_DOWN_MASK));
 		saveAs.addActionListener(e -> {
 			try {
 				mainEditorWindow.saveFileAs();
@@ -87,7 +89,7 @@ public class MainJMenuBar extends JMenuBar {
 		});
 
 		saveCopy = fileJMenu.add("Save Copy to...");
-		saveCopy.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK | InputEvent.ALT_DOWN_MASK));
+		saveCopy.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, shortcut | InputEvent.ALT_DOWN_MASK));
 		saveCopy.addActionListener(e -> {
 			try {
 				mainEditorWindow.saveFileCopy();
@@ -109,7 +111,7 @@ public class MainJMenuBar extends JMenuBar {
 		JMenu editJMenu = new JMenu("Edit");
 
 		undo = editJMenu.add("Undo");
-		undo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK));
+		undo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, shortcut));
 		undo.addActionListener(e -> getActiveScriptTab().undo());
 
 		redo = editJMenu.add("Redo");
@@ -120,15 +122,15 @@ public class MainJMenuBar extends JMenuBar {
 		editJMenu.addSeparator();
 
 		cut = editJMenu.add("Cut");
-		cut.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_DOWN_MASK));
+		cut.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, shortcut));
 		cut.addActionListener(e -> getActiveScriptTab().getPianoRoll().cut());
 
 		copy = editJMenu.add("Copy");
-		copy.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK));
+		copy.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, shortcut));
 		copy.addActionListener(e -> getActiveScriptTab().getPianoRoll().copy());
 
 		paste = editJMenu.add("Paste");
-		paste.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, InputEvent.CTRL_DOWN_MASK));
+		paste.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, shortcut));
 		paste.addActionListener(e -> {
 			try {
 				getActiveScriptTab().getPianoRoll().paste();
@@ -138,7 +140,7 @@ public class MainJMenuBar extends JMenuBar {
 		});
 
 		replace = editJMenu.add("Replace");
-		replace.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_DOWN_MASK));
+		replace.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, shortcut));
 		replace.addActionListener(e -> {
 			try {
 				getActiveScriptTab().getPianoRoll().replace();
@@ -156,15 +158,15 @@ public class MainJMenuBar extends JMenuBar {
 		deleteLines.addActionListener(e -> getActiveScriptTab().getPianoRoll().clearSelectedRows());
 
 		selectLines = editJMenu.add("Select lines");
-		selectLines.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, InputEvent.CTRL_DOWN_MASK));
+		selectLines.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, shortcut));
 		selectLines.addActionListener(e -> mainEditorWindow.selectLines());
 
 		addLine = editJMenu.add("Add line");
-		addLine.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK | InputEvent.ALT_DOWN_MASK));
+		addLine.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, shortcut | InputEvent.SHIFT_DOWN_MASK | InputEvent.ALT_DOWN_MASK));
 		addLine.addActionListener(e -> mainEditorWindow.addSingleEmptyRow());
 
 		addLines = editJMenu.add("Add multiple lines");
-		addLines.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK));
+		addLines.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, shortcut | InputEvent.SHIFT_DOWN_MASK));
 		addLines.addActionListener(e -> mainEditorWindow.addMultipleEmptyRows());
 
 		editJMenu.addSeparator();
@@ -224,8 +226,8 @@ public class MainJMenuBar extends JMenuBar {
 
 	public void updateRedoAccelerator(Settings.RedoKeybind keybind) {
 		switch(keybind) {
-			case CTRL_SHIFT_Z: redo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK)); break;
-			case CTRL_Y: redo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, InputEvent.CTRL_DOWN_MASK)); break;
+			case CTRL_SHIFT_Z: redo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, shortcut | InputEvent.SHIFT_DOWN_MASK)); break;
+			case CTRL_Y: redo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, shortcut)); break;
 			default: System.err.println("setting undefined redokeybind! "+keybind);
 		}
 	}
