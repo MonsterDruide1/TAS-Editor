@@ -56,7 +56,10 @@ public class JoystickPanel extends JPanel {
 		SpinnerModel xModel = new SpinnerNumberModel(0, -32767, 32767, 100);
 		SpinnerModel yModel = new SpinnerNumberModel(0, -32767, 32767, 100);
 		SpinnerModel radiusModel = new SpinnerNumberModel(0, 0, 1, 0.1);
-		SpinnerModel angleModel = new SpinnerNumberModel(0, -1, 361, 1.0); // using double as step size to force double number model
+		SpinnerNumberModel angleModel = new SpinnerNumberModel(0, -1, 361, 1.0); // using double as step size to force double number model
+		// disable bounds. If done above, the model starts returning `int`s (precision loss)
+		angleModel.setMinimum(null);
+		angleModel.setMaximum(null);
 
 		xSpinner = new JSpinner(xModel);
 		ySpinner = new JSpinner(yModel);
